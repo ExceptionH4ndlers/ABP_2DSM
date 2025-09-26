@@ -22,6 +22,11 @@ const ChartContainer = styled.div`
   background: rgba(255, 255, 255, 0.5);
   border-radius: 12px;
   padding: 1rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
 `;
 
 const SVG = styled.svg`
@@ -59,6 +64,11 @@ const Legend = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 1rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+  }
 `;
 
 const LegendItem = styled.div`
@@ -73,6 +83,11 @@ const LegendItem = styled.div`
 
   &:hover {
     color: ${({ theme }) => theme.colors.text.base};
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 0.75rem;
+    gap: 0.375rem;
   }
 `;
 
@@ -104,25 +119,31 @@ export default function DonutChart({
 
   const offset = 0;
 
+  // Ajustar tamanho para mobile
+  const responsiveSize = window.innerWidth < 480 ? Math.min(size, 200) : size;
+  const responsiveThickness = window.innerWidth < 480 ? Math.min(thickness, 16) : thickness;
+  const responsiveRadius = responsiveSize / 2 - responsiveThickness / 2;
+  const responsiveCircumference = 2 * Math.PI * responsiveRadius;
+
   return (
     <ChartContainer>
-      <SVG width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        <g transform={`rotate(-90 ${size / 2} ${size / 2})`}>
+      <SVG width={responsiveSize} height={responsiveSize} viewBox={`0 0 ${responsiveSize} ${responsiveSize}`}>
+        <g transform={`rotate(-90 ${responsiveSize / 2} ${responsiveSize / 2})`}>
           {segments.map((s, idx) => {
             const ratio = s.value / total;
-            const dash = ratio * circumference;
-            const gap = circumference - dash;
+            const dash = ratio * responsiveCircumference;
+            const gap = responsiveCircumference - dash;
             const strokeDasharray = `${dash} ${gap}`;
 
             return (
               <Segment
                 key={idx}
-                cx={size / 2}
-                cy={size / 2}
-                r={radius}
+                cx={responsiveSize / 2}
+                cy={responsiveSize / 2}
+                r={responsiveRadius}
                 fill="none"
                 stroke={s.color}
-                strokeWidth={thickness}
+                strokeWidth={responsiveThickness}
                 strokeDasharray={strokeDasharray}
                 strokeDashoffset={-offset}
                 strokeLinecap="round"
@@ -133,18 +154,18 @@ export default function DonutChart({
         </g>
 
         {/* Círculo central */}
-        <CenterCircle cx={size / 2} cy={size / 2} r={radius - thickness - 5} />
+        <CenterCircle cx={responsiveSize / 2} cy={responsiveSize / 2} r={responsiveRadius - responsiveThickness - 5} />
 
         {/* Texto central */}
         {centerLabel && (
-          <CenterText x={size / 2} y={size / 2 - 5}>
+          <CenterText x={responsiveSize / 2} y={responsiveSize / 2 - 5}>
             {centerLabel.split("\n")[0]}
           </CenterText>
         )}
 
         {/* Porcentagem central */}
         {centerLabel && centerLabel.includes("%") && (
-          <PercentageText x={size / 2} y={size / 2 + 10}>
+          <PercentageText x={responsiveSize / 2} y={responsiveSize / 2 + 10}>
             {centerLabel.split("\n")[1] || ""}
           </PercentageText>
         )}

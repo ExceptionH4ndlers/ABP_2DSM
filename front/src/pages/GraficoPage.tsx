@@ -8,12 +8,21 @@ import BarChart from "../components/charts/BarChart";
 const PageContainer = styled.div`
   min-height: 100vh;
   background: #ffffff;
+  width: 100%;
+  overflow-x: hidden;
 `;
 
 const MainContent = styled.main`
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 1rem;
+    max-width: 100%;
+  }
 `;
 
 const PageTitle = styled.h2`
@@ -22,12 +31,21 @@ const PageTitle = styled.h2`
   font-weight: 700;
   text-align: center;
   margin-bottom: 0.5rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 1.75rem;
+  }
 `;
 
 const PageSubtitle = styled.p`
   color: #475569;
   text-align: center;
   margin: 0 0 1.5rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+  }
 `;
 
 const ChartsGrid = styled.div`
@@ -35,6 +53,20 @@ const ChartsGrid = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 2rem;
   margin-bottom: 2rem;
+  width: 100%;
+  box-sizing: border-box;
+
+  ${({ theme }) => theme.media.tablet} {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 0;
+  }
 `;
 
 const ChartPanel = styled.div`
@@ -48,11 +80,20 @@ const ChartPanel = styled.div`
     transform 0.2s ease,
     box-shadow 0.2s ease,
     border-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(30, 64, 175, 0.2);
     border-color: rgba(30, 64, 175, 0.25);
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin: 0;
   }
 `;
 
@@ -102,11 +143,33 @@ const ExportButton = styled.button`
   align-items: center;
   gap: 0.5rem;
   margin: 0 auto;
+  min-height: 44px;
+  min-width: 120px;
+  justify-content: center;
 
   &:hover {
     background: ${({ theme }) => theme.colors.primaryDark};
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 0.875rem 1.25rem;
+    min-height: 48px;
+    font-size: 0.9rem;
+    
+    &:hover {
+      transform: none;
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
   }
 `;
 

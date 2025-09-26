@@ -37,6 +37,21 @@ const theme: DefaultTheme = {
     small: "0 1px 2px rgba(0,0,0,0.05)",
     medium: "0 4px 6px rgba(0,0,0,0.1)",
   },
+  breakpoints: {
+    mobile: "480px",
+    tablet: "768px",
+    desktop: "1024px",
+    wide: "1200px",
+  },
+  media: {
+    mobile: `@media (max-width: 479px)`,
+    tablet: `@media (min-width: 480px) and (max-width: 767px)`,
+    desktop: `@media (min-width: 768px) and (max-width: 1023px)`,
+    wide: `@media (min-width: 1024px)`,
+    mobileUp: `@media (min-width: 480px)`,
+    tabletUp: `@media (min-width: 768px)`,
+    desktopUp: `@media (min-width: 1024px)`,
+  },
 };
 
 export default theme;

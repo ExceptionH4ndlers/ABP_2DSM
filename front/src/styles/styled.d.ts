@@ -38,6 +38,21 @@ declare module "styled-components" {
       small: string;
       medium: string;
     };
+    breakpoints: {
+      mobile: string;
+      tablet: string;
+      desktop: string;
+      wide: string;
+    };
+    media: {
+      mobile: string;
+      tablet: string;
+      desktop: string;
+      wide: string;
+      mobileUp: string;
+      tabletUp: string;
+      desktopUp: string;
+    };
   }
 }
 

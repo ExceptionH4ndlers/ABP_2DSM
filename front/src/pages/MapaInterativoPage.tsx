@@ -6,12 +6,21 @@ import { Filter } from "lucide-react";
 const PageContainer = styled.div`
   min-height: 100vh;
   background: #ffffff;
+  width: 100%;
+  overflow-x: hidden;
 `;
 
 const MainContent = styled.main`
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 1rem;
+    max-width: 100%;
+  }
 `;
 
 const PageTitle = styled.h2`
@@ -20,12 +29,21 @@ const PageTitle = styled.h2`
   font-weight: 700;
   text-align: center;
   margin-bottom: 0.5rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 1.75rem;
+  }
 `;
 
 const PageSubtitle = styled.p`
   color: #475569;
   text-align: center;
   margin: 0 0 1.5rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+  }
 `;
 
 const ContentGrid = styled.div`
@@ -33,10 +51,18 @@ const ContentGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   height: 70vh;
+  width: 100%;
+  box-sizing: border-box;
 
-  @media (max-width: 768px) {
+  ${({ theme }) => theme.media.tablet} {
     grid-template-columns: 1fr;
     height: auto;
+    gap: 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    gap: 1rem;
+    padding: 0;
   }
 `;
 
@@ -52,11 +78,19 @@ const DataPanel = styled.div`
     transform 0.2s ease,
     box-shadow 0.2s ease,
     border-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(30, 64, 175, 0.2);
     border-color: rgba(30, 64, 175, 0.25);
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin: 0;
   }
 `;
 
@@ -74,11 +108,36 @@ const FilterButton = styled.button`
   gap: 0.5rem;
   margin-left: auto;
   margin-bottom: 1.5rem;
+  min-height: 44px;
+  min-width: 100px;
+  justify-content: center;
 
   &:hover {
     background: ${({ theme }) => theme.colors.primaryDark};
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 0.875rem 1.25rem;
+    min-height: 48px;
+    font-size: 0.9rem;
+    margin-left: 0;
+    margin-bottom: 1rem;
+    width: 100%;
+    
+    &:hover {
+      transform: none;
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
   }
 `;
 
@@ -89,6 +148,22 @@ const DataTable = styled.table`
   border-radius: 12px;
   overflow: hidden;
   backdrop-filter: blur(5px);
+  min-width: 300px;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+`;
+
+const TableWrapper = styled.div`
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  
+  ${({ theme }) => theme.media.mobile} {
+    border-radius: 8px;
+  }
 `;
 
 const TableHeader = styled.th`
@@ -98,6 +173,12 @@ const TableHeader = styled.th`
   color: white;
   font-weight: 600;
   font-size: 0.875rem;
+  white-space: nowrap;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
 `;
 
 const TableCell = styled.td`
@@ -105,6 +186,12 @@ const TableCell = styled.td`
   border-bottom: 1px solid rgba(229, 231, 235, 0.5);
   color: ${({ theme }) => theme.colors.text.base};
   font-size: 0.875rem;
+  white-space: nowrap;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
 `;
 
 const TableRow = styled.tr`
@@ -225,42 +312,44 @@ function MapaInterativoPage() {
               Filtro
             </FilterButton>
 
-            <DataTable>
-              <thead>
-                <tr>
-                  <TableHeader>ID</TableHeader>
-                  <TableHeader>Data e Hora</TableHeader>
-                  <TableHeader>Temp</TableHeader>
-                </tr>
-              </thead>
-              <tbody>
-                <TableRow>
-                  <TableCell>123</TableCell>
-                  <TableCell>22:10</TableCell>
-                  <TableCell>22°</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>124</TableCell>
-                  <TableCell>23:10</TableCell>
-                  <TableCell>21°</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>125</TableCell>
-                  <TableCell>00:10</TableCell>
-                  <TableCell>20°</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>126</TableCell>
-                  <TableCell>01:10</TableCell>
-                  <TableCell>19°</TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell>127</TableCell>
-                  <TableCell>02:10</TableCell>
-                  <TableCell>18°</TableCell>
-                </TableRow>
-              </tbody>
-            </DataTable>
+            <TableWrapper>
+              <DataTable>
+                <thead>
+                  <tr>
+                    <TableHeader>ID</TableHeader>
+                    <TableHeader>Data e Hora</TableHeader>
+                    <TableHeader>Temp</TableHeader>
+                  </tr>
+                </thead>
+                <tbody>
+                  <TableRow>
+                    <TableCell>123</TableCell>
+                    <TableCell>22:10</TableCell>
+                    <TableCell>22°</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>124</TableCell>
+                    <TableCell>23:10</TableCell>
+                    <TableCell>21°</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>125</TableCell>
+                    <TableCell>00:10</TableCell>
+                    <TableCell>20°</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>126</TableCell>
+                    <TableCell>01:10</TableCell>
+                    <TableCell>19°</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>127</TableCell>
+                    <TableCell>02:10</TableCell>
+                    <TableCell>18°</TableCell>
+                  </TableRow>
+                </tbody>
+              </DataTable>
+            </TableWrapper>
           </DataPanel>
 
           <MapPanel>

@@ -20,6 +20,11 @@ const ChartContainer = styled.div`
   background: rgba(255, 255, 255, 0.5);
   border-radius: 12px;
   padding: 1rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
 `;
 
 const Frame = styled.div`
@@ -29,6 +34,14 @@ const Frame = styled.div`
   align-items: end;
   justify-content: space-around;
   gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    gap: 4px;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+  }
 `;
 
 const BarContainer = styled.div`
@@ -37,6 +50,12 @@ const BarContainer = styled.div`
   align-items: center;
   height: 100%;
   justify-content: end;
+  min-width: 40px;
+  flex-shrink: 0;
+
+  ${({ theme }) => theme.media.mobile} {
+    min-width: 32px;
+  }
 `;
 
 const Bar = styled.div<{ h: number; color: string }>`
@@ -59,6 +78,10 @@ const Bar = styled.div<{ h: number; color: string }>`
     }
   }
 
+  &:active {
+    transform: translateY(-2px) scale(0.98);
+  }
+
   &::after {
     content: "";
     position: absolute;
@@ -72,6 +95,15 @@ const Bar = styled.div<{ h: number; color: string }>`
     border-bottom: 8px solid ${({ color }) => color};
     opacity: 0;
     transition: opacity 0.3s ease;
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    min-width: 32px;
+    border-radius: 6px 6px 3px 3px;
+    
+    &:hover {
+      transform: translateY(-2px);
+    }
   }
 `;
 
@@ -97,6 +129,11 @@ const Label = styled.div`
   color: ${({ theme }) => theme.colors.text.muted};
   text-align: center;
   font-weight: 500;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 0.75rem;
+    margin-top: 6px;
+  }
 `;
 
 export default function BarChart({ data, height = 300, max, showValues = true }: BarChartProps) {
