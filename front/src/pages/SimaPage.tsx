@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { getSima } from "../api/simaApi";
 import type { Sima, PaginatedResponse } from "../types/sima";
 import styled from "styled-components";
+import { CsvExportButton } from "../components/CsvExportButton";
+import type { SimaData } from "../utils/csvParser";
 
 // --- Styled Components (mesmos do seu código anterior) ---
 
@@ -71,7 +73,7 @@ const TableWrapper = styled.div`
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: 16px;
-  
+
   ${({ theme }) => theme.media.mobile} {
     border-radius: 12px;
     margin: 0 -1rem;
@@ -150,11 +152,11 @@ const Button = styled.button<{ disabled?: boolean }>`
     padding: 0.875rem 1.25rem;
     min-height: 48px;
     font-size: 0.9rem;
-    
+
     &:hover {
       transform: none;
     }
-    
+
     &:active {
       transform: scale(0.95);
     }
@@ -186,12 +188,60 @@ const DateInputs = styled.div`
   }
 `;
 
+const ExportSection = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+`;
+
 function SimaPage() {
   const [data, setData] = useState<Sima[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [startDate, setStartDate] = useState("2004-01-01"); // data inicial padrão
   const [endDate, setEndDate] = useState("2004-12-31"); // data final padrão
+
+  // Converter dados SIMA para formato do CSV parser
+  const convertToCsvData = (simaData: Sima[]): SimaData[] => {
+    return simaData.map((item) => ({
+      idsima: item.idsima,
+      idestacao: item.idestacao,
+      datahora: item.datahora,
+      regno: item.regno,
+      nofsamples: item.nofsamples,
+      proamag: item.proamag,
+      dirvt: item.dirvt,
+      intensvt: item.intensvt,
+      u_vel: item.u_vel,
+      v_vel: item.v_vel,
+      tempag1: item.tempag1,
+      tempag2: item.tempag2,
+      tempag3: item.tempag3,
+      tempag4: item.tempag4,
+      tempar: item.tempar,
+      ur: item.ur,
+      tempar_r: item.tempar_r,
+      pressatm: item.pressatm,
+      radincid: item.radincid,
+      radrefl: item.radrefl,
+      bateria: item.bateria,
+      sonda_temp: item.sonda_temp,
+      sonda_cond: item.sonda_cond,
+      sonda_DOsat: item.sonda_DOsat,
+      sonda_DO: item.sonda_DO,
+      sonda_pH: item.sonda_pH,
+      sonda_NH4: item.sonda_NH4,
+      sonda_NO3: item.sonda_NO3,
+      sonda_turb: item.sonda_turb,
+      sonda_chl: item.sonda_chl,
+      sonda_bateria: item.sonda_bateria,
+      corr_norte: item.corr_norte,
+      corr_leste: item.corr_leste,
+      co2_low: item.co2_low,
+      co2_high: item.co2_high,
+      precipitacao: item.precipitacao,
+    }));
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -244,6 +294,16 @@ function SimaPage() {
           />
         </label>
       </DateInputs>
+
+      {/* 📤 Botão de exportação */}
+      <ExportSection>
+        <CsvExportButton
+          data={convertToCsvData(data)}
+          filename={`dados_sima_${startDate}_${endDate}.csv`}
+          variant="primary"
+          size="medium"
+        />
+      </ExportSection>
 
       {/* 🧾 Tabela de dados */}
       <TableWrapper>

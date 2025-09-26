@@ -142,10 +142,11 @@ const MobileMenu = styled.div<{ isOpen: boolean }>`
   flex-direction: column;
   max-height: ${({ isOpen }) => (isOpen ? "300px" : "0")};
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transition:
+    max-height 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
   opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
-  box-shadow: ${({ isOpen }) => 
-    isOpen ? "0 8px 32px rgba(0, 0, 0, 0.2)" : "none"};
+  box-shadow: ${({ isOpen }) => (isOpen ? "0 8px 32px rgba(0, 0, 0, 0.2)" : "none")};
 `;
 
 const MobileLink = styled(Link)<{ active?: boolean }>`

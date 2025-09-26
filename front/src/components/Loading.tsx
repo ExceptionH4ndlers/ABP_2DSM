@@ -20,7 +20,7 @@ const LoadingContainer = styled.div<{ size?: "small" | "medium" | "large" }>`
   justify-content: center;
   gap: 1rem;
   padding: 2rem;
-  
+
   ${({ size }) => {
     switch (size) {
       case "small":
@@ -38,7 +38,7 @@ const Spinner = styled.div<{ size?: "small" | "medium" | "large" }>`
   border-top: 3px solid ${({ theme }) => theme.colors.primary};
   border-radius: 50%;
   animation: ${spin} 1s linear infinite;
-  
+
   ${({ size }) => {
     switch (size) {
       case "small":
@@ -56,7 +56,7 @@ const LoadingText = styled.p<{ size?: "small" | "medium" | "large" }>`
   font-weight: 500;
   text-align: center;
   animation: ${pulse} 2s ease-in-out infinite;
-  
+
   ${({ size }) => {
     switch (size) {
       case "small":
@@ -91,10 +91,10 @@ interface LoadingProps {
   showDots?: boolean;
 }
 
-const Loading: React.FC<LoadingProps> = ({ 
-  size = "medium", 
-  text = "Carregando...", 
-  showDots = false 
+const Loading: React.FC<LoadingProps> = ({
+  size = "medium",
+  text = "Carregando...",
+  showDots = false,
 }) => {
   return (
     <LoadingContainer size={size}>
@@ -129,7 +129,7 @@ const CardLoading = styled.div`
   background: ${({ theme }) => theme.colors.card.background};
   border-radius: 16px;
   border: 1px solid ${({ theme }) => theme.colors.card.border};
-  
+
   ${({ theme }) => theme.media.mobile} {
     padding: 1.5rem;
     border-radius: 12px;
@@ -157,7 +157,7 @@ const SkeletonCard = styled.div`
   border-radius: 16px;
   padding: 1.5rem;
   border: 1px solid ${({ theme }) => theme.colors.card.border};
-  
+
   ${({ theme }) => theme.media.mobile} {
     padding: 1rem;
     border-radius: 12px;

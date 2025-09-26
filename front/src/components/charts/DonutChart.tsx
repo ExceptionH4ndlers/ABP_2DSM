@@ -114,9 +114,6 @@ export default function DonutChart({
   showLegend = true,
 }: DonutChartProps) {
   const total = segments.reduce((sum, s) => sum + s.value, 0) || 1;
-  const radius = size / 2 - thickness / 2;
-  const circumference = 2 * Math.PI * radius;
-
   const offset = 0;
 
   // Ajustar tamanho para mobile
@@ -127,7 +124,11 @@ export default function DonutChart({
 
   return (
     <ChartContainer>
-      <SVG width={responsiveSize} height={responsiveSize} viewBox={`0 0 ${responsiveSize} ${responsiveSize}`}>
+      <SVG
+        width={responsiveSize}
+        height={responsiveSize}
+        viewBox={`0 0 ${responsiveSize} ${responsiveSize}`}
+      >
         <g transform={`rotate(-90 ${responsiveSize / 2} ${responsiveSize / 2})`}>
           {segments.map((s, idx) => {
             const ratio = s.value / total;
@@ -154,7 +155,11 @@ export default function DonutChart({
         </g>
 
         {/* Círculo central */}
-        <CenterCircle cx={responsiveSize / 2} cy={responsiveSize / 2} r={responsiveRadius - responsiveThickness - 5} />
+        <CenterCircle
+          cx={responsiveSize / 2}
+          cy={responsiveSize / 2}
+          r={responsiveRadius - responsiveThickness - 5}
+        />
 
         {/* Texto central */}
         {centerLabel && (

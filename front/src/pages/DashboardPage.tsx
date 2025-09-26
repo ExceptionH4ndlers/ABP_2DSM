@@ -8,6 +8,7 @@ const DashboardContainer = styled.div`
   background: #ffffff;
   width: 100%;
   overflow-x: hidden;
+  box-sizing: border-box;
 `;
 
 const MainContent = styled.main`
@@ -18,7 +19,7 @@ const MainContent = styled.main`
   box-sizing: border-box;
 
   ${({ theme }) => theme.media.mobile} {
-    padding: 1rem;
+    padding: 1rem 0.75rem;
     max-width: 100%;
   }
 `;
@@ -37,9 +38,10 @@ const ContentGrid = styled.div`
   }
 
   ${({ theme }) => theme.media.mobile} {
+    grid-template-columns: 1fr;
     gap: 1rem;
     margin-top: 1rem;
-    padding: 0;
+    padding: 0 0.5rem;
   }
 `;
 
@@ -86,6 +88,8 @@ const InfoSection = styled.div`
   width: 100%;
   box-sizing: border-box;
   overflow: hidden;
+  word-wrap: break-word;
+  hyphens: auto;
 
   &:hover {
     transform: translateY(-2px);
@@ -94,9 +98,15 @@ const InfoSection = styled.div`
   }
 
   ${({ theme }) => theme.media.mobile} {
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: 16px;
     margin: 0;
+    box-shadow: 0 4px 20px rgba(30, 64, 175, 0.1);
+
+    &:hover {
+      transform: none;
+      box-shadow: 0 4px 20px rgba(30, 64, 175, 0.15);
+    }
   }
 `;
 
@@ -105,6 +115,11 @@ const SectionHeader = styled.div`
   align-items: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const SectionIcon = styled.div`
@@ -115,6 +130,13 @@ const SectionIcon = styled.div`
   place-items: center;
   background: rgba(30, 64, 175, 0.1);
   color: ${({ theme }) => theme.colors.primary};
+  flex-shrink: 0;
+
+  ${({ theme }) => theme.media.mobile} {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
 `;
 
 const InfoTitle = styled.h3`
@@ -122,6 +144,12 @@ const InfoTitle = styled.h3`
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0;
+  line-height: 1.3;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 1.25rem;
+    line-height: 1.2;
+  }
 `;
 
 const InfoText = styled.p`
@@ -130,6 +158,8 @@ const InfoText = styled.p`
   text-align: justify;
   font-size: 1rem;
   margin-bottom: 1rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 
   &:last-child {
     margin-bottom: 0;
@@ -139,9 +169,24 @@ const InfoText = styled.p`
     color: ${({ theme }) => theme.colors.text.base};
     font-weight: 600;
   }
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    text-align: left;
+    margin-bottom: 0.875rem;
+  }
 `;
 
-// textos de fonte removidos da home
+const ResponsiveIcon = styled.div`
+  width: 24px;
+  height: 24px;
+
+  ${({ theme }) => theme.media.mobile} {
+    width: 20px;
+    height: 20px;
+  }
+`;
 
 function DashboardPage() {
   return (
@@ -157,7 +202,7 @@ function DashboardPage() {
             <InfoSection>
               <SectionHeader>
                 <SectionIcon>
-                  <Waves size={24} />
+                  <ResponsiveIcon as={Waves} />
                 </SectionIcon>
                 <InfoTitle>Sobre o SIMA</InfoTitle>
               </SectionHeader>
@@ -178,7 +223,7 @@ function DashboardPage() {
           <InfoSection>
             <SectionHeader>
               <SectionIcon>
-                <Settings size={24} />
+                <ResponsiveIcon as={Settings} />
               </SectionIcon>
               <InfoTitle>Estrutura do SIMA</InfoTitle>
             </SectionHeader>
@@ -197,7 +242,7 @@ function DashboardPage() {
           <InfoSection>
             <SectionHeader>
               <SectionIcon>
-                <Database size={24} />
+                <ResponsiveIcon as={Database} />
               </SectionIcon>
               <InfoTitle>Modo de Funcionamento</InfoTitle>
             </SectionHeader>
