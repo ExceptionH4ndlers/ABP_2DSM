@@ -6,12 +6,21 @@ import { Waves, Settings, Database } from "lucide-react";
 const DashboardContainer = styled.div`
   min-height: 100vh;
   background: #ffffff;
+  width: 100%;
+  overflow-x: hidden;
 `;
 
 const MainContent = styled.main`
   padding: 2rem;
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 1rem;
+    max-width: 100%;
+  }
 `;
 
 const ContentGrid = styled.div`
@@ -19,10 +28,18 @@ const ContentGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   margin-top: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 
-  @media (max-width: 1024px) {
+  ${({ theme }) => theme.media.tablet} {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 0;
   }
 `;
 
@@ -37,6 +54,11 @@ const PageTitle = styled.h2`
   text-align: center;
   margin-bottom: 0.75rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
 `;
 
 const PageSubtitle = styled.p`
@@ -44,6 +66,11 @@ const PageSubtitle = styled.p`
   text-align: center;
   margin: 0 0 3rem;
   font-size: 1.125rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 1rem;
+    margin: 0 0 2rem;
+  }
 `;
 
 const InfoSection = styled.div`
@@ -56,11 +83,20 @@ const InfoSection = styled.div`
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(30, 64, 175, 0.2);
     border-color: rgba(30, 64, 175, 0.25);
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin: 0;
   }
 `;
 

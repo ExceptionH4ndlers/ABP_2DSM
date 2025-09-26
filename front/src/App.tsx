@@ -13,11 +13,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <div className="w-full min-h-screen flex flex-col">
+      <div className="w-full min-h-screen flex flex-col overflow-x-hidden">
         <Router>
           <BarraBrasil />
           <MenuBar />
-          <div className="flex-1 w-full">
+          <div className="flex-1 w-full overflow-x-hidden">
             <Routes>
               <Route path="/" element={<DashboardPage />} />
               <Route path="/mapa" element={<MapaInterativoPage />} />

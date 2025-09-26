@@ -10,6 +10,12 @@ const PageContainer = styled.div`
   width: 100%;
   padding: 2rem;
   background: #ffffff;
+  overflow-x: hidden;
+  box-sizing: border-box;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 1rem;
+  }
 `;
 
 const Title = styled.h1`
@@ -18,12 +24,21 @@ const Title = styled.h1`
   margin-bottom: 0.5rem;
   color: #0f172a;
   text-align: center;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 1.75rem;
+  }
 `;
 
 const Subtitle = styled.p`
   color: #475569;
   text-align: center;
   margin: 0 0 1.5rem;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+  }
 `;
 
 const Table = styled.table`
@@ -45,6 +60,23 @@ const Table = styled.table`
     box-shadow: 0 12px 40px rgba(30, 64, 175, 0.2);
     border-color: rgba(30, 64, 175, 0.25);
   }
+
+  ${({ theme }) => theme.media.mobile} {
+    border-radius: 12px;
+    font-size: 0.8rem;
+  }
+`;
+
+const TableWrapper = styled.div`
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 16px;
+  
+  ${({ theme }) => theme.media.mobile} {
+    border-radius: 12px;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
 `;
 
 const Th = styled.th`
@@ -54,6 +86,12 @@ const Th = styled.th`
   color: white;
   font-weight: 600;
   font-size: 0.875rem;
+  white-space: nowrap;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
 `;
 
 const Td = styled.td`
@@ -61,6 +99,12 @@ const Td = styled.td`
   border-bottom: 1px solid rgba(229, 231, 235, 0.5);
   color: ${({ theme }) => theme.colors.text.base};
   font-size: 0.875rem;
+  white-space: nowrap;
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+  }
 `;
 
 const Tr = styled.tr`
@@ -86,11 +130,34 @@ const Button = styled.button<{ disabled?: boolean }>`
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   font-weight: 600;
   transition: all 0.2s ease;
+  min-height: 44px;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     background-color: ${(props) => (props.disabled ? "#9ca3af" : props.theme.colors.primaryDark)};
     transform: ${(props) => (props.disabled ? "none" : "translateY(-2px)")};
     box-shadow: ${(props) => (props.disabled ? "none" : "0 8px 20px rgba(30, 64, 175, 0.3)")};
+  }
+
+  &:active {
+    transform: ${(props) => (props.disabled ? "none" : "translateY(0) scale(0.98)")};
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 0.875rem 1.25rem;
+    min-height: 48px;
+    font-size: 0.9rem;
+    
+    &:hover {
+      transform: none;
+    }
+    
+    &:active {
+      transform: scale(0.95);
+    }
   }
 `;
 
@@ -99,11 +166,23 @@ const DateInputs = styled.div`
   gap: 1rem;
   margin-bottom: 1rem;
   align-items: center;
+  justify-content: center;
 
   input {
     padding: 0.5rem;
     border-radius: 6px;
     border: 1px solid #d1d5db;
+  }
+
+  ${({ theme }) => theme.media.mobile} {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+
+    input {
+      padding: 0.75rem;
+      font-size: 16px; /* Evita zoom no iOS */
+    }
   }
 `;
 
@@ -167,28 +246,30 @@ function SimaPage() {
       </DateInputs>
 
       {/* 🧾 Tabela de dados */}
-      <Table>
-        <thead>
-          <tr>
-            <Th>ID</Th>
-            <Th>Estação</Th>
-            <Th>Data/Hora</Th>
-            <Th>Temperatura</Th>
-            <Th>Precipitação</Th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((row) => (
-            <Tr key={row.idsima}>
-              <Td>{row.idsima}</Td>
-              <Td>{row.idestacao}</Td>
-              <Td>{new Date(row.datahora).toLocaleString("pt-BR")}</Td>
-              <Td>{row.tempar ?? "-"}</Td>
-              <Td>{row.precipitacao ?? "-"}</Td>
-            </Tr>
-          ))}
-        </tbody>
-      </Table>
+      <TableWrapper>
+        <Table>
+          <thead>
+            <tr>
+              <Th>ID</Th>
+              <Th>Estação</Th>
+              <Th>Data/Hora</Th>
+              <Th>Temperatura</Th>
+              <Th>Precipitação</Th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row) => (
+              <Tr key={row.idsima}>
+                <Td>{row.idsima}</Td>
+                <Td>{row.idestacao}</Td>
+                <Td>{new Date(row.datahora).toLocaleString("pt-BR")}</Td>
+                <Td>{row.tempar ?? "-"}</Td>
+                <Td>{row.precipitacao ?? "-"}</Td>
+              </Tr>
+            ))}
+          </tbody>
+        </Table>
+      </TableWrapper>
 
       {/* 📄 Paginação */}
       <Pagination>
