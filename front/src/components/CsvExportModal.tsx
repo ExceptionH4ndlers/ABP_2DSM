@@ -1,14 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import {
-  Download,
-  Settings,
-  AlertCircle,
-  CheckCircle,
-  Calendar,
-  MapPin,
-  Filter,
-} from "lucide-react";
+import type { DefaultTheme } from "styled-components";
+import { Download, Settings, AlertCircle, CheckCircle, Filter } from "lucide-react";
 import { useCsvExport } from "../hooks/useCsvExport";
 import type { SimaData, CsvExportOptions } from "../utils/csvParser";
 
@@ -72,7 +65,7 @@ const CloseButton = styled.button`
   transition: all 0.2s ease;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.background.secondary};
+    background: ${({ theme }) => theme.colors.card.background};
     color: ${({ theme }) => theme.colors.text.base};
   }
 `;
@@ -105,7 +98,7 @@ const Label = styled.label`
 const Input = styled.input`
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.card.border};
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -119,7 +112,7 @@ const Input = styled.input`
 const Select = styled.select`
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid ${({ theme }) => theme.colors.border};
+  border: 1px solid ${({ theme }) => theme.colors.card.border};
   border-radius: 8px;
   font-size: 1rem;
   background: white;
@@ -152,7 +145,7 @@ const Checkbox = styled.input`
 `;
 
 const DataPreview = styled.div`
-  background: ${({ theme }) => theme.colors.background.secondary};
+  background: ${({ theme }) => theme.colors.card.background};
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
@@ -190,17 +183,7 @@ const ErrorMessage = styled.div`
   gap: 0.5rem;
 `;
 
-const SuccessMessage = styled.div`
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #16a34a;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
+// SuccessMessage removido - não utilizado
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -223,22 +206,22 @@ const Button = styled.button<{ variant?: "primary" | "secondary" }>`
   ${({ variant = "secondary" }) => {
     if (variant === "primary") {
       return `
-        background: ${({ theme }) => theme.colors.primary};
+        background: ${({ theme }: { theme: DefaultTheme }) => theme.colors.primary};
         color: white;
         
         &:hover:not(:disabled) {
-          background: ${({ theme }) => theme.colors.primaryDark};
+          background: ${({ theme }: { theme: DefaultTheme }) => theme.colors.primaryDark};
           transform: translateY(-1px);
         }
       `;
     }
     return `
-      background: ${({ theme }) => theme.colors.background.secondary};
-      color: ${({ theme }) => theme.colors.text.base};
-      border: 1px solid ${({ theme }) => theme.colors.border};
+      background: ${({ theme }: { theme: DefaultTheme }) => theme.colors.card.background};
+      color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.text.base};
+      border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme.colors.card.border};
       
       &:hover:not(:disabled) {
-        background: ${({ theme }) => theme.colors.background.primary};
+        background: ${({ theme }: { theme: DefaultTheme }) => theme.colors.background};
       }
     `;
   }}
@@ -281,11 +264,17 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
     onClose();
   };
 
-  const updateOptions = (key: keyof CsvExportOptions, value: any) => {
+  const updateOptions = (
+    key: keyof CsvExportOptions,
+    value: string | boolean | Record<string, unknown>,
+  ) => {
     setOptions((prev) => ({ ...prev, [key]: value }));
   };
 
-  const updateFilters = (key: keyof NonNullable<CsvExportOptions["filtros"]>, value: any) => {
+  const updateFilters = (
+    key: keyof NonNullable<CsvExportOptions["filtros"]>,
+    value: string | boolean | Date,
+  ) => {
     setOptions((prev) => ({
       ...prev,
       filtros: { ...prev.filtros, [key]: value },

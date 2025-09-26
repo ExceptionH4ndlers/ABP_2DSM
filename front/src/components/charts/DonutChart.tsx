@@ -114,9 +114,6 @@ export default function DonutChart({
   showLegend = true,
 }: DonutChartProps) {
   const total = segments.reduce((sum, s) => sum + s.value, 0) || 1;
-  const radius = size / 2 - thickness / 2;
-  const circumference = 2 * Math.PI * radius;
-
   const offset = 0;
 
   // Ajustar tamanho para mobile

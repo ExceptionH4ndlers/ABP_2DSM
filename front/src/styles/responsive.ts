@@ -1,44 +1,44 @@
 // Utilitários de responsividade para o projeto SIMA
-import { css } from "styled-components";
+import { css, CSSObject } from "styled-components";
 
 // Mixins para breakpoints responsivos
-export const mobile = (styles: any) => css`
+export const mobile = (styles: CSSObject | string) => css`
   @media (max-width: 479px) {
     ${styles}
   }
 `;
 
-export const tablet = (styles: any) => css`
+export const tablet = (styles: CSSObject | string) => css`
   @media (min-width: 480px) and (max-width: 767px) {
     ${styles}
   }
 `;
 
-export const desktop = (styles: any) => css`
+export const desktop = (styles: CSSObject | string) => css`
   @media (min-width: 768px) and (max-width: 1023px) {
     ${styles}
   }
 `;
 
-export const wide = (styles: any) => css`
+export const wide = (styles: CSSObject | string) => css`
   @media (min-width: 1024px) {
     ${styles}
   }
 `;
 
-export const mobileUp = (styles: any) => css`
+export const mobileUp = (styles: CSSObject | string) => css`
   @media (min-width: 480px) {
     ${styles}
   }
 `;
 
-export const tabletUp = (styles: any) => css`
+export const tabletUp = (styles: CSSObject | string) => css`
   @media (min-width: 768px) {
     ${styles}
   }
 `;
 
-export const desktopUp = (styles: any) => css`
+export const desktopUp = (styles: CSSObject | string) => css`
   @media (min-width: 1024px) {
     ${styles}
   }
