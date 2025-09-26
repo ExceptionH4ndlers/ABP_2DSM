@@ -212,7 +212,7 @@ export class SimaCsvParser {
 
     camposOrdenados.forEach((campo) => {
       if (campo.nomecampo) {
-        const valor = (data as Record<string, unknown>)[campo.nomecampo];
+        const valor = (data as unknown as Record<string, unknown>)[campo.nomecampo];
         row.push(valor !== null && valor !== undefined ? valor.toString() : "");
       }
     });

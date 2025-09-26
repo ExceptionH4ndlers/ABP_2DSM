@@ -61,6 +61,8 @@ const ContentGrid = styled.div`
   }
 
   ${({ theme }) => theme.media.mobile} {
+    grid-template-columns: 1fr;
+    height: auto;
     gap: 1rem;
     padding: 0;
   }
@@ -80,6 +82,8 @@ const DataPanel = styled.div`
     border-color 0.2s ease;
   width: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-2px);
@@ -88,9 +92,15 @@ const DataPanel = styled.div`
   }
 
   ${({ theme }) => theme.media.mobile} {
-    padding: 1.5rem;
+    padding: 1.25rem;
     border-radius: 16px;
     margin: 0;
+    box-shadow: 0 4px 20px rgba(30, 64, 175, 0.1);
+
+    &:hover {
+      transform: none;
+      box-shadow: 0 4px 20px rgba(30, 64, 175, 0.15);
+    }
   }
 `;
 
@@ -111,6 +121,7 @@ const FilterButton = styled.button`
   min-height: 44px;
   min-width: 100px;
   justify-content: center;
+  flex-shrink: 0;
 
   &:hover {
     background: ${({ theme }) => theme.colors.primaryDark};
@@ -130,6 +141,7 @@ const FilterButton = styled.button`
     margin-left: 0;
     margin-bottom: 1rem;
     width: 100%;
+    justify-content: center;
 
     &:hover {
       transform: none;
@@ -212,17 +224,33 @@ const MapPanel = styled.div`
     transform 0.2s ease,
     box-shadow 0.2s ease,
     border-color 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(30, 64, 175, 0.2);
     border-color: rgba(30, 64, 175, 0.25);
   }
+
+  ${({ theme }) => theme.media.mobile} {
+    padding: 1.25rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(30, 64, 175, 0.1);
+
+    &:hover {
+      transform: none;
+      box-shadow: 0 4px 20px rgba(30, 64, 175, 0.15);
+    }
+  }
 `;
 
 const MapContainer = styled.div`
   width: 100%;
   height: 100%;
+  min-height: 400px;
   background: #f0f0f0;
   border-radius: 8px;
   position: relative;
@@ -238,6 +266,12 @@ const MapContainer = styled.div`
     0 10px,
     10px -10px,
     -10px 0px;
+  flex: 1;
+
+  ${({ theme }) => theme.media.mobile} {
+    min-height: 300px;
+    border-radius: 6px;
+  }
 `;
 
 const MapPlaceholder = styled.div`
@@ -249,6 +283,11 @@ const MapPlaceholder = styled.div`
   color: #6b7280;
   font-size: 1.1rem;
   font-weight: 500;
+  z-index: 1;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 1rem;
+  }
 `;
 
 const MapMarker = styled.div<{ x: number; y: number }>`
@@ -263,6 +302,7 @@ const MapMarker = styled.div<{ x: number; y: number }>`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
+  z-index: 2;
 
   &:hover {
     transform: scale(1.2);
@@ -281,6 +321,19 @@ const MapMarker = styled.div<{ x: number; y: number }>`
     border-right: 6px solid transparent;
     border-top: 8px solid #ef4444;
   }
+
+  ${({ theme }) => theme.media.mobile} {
+    width: 16px;
+    height: 16px;
+    border: 2px solid white;
+
+    &::after {
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 6px solid #ef4444;
+      bottom: -6px;
+    }
+  }
 `;
 
 const MapLabel = styled.div<{ x: number; y: number }>`
@@ -296,6 +349,13 @@ const MapLabel = styled.div<{ x: number; y: number }>`
   pointer-events: none;
   transform: translate(-50%, -100%);
   margin-top: -5px;
+  z-index: 3;
+
+  ${({ theme }) => theme.media.mobile} {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+  }
 `;
 
 function MapaInterativoPage() {

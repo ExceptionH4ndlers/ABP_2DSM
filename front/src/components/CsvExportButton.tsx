@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import type { DefaultTheme } from "styled-components";
 import { Download } from "lucide-react";
 import { CsvExportModal } from "./CsvExportModal";
 import type { SimaData } from "../utils/csvParser";
@@ -52,12 +53,12 @@ const StyledButton = styled.button<{ variant: string; size: string }>`
       case "secondary":
       default:
         return `
-          background: ${({ theme }) => theme.colors.background.secondary};
-          color: ${({ theme }) => theme.colors.text.base};
-          border: 1px solid ${({ theme }) => theme.colors.border};
+          background: ${({ theme }: { theme: DefaultTheme }) => theme.colors.card.background};
+          color: ${({ theme }: { theme: DefaultTheme }) => theme.colors.text.base};
+          border: 1px solid ${({ theme }: { theme: DefaultTheme }) => theme.colors.card.border};
           
           &:hover:not(:disabled) {
-            background: ${({ theme }) => theme.colors.background.primary};
+            background: ${({ theme }: { theme: DefaultTheme }) => theme.colors.background};
             transform: translateY(-1px);
           }
         `;

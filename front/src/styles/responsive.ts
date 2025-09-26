@@ -1,44 +1,51 @@
 // Utilitários de responsividade para o projeto SIMA
-import { css, CSSObject } from "styled-components";
+import { css } from "styled-components";
 
 // Mixins para breakpoints responsivos
-export const mobile = (styles: CSSObject | string) => css`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const mobile = (styles: any) => css`
   @media (max-width: 479px) {
     ${styles}
   }
 `;
 
-export const tablet = (styles: CSSObject | string) => css`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const tablet = (styles: any) => css`
   @media (min-width: 480px) and (max-width: 767px) {
     ${styles}
   }
 `;
 
-export const desktop = (styles: CSSObject | string) => css`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const desktop = (styles: any) => css`
   @media (min-width: 768px) and (max-width: 1023px) {
     ${styles}
   }
 `;
 
-export const wide = (styles: CSSObject | string) => css`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const wide = (styles: any) => css`
   @media (min-width: 1024px) {
     ${styles}
   }
 `;
 
-export const mobileUp = (styles: CSSObject | string) => css`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const mobileUp = (styles: any) => css`
   @media (min-width: 480px) {
     ${styles}
   }
 `;
 
-export const tabletUp = (styles: CSSObject | string) => css`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const tabletUp = (styles: any) => css`
   @media (min-width: 768px) {
     ${styles}
   }
 `;
 
-export const desktopUp = (styles: CSSObject | string) => css`
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const desktopUp = (styles: any) => css`
   @media (min-width: 1024px) {
     ${styles}
   }
