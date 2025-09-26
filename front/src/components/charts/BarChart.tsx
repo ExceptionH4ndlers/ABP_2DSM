@@ -100,7 +100,7 @@ const Bar = styled.div<{ h: number; color: string }>`
   ${({ theme }) => theme.media.mobile} {
     min-width: 32px;
     border-radius: 6px 6px 3px 3px;
-    
+
     &:hover {
       transform: translateY(-2px);
     }

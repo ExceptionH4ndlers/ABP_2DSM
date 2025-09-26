@@ -9,7 +9,7 @@ export const mobileConfig = {
     desktop: "1024px",
     wide: "1200px",
   },
-  
+
   // Tamanhos de fonte responsivos
   fontSizes: {
     mobile: {
@@ -25,7 +25,7 @@ export const mobileConfig = {
       xlarge: "1.5rem",
     },
   },
-  
+
   // Espaçamentos responsivos
   spacing: {
     mobile: {
@@ -43,19 +43,19 @@ export const mobileConfig = {
       xl: "2rem",
     },
   },
-  
+
   // Configurações de toque
   touch: {
     minSize: "44px", // Tamanho mínimo recomendado para elementos tocáveis
     activeOpacity: 0.7, // Opacidade quando pressionado
   },
-  
+
   // Configurações de scroll
   scroll: {
     smooth: true,
     momentum: true, // Scroll com momentum no iOS
   },
-  
+
   // Configurações de viewport
   viewport: {
     preventZoom: true, // Previne zoom em inputs

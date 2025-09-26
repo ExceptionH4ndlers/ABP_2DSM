@@ -47,7 +47,7 @@ export const desktopUp = (styles: any) => css`
 // Mixins para elementos responsivos comuns
 export const responsivePadding = css`
   padding: 2rem;
-  
+
   ${mobile`
     padding: 1rem;
   `}
@@ -55,7 +55,7 @@ export const responsivePadding = css`
 
 export const responsiveMargin = css`
   margin: 2rem 0;
-  
+
   ${mobile`
     margin: 1rem 0;
   `}
@@ -63,7 +63,7 @@ export const responsiveMargin = css`
 
 export const responsiveFontSize = css`
   font-size: 1rem;
-  
+
   ${mobile`
     font-size: 0.875rem;
   `}
@@ -71,7 +71,7 @@ export const responsiveFontSize = css`
 
 export const responsiveBorderRadius = css`
   border-radius: 20px;
-  
+
   ${mobile`
     border-radius: 16px;
   `}
@@ -81,7 +81,7 @@ export const responsiveGrid = css`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
-  
+
   ${mobile`
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -91,7 +91,7 @@ export const responsiveGrid = css`
 export const responsiveFlex = css`
   display: flex;
   gap: 1rem;
-  
+
   ${mobile`
     flex-direction: column;
     gap: 0.75rem;
@@ -102,7 +102,7 @@ export const responsiveFlex = css`
 export const touchFriendly = css`
   min-height: 44px;
   min-width: 44px;
-  
+
   ${mobile`
     min-height: 48px;
     min-width: 48px;
@@ -125,7 +125,7 @@ export const mobileOptimized = css`
 export const scrollOptimized = css`
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  
+
   ${mobile`
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 0, 0, 0.2) transparent;

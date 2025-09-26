@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Download, Droplets, Thermometer } from "lucide-react";
+import { Droplets, Thermometer } from "lucide-react";
 import DonutChart from "../components/charts/DonutChart";
 import BarChart from "../components/charts/BarChart";
 
@@ -130,49 +130,6 @@ const ChartContainer = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-const ExportButton = styled.button`
-  background: ${({ theme }) => theme.colors.primary};
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 auto;
-  min-height: 44px;
-  min-width: 120px;
-  justify-content: center;
-
-  &:hover {
-    background: ${({ theme }) => theme.colors.primaryDark};
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
-  }
-
-  &:active {
-    transform: translateY(0) scale(0.98);
-    box-shadow: 0 4px 12px rgba(30, 64, 175, 0.2);
-  }
-
-  ${({ theme }) => theme.media.mobile} {
-    padding: 0.875rem 1.25rem;
-    min-height: 48px;
-    font-size: 0.9rem;
-    
-    &:hover {
-      transform: none;
-    }
-    
-    &:active {
-      transform: scale(0.95);
-    }
-  }
-`;
-
 const SourceText = styled.p`
   color: ${({ theme }) => theme.colors.text.muted};
   font-size: 0.875rem;
@@ -234,10 +191,6 @@ function GraficoPage() {
               <BarChart data={temperaturaData} height={300} showValues={true} />
             </ChartContainer>
             <SourceText>Temperatura média mensal (°C) - Estação SIMA 001</SourceText>
-            <ExportButton>
-              <Download size={16} />
-              EXPORTAR
-            </ExportButton>
           </ChartPanel>
 
           <ChartPanel>
@@ -251,10 +204,6 @@ function GraficoPage() {
               <BarChart data={precipitacaoData} height={300} showValues={true} />
             </ChartContainer>
             <SourceText>Precipitação acumulada mensal (mm) - Estação SIMA 001</SourceText>
-            <ExportButton>
-              <Download size={16} />
-              EXPORTAR
-            </ExportButton>
           </ChartPanel>
         </ChartsGrid>
 
@@ -279,10 +228,6 @@ function GraficoPage() {
             <SourceText>
               Classificação da qualidade da água baseada em parâmetros físico-químicos
             </SourceText>
-            <ExportButton>
-              <Download size={16} />
-              EXPORTAR
-            </ExportButton>
           </ChartPanel>
 
           <ChartPanel>
@@ -302,10 +247,6 @@ function GraficoPage() {
               />
             </ChartContainer>
             <SourceText>Distribuição global de água salgada vs água doce</SourceText>
-            <ExportButton>
-              <Download size={16} />
-              EXPORTAR
-            </ExportButton>
           </ChartPanel>
         </ChartsGrid>
       </MainContent>

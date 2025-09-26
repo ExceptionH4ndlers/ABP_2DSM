@@ -130,11 +130,11 @@ const FilterButton = styled.button`
     margin-left: 0;
     margin-bottom: 1rem;
     width: 100%;
-    
+
     &:hover {
       transform: none;
     }
-    
+
     &:active {
       transform: scale(0.95);
     }
@@ -160,7 +160,7 @@ const TableWrapper = styled.div`
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   border-radius: 12px;
-  
+
   ${({ theme }) => theme.media.mobile} {
     border-radius: 8px;
   }

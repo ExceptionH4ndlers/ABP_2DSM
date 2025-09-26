@@ -5,12 +5,12 @@ import styled from "styled-components";
 const BarraBrasilContainer = styled.div`
   width: 100%;
   overflow: hidden;
-  
+
   #barra-brasil {
     width: 100% !important;
     max-width: 100% !important;
     overflow: hidden !important;
-    
+
     * {
       max-width: 100% !important;
       box-sizing: border-box !important;
