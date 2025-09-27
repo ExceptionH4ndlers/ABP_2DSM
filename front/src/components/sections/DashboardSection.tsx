@@ -153,7 +153,7 @@ const ActionButtons = styled.div`
   }
 `;
 
-const ActionButton = styled.button<{ variant?: "primary" | "secondary" }>`
+const ActionButton = styled.button<{ $variant?: "primary" | "secondary" }>`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -165,8 +165,8 @@ const ActionButton = styled.button<{ variant?: "primary" | "secondary" }>`
   cursor: pointer;
   border: none;
 
-  ${({ variant = "primary" }) =>
-    variant === "primary"
+  ${({ $variant = "primary" }) =>
+    $variant === "primary"
       ? `
         background: linear-gradient(135deg, #3b82f6, #1d4ed8);
         color: white;
@@ -389,7 +389,7 @@ function DashboardSection() {
               <Filter size={18} />
               Aplicar Filtros
             </ActionButton>
-            <ActionButton variant="secondary">
+            <ActionButton $variant="secondary">
               <RefreshCw size={18} />
               Atualizar Dados
             </ActionButton>

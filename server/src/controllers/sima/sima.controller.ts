@@ -15,6 +15,8 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const limit = parseInt(req.query.limit as string, 10);
     const startDate = req.query.startDate as string;
     const endDate = req.query.endDate as string;
+    const estacao = req.query.estacao as string;
+    const sortOrder = (req.query.sortOrder as string) || "desc"; // Padrão: mais recente primeiro
 
     // Validações
     if (!page || page < 1) {
@@ -47,20 +49,34 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const startDateTime = `${startDate} 00:00:00`;
     const endDateTime = `${addOneDay(endDate)} 00:00:00`;
 
-    // Consulta paginada com filtro de data considerando timestamp
+    // Monta a query base
+    let whereClause = "WHERE datahora >= $3 AND datahora < $4";
+    let queryParams = [limit, offset, startDateTime, endDateTime];
+    let countWhereClause = "WHERE datahora >= $1 AND datahora < $2";
+    let countParams = [startDateTime, endDateTime];
+
+    // Adiciona filtro de estação se fornecido
+    if (estacao) {
+      whereClause += " AND idestacao = $5";
+      countWhereClause += " AND idestacao = $3";
+      queryParams.push(estacao);
+      countParams.push(estacao);
+    }
+
+    // Consulta paginada com filtros
     const result = await simaPool.query(
       `SELECT * FROM tbsima
-       WHERE datahora >= $3 AND datahora < $4
-       ORDER BY datahora DESC
+       ${whereClause}
+       ORDER BY datahora ${sortOrder === "asc" ? "ASC" : "DESC"}
        LIMIT $1 OFFSET $2`,
-      [limit, offset, startDateTime, endDateTime],
+      queryParams,
     );
 
     // Total de registros dentro do filtro
     const countResult = await simaPool.query(
       `SELECT COUNT(*) FROM tbsima
-       WHERE datahora >= $1 AND datahora < $2`,
-      [startDateTime, endDateTime],
+       ${countWhereClause}`,
+      countParams,
     );
 
     const total = parseInt(countResult.rows[0].count, 10);
