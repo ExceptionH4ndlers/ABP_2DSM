@@ -248,18 +248,19 @@ function BalcarSection() {
         <SectionHeader>
           <SectionTitle>Projeto BALCAR</SectionTitle>
           <SectionSubtitle>
-            Emissões de Gases de Efeito Estufa em Reservatórios de Centrais Hidrelétricas
+            Emissões de Gases de Efeito Estufa em Reservatórios de Centrais Hidrelétricas - Projeto desenvolvido pelo INPE
           </SectionSubtitle>
         </SectionHeader>
 
         <ContentGrid>
           <TextContent>
             <Description>
-              O Projeto BALCAR concentra-se na coleta de dados limnológicos e meteorológicos para
-              subsidiar estudos sobre o balanço de carbono nos reservatórios de Furnas. Os dados
-              coletados incluem parâmetros na interface água-sedimento, coluna d'água e interface
-              água-atmosfera, com o objetivo de determinar as emissões de GEE e entender os
-              processos envolvidos no ciclo do carbono nesses ambientes.
+              O Projeto BALCAR (Emissões de Gases de Efeito Estufa em Reservatórios de Centrais Hidrelétricas) 
+              é desenvolvido pelo INPE e concentra-se na coleta de dados limnológicos e meteorológicos para 
+              subsidiar estudos sobre o balanço de carbono nos reservatórios de Furnas. Os dados coletados 
+              incluem parâmetros na interface água-sedimento, coluna d'água e interface água-atmosfera, 
+              com o objetivo de determinar as emissões de GEE e entender os processos envolvidos no ciclo 
+              do carbono nesses ambientes.
             </Description>
 
             <FocusAreasList>
