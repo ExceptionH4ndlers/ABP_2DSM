@@ -25,11 +25,11 @@ export interface SimaData {
   bateria?: number;
   sonda_temp?: number;
   sonda_cond?: number;
-  sonda_DOsat?: number;
-  sonda_DO?: number;
-  sonda_pH?: number;
-  sonda_NH4?: number;
-  sonda_NO3?: number;
+  sonda_dosat?: number;
+  sonda_do?: number;
+  sonda_ph?: number;
+  sonda_nh4?: number;
+  sonda_no3?: number;
   sonda_turb?: number;
   sonda_chl?: number;
   sonda_bateria?: number;
@@ -96,10 +96,6 @@ export interface CsvExportOptions {
 }
 
 export class SimaCsvParser {
-  private estacoes: Map<string, EstacaoData> = new Map();
-  private sensores: Map<number, SensorData> = new Map();
-  private campos: Map<string, CampoData> = new Map();
-
   constructor() {
     this.initializeMetadata();
   }
@@ -108,61 +104,40 @@ export class SimaCsvParser {
    * Inicializa os metadados das estações, sensores e campos
    */
   private async initializeMetadata(): Promise<void> {
-    try {
-      // Carregar dados das estações
-      const estacoesResponse = await fetch("/api/estacoes");
-      if (estacoesResponse.ok) {
-        const estacoes = await estacoesResponse.json();
-        estacoes.forEach((estacao: EstacaoData) => {
-          this.estacoes.set(estacao.idestacao, estacao);
-        });
-      }
-
-      // Carregar dados dos sensores
-      const sensoresResponse = await fetch("/api/sensores");
-      if (sensoresResponse.ok) {
-        const sensores = await sensoresResponse.json();
-        sensores.forEach((sensor: SensorData) => {
-          this.sensores.set(sensor.idSensor, sensor);
-        });
-      }
-
-      // Carregar dados dos campos
-      const camposResponse = await fetch("/api/campos");
-      if (camposResponse.ok) {
-        const campos = await camposResponse.json();
-        campos.forEach((campo: CampoData) => {
-          if (campo.nomecampo) {
-            this.campos.set(campo.nomecampo, campo);
-          }
-        });
-      }
-    } catch (error) {
-      console.warn("Erro ao carregar metadados:", error);
-    }
+    // Metadados são gerados dinamicamente baseados nos dados reais do banco
+    // Os cabeçalhos e campos são extraídos automaticamente dos dados SIMA
   }
 
   /**
    * Gera cabeçalhos CSV com informações detalhadas dos campos
    */
-  private generateHeaders(options: CsvExportOptions): string[] {
+  private generateHeaders(options: CsvExportOptions, sampleData?: SimaData): string[] {
     const headers: string[] = [];
 
     if (options.incluirCabecalhos) {
       // Cabeçalhos básicos sempre incluídos
       headers.push("ID_SIMA", "ID_ESTACAO", "DATA_HORA");
 
-      // Adicionar cabeçalhos dos campos de dados
-      const camposOrdenados = Array.from(this.campos.values()).sort(
-        (a, b) => (a.ordem || 0) - (b.ordem || 0),
-      );
+      // Gerar cabeçalhos dinamicamente baseados nos campos disponíveis nos dados
+      if (sampleData) {
+        const dynamicHeaders = Object.keys(sampleData)
+          .filter(key => key !== 'idsima' && key !== 'idestacao' && key !== 'datahora')
+          .map(key => key.toUpperCase())
+          .sort();
 
-      camposOrdenados.forEach((campo) => {
-        if (campo.nomecampo && campo.rotulo) {
-          const header = `${campo.rotulo.toUpperCase()} (${campo.unidademedida || "N/A"})`;
-          headers.push(header);
-        }
-      });
+        headers.push(...dynamicHeaders);
+      } else {
+        // Fallback com todos os campos possíveis se não houver dados de exemplo
+        const allPossibleHeaders = [
+          "REGNO", "NOFSAMPLES", "PROAMAG", "DIRVT", "INTENSVT", "U_VEL", "V_VEL",
+          "TEMPAG1", "TEMPAG2", "TEMPAG3", "TEMPAG4", "TEMPAR", "UR", "TEMPAR_R", 
+          "PRESSATM", "RADINCID", "RADREFL", "BATERIA", "SONDA_TEMP", "SONDA_COND",
+          "SONDA_DOSAT", "SONDA_DO", "SONDA_PH", "SONDA_NH4", "SONDA_NO3", 
+          "SONDA_TURB", "SONDA_CHL", "SONDA_BATERIA", "CORR_NORTE", "CORR_LESTE",
+          "CO2_LOW", "CO2_HIGH", "PRECIPITACAO"
+        ];
+        headers.push(...allPossibleHeaders);
+      }
     }
 
     return headers;
@@ -173,24 +148,28 @@ export class SimaCsvParser {
    */
   private generateMetadata(data: SimaData[], options: CsvExportOptions): CsvMetadata {
     const estacaoId = data[0]?.idestacao;
-    const estacao = estacaoId ? this.estacoes.get(estacaoId) : undefined;
 
     const datas = data.map((d) => new Date(d.datahora)).sort();
     const periodoInicio = datas[0]?.toISOString().split("T")[0] || "";
     const periodoFim = datas[datas.length - 1]?.toISOString().split("T")[0] || "";
 
     return {
-      titulo: `Dados SIMA - ${estacao?.rotulo || "Estação " + estacaoId}`,
+      titulo: `Dados SIMA - Estação ${estacaoId}`,
       descricao:
         "Dados de monitoramento hidrosférico coletados pelo Sistema Integrado de Monitoramento Ambiental (SIMA)",
       fonte: "SIMA - Sistema Integrado de Monitoramento Ambiental",
       dataGeracao: new Date().toISOString(),
       versao: "1.0",
-      estacao: estacao || { idestacao: estacaoId || "N/A" },
+      estacao: { 
+        idestacao: estacaoId || "N/A",
+        rotulo: estacaoId || "N/A",
+        lat: undefined,
+        lng: undefined
+      },
       periodoInicio,
       periodoFim,
       totalRegistros: data.length,
-      camposIncluidos: this.generateHeaders(options),
+      camposIncluidos: this.generateHeaders(options, data[0]),
     };
   }
 
@@ -205,16 +184,14 @@ export class SimaCsvParser {
     row.push(data.idestacao);
     row.push(this.formatDate(data.datahora, options.formatoData));
 
-    // Dados dos sensores
-    const camposOrdenados = Array.from(this.campos.values()).sort(
-      (a, b) => (a.ordem || 0) - (b.ordem || 0),
-    );
+    // Adicionar todos os campos dinamicamente baseados nos dados disponíveis
+    const dataKeys = Object.keys(data)
+      .filter(key => key !== 'idsima' && key !== 'idestacao' && key !== 'datahora')
+      .sort();
 
-    camposOrdenados.forEach((campo) => {
-      if (campo.nomecampo) {
-        const valor = (data as unknown as Record<string, unknown>)[campo.nomecampo];
-        row.push(valor !== null && valor !== undefined ? valor.toString() : "");
-      }
+    dataKeys.forEach(key => {
+      const value = (data as unknown as Record<string, unknown>)[key];
+      row.push(value !== null && value !== undefined ? value.toString() : "");
     });
 
     return row;
@@ -264,11 +241,21 @@ export class SimaCsvParser {
       throw new Error("Nenhum dado fornecido para exportação");
     }
 
+    // Aplicar filtro de estação se especificado
+    let filteredData = data;
+    if (options.filtros?.estacao) {
+      filteredData = data.filter((record) => record.idestacao === options.filtros?.estacao);
+    }
+
+    if (filteredData.length === 0) {
+      throw new Error("Nenhum dado encontrado para a estação selecionada");
+    }
+
     const lines: string[] = [];
 
     // Gerar metadados se solicitado
     if (options.incluirMetadados) {
-      const metadata = this.generateMetadata(data, options);
+      const metadata = this.generateMetadata(filteredData, options);
       lines.push("# METADADOS DO ARQUIVO CSV SIMA");
       lines.push(`# Título: ${metadata.titulo}`);
       lines.push(`# Descrição: ${metadata.descricao}`);
@@ -287,34 +274,18 @@ export class SimaCsvParser {
       lines.push("# ID_SIMA: Identificador único do registro");
       lines.push("# ID_ESTACAO: Identificador da estação de coleta");
       lines.push("# DATA_HORA: Data e hora da coleta");
-
-      // Adicionar descrições dos campos
-      const camposOrdenados = Array.from(this.campos.values()).sort(
-        (a, b) => (a.ordem || 0) - (b.ordem || 0),
-      );
-
-      camposOrdenados.forEach((campo) => {
-        if (campo.nomecampo && campo.rotulo) {
-          const sensor = campo.idSensor ? this.sensores.get(campo.idSensor) : null;
-          const descricao = sensor
-            ? `${campo.rotulo} (${sensor.fabricante} ${sensor.modelo})`
-            : campo.rotulo;
-          lines.push(`# ${campo.nomecampo}: ${descricao} [${campo.unidademedida || "N/A"}]`);
-        }
-      });
-
       lines.push("#");
       lines.push("# DADOS:");
     }
 
     // Gerar cabeçalhos
     if (options.incluirCabecalhos) {
-      const headers = this.generateHeaders(options);
+      const headers = this.generateHeaders(options, data[0]);
       lines.push(headers.map((h) => this.escapeCsvValue(h)).join(options.separador));
     }
 
     // Gerar linhas de dados
-    data.forEach((record) => {
+    filteredData.forEach((record) => {
       const row = this.formatDataRow(record, options);
       lines.push(row.map((v) => this.escapeCsvValue(v)).join(options.separador));
     });

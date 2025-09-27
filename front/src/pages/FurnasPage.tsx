@@ -190,17 +190,11 @@ const LogoImage = styled.img`
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
   object-fit: contain;
-  filter: 
-    contrast(1.05) 
-    brightness(1.02) 
-    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08));
+  filter: contrast(1.05) brightness(1.02) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08));
   transition: all 0.3s ease;
-  
+
   &:hover {
-    filter: 
-      contrast(1.08) 
-      brightness(1.05) 
-      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
+    filter: contrast(1.08) brightness(1.05) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
     transform: scale(1.02);
   }
 `;
@@ -264,46 +258,51 @@ function FurnasPage() {
     {
       icon: <Target size={24} />,
       title: "Determinação de Emissões",
-      description: "Determinar as emissões de gases de efeito estufa: gás carbônico, metano e óxido nitroso, dos reservatórios das hidrelétricas"
+      description:
+        "Determinar as emissões de gases de efeito estufa: gás carbônico, metano e óxido nitroso, dos reservatórios das hidrelétricas",
     },
     {
       icon: <LogoImage src={logoFurnas} alt="Furnas" style={{ width: 60, height: 60 }} />,
       title: "Ciclo do Carbono",
-      description: "Identificar as rotas do ciclo do carbono nesses reservatórios e os fatores ambientais envolvidos"
+      description:
+        "Identificar as rotas do ciclo do carbono nesses reservatórios e os fatores ambientais envolvidos",
     },
     {
       icon: <LogoImage src={logoFurnas} alt="Furnas" style={{ width: 60, height: 60 }} />,
       title: "Avaliação de Fatores",
-      description: "Avaliar a influência dos fatores morfológicos, morfométricos, biogeoquímicos e operacionais dos reservatórios na emissão de gases de efeito estufa"
+      description:
+        "Avaliar a influência dos fatores morfológicos, morfométricos, biogeoquímicos e operacionais dos reservatórios na emissão de gases de efeito estufa",
     },
     {
       icon: <TrendingUp size={24} />,
       title: "Padrão de Emissão",
-      description: "Determinar o padrão de emissão existente, anteriormente à construção de reservatórios"
+      description:
+        "Determinar o padrão de emissão existente, anteriormente à construção de reservatórios",
     },
     {
       icon: <Map size={24} />,
       title: "Modelo Espacial",
-      description: "Elaborar um modelo espacial e temporal de emissão de gases para reservatórios implantados em ambientes de cerrado"
-    }
+      description:
+        "Elaborar um modelo espacial e temporal de emissão de gases para reservatórios implantados em ambientes de cerrado",
+    },
   ];
 
   const projectInfo = [
     {
       icon: <Users size={24} />,
       label: "Participantes",
-      value: "FURNAS, IIE, INPE, UFJF, UFRJ/COPPE"
+      value: "FURNAS, IIE, INPE, UFJF, UFRJ/COPPE",
     },
     {
       icon: <MapPin size={24} />,
       label: "Campanhas",
-      value: "79 campanhas em reservatórios de Furnas"
+      value: "79 campanhas em reservatórios de Furnas",
     },
     {
       icon: <BookOpen size={24} />,
       label: "Interfaces",
-      value: "Água-sedimento, coluna d'água e água-atmosfera"
-    }
+      value: "Água-sedimento, coluna d'água e água-atmosfera",
+    },
   ];
 
   return (
@@ -317,7 +316,9 @@ function FurnasPage() {
           <HeaderInfo>
             <HeaderTitle>Balanço de Carbono nos Reservatórios de Furnas</HeaderTitle>
             <HeaderSubtitle>
-              Projeto desenvolvido pelo INPE em cooperação com UFRJ, UFJF e IIE para determinação de emissões de gases de efeito estufa nos reservatórios das hidrelétricas de Furnas Centrais Elétricas S.A.
+              Projeto desenvolvido pelo INPE em cooperação com UFRJ, UFJF e IIE para determinação de
+              emissões de gases de efeito estufa nos reservatórios das hidrelétricas de Furnas
+              Centrais Elétricas S.A.
             </HeaderSubtitle>
           </HeaderInfo>
         </HeaderContent>
@@ -328,12 +329,12 @@ function FurnasPage() {
           <DescriptionSection>
             <DescriptionTitle>Sobre o Projeto</DescriptionTitle>
             <DescriptionText>
-              Este portal constitui a interface de acesso aos dados do Projeto Balanço de Carbono nos 
-              Reservatórios de FURNAS Centrais Elétricas S.A. A base de dados é formada por coletas 
-              in situ de equipes que tinham como objetivo obter dados para determinar as emissões de 
-              gases de efeito estufa: gás carbônico, metano e óxido nitroso, dos reservatórios das 
-              hidrelétricas, identificar as rotas do ciclo do carbono nesses reservatórios e os 
-              fatores ambientais envolvidos.
+              Este portal constitui a interface de acesso aos dados do Projeto Balanço de Carbono
+              nos Reservatórios de FURNAS Centrais Elétricas S.A. A base de dados é formada por
+              coletas in situ de equipes que tinham como objetivo obter dados para determinar as
+              emissões de gases de efeito estufa: gás carbônico, metano e óxido nitroso, dos
+              reservatórios das hidrelétricas, identificar as rotas do ciclo do carbono nesses
+              reservatórios e os fatores ambientais envolvidos.
             </DescriptionText>
           </DescriptionSection>
 
@@ -366,11 +367,16 @@ function FurnasPage() {
           <AccessSection>
             <AccessTitle>Acesso aos Dados</AccessTitle>
             <AccessText>
-              Os dados do Projeto Balanço de Carbono estão disponíveis através de nossa plataforma web, 
-              permitindo consultas personalizadas, visualização em tabelas dinâmicas e mapas interativos.
+              Os dados do Projeto Balanço de Carbono estão disponíveis através de nossa plataforma
+              web, permitindo consultas personalizadas, visualização em tabelas dinâmicas e mapas
+              interativos.
             </AccessText>
             <AccessButton onClick={() => navigate("/furnas/dados")}>
-              <LogoImage src={logoFurnas} alt="Furnas" style={{ width: 32, height: 32, marginRight: "0.5rem" }} />
+              <LogoImage
+                src={logoFurnas}
+                alt="Furnas"
+                style={{ width: 32, height: 32, marginRight: "0.5rem" }}
+              />
               Acessar Dados do Projeto
             </AccessButton>
           </AccessSection>

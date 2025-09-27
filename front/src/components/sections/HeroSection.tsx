@@ -69,7 +69,6 @@ const HeroSubtitle = styled.p`
   }
 `;
 
-
 const ScrollIndicator = styled.div`
   position: absolute;
   bottom: 2rem;
@@ -122,9 +121,9 @@ function HeroSection() {
       <HeroContent>
         <HeroTitle>Portal de Dados Limnológicos</HeroTitle>
         <HeroSubtitle>
-          Acesso integrado aos dados de monitoramento ambiental dos reservatórios de Furnas Centrais Elétricas S.A. através dos projetos SIMA, Balanço de Carbono e BALCAR
+          Acesso integrado aos dados de monitoramento ambiental dos reservatórios de Furnas Centrais
+          Elétricas S.A. através dos projetos SIMA, Balanço de Carbono e BALCAR
         </HeroSubtitle>
-
       </HeroContent>
 
       <ScrollIndicator onClick={scrollToNext}>

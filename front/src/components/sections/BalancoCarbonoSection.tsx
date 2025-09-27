@@ -248,19 +248,21 @@ function BalancoCarbonoSection() {
         <SectionHeader>
           <SectionTitle>Balanço de Carbono nos Reservatórios de Furnas</SectionTitle>
           <SectionSubtitle>
-            Projeto desenvolvido pelo INPE em cooperação com UFRJ, UFJF e IIE para determinação de emissões de gases de efeito estufa nos reservatórios das hidrelétricas de Furnas Centrais Elétricas S.A.
+            Projeto desenvolvido pelo INPE em cooperação com UFRJ, UFJF e IIE para determinação de
+            emissões de gases de efeito estufa nos reservatórios das hidrelétricas de Furnas
+            Centrais Elétricas S.A.
           </SectionSubtitle>
         </SectionHeader>
 
         <ContentGrid>
           <TextContent>
             <Description>
-              Este portal constitui a interface de acesso aos dados do Projeto Balanço de Carbono nos 
-              Reservatórios de FURNAS Centrais Elétricas S.A. A base de dados é formada por coletas 
-              in situ de equipes que tinham como objetivo obter dados para determinar as emissões de 
-              gases de efeito estufa: gás carbônico, metano e óxido nitroso, dos reservatórios das 
-              hidrelétricas, identificar as rotas do ciclo do carbono nesses reservatórios e os 
-              fatores ambientais envolvidos.
+              Este portal constitui a interface de acesso aos dados do Projeto Balanço de Carbono
+              nos Reservatórios de FURNAS Centrais Elétricas S.A. A base de dados é formada por
+              coletas in situ de equipes que tinham como objetivo obter dados para determinar as
+              emissões de gases de efeito estufa: gás carbônico, metano e óxido nitroso, dos
+              reservatórios das hidrelétricas, identificar as rotas do ciclo do carbono nesses
+              reservatórios e os fatores ambientais envolvidos.
             </Description>
 
             <ObjectivesList>
@@ -271,8 +273,8 @@ function BalancoCarbonoSection() {
                 <ObjectiveContent>
                   <ObjectiveTitle>Determinação de Emissões</ObjectiveTitle>
                   <ObjectiveText>
-                    Determinar as emissões de gases de efeito estufa: gás carbônico, metano e óxido nitroso, 
-                    dos reservatórios das hidrelétricas
+                    Determinar as emissões de gases de efeito estufa: gás carbônico, metano e óxido
+                    nitroso, dos reservatórios das hidrelétricas
                   </ObjectiveText>
                 </ObjectiveContent>
               </ObjectiveItem>
@@ -284,7 +286,8 @@ function BalancoCarbonoSection() {
                 <ObjectiveContent>
                   <ObjectiveTitle>Ciclo do Carbono</ObjectiveTitle>
                   <ObjectiveText>
-                    Identificar as rotas do ciclo do carbono nesses reservatórios e os fatores ambientais envolvidos
+                    Identificar as rotas do ciclo do carbono nesses reservatórios e os fatores
+                    ambientais envolvidos
                   </ObjectiveText>
                 </ObjectiveContent>
               </ObjectiveItem>
@@ -296,8 +299,8 @@ function BalancoCarbonoSection() {
                 <ObjectiveContent>
                   <ObjectiveTitle>Avaliação de Fatores</ObjectiveTitle>
                   <ObjectiveText>
-                    Avaliar a influência dos fatores morfológicos, morfométricos, biogeoquímicos e operacionais 
-                    dos reservatórios na emissão de gases de efeito estufa
+                    Avaliar a influência dos fatores morfológicos, morfométricos, biogeoquímicos e
+                    operacionais dos reservatórios na emissão de gases de efeito estufa
                   </ObjectiveText>
                 </ObjectiveContent>
               </ObjectiveItem>
@@ -309,7 +312,8 @@ function BalancoCarbonoSection() {
                 <ObjectiveContent>
                   <ObjectiveTitle>Padrão de Emissão</ObjectiveTitle>
                   <ObjectiveText>
-                    Determinar o padrão de emissão existente, anteriormente à construção de reservatórios
+                    Determinar o padrão de emissão existente, anteriormente à construção de
+                    reservatórios
                   </ObjectiveText>
                 </ObjectiveContent>
               </ObjectiveItem>
@@ -321,8 +325,8 @@ function BalancoCarbonoSection() {
                 <ObjectiveContent>
                   <ObjectiveTitle>Modelo Espacial</ObjectiveTitle>
                   <ObjectiveText>
-                    Elaborar um modelo espacial e temporal de emissão de gases para reservatórios implantados 
-                    em ambientes de cerrado
+                    Elaborar um modelo espacial e temporal de emissão de gases para reservatórios
+                    implantados em ambientes de cerrado
                   </ObjectiveText>
                 </ObjectiveContent>
               </ObjectiveItem>

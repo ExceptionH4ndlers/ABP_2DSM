@@ -252,17 +252,18 @@ function SimaSection() {
         <SectionHeader>
           <SectionTitle>Sistema Integrado de Monitoração Ambiental (SIMA)</SectionTitle>
           <SectionSubtitle>
-            Sistema de monitoramento contínuo desenvolvido pelo INPE para coleta automática de dados limnológicos e meteorológicos em reservatórios
+            Sistema de monitoramento contínuo desenvolvido pelo INPE para coleta automática de dados
+            limnológicos e meteorológicos em reservatórios
           </SectionSubtitle>
         </SectionHeader>
 
         <ContentGrid>
           <TextContent>
             <Description>
-              O SIMA (Sistema Integrado de Monitoração Ambiental) é um sistema desenvolvido pelo INPE 
-              para monitoramento contínuo de reservatórios hidrelétricos. O sistema coleta dados 
-              automaticamente de parâmetros meteorológicos, hidrológicos e de qualidade da água, 
-              fornecendo séries temporais contínuas para análise ambiental e científica.
+              O SIMA (Sistema Integrado de Monitoração Ambiental) é um sistema desenvolvido pelo
+              INPE para monitoramento contínuo de reservatórios hidrelétricos. O sistema coleta
+              dados automaticamente de parâmetros meteorológicos, hidrológicos e de qualidade da
+              água, fornecendo séries temporais contínuas para análise ambiental e científica.
             </Description>
 
             <FeaturesList>

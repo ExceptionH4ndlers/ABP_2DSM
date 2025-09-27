@@ -135,18 +135,18 @@ const MobileButton = styled.button`
   }
 `;
 
-const MobileMenu = styled.div<{ isOpen: boolean }>`
+const MobileMenu = styled.div<{ $isOpen: boolean }>`
   background: linear-gradient(180deg, rgba(8, 78, 172, 1) 0%, rgba(11, 110, 246, 1) 100%);
   width: 100%;
   display: flex;
   flex-direction: column;
-  max-height: ${({ isOpen }) => (isOpen ? "300px" : "0")};
+  max-height: ${({ $isOpen }) => ($isOpen ? "300px" : "0")};
   overflow: hidden;
   transition:
     max-height 0.3s ease-in-out,
     opacity 0.3s ease-in-out;
-  opacity: ${({ isOpen }) => (isOpen ? "1" : "0")};
-  box-shadow: ${({ isOpen }) => (isOpen ? "0 8px 32px rgba(0, 0, 0, 0.2)" : "none")};
+  opacity: ${({ $isOpen }) => ($isOpen ? "1" : "0")};
+  box-shadow: ${({ $isOpen }) => ($isOpen ? "0 8px 32px rgba(0, 0, 0, 0.2)" : "none")};
 `;
 
 const MobileLink = styled(Link)<{ active?: boolean }>`
@@ -228,7 +228,7 @@ function MenuBar() {
       </Container>
 
       {/* Menu mobile */}
-      <MobileMenu isOpen={isOpen}>
+      <MobileMenu $isOpen={isOpen}>
         <MobileLink to="/" active={location.pathname === "/"} onClick={() => setIsOpen(false)}>
           <Home size={18} />
           Home

@@ -12,7 +12,6 @@ const HomeContainer = styled.div`
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 `;
 
-
 const ProjectsSection = styled.section`
   padding: 4rem 2rem;
   background: white;
@@ -109,17 +108,11 @@ const LogoImage = styled.img`
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
   object-fit: contain;
-  filter: 
-    contrast(1.05) 
-    brightness(1.02) 
-    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08));
+  filter: contrast(1.05) brightness(1.02) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08));
   transition: all 0.3s ease;
-  
+
   &:hover {
-    filter: 
-      contrast(1.08) 
-      brightness(1.05) 
-      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
+    filter: contrast(1.08) brightness(1.05) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
     transform: scale(1.02);
   }
 `;
@@ -181,10 +174,7 @@ const InstitutionalLogoImage = styled.img`
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
   object-fit: contain;
-  filter: 
-    contrast(1.05) 
-    brightness(1.02) 
-    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  filter: contrast(1.05) brightness(1.02) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   transition: all 0.3s ease;
 
   ${({ theme }) => theme.media.mobile} {
@@ -221,8 +211,6 @@ const ProjectLink = styled.div`
   }
 `;
 
-
-
 function HomePage() {
   const navigate = useNavigate();
 
@@ -230,31 +218,34 @@ function HomePage() {
     {
       id: "sima",
       title: "SIMA",
-      description: "Sistema pioneiro de monitoramento contínuo com plataformas autônomas ancoradas. Coleta automática de 12+ parâmetros ambientais com transmissão via satélite em tempo real.",
+      description:
+        "Sistema pioneiro de monitoramento contínuo com plataformas autônomas ancoradas. Coleta automática de 12+ parâmetros ambientais com transmissão via satélite em tempo real.",
       icon: <LogoImage src={logoSima} alt="SIMA" style={{ width: 80, height: 80 }} />,
-      color: "#3b82f6"
+      color: "#3b82f6",
     },
     {
       id: "furnas",
       title: "Balanço de Carbono",
-      description: "79 campanhas científicas em reservatórios de Furnas para quantificar emissões de CH₄, CO₂ e N₂O. Desenvolvimento de modelo espacial para ambientes de cerrado.",
+      description:
+        "79 campanhas científicas em reservatórios de Furnas para quantificar emissões de CH₄, CO₂ e N₂O. Desenvolvimento de modelo espacial para ambientes de cerrado.",
       icon: <LogoImage src={logoFurnas} alt="Furnas" style={{ width: 80, height: 80 }} />,
-      color: "#22c55e"
+      color: "#22c55e",
     },
     {
       id: "balcar",
       title: "BALCAR",
-      description: "Estudo das rotas do ciclo do carbono em interfaces água-sedimento, coluna d'água e água-atmosfera. Análise de fatores morfológicos e biogeoquímicos.",
+      description:
+        "Estudo das rotas do ciclo do carbono em interfaces água-sedimento, coluna d'água e água-atmosfera. Análise de fatores morfológicos e biogeoquímicos.",
       icon: <LogoImage src={logoBalcar} alt="BALCAR" style={{ width: 80, height: 80 }} />,
-      color: "#06b6d4"
-    }
+      color: "#06b6d4",
+    },
   ];
 
   const handleProjectClick = (projectId: string) => {
-    if (projectId === 'sima') {
-      navigate('/sima');
+    if (projectId === "sima") {
+      navigate("/sima");
       setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }, 100);
     } else {
       navigate(`/${projectId}`);
@@ -263,13 +254,14 @@ function HomePage() {
 
   return (
     <HomeContainer>
-
       <ProjectsSection>
         <SectionContent>
           <SectionHeader>
             <SectionTitle>Projetos Científicos</SectionTitle>
             <SectionSubtitle>
-              Três projetos pioneiros desenvolvidos pelo INPE em parceria com UFRJ, UFJF, IIE e Furnas Centrais Elétricas S.A. para compreender o impacto ambiental dos reservatórios hidrelétricos no Brasil.
+              Três projetos pioneiros desenvolvidos pelo INPE em parceria com UFRJ, UFJF, IIE e
+              Furnas Centrais Elétricas S.A. para compreender o impacto ambiental dos reservatórios
+              hidrelétricos no Brasil.
             </SectionSubtitle>
           </SectionHeader>
 
@@ -290,23 +282,31 @@ function HomePage() {
 
       <InstitutionalSection>
         <InstitutionalContent>
-          <InstitutionalTitle>Desenvolvido pelo Instituto Nacional de Pesquisas Espaciais</InstitutionalTitle>
+          <InstitutionalTitle>
+            Desenvolvido pelo Instituto Nacional de Pesquisas Espaciais
+          </InstitutionalTitle>
           <InstitutionalLogos>
-            <InstitutionalLogoLink 
-              href="https://www.gov.br/inpe/pt-br" 
-              target="_blank" 
+            <InstitutionalLogoLink
+              href="https://www.gov.br/inpe/pt-br"
+              target="_blank"
               rel="noopener noreferrer"
               title="Site oficial do INPE"
             >
-              <InstitutionalLogoImage src={logoInpe} alt="INPE - Instituto Nacional de Pesquisas Espaciais" />
+              <InstitutionalLogoImage
+                src={logoInpe}
+                alt="INPE - Instituto Nacional de Pesquisas Espaciais"
+              />
             </InstitutionalLogoLink>
-            <InstitutionalLogoLink 
-              href="http://www.dsr.inpe.br/" 
-              target="_blank" 
+            <InstitutionalLogoLink
+              href="http://www.dsr.inpe.br/"
+              target="_blank"
               rel="noopener noreferrer"
               title="Divisão de Sensoriamento Remoto - INPE"
             >
-              <InstitutionalLogoImage src={logoDsr} alt="DSR - Divisão de Sensoriamento Remoto do INPE" />
+              <InstitutionalLogoImage
+                src={logoDsr}
+                alt="DSR - Divisão de Sensoriamento Remoto do INPE"
+              />
             </InstitutionalLogoLink>
           </InstitutionalLogos>
         </InstitutionalContent>

@@ -42,7 +42,6 @@ const Logo = styled.div`
   }
 `;
 
-
 const NavLinks = styled.div<{ $isOpen: boolean }>`
   display: flex;
   align-items: center;
@@ -108,7 +107,6 @@ const MobileMenuButton = styled.button`
     display: block;
   }
 `;
-
 
 const ButtonGroup = styled.div`
   display: flex;
@@ -233,7 +231,6 @@ const DropdownItem = styled.button`
   }
 `;
 
-
 function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -242,7 +239,11 @@ function Navigation() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const activeSection = location.pathname === "/" ? "home" : location.pathname.substring(1);
-  const isSimaActive = activeSection === "sima" || activeSection === "sima-home" || activeSection === "sima-mapa" || activeSection === "sima-dados";
+  const isSimaActive =
+    activeSection === "sima" ||
+    activeSection === "sima-home" ||
+    activeSection === "sima-mapa" ||
+    activeSection === "sima-dados";
 
   // Títulos específicos para cada página
   const getPageTitle = () => {
@@ -261,34 +262,34 @@ function Navigation() {
   };
 
   const navigateToSection = (path: string) => {
-    if (path.startsWith('/sima')) {
-      const sectionId = path.replace('/sima', '').replace('-', '');
-      
+    if (path.startsWith("/sima")) {
+      const sectionId = path.replace("/sima", "").replace("-", "");
+
       // Se já estamos na página SIMA, apenas fazer scroll
-      if (location.pathname === '/sima') {
-        if (sectionId === 'home' || sectionId === '') {
+      if (location.pathname === "/sima") {
+        if (sectionId === "home" || sectionId === "") {
           // Para home, ir para a seção "Sobre o SIMA"
-          const element = document.getElementById('home');
+          const element = document.getElementById("home");
           if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+            element.scrollIntoView({ behavior: "smooth" });
           }
         } else if (sectionId) {
           const element = document.getElementById(sectionId);
           if (element) {
-            element.scrollIntoView({ behavior: 'smooth' });
+            element.scrollIntoView({ behavior: "smooth" });
           }
         }
       } else {
         // Se não estamos na página SIMA, navegar primeiro
-        navigate('/sima');
+        navigate("/sima");
         setTimeout(() => {
-          if (sectionId === 'home' || sectionId === '') {
+          if (sectionId === "home" || sectionId === "") {
             // Para home ou navegação geral, ir para o topo da página
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: "smooth" });
           } else if (sectionId) {
             const element = document.getElementById(sectionId);
             if (element) {
-              element.scrollIntoView({ behavior: 'smooth' });
+              element.scrollIntoView({ behavior: "smooth" });
             }
           }
         }, 100);
@@ -312,9 +313,9 @@ function Navigation() {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -322,9 +323,7 @@ function Navigation() {
     <NavigationContainer>
       <NavContent>
         <NavContentWrapper>
-          <Logo>
-            {getPageTitle()}
-          </Logo>
+          <Logo>{getPageTitle()}</Logo>
         </NavContentWrapper>
 
         <NavLinks $isOpen={isMobileMenuOpen}>
@@ -340,10 +339,7 @@ function Navigation() {
           </NavLink>
 
           <DropdownContainer ref={dropdownRef}>
-            <DropdownButton
-              onClick={handleSimaDropdownToggle}
-              $isActive={isSimaActive}
-            >
+            <DropdownButton onClick={handleSimaDropdownToggle} $isActive={isSimaActive}>
               SIMA
               <ChevronDown size={16} />
             </DropdownButton>
@@ -384,7 +380,6 @@ function Navigation() {
           >
             BALCAR
           </NavLink>
-
         </NavLinks>
 
         <ButtonGroup>

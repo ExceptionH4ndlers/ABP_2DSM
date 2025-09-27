@@ -245,17 +245,11 @@ const LogoImage = styled.img`
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
   object-fit: contain;
-  filter: 
-    contrast(1.05) 
-    brightness(1.02) 
-    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08));
+  filter: contrast(1.05) brightness(1.02) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08));
   transition: all 0.3s ease;
-  
+
   &:hover {
-    filter: 
-      contrast(1.08) 
-      brightness(1.05) 
-      drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
+    filter: contrast(1.08) brightness(1.05) drop-shadow(0 2px 6px rgba(0, 0, 0, 0.12));
     transform: scale(1.02);
   }
 `;
@@ -267,18 +261,21 @@ function BalcarPage() {
     {
       icon: <LogoImage src={logoBalcar} alt="BALCAR" style={{ width: 60, height: 60 }} />,
       title: "Interface Água-Sedimento",
-      description: "Monitoramento dos processos de troca entre a coluna d'água e os sedimentos do fundo, incluindo fluxos de gases e concentrações de carbono e nutrientes."
+      description:
+        "Monitoramento dos processos de troca entre a coluna d'água e os sedimentos do fundo, incluindo fluxos de gases e concentrações de carbono e nutrientes.",
     },
     {
       icon: <LogoImage src={logoBalcar} alt="BALCAR" style={{ width: 60, height: 60 }} />,
       title: "Coluna d'Água",
-      description: "Análise vertical dos parâmetros físicos, químicos e biológicos da água, incluindo produção primária, metabolismo bacteriano e concentrações de nutrientes."
+      description:
+        "Análise vertical dos parâmetros físicos, químicos e biológicos da água, incluindo produção primária, metabolismo bacteriano e concentrações de nutrientes.",
     },
     {
       icon: <Activity size={24} />,
       title: "Interface Água-Atmosfera",
-      description: "Estimativa de fluxos de gases de efeito estufa na interface água-atmosfera e determinação do aporte e das taxas de sedimentação de carbono."
-    }
+      description:
+        "Estimativa de fluxos de gases de efeito estufa na interface água-atmosfera e determinação do aporte e das taxas de sedimentação de carbono.",
+    },
   ];
 
   const parameters = [
@@ -293,7 +290,7 @@ function BalcarPage() {
     { name: "Velocidade do Vento", value: "m/s" },
     { name: "Produção Primária", value: "mg C/m³/h" },
     { name: "Metabolismo Bacteriano", value: "mg C/m³/h" },
-    { name: "Taxa de Sedimentação", value: "mg C/m²/dia" }
+    { name: "Taxa de Sedimentação", value: "mg C/m²/dia" },
   ];
 
   return (
@@ -307,7 +304,8 @@ function BalcarPage() {
           <HeaderInfo>
             <HeaderTitle>Projeto BALCAR</HeaderTitle>
             <HeaderSubtitle>
-              Emissões de Gases de Efeito Estufa em Reservatórios de Centrais Hidrelétricas - Projeto desenvolvido pelo INPE
+              Emissões de Gases de Efeito Estufa em Reservatórios de Centrais Hidrelétricas -
+              Projeto desenvolvido pelo INPE
             </HeaderSubtitle>
           </HeaderInfo>
         </HeaderContent>
@@ -318,12 +316,12 @@ function BalcarPage() {
           <DescriptionSection>
             <DescriptionTitle>Sobre o Projeto BALCAR</DescriptionTitle>
             <DescriptionText>
-              O Projeto BALCAR (Emissões de Gases de Efeito Estufa em Reservatórios de Centrais Hidrelétricas) 
-              é desenvolvido pelo INPE e concentra-se na coleta de dados limnológicos e meteorológicos para 
-              subsidiar estudos sobre o balanço de carbono nos reservatórios de Furnas. Os dados coletados 
-              incluem parâmetros na interface água-sedimento, coluna d'água e interface água-atmosfera, 
-              com o objetivo de determinar as emissões de GEE e entender os processos envolvidos no ciclo 
-              do carbono nesses ambientes.
+              O Projeto BALCAR (Emissões de Gases de Efeito Estufa em Reservatórios de Centrais
+              Hidrelétricas) é desenvolvido pelo INPE e concentra-se na coleta de dados limnológicos
+              e meteorológicos para subsidiar estudos sobre o balanço de carbono nos reservatórios
+              de Furnas. Os dados coletados incluem parâmetros na interface água-sedimento, coluna
+              d'água e interface água-atmosfera, com o objetivo de determinar as emissões de GEE e
+              entender os processos envolvidos no ciclo do carbono nesses ambientes.
             </DescriptionText>
           </DescriptionSection>
 
@@ -343,8 +341,9 @@ function BalcarPage() {
           <ParametersSection>
             <ParametersTitle>Parâmetros Monitorados</ParametersTitle>
             <DescriptionText>
-              O projeto BALCAR monitora diversos parâmetros ambientais relacionados às emissões de gases 
-              de efeito estufa e aos processos do ciclo do carbono em reservatórios hidrelétricos.
+              O projeto BALCAR monitora diversos parâmetros ambientais relacionados às emissões de
+              gases de efeito estufa e aos processos do ciclo do carbono em reservatórios
+              hidrelétricos.
             </DescriptionText>
 
             <ParametersGrid>
@@ -363,11 +362,15 @@ function BalcarPage() {
           <AccessSection>
             <AccessTitle>Acesso aos Dados</AccessTitle>
             <AccessText>
-              Os dados do Projeto BALCAR estão disponíveis através de nossa plataforma web, 
+              Os dados do Projeto BALCAR estão disponíveis através de nossa plataforma web,
               permitindo consultas personalizadas, visualização em gráficos e exportação em CSV.
             </AccessText>
             <AccessButton onClick={() => navigate("/balcar/dados")}>
-              <LogoImage src={logoBalcar} alt="BALCAR" style={{ width: 32, height: 32, marginRight: "0.5rem" }} />
+              <LogoImage
+                src={logoBalcar}
+                alt="BALCAR"
+                style={{ width: 32, height: 32, marginRight: "0.5rem" }}
+              />
               Acessar Dados do BALCAR
             </AccessButton>
           </AccessSection>
