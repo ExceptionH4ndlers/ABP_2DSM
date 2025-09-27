@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 export interface SimaApiData {
   idsima: number;
@@ -57,7 +57,7 @@ export interface SimaApiParams {
   sortOrder?: string;
 }
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = "http://localhost:3001";
 
 export const useSimaApi = () => {
   const [data, setData] = useState<SimaApiData[]>([]);
@@ -67,7 +67,7 @@ export const useSimaApi = () => {
     page: 1,
     limit: 10,
     total: 0,
-    totalPages: 0
+    totalPages: 0,
   });
 
   const fetchData = async (params: SimaApiParams) => {
@@ -79,38 +79,38 @@ export const useSimaApi = () => {
         page: params.page.toString(),
         limit: params.limit.toString(),
         startDate: params.startDate,
-        endDate: params.endDate
+        endDate: params.endDate,
       });
 
       if (params.estacao) {
-        queryParams.append('estacao', params.estacao);
+        queryParams.append("estacao", params.estacao);
       }
 
       if (params.sortOrder) {
-        queryParams.append('sortOrder', params.sortOrder);
+        queryParams.append("sortOrder", params.sortOrder);
       }
 
       const response = await fetch(`${API_BASE_URL}/sima/all?${queryParams}`);
-      
+
       if (!response.ok) {
         throw new Error(`Erro na API: ${response.status}`);
       }
 
       const result: SimaApiResponse = await response.json();
-      
+
       if (result.success) {
         setData(result.data);
         setPagination({
           page: result.page,
           limit: result.limit,
           total: result.total,
-          totalPages: result.totalPages
+          totalPages: result.totalPages,
         });
       } else {
-        throw new Error('Erro na resposta da API');
+        throw new Error("Erro na resposta da API");
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro desconhecido');
+      setError(err instanceof Error ? err.message : "Erro desconhecido");
       setData([]);
     } finally {
       setLoading(false);
@@ -122,6 +122,6 @@ export const useSimaApi = () => {
     loading,
     error,
     pagination,
-    fetchData
+    fetchData,
   };
 };

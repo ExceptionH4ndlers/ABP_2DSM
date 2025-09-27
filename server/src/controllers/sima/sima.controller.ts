@@ -16,7 +16,7 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const startDate = req.query.startDate as string;
     const endDate = req.query.endDate as string;
     const estacao = req.query.estacao as string;
-    const sortOrder = req.query.sortOrder as string || 'desc'; // Padrão: mais recente primeiro
+    const sortOrder = (req.query.sortOrder as string) || "desc"; // Padrão: mais recente primeiro
 
     // Validações
     if (!page || page < 1) {
@@ -67,7 +67,7 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const result = await simaPool.query(
       `SELECT * FROM tbsima
        ${whereClause}
-       ORDER BY datahora ${sortOrder === 'asc' ? 'ASC' : 'DESC'}
+       ORDER BY datahora ${sortOrder === "asc" ? "ASC" : "DESC"}
        LIMIT $1 OFFSET $2`,
       queryParams,
     );

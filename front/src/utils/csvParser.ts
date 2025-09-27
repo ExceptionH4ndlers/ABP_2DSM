@@ -121,20 +121,47 @@ export class SimaCsvParser {
       // Gerar cabeçalhos dinamicamente baseados nos campos disponíveis nos dados
       if (sampleData) {
         const dynamicHeaders = Object.keys(sampleData)
-          .filter(key => key !== 'idsima' && key !== 'idestacao' && key !== 'datahora')
-          .map(key => key.toUpperCase())
+          .filter((key) => key !== "idsima" && key !== "idestacao" && key !== "datahora")
+          .map((key) => key.toUpperCase())
           .sort();
 
         headers.push(...dynamicHeaders);
       } else {
         // Fallback com todos os campos possíveis se não houver dados de exemplo
         const allPossibleHeaders = [
-          "REGNO", "NOFSAMPLES", "PROAMAG", "DIRVT", "INTENSVT", "U_VEL", "V_VEL",
-          "TEMPAG1", "TEMPAG2", "TEMPAG3", "TEMPAG4", "TEMPAR", "UR", "TEMPAR_R", 
-          "PRESSATM", "RADINCID", "RADREFL", "BATERIA", "SONDA_TEMP", "SONDA_COND",
-          "SONDA_DOSAT", "SONDA_DO", "SONDA_PH", "SONDA_NH4", "SONDA_NO3", 
-          "SONDA_TURB", "SONDA_CHL", "SONDA_BATERIA", "CORR_NORTE", "CORR_LESTE",
-          "CO2_LOW", "CO2_HIGH", "PRECIPITACAO"
+          "REGNO",
+          "NOFSAMPLES",
+          "PROAMAG",
+          "DIRVT",
+          "INTENSVT",
+          "U_VEL",
+          "V_VEL",
+          "TEMPAG1",
+          "TEMPAG2",
+          "TEMPAG3",
+          "TEMPAG4",
+          "TEMPAR",
+          "UR",
+          "TEMPAR_R",
+          "PRESSATM",
+          "RADINCID",
+          "RADREFL",
+          "BATERIA",
+          "SONDA_TEMP",
+          "SONDA_COND",
+          "SONDA_DOSAT",
+          "SONDA_DO",
+          "SONDA_PH",
+          "SONDA_NH4",
+          "SONDA_NO3",
+          "SONDA_TURB",
+          "SONDA_CHL",
+          "SONDA_BATERIA",
+          "CORR_NORTE",
+          "CORR_LESTE",
+          "CO2_LOW",
+          "CO2_HIGH",
+          "PRECIPITACAO",
         ];
         headers.push(...allPossibleHeaders);
       }
@@ -160,11 +187,11 @@ export class SimaCsvParser {
       fonte: "SIMA - Sistema Integrado de Monitoramento Ambiental",
       dataGeracao: new Date().toISOString(),
       versao: "1.0",
-      estacao: { 
+      estacao: {
         idestacao: estacaoId || "N/A",
         rotulo: estacaoId || "N/A",
         lat: undefined,
-        lng: undefined
+        lng: undefined,
       },
       periodoInicio,
       periodoFim,
@@ -186,10 +213,10 @@ export class SimaCsvParser {
 
     // Adicionar todos os campos dinamicamente baseados nos dados disponíveis
     const dataKeys = Object.keys(data)
-      .filter(key => key !== 'idsima' && key !== 'idestacao' && key !== 'datahora')
+      .filter((key) => key !== "idsima" && key !== "idestacao" && key !== "datahora")
       .sort();
 
-    dataKeys.forEach(key => {
+    dataKeys.forEach((key) => {
       const value = (data as unknown as Record<string, unknown>)[key];
       row.push(value !== null && value !== undefined ? value.toString() : "");
     });

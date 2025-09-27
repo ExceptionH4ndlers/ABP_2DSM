@@ -260,26 +260,26 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
   // Função para validar campos obrigatórios
   const validateRequiredFields = () => {
     const errors: string[] = [];
-    
+
     if (!filename.trim()) {
       errors.push("Nome do arquivo é obrigatório");
     }
-    
+
     if (!options.formatoData) {
       errors.push("Formato de data é obrigatório");
     }
-    
+
     if (!options.separador) {
       errors.push("Separador é obrigatório");
     }
-    
+
     if (!options.encoding) {
       errors.push("Codificação é obrigatória");
     }
-    
+
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   };
 
@@ -293,22 +293,24 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
     }
 
     try {
-      const response = await fetch(`http://localhost:3001/sima/all?page=1&limit=1000&startDate=2004-01-01&endDate=2017-12-31&estacao=${estacao}`);
-      
+      const response = await fetch(
+        `http://localhost:3001/sima/all?page=1&limit=1000&startDate=2004-01-01&endDate=2017-12-31&estacao=${estacao}`,
+      );
+
       if (response.ok) {
         const result = await response.json();
-        
+
         if (result.success && result.data && result.data.length > 0) {
           const dates = result.data.map((item: { datahora: string }) => new Date(item.datahora));
           const minDate = new Date(Math.min(...dates.map((d: Date) => d.getTime())));
           const maxDate = new Date(Math.max(...dates.map((d: Date) => d.getTime())));
-          
-          updateFilters("dataInicio", minDate.toISOString().split('T')[0]);
-          updateFilters("dataFim", maxDate.toISOString().split('T')[0]);
+
+          updateFilters("dataInicio", minDate.toISOString().split("T")[0]);
+          updateFilters("dataFim", maxDate.toISOString().split("T")[0]);
         }
       }
     } catch (error) {
-      console.error('Erro ao buscar datas da estação:', error);
+      console.error("Erro ao buscar datas da estação:", error);
     }
   };
 
@@ -537,7 +539,7 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
         </FormSection>
 
         {!validateRequiredFields().isValid && (
-          <ErrorMessage style={{ marginBottom: '1rem' }}>
+          <ErrorMessage style={{ marginBottom: "1rem" }}>
             <AlertCircle size={20} />
             Campos obrigatórios não preenchidos: {validateRequiredFields().errors.join(", ")}
           </ErrorMessage>
@@ -547,9 +549,9 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
           <Button $variant="secondary" onClick={handleClose} disabled={isExporting}>
             Cancelar
           </Button>
-          <Button 
-            $variant="primary" 
-            onClick={handleExport} 
+          <Button
+            $variant="primary"
+            onClick={handleExport}
             disabled={isExporting || !validateRequiredFields().isValid}
           >
             <Download size={16} />

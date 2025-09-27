@@ -28,36 +28,41 @@ export const useCsvExport = (): UseCsvExportReturn => {
         let dataToExport = data;
 
         // Se há filtros no modal, sempre buscar dados da API (ignorar dados da tabela)
-        if (options?.filtros && (options.filtros.dataInicio || options.filtros.dataFim || options.filtros.estacao)) {
-            const queryParams = new URLSearchParams();
-            
-            if (options.filtros.dataInicio) {
-              queryParams.append('startDate', options.filtros.dataInicio);
-            }
-            if (options.filtros.dataFim) {
-              queryParams.append('endDate', options.filtros.dataFim);
-            }
-            if (options.filtros.estacao) {
-              queryParams.append('estacao', options.filtros.estacao);
-            }
-            
-            // Buscar muitos registros para exportação
-            queryParams.append('page', '1');
-            queryParams.append('limit', '10000');
+        if (
+          options?.filtros &&
+          (options.filtros.dataInicio || options.filtros.dataFim || options.filtros.estacao)
+        ) {
+          const queryParams = new URLSearchParams();
 
-            const response = await fetch(`http://localhost:3001/sima/all?${queryParams}`);
-            
-            if (response.ok) {
-              const result = await response.json();
-              if (result.success && result.data) {
-                dataToExport = result.data;
-              }
+          if (options.filtros.dataInicio) {
+            queryParams.append("startDate", options.filtros.dataInicio);
+          }
+          if (options.filtros.dataFim) {
+            queryParams.append("endDate", options.filtros.dataFim);
+          }
+          if (options.filtros.estacao) {
+            queryParams.append("estacao", options.filtros.estacao);
+          }
+
+          // Buscar muitos registros para exportação
+          queryParams.append("page", "1");
+          queryParams.append("limit", "10000");
+
+          const response = await fetch(`http://localhost:3001/sima/all?${queryParams}`);
+
+          if (response.ok) {
+            const result = await response.json();
+            if (result.success && result.data) {
+              dataToExport = result.data;
             }
           }
+        }
 
         // Validar dados antes da exportação
         if (dataToExport.length === 0) {
-          throw new Error("Nenhum dado encontrado para exportação. Verifique os filtros ou carregue dados na tabela.");
+          throw new Error(
+            "Nenhum dado encontrado para exportação. Verifique os filtros ou carregue dados na tabela.",
+          );
         }
 
         const validation = simaCsvParser.validateData(dataToExport);

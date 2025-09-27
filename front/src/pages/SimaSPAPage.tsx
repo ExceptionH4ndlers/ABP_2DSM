@@ -1,9 +1,30 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { 
-  Target, Clock, Activity, Shield, MapPin, Database, Filter, Search, ChevronLeft, ChevronRight,
-  Thermometer, Droplets, Wind, Sun, Waves, Zap, Gauge, Eye, Droplet, TestTube, 
-  Navigation, Battery, CloudRain, AlertCircle
+import {
+  Target,
+  Clock,
+  Activity,
+  Shield,
+  MapPin,
+  Database,
+  Filter,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  Thermometer,
+  Droplets,
+  Wind,
+  Sun,
+  Waves,
+  Zap,
+  Gauge,
+  Eye,
+  Droplet,
+  TestTube,
+  Navigation,
+  Battery,
+  CloudRain,
+  AlertCircle,
 } from "lucide-react";
 import { CsvExportButton } from "../components/CsvExportButton";
 import { useSimaApi } from "../hooks/useSimaApi";
@@ -203,7 +224,6 @@ const ActionButton = styled.button`
   }
 `;
 
-
 const SearchButton = styled(ActionButton)`
   background: white;
   border-color: #9ca3af;
@@ -245,7 +265,9 @@ const StyledTable = styled.table`
   background: white;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   th,
   td {
@@ -326,58 +348,100 @@ const StyledTable = styled.table`
 
   /* Categorias de parâmetros com cores mais definidas */
   /* Identificação */
-  th:nth-child(4), th:nth-child(5), th:nth-child(6),
-  td:nth-child(4), td:nth-child(5), td:nth-child(6) {
+  th:nth-child(4),
+  th:nth-child(5),
+  th:nth-child(6),
+  td:nth-child(4),
+  td:nth-child(5),
+  td:nth-child(6) {
     background: #fef3c7;
   }
 
   /* Vento */
-  th:nth-child(7), th:nth-child(8), th:nth-child(9), th:nth-child(10),
-  td:nth-child(7), td:nth-child(8), td:nth-child(9), td:nth-child(10) {
+  th:nth-child(7),
+  th:nth-child(8),
+  th:nth-child(9),
+  th:nth-child(10),
+  td:nth-child(7),
+  td:nth-child(8),
+  td:nth-child(9),
+  td:nth-child(10) {
     background: #dbeafe;
   }
 
   /* Temperatura Água */
-  th:nth-child(11), th:nth-child(12), th:nth-child(13), th:nth-child(14),
-  td:nth-child(11), td:nth-child(12), td:nth-child(13), td:nth-child(14) {
+  th:nth-child(11),
+  th:nth-child(12),
+  th:nth-child(13),
+  th:nth-child(14),
+  td:nth-child(11),
+  td:nth-child(12),
+  td:nth-child(13),
+  td:nth-child(14) {
     background: #d1fae5;
   }
 
   /* Atmosfera */
-  th:nth-child(15), th:nth-child(16), th:nth-child(17), th:nth-child(18),
-  td:nth-child(15), td:nth-child(16), td:nth-child(17), td:nth-child(18) {
+  th:nth-child(15),
+  th:nth-child(16),
+  th:nth-child(17),
+  th:nth-child(18),
+  td:nth-child(15),
+  td:nth-child(16),
+  td:nth-child(17),
+  td:nth-child(18) {
     background: #fce7f3;
   }
 
   /* Radiação */
-  th:nth-child(19), th:nth-child(20),
-  td:nth-child(19), td:nth-child(20) {
+  th:nth-child(19),
+  th:nth-child(20),
+  td:nth-child(19),
+  td:nth-child(20) {
     background: #fef3c7;
   }
 
   /* Sistema */
-  th:nth-child(21), th:nth-child(30),
-  td:nth-child(21), td:nth-child(30) {
+  th:nth-child(21),
+  th:nth-child(30),
+  td:nth-child(21),
+  td:nth-child(30) {
     background: #e5e7eb;
   }
 
   /* Sonda Aquática */
-  th:nth-child(22), th:nth-child(23), th:nth-child(24), th:nth-child(25), 
-  th:nth-child(26), th:nth-child(27), th:nth-child(28), th:nth-child(29),
-  td:nth-child(22), td:nth-child(23), td:nth-child(24), td:nth-child(25), 
-  td:nth-child(26), td:nth-child(27), td:nth-child(28), td:nth-child(29) {
+  th:nth-child(22),
+  th:nth-child(23),
+  th:nth-child(24),
+  th:nth-child(25),
+  th:nth-child(26),
+  th:nth-child(27),
+  th:nth-child(28),
+  th:nth-child(29),
+  td:nth-child(22),
+  td:nth-child(23),
+  td:nth-child(24),
+  td:nth-child(25),
+  td:nth-child(26),
+  td:nth-child(27),
+  td:nth-child(28),
+  td:nth-child(29) {
     background: #dbeafe;
   }
 
   /* Correntes */
-  th:nth-child(31), th:nth-child(32),
-  td:nth-child(31), td:nth-child(32) {
+  th:nth-child(31),
+  th:nth-child(32),
+  td:nth-child(31),
+  td:nth-child(32) {
     background: #ddd6fe;
   }
 
   /* Gases */
-  th:nth-child(33), th:nth-child(34),
-  td:nth-child(33), td:nth-child(34) {
+  th:nth-child(33),
+  th:nth-child(34),
+  td:nth-child(33),
+  td:nth-child(34) {
     background: #fecaca;
   }
 
@@ -560,51 +624,53 @@ function SimaSPAPage() {
     endDate: "2016-12-03", // Maior data disponível no banco SIMA
     limit: 10,
     estacao: "", // Filtro por estação
-    sortOrder: "desc" // Ordenação: "asc" (mais antigo → mais recente) ou "desc" (mais recente → mais antigo)
+    sortOrder: "desc", // Ordenação: "asc" (mais antigo → mais recente) ou "desc" (mais recente → mais antigo)
   });
 
   // Função para buscar datas específicas de uma estação
   const updateDatesForStation = async (estacao: string) => {
     // Atualizar a estação primeiro
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      estacao: estacao
+      estacao: estacao,
     }));
 
     // Se for "todas as estações", usar as datas gerais
     if (!estacao) {
-      setFilters(prev => ({
+      setFilters((prev) => ({
         ...prev,
         startDate: "2004-01-12", // Data mais antiga geral
         endDate: "2016-12-03", // Data mais recente geral
-        estacao: estacao
+        estacao: estacao,
       }));
       return;
     }
 
     try {
       // Buscar dados da estação específica para obter as datas
-      const response = await fetch(`http://localhost:3001/sima/all?page=1&limit=1000&startDate=2004-01-01&endDate=2017-12-31&estacao=${estacao}`);
-      
+      const response = await fetch(
+        `http://localhost:3001/sima/all?page=1&limit=1000&startDate=2004-01-01&endDate=2017-12-31&estacao=${estacao}`,
+      );
+
       if (response.ok) {
         const result = await response.json();
-        
+
         if (result.success && result.data && result.data.length > 0) {
           // Encontrar a data mais antiga e mais recente
           const dates = result.data.map((item: { datahora: string }) => new Date(item.datahora));
           const minDate = new Date(Math.min(...dates.map((d: Date) => d.getTime())));
           const maxDate = new Date(Math.max(...dates.map((d: Date) => d.getTime())));
-          
+
           // Atualizar os filtros com as novas datas
-          setFilters(prev => ({
+          setFilters((prev) => ({
             ...prev,
-            startDate: minDate.toISOString().split('T')[0],
-            endDate: maxDate.toISOString().split('T')[0]
+            startDate: minDate.toISOString().split("T")[0],
+            endDate: maxDate.toISOString().split("T")[0],
           }));
         }
       }
     } catch (error) {
-      console.error('Erro ao buscar datas da estação:', error);
+      console.error("Erro ao buscar datas da estação:", error);
     }
   };
 
@@ -617,7 +683,7 @@ function SimaSPAPage() {
       startDate: filters.startDate,
       endDate: filters.endDate,
       estacao: filters.estacao || undefined,
-      sortOrder: filters.sortOrder
+      sortOrder: filters.sortOrder,
     });
   };
 
@@ -628,7 +694,7 @@ function SimaSPAPage() {
       startDate: filters.startDate,
       endDate: filters.endDate,
       estacao: filters.estacao || undefined,
-      sortOrder: filters.sortOrder
+      sortOrder: filters.sortOrder,
     });
   };
 
@@ -638,7 +704,7 @@ function SimaSPAPage() {
       endDate: "2016-12-03", // Maior data disponível no banco SIMA
       limit: 10,
       estacao: "",
-      sortOrder: "desc"
+      sortOrder: "desc",
     });
   };
 
@@ -672,7 +738,7 @@ function SimaSPAPage() {
     { value: "324462", label: "Estação 324462" },
     { value: "32459", label: "Estação 32459" },
     { value: "funilB", label: "Estação Funil B" },
-    { value: "moraes", label: "Estação Moraes" }
+    { value: "moraes", label: "Estação Moraes" },
   ];
   return (
     <SimaSPAContainer>
@@ -920,7 +986,7 @@ function SimaSPAPage() {
               <li>Visualização de séries temporais</li>
             </ul>
           </MapPlaceholder>
-          
+
           <FilterButton>
             <Filter size={20} />
             Configurar Filtros
@@ -930,35 +996,35 @@ function SimaSPAPage() {
 
       {/* Seção Tabelas - Fora do MainContent para usar largura total */}
       <FullWidthSection id="dados">
-        <SectionTitle style={{ textAlign: 'center', marginBottom: '1rem' }}>
-            <Database size={40} />
+        <SectionTitle style={{ textAlign: "center", marginBottom: "1rem" }}>
+          <Database size={40} />
           Banco de Dados
-          </SectionTitle>
-        <SectionSubtitle style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            Consulte e visualize os dados coletados pelo SIMA em formato de tabelas
-          </SectionSubtitle>
+        </SectionTitle>
+        <SectionSubtitle style={{ textAlign: "center", marginBottom: "2rem" }}>
+          Consulte e visualize os dados coletados pelo SIMA em formato de tabelas
+        </SectionSubtitle>
 
-        <ControlsSection style={{ maxWidth: '100%', width: '100%' }}>
-            <ControlsGrid>
-              <ControlGroup>
-                <ControlLabel>Data Início</ControlLabel>
-              <ControlInput 
-                type="date" 
+        <ControlsSection style={{ maxWidth: "100%", width: "100%" }}>
+          <ControlsGrid>
+            <ControlGroup>
+              <ControlLabel>Data Início</ControlLabel>
+              <ControlInput
+                type="date"
                 value={filters.startDate}
-                onChange={(e) => setFilters({...filters, startDate: e.target.value})}
+                onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
               />
-              </ControlGroup>
-              <ControlGroup>
-                <ControlLabel>Data Fim</ControlLabel>
-              <ControlInput 
-                type="date" 
+            </ControlGroup>
+            <ControlGroup>
+              <ControlLabel>Data Fim</ControlLabel>
+              <ControlInput
+                type="date"
                 value={filters.endDate}
-                onChange={(e) => setFilters({...filters, endDate: e.target.value})}
+                onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
               />
-              </ControlGroup>
-              <ControlGroup>
-                <ControlLabel>Estação</ControlLabel>
-              <ControlSelect 
+            </ControlGroup>
+            <ControlGroup>
+              <ControlLabel>Estação</ControlLabel>
+              <ControlSelect
                 value={filters.estacao}
                 onChange={(e) => updateDatesForStation(e.target.value)}
               >
@@ -967,13 +1033,13 @@ function SimaSPAPage() {
                     {estacao.label}
                   </option>
                 ))}
-                </ControlSelect>
-              </ControlGroup>
-              <ControlGroup>
+              </ControlSelect>
+            </ControlGroup>
+            <ControlGroup>
               <ControlLabel>Registros por página</ControlLabel>
-              <ControlSelect 
+              <ControlSelect
                 value={filters.limit}
-                onChange={(e) => setFilters({...filters, limit: parseInt(e.target.value)})}
+                onChange={(e) => setFilters({ ...filters, limit: parseInt(e.target.value) })}
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -983,169 +1049,248 @@ function SimaSPAPage() {
             </ControlGroup>
             <ControlGroup>
               <ControlLabel>Ordenação</ControlLabel>
-              <ControlSelect 
+              <ControlSelect
                 value={filters.sortOrder}
-                onChange={(e) => setFilters({...filters, sortOrder: e.target.value})}
+                onChange={(e) => setFilters({ ...filters, sortOrder: e.target.value })}
               >
                 <option value="desc">Mais recente → Mais antigo</option>
                 <option value="asc">Mais antigo → Mais recente</option>
-                </ControlSelect>
-              </ControlGroup>
-            </ControlsGrid>
-            
-            <ActionButtons>
+              </ControlSelect>
+            </ControlGroup>
+          </ControlsGrid>
+
+          <ActionButtons>
             <SearchButton onClick={handleSearch} disabled={loading}>
-                <Search size={20} />
-              {loading ? 'Buscando...' : 'Buscar Dados'}
+              <Search size={20} />
+              {loading ? "Buscando..." : "Buscar Dados"}
             </SearchButton>
             <ClearButton onClick={handleClearFilters}>
-                <Filter size={20} />
-                Limpar Filtros
+              <Filter size={20} />
+              Limpar Filtros
             </ClearButton>
             <CsvExportButton data={data} filename="dados_sima.csv" />
-            </ActionButtons>
-          </ControlsSection>
+          </ActionButtons>
+        </ControlsSection>
 
-          {error && (
-            <ErrorContainer>
-              <strong>Erro ao carregar dados:</strong> {error}
-            </ErrorContainer>
-          )}
+        {error && (
+          <ErrorContainer>
+            <strong>Erro ao carregar dados:</strong> {error}
+          </ErrorContainer>
+        )}
 
-          {loading ? (
-            <LoadingContainer>
-              <Search size={24} style={{ marginRight: '0.5rem' }} />
-              Carregando dados...
-            </LoadingContainer>
-          ) : (
-            <>
-          <TableContainer>
-            <StyledTable>
-              <thead>
-                <tr>
-                      <th><Database size={18} /> ID</th>
-                      <th><MapPin size={18} /> Estação</th>
-                      <th><Clock size={18} /> Data/Hora</th>
-                      <th><Activity size={18} /> Reg. No</th>
-                      <th><TestTube size={18} /> Amostras</th>
-                      <th><Navigation size={18} /> Proa Mag</th>
-                      <th><Wind size={18} /> Vento Dir. (°)</th>
-                      <th><Wind size={18} /> Vento Vel. (m/s)</th>
-                      <th><Wind size={18} /> Vento U (m/s)</th>
-                      <th><Wind size={18} /> Vento V (m/s)</th>
-                      <th><Waves size={18} /> Temp. Água 1 (°C)</th>
-                      <th><Waves size={18} /> Temp. Água 2 (°C)</th>
-                      <th><Waves size={18} /> Temp. Água 3 (°C)</th>
-                      <th><Waves size={18} /> Temp. Água 4 (°C)</th>
-                      <th><Thermometer size={18} /> Temp. Ar (°C)</th>
-                      <th><Droplets size={18} /> Umidade (%)</th>
-                      <th><Thermometer size={18} /> Temp. Ar Rotronic (°C)</th>
-                      <th><Gauge size={18} /> Pressão (hPa)</th>
-                      <th><Sun size={18} /> Rad. Solar Inc. (W/m²)</th>
-                      <th><Sun size={18} /> Rad. Solar Ref. (W/m²)</th>
-                      <th><Battery size={18} /> Bateria Painel (V)</th>
-                      <th><Thermometer size={18} /> Sonda Temp. (°C)</th>
-                      <th><Zap size={18} /> Condutividade (μS/cm)</th>
-                      <th><Eye size={18} /> O₂ Saturação (%)</th>
-                      <th><Droplet size={18} /> Oxigênio (mg/L)</th>
-                      <th><TestTube size={18} /> pH</th>
-                      <th><TestTube size={18} /> Amonia (mg/L)</th>
-                      <th><TestTube size={18} /> Nitrato (mg/L)</th>
-                      <th><Eye size={18} /> Turbidez (NTU)</th>
-                      <th><Droplet size={18} /> Clorofila (μg/L)</th>
-                      <th><Battery size={18} /> Sonda Bateria (V)</th>
-                      <th><Navigation size={18} /> Corrente Norte (m/s)</th>
-                      <th><Navigation size={18} /> Corrente Leste (m/s)</th>
-                      <th><AlertCircle size={18} /> CO₂ Baixo (ppm)</th>
-                      <th><AlertCircle size={18} /> CO₂ Alto (ppm)</th>
-                      <th><CloudRain size={18} /> Precipitação (mm)</th>
-                </tr>
-              </thead>
-              <tbody>
-                    {data.map((item) => (
-                  <tr key={item.idsima}>
-                        <td><strong>{item.idsima}</strong></td>
-                        <td><strong>{item.idestacao}</strong></td>
-                        <td><strong>{new Date(item.datahora).toLocaleString("pt-BR")}</strong></td>
-                        <td>{item.regno || "-"}</td>
-                        <td>{item.nofsamples || "-"}</td>
-                        <td>{formatValue(item.proamag, 2)}</td>
-                        <td>{formatValue(item.dirvt, 1)}</td>
-                        <td>{formatValue(item.intensvt, 1)}</td>
-                        <td>{formatValue(item.u_vel, 2)}</td>
-                        <td>{formatValue(item.v_vel, 2)}</td>
-                        <td>{formatValue(item.tempag1, 1)}</td>
-                        <td>{formatValue(item.tempag2, 1)}</td>
-                        <td>{formatValue(item.tempag3, 1)}</td>
-                        <td>{formatValue(item.tempag4, 1)}</td>
-                        <td>{formatValue(item.tempar, 1)}</td>
-                        <td>{formatValue(item.ur, 1)}</td>
-                        <td>{formatValue(item.tempar_r, 1)}</td>
-                        <td>{formatValue(item.pressatm, 1)}</td>
-                        <td>{formatValue(item.radincid, 1)}</td>
-                        <td>{formatValue(item.radrefl, 1)}</td>
-                        <td>{formatValue(item.bateria, 2)}</td>
-                        <td>{formatValue(item.sonda_temp, 1)}</td>
-                        <td>{formatValue(item.sonda_cond, 1)}</td>
-                        <td>{formatValue(item.sonda_dosat, 1)}</td>
-                        <td>{formatValue(item.sonda_do, 1)}</td>
-                        <td>{formatValue(item.sonda_ph, 1)}</td>
-                        <td>{formatValue(item.sonda_nh4, 2)}</td>
-                        <td>{formatValue(item.sonda_no3, 2)}</td>
-                        <td>{formatValue(item.sonda_turb, 1)}</td>
-                        <td>{formatValue(item.sonda_chl, 1)}</td>
-                        <td>{formatValue(item.sonda_bateria, 2)}</td>
-                        <td>{formatValue(item.corr_norte, 2)}</td>
-                        <td>{formatValue(item.corr_leste, 2)}</td>
-                        <td>{formatValue(item.co2_low, 1)}</td>
-                        <td>{formatValue(item.co2_high, 1)}</td>
-                        <td>{formatValue(item.precipitacao, 1)}</td>
+        {loading ? (
+          <LoadingContainer>
+            <Search size={24} style={{ marginRight: "0.5rem" }} />
+            Carregando dados...
+          </LoadingContainer>
+        ) : (
+          <>
+            <TableContainer>
+              <StyledTable>
+                <thead>
+                  <tr>
+                    <th>
+                      <Database size={18} /> ID
+                    </th>
+                    <th>
+                      <MapPin size={18} /> Estação
+                    </th>
+                    <th>
+                      <Clock size={18} /> Data/Hora
+                    </th>
+                    <th>
+                      <Activity size={18} /> Reg. No
+                    </th>
+                    <th>
+                      <TestTube size={18} /> Amostras
+                    </th>
+                    <th>
+                      <Navigation size={18} /> Proa Mag
+                    </th>
+                    <th>
+                      <Wind size={18} /> Vento Dir. (°)
+                    </th>
+                    <th>
+                      <Wind size={18} /> Vento Vel. (m/s)
+                    </th>
+                    <th>
+                      <Wind size={18} /> Vento U (m/s)
+                    </th>
+                    <th>
+                      <Wind size={18} /> Vento V (m/s)
+                    </th>
+                    <th>
+                      <Waves size={18} /> Temp. Água 1 (°C)
+                    </th>
+                    <th>
+                      <Waves size={18} /> Temp. Água 2 (°C)
+                    </th>
+                    <th>
+                      <Waves size={18} /> Temp. Água 3 (°C)
+                    </th>
+                    <th>
+                      <Waves size={18} /> Temp. Água 4 (°C)
+                    </th>
+                    <th>
+                      <Thermometer size={18} /> Temp. Ar (°C)
+                    </th>
+                    <th>
+                      <Droplets size={18} /> Umidade (%)
+                    </th>
+                    <th>
+                      <Thermometer size={18} /> Temp. Ar Rotronic (°C)
+                    </th>
+                    <th>
+                      <Gauge size={18} /> Pressão (hPa)
+                    </th>
+                    <th>
+                      <Sun size={18} /> Rad. Solar Inc. (W/m²)
+                    </th>
+                    <th>
+                      <Sun size={18} /> Rad. Solar Ref. (W/m²)
+                    </th>
+                    <th>
+                      <Battery size={18} /> Bateria Painel (V)
+                    </th>
+                    <th>
+                      <Thermometer size={18} /> Sonda Temp. (°C)
+                    </th>
+                    <th>
+                      <Zap size={18} /> Condutividade (μS/cm)
+                    </th>
+                    <th>
+                      <Eye size={18} /> O₂ Saturação (%)
+                    </th>
+                    <th>
+                      <Droplet size={18} /> Oxigênio (mg/L)
+                    </th>
+                    <th>
+                      <TestTube size={18} /> pH
+                    </th>
+                    <th>
+                      <TestTube size={18} /> Amonia (mg/L)
+                    </th>
+                    <th>
+                      <TestTube size={18} /> Nitrato (mg/L)
+                    </th>
+                    <th>
+                      <Eye size={18} /> Turbidez (NTU)
+                    </th>
+                    <th>
+                      <Droplet size={18} /> Clorofila (μg/L)
+                    </th>
+                    <th>
+                      <Battery size={18} /> Sonda Bateria (V)
+                    </th>
+                    <th>
+                      <Navigation size={18} /> Corrente Norte (m/s)
+                    </th>
+                    <th>
+                      <Navigation size={18} /> Corrente Leste (m/s)
+                    </th>
+                    <th>
+                      <AlertCircle size={18} /> CO₂ Baixo (ppm)
+                    </th>
+                    <th>
+                      <AlertCircle size={18} /> CO₂ Alto (ppm)
+                    </th>
+                    <th>
+                      <CloudRain size={18} /> Precipitação (mm)
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </StyledTable>
-          </TableContainer>
+                </thead>
+                <tbody>
+                  {data.map((item) => (
+                    <tr key={item.idsima}>
+                      <td>
+                        <strong>{item.idsima}</strong>
+                      </td>
+                      <td>
+                        <strong>{item.idestacao}</strong>
+                      </td>
+                      <td>
+                        <strong>{new Date(item.datahora).toLocaleString("pt-BR")}</strong>
+                      </td>
+                      <td>{item.regno || "-"}</td>
+                      <td>{item.nofsamples || "-"}</td>
+                      <td>{formatValue(item.proamag, 2)}</td>
+                      <td>{formatValue(item.dirvt, 1)}</td>
+                      <td>{formatValue(item.intensvt, 1)}</td>
+                      <td>{formatValue(item.u_vel, 2)}</td>
+                      <td>{formatValue(item.v_vel, 2)}</td>
+                      <td>{formatValue(item.tempag1, 1)}</td>
+                      <td>{formatValue(item.tempag2, 1)}</td>
+                      <td>{formatValue(item.tempag3, 1)}</td>
+                      <td>{formatValue(item.tempag4, 1)}</td>
+                      <td>{formatValue(item.tempar, 1)}</td>
+                      <td>{formatValue(item.ur, 1)}</td>
+                      <td>{formatValue(item.tempar_r, 1)}</td>
+                      <td>{formatValue(item.pressatm, 1)}</td>
+                      <td>{formatValue(item.radincid, 1)}</td>
+                      <td>{formatValue(item.radrefl, 1)}</td>
+                      <td>{formatValue(item.bateria, 2)}</td>
+                      <td>{formatValue(item.sonda_temp, 1)}</td>
+                      <td>{formatValue(item.sonda_cond, 1)}</td>
+                      <td>{formatValue(item.sonda_dosat, 1)}</td>
+                      <td>{formatValue(item.sonda_do, 1)}</td>
+                      <td>{formatValue(item.sonda_ph, 1)}</td>
+                      <td>{formatValue(item.sonda_nh4, 2)}</td>
+                      <td>{formatValue(item.sonda_no3, 2)}</td>
+                      <td>{formatValue(item.sonda_turb, 1)}</td>
+                      <td>{formatValue(item.sonda_chl, 1)}</td>
+                      <td>{formatValue(item.sonda_bateria, 2)}</td>
+                      <td>{formatValue(item.corr_norte, 2)}</td>
+                      <td>{formatValue(item.corr_leste, 2)}</td>
+                      <td>{formatValue(item.co2_low, 1)}</td>
+                      <td>{formatValue(item.co2_high, 1)}</td>
+                      <td>{formatValue(item.precipitacao, 1)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </StyledTable>
+            </TableContainer>
 
-              {data.length === 0 && !loading && !error && (
-                <div style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-                  <Database size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
-                  <p>Nenhum dado carregado ainda.</p>
-                  <p>Configure os filtros e clique em "Buscar Dados" para visualizar as informações.</p>
-                </div>
-              )}
+            {data.length === 0 && !loading && !error && (
+              <div style={{ textAlign: "center", padding: "2rem", color: "#666" }}>
+                <Database size={48} style={{ marginBottom: "1rem", opacity: 0.5 }} />
+                <p>Nenhum dado carregado ainda.</p>
+                <p>
+                  Configure os filtros e clique em "Buscar Dados" para visualizar as informações.
+                </p>
+              </div>
+            )}
 
-              {data.length > 0 && (
-                <PaginationContainer>
-                  <PaginationButton 
-                    onClick={() => handlePageChange(pagination.page - 1)}
-                    disabled={pagination.page <= 1}
-                  >
-                    <ChevronLeft size={16} />
-                    Anterior
-                  </PaginationButton>
-                  
-                  <PaginationInfo>
-                    Página {pagination.page} de {pagination.totalPages} 
-                    ({pagination.total} registros)
-                  </PaginationInfo>
-                  
-                  <PaginationButton 
-                    onClick={() => handlePageChange(pagination.page + 1)}
-                    disabled={pagination.page >= pagination.totalPages}
-                  >
-                    Próxima
-                    <ChevronRight size={16} />
-                  </PaginationButton>
-                </PaginationContainer>
-              )}
+            {data.length > 0 && (
+              <PaginationContainer>
+                <PaginationButton
+                  onClick={() => handlePageChange(pagination.page - 1)}
+                  disabled={pagination.page <= 1}
+                >
+                  <ChevronLeft size={16} />
+                  Anterior
+                </PaginationButton>
 
-              {data.length === 0 && !loading && !error && (
-                <LoadingContainer>
-                  Nenhum dado encontrado para o período selecionado.
-                </LoadingContainer>
-              )}
-            </>
-          )}
+                <PaginationInfo>
+                  Página {pagination.page} de {pagination.totalPages}({pagination.total} registros)
+                </PaginationInfo>
+
+                <PaginationButton
+                  onClick={() => handlePageChange(pagination.page + 1)}
+                  disabled={pagination.page >= pagination.totalPages}
+                >
+                  Próxima
+                  <ChevronRight size={16} />
+                </PaginationButton>
+              </PaginationContainer>
+            )}
+
+            {data.length === 0 && !loading && !error && (
+              <LoadingContainer>
+                Nenhum dado encontrado para o período selecionado.
+              </LoadingContainer>
+            )}
+          </>
+        )}
       </FullWidthSection>
     </SimaSPAContainer>
   );
