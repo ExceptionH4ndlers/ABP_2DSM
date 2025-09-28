@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { ClipLoader } from 'react-spinners';
+import React, { useState, useEffect } from "react";
+import { ClipLoader } from "react-spinners";
 
 const DataComponent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
@@ -14,9 +14,9 @@ const DataComponent: React.FC = () => {
     setError(null);
 
     try {
-      const response = await fetch('https://api.example.com/data');
+      const response = await fetch("https://api.example.com/data");
       if (!response.ok) {
-        throw new Error('Erro ao carregar dados');
+        throw new Error("Erro ao carregar dados");
       }
 
       // await response.json(); // Usar se for tratar os dados
@@ -24,18 +24,19 @@ const DataComponent: React.FC = () => {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        setError('Erro inesperado');
+        setError("Erro inesperado");
       }
     } finally {
       setLoading(false);
     }
   };
 
-
   // Estado: carregando
   if (loading) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 50 }}>
+      <div
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: 50 }}
+      >
         <ClipLoader color="#007bff" size={60} loading={true} />
         <p style={{ marginTop: 10 }}>Carregando dados...</p>
       </div>
@@ -45,8 +46,8 @@ const DataComponent: React.FC = () => {
   // Estado: erro
   if (error) {
     return (
-      <div style={{ textAlign: 'center', marginTop: 50 }}>
-        <p style={{ color: 'red' }}>Ocorreu um erro: {error}</p>
+      <div style={{ textAlign: "center", marginTop: 50 }}>
+        <p style={{ color: "red" }}>Ocorreu um erro: {error}</p>
         <button onClick={fetchData}>Tentar novamente</button>
       </div>
     );
@@ -54,7 +55,7 @@ const DataComponent: React.FC = () => {
 
   // Estado: carregado com sucesso (sem renderizar dados)
   return (
-    <div style={{ textAlign: 'center', marginTop: 50 }}>
+    <div style={{ textAlign: "center", marginTop: 50 }}>
       <p>Dados carregados com sucesso.</p>
     </div>
   );
