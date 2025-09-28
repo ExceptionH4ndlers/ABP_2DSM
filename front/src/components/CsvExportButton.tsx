@@ -14,7 +14,7 @@ interface ExportButtonProps {
   className?: string;
 }
 
-const StyledButton = styled.button<{ variant: string; size: string }>`
+const StyledButton = styled.button<{ $variant: string; $size: string }>`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -25,8 +25,8 @@ const StyledButton = styled.button<{ variant: string; size: string }>`
   transition: all 0.2s ease;
   text-decoration: none;
 
-  ${({ variant }) => {
-    switch (variant) {
+  ${({ $variant }) => {
+    switch ($variant) {
       case "primary":
         return `
           background: #1e40af;
@@ -65,8 +65,8 @@ const StyledButton = styled.button<{ variant: string; size: string }>`
     }
   }}
 
-  ${({ size }) => {
-    switch (size) {
+  ${({ $size }) => {
+    switch ($size) {
       case "small":
         return `
           padding: 0.5rem 0.75rem;
@@ -120,8 +120,8 @@ export const CsvExportButton: React.FC<ExportButtonProps> = ({
   return (
     <>
       <StyledButton
-        variant={variant}
-        size={size}
+        $variant={variant || "primary"}
+        $size={size || "medium"}
         onClick={handleClick}
         disabled={disabled}
         className={className}
@@ -138,7 +138,7 @@ export const CsvExportButton: React.FC<ExportButtonProps> = ({
       </StyledButton>
 
       <CsvExportModal
-        isOpen={isModalOpen}
+        $isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         data={data}
         defaultFilename={filename}

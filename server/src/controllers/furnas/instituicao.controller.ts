@@ -10,14 +10,19 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const limit = Number(req.query.limit) || PAGE_SIZE;
     const offset = (page - 1) * limit;
 
-    // consulta com paginação
+    // consulta simples
     const result = await furnasPool.query(
       `
       SELECT 
         idinstituicao,
-        nome
+        nome,
+        sigla,
+        endereco,
+        telefone,
+        email,
+        responsavel
       FROM tbinstituicao
-      ORDER BY nome
+      ORDER BY nome ASC
       LIMIT $1 OFFSET $2
       `,
       [limit, offset],
@@ -27,13 +32,24 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const countResult = await furnasPool.query("SELECT COUNT(*) FROM tbinstituicao");
     const total = Number(countResult.rows[0].count);
 
+    // dados formatados
+    const data = result.rows.map((row: any) => ({
+      idinstituicao: row.idinstituicao,
+      nome: row.nome,
+      sigla: row.sigla,
+      endereco: row.endereco,
+      telefone: row.telefone,
+      email: row.email,
+      responsavel: row.responsavel,
+    }));
+
     res.status(200).json({
       success: true,
       page,
       limit,
       total,
       totalPages: Math.ceil(total / limit),
-      data: result.rows,
+      data,
     });
   } catch (error: any) {
     logger.error("Erro ao consultar tbinstituicao", {

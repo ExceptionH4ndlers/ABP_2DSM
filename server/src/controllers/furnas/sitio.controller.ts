@@ -10,23 +10,22 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const limit = Number(req.query.limit) || PAGE_SIZE;
     const offset = (page - 1) * limit;
 
-    // consulta com paginação
+    // consulta com joins
     const result = await furnasPool.query(
       `
       SELECT 
         a.idsitio,
-        a.nome AS sitio_nome,
-        a.lat AS sitio_lat,
-        a.lng AS sitio_lng,
+        a.nome,
+        a.lat,
+        a.lng,
+        a.profundidade,
         a.descricao,
         b.idreservatorio,
-        b.nome AS reservatorio_nome,
-        b.lat AS reservatorio_lat,
-        b.lng AS reservatorio_lng
+        b.nome AS reservatorio_nome
       FROM tbsitio AS a
-      LEFT JOIN tbreservatorio AS b 
+      LEFT JOIN tbreservatorio AS b
         ON a.idreservatorio = b.idreservatorio
-      ORDER BY a.nome
+      ORDER BY a.nome ASC
       LIMIT $1 OFFSET $2
       `,
       [limit, offset],
@@ -39,18 +38,17 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     // dados formatados
     const data = result.rows.map((row: any) => ({
       idsitio: row.idsitio,
+      nome: row.nome,
+      lat: row.lat,
+      lng: row.lng,
+      profundidade: row.profundidade,
+      descricao: row.descricao,
       reservatorio: row.idreservatorio
         ? {
             idreservatorio: row.idreservatorio,
             nome: row.reservatorio_nome,
-            lat: row.reservatorio_lat,
-            lng: row.reservatorio_lng,
           }
         : undefined,
-      nome: row.sitio_nome,
-      lat: row.sitio_lat,
-      lng: row.sitio_lng,
-      descricao: row.descricao,
     }));
 
     res.status(200).json({
@@ -66,6 +64,10 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
       message: error.message,
       stack: error.stack,
     });
-    res.status(500).json({ success: false, error: "Erro ao realizar a operação." });
+
+    res.status(500).json({
+      success: false,
+      error: "Erro ao realizar a operação.",
+    });
   }
 };

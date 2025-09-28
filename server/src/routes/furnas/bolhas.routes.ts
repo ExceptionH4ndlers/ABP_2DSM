@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAll } from "../../controllers/balcar/fluxoinpe.controller";
+import { getAll } from "../../controllers/furnas/bolhas.controller";
 
 const router = Router();
 

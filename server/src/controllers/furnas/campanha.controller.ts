@@ -10,7 +10,7 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const limit = Number(req.query.limit) || PAGE_SIZE;
     const offset = (page - 1) * limit;
 
-    // consulta com paginação
+    // consulta com joins
     const result = await furnasPool.query(
       `
       SELECT 
@@ -18,18 +18,17 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
         a.nrocampanha,
         a.datainicio,
         a.datafim,
-        b.idinstituicao,
-        b.nome AS instituicao_nome,
-        c.idreservatorio,
-        c.nome AS reservatorio_nome,
-        c.lat AS reservatorio_lat,
-        c.lng AS reservatorio_lng
+        a.descricao,
+        b.idreservatorio,
+        b.nome AS reservatorio_nome,
+        c.idinstituicao,
+        c.nome AS instituicao_nome
       FROM tbcampanha AS a
-      LEFT JOIN tbinstituicao AS b 
-        ON a.idinstituicao = b.idinstituicao
-      LEFT JOIN tbreservatorio AS c 
-        ON a.idreservatorio = c.idreservatorio
-      ORDER BY c.nome, a.nrocampanha
+      LEFT JOIN tbreservatorio AS b
+        ON a.idreservatorio = b.idreservatorio
+      LEFT JOIN tbinstituicao AS c
+        ON a.idinstituicao = c.idinstituicao
+      ORDER BY a.datainicio DESC
       LIMIT $1 OFFSET $2
       `,
       [limit, offset],
@@ -42,23 +41,22 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     // dados formatados
     const data = result.rows.map((row: any) => ({
       idcampanha: row.idcampanha,
+      nrocampanha: row.nrocampanha,
+      datainicio: row.datainicio,
+      datafim: row.datafim,
+      descricao: row.descricao,
+      reservatorio: row.idreservatorio
+        ? {
+            idreservatorio: row.idreservatorio,
+            nome: row.reservatorio_nome,
+          }
+        : undefined,
       instituicao: row.idinstituicao
         ? {
             idinstituicao: row.idinstituicao,
             nome: row.instituicao_nome,
           }
         : undefined,
-      reservatorio: row.idreservatorio
-        ? {
-            idreservatorio: row.idreservatorio,
-            nome: row.reservatorio_nome,
-            lat: row.reservatorio_lat,
-            lng: row.reservatorio_lng,
-          }
-        : undefined,
-      nrocampanha: row.nrocampanha,
-      datainicio: row.datainicio,
-      datafim: row.datafim,
     }));
 
     res.status(200).json({
