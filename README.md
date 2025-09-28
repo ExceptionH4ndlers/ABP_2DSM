@@ -14,7 +14,7 @@ Sistema web desenvolvido para visualização e disseminação de dados limnológ
 | 🔄 Metodologia | Aprendizagem Baseada em Projetos (ABP) |
 | 👤 Focal Point | André Olimpio |
 | 🤝 Parceiro | INPE - Laboratório de Instrumentação de Sistemas Aquáticos (labISA) |
-| 📅 Kick off | 11/09/2025 às 19h30 |
+| 📅 Kick off | 16/09/2025 |
 | 📊 Status | Em desenvolvimento |
 
 ### 🎯 Tema do Semestre
@@ -51,34 +51,6 @@ O INPE, UFRJ, UFJF e IIE, em cooperação com Furnas Centrais Elétricas S.A., c
 - **RP03**: Front-end desenvolvido em React com TypeScript
 - **RP04**: Aplicação utilizando containers independentes para banco de dados, back-end e front-end
 
-### 📁 Estrutura do Projeto
-
-#### 📝 Dailys
-A pasta `Dailys/` contém os registros das reuniões diárias (Daily Scrums) da metodologia ágil Scrum, incluindo:
-- ATA das reuniões diárias
-- Resumo das atividades realizadas
-- Impedimentos identificados
-- Planejamento das próximas atividades
-- Acompanhamento do progresso do projeto
-
-#### 🏃‍♂️ Scrum
-A pasta `Scrum/` armazena todos os artefatos e documentos relacionados à metodologia Scrum, incluindo:
-
-**📋 Product Backlog**
-- `Product Backlog/Product Backlog Completo.pdf` - Documento completo do Product Backlog com todas as histórias de usuário e requisitos do projeto
-
-**🏃‍♂️ Sprints**
-- `Sprints/Sprint 1/` - Pasta contendo os artefatos do Sprint 1
-  - `Sprint Backlog/Sprint Backlog.pdf` - Documento do Sprint Backlog com as tarefas selecionadas para o Sprint 1
-
-**📊 Burndown Chart**
-- `Burndown Chart/Sprint 1/BurndownIdeal.png` - Gráfico de burndown ideal para acompanhamento do progresso do Sprint 1
-
-**Outros artefatos Scrum:**
-- Sprint Planning
-- Sprint Review
-- Retrospectivas
-- Outros documentos da metodologia ágil
 
 ### 🚀 Tecnologias Utilizadas
 
@@ -206,6 +178,79 @@ npm run dev
 - Hot reload para server e front em dev
 - ESLint + Prettier (garantindo padronização de código)
 - CI no GitHub Actions
+
+</details>
+
+<details>
+<summary><b>🏃‍♂️ Artefatos Scrum - Acesso Rápido</b></summary>
+
+Este dropdown contém todos os artefatos e documentos relacionados à metodologia Scrum utilizada no desenvolvimento do projeto. Aqui você encontrará acesso direto aos documentos de planejamento, acompanhamento e reuniões da equipe.
+
+### 📋 **Acesso Direto aos Artefatos**
+
+| **Artefato** | **Link Direto** | **Descrição** |
+|--------------|-----------------|---------------|
+| **📋 Product Backlog** | [`Product Backlog Completo.pdf`](Scrum/Product%20Backlog/Product%20Backlog%20Completo.pdf) | Documento completo com todas as histórias de usuário, requisitos funcionais e não funcionais do projeto |
+| **🏃‍♂️ Sprint Planning** | [`Sprint Backlog.pdf`](Scrum/Sprints/Sprint%201/Sprint%20Backlog/Sprint%20Backlog.pdf) | Tarefas e atividades planejadas para o Sprint 1, incluindo estimativas e responsáveis |
+| **📊 Burndown Chart** | [`BurndownIdeal.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownIdeal.png) | Gráfico de progresso ideal do Sprint 1 para acompanhamento da evolução das atividades |
+
+### 📅 **Dailys (Reuniões Diárias)**
+
+As reuniões diárias (Daily Scrums) são realizadas para sincronização da equipe, identificação de impedimentos e planejamento das atividades do dia. Cada ATA contém:
+
+- **Resumo das atividades realizadas** no dia anterior
+- **Planejamento das atividades** para o dia atual
+- **Impedimentos identificados** e ações para resolução
+- **Acompanhamento do progresso** do Sprint
+
+| **Data** | **Link Direto** | **Descrição** |
+|----------|-----------------|---------------|
+| **12/09/2025** | [`ATA_DAILY_12.09.2025.pdf`](Dailys/ATA_DAILY_12.09.2025.pdf) | ATA da reunião diária de 12 de setembro |
+| **16/09/2025** | [`ATA_DAILY_16.09.2025.pdf`](Dailys/ATA_DAILY_16.09.2025.pdf) | ATA da reunião diária de 16 de setembro |
+| **18/09/2025** | [`ATA_DAILY_18.09.2025.pdf`](Dailys/ATA_DAILY_18.09.2025.pdf) | ATA da reunião diária de 18 de setembro |
+| **22/09/2025** | [`ATA_DAILY_22.09.2025.pdf`](Dailys/ATA_DAILY_22.09.2025.pdf) | ATA da reunião diária de 22 de setembro |
+| **24/09/2025** | [`ATA_DAILY_24.09.2025.pdf`](Dailys/ATA_DAILY_24.09.2025.pdf) | ATA da reunião diária de 24 de setembro |
+| **26/09/2025** | [`ATA_DAILY_26.09.2025.pdf`](Dailys/ATA_DAILY_26.09.2025.pdf) | ATA da reunião diária de 26 de setembro |
+
+### 📁 **Estrutura de Pastas Scrum**
+
+A organização dos artefatos Scrum segue a estrutura padrão da metodologia, facilitando a localização e manutenção dos documentos:
+
+```
+ABP_2DSM/
+├── Scrum/                           # Pasta principal dos artefatos Scrum
+│   ├── Product Backlog/             # Backlog do produto
+│   │   └── Product Backlog Completo.pdf
+│   ├── Sprints/                     # Artefatos dos Sprints
+│   │   └── Sprint 1/                # Sprint 1
+│   │       └── Sprint Backlog/      # Backlog do Sprint
+│   │           └── Sprint Backlog.pdf
+│   └── Burndown Chart/              # Gráficos de progresso
+│       └── Sprint 1/                # Burndown do Sprint 1
+│           └── BurndownIdeal.png
+└── Dailys/                          # Registros das reuniões diárias
+    ├── ATA_DAILY_12.09.2025.pdf     # Daily de 12/09/2025
+    ├── ATA_DAILY_16.09.2025.pdf     # Daily de 16/09/2025
+    ├── ATA_DAILY_18.09.2025.pdf     # Daily de 18/09/2025
+    ├── ATA_DAILY_22.09.2025.pdf     # Daily de 22/09/2025
+    ├── ATA_DAILY_24.09.2025.pdf     # Daily de 24/09/2025
+    └── ATA_DAILY_26.09.2025.pdf     # Daily de 26/09/2025
+```
+
+### 🎯 **Como Usar Este Dropdown**
+
+1. **Para consultar requisitos**: Acesse o Product Backlog para ver todas as funcionalidades planejadas
+2. **Para acompanhar o Sprint**: Use o Sprint Backlog e o Burndown Chart para monitorar o progresso
+3. **Para consultar reuniões**: Acesse as ATAs das Dailys por data para ver o histórico de atividades
+4. **Para navegação rápida**: Use os links diretos nas tabelas acima
+
+### 📝 **Próximos Artefatos**
+
+Conforme o projeto evolui, novos artefatos serão adicionados:
+- **Sprint 2**: Novos Sprint Backlogs e Burndown Charts
+- **Sprint Review**: Relatórios de revisão dos Sprints
+- **Retrospectivas**: Análises de melhoria da equipe
+- **Novas Dailys**: Registros das reuniões diárias futuras
 
 </details>
 
