@@ -13,6 +13,6 @@ router.use("/campanha", campanha);
 router.use("/instituicao", instituicao);
 router.use("/reservatorio", reservatorio);
 router.use("/sitio", sitio);
-router.use("/bolhas", bolha)
+router.use("/bolhas", bolha);
 
 export default router;
