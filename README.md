@@ -14,7 +14,7 @@ Sistema web desenvolvido para visualização e disseminação de dados limnológ
 | 🔄 Metodologia | Aprendizagem Baseada em Projetos (ABP) |
 | 👤 Focal Point | André Olimpio |
 | 🤝 Parceiro | INPE - Laboratório de Instrumentação de Sistemas Aquáticos (labISA) |
-| 📅 Kick off | 11/09/2025 às 19h30 |
+| 📅 Kick off | 16/09/2025 |
 | 📊 Status | Em desenvolvimento |
 
 ### 🎯 Tema do Semestre
@@ -209,6 +209,8 @@ As reuniões diárias (Daily Scrums) são realizadas para sincronização da equ
 | **16/09/2025** | [`ATA_DAILY_16.09.2025.pdf`](Dailys/ATA_DAILY_16.09.2025.pdf) | ATA da reunião diária de 16 de setembro |
 | **18/09/2025** | [`ATA_DAILY_18.09.2025.pdf`](Dailys/ATA_DAILY_18.09.2025.pdf) | ATA da reunião diária de 18 de setembro |
 | **22/09/2025** | [`ATA_DAILY_22.09.2025.pdf`](Dailys/ATA_DAILY_22.09.2025.pdf) | ATA da reunião diária de 22 de setembro |
+| **24/09/2025** | [`ATA_DAILY_24.09.2025.pdf`](Dailys/ATA_DAILY_24.09.2025.pdf) | ATA da reunião diária de 24 de setembro |
+| **26/09/2025** | [`ATA_DAILY_26.09.2025.pdf`](Dailys/ATA_DAILY_26.09.2025.pdf) | ATA da reunião diária de 26 de setembro |
 
 ### 📁 **Estrutura de Pastas Scrum**
 
@@ -230,7 +232,9 @@ ABP_2DSM/
     ├── ATA_DAILY_12.09.2025.pdf     # Daily de 12/09/2025
     ├── ATA_DAILY_16.09.2025.pdf     # Daily de 16/09/2025
     ├── ATA_DAILY_18.09.2025.pdf     # Daily de 18/09/2025
-    └── ATA_DAILY_22.09.2025.pdf     # Daily de 22/09/2025
+    ├── ATA_DAILY_22.09.2025.pdf     # Daily de 22/09/2025
+    ├── ATA_DAILY_24.09.2025.pdf     # Daily de 24/09/2025
+    └── ATA_DAILY_26.09.2025.pdf     # Daily de 26/09/2025
 ```
 
 ### 🎯 **Como Usar Este Dropdown**
