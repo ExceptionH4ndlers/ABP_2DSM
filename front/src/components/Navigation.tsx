@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Menu, X, ChevronDown, Home, Map, Database, Target } from "lucide-react";
+import { Menu, X, ChevronDown, Home, Map, Database, Target, BookOpen } from "lucide-react";
 
 const NavigationContainer = styled.nav`
   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
@@ -243,6 +243,8 @@ function Navigation() {
     activeSection === "sima" ||
     activeSection === "sima-home" ||
     activeSection === "sima-equipe" ||
+    activeSection === "sima-publicacoes" ||
+    activeSection === "sima-apoio" ||
     activeSection === "sima-mapa" ||
     activeSection === "sima-dados";
 
@@ -362,6 +364,14 @@ function Navigation() {
               <DropdownItem onClick={() => navigateToSection("/sima-equipe")}>
                 <Target size={16} />
                 Equipe
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/sima-publicacoes")}>
+                <BookOpen size={16} />
+                Publicações
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/sima-apoio")}>
+                <Target size={16} />
+                Apoio Institucional
               </DropdownItem>
               <DropdownItem onClick={() => navigateToSection("/sima-mapa")}>
                 <Map size={16} />
