@@ -250,18 +250,20 @@ function SimaSection() {
     <SectionContainer id="sima">
       <SectionContent>
         <SectionHeader>
-          <SectionTitle>Sistema Integrado de Monitoramento Ambiental</SectionTitle>
+          <SectionTitle>Sistema Integrado de Monitoração Ambiental (SIMA)</SectionTitle>
           <SectionSubtitle>
-            Monitoramento em tempo real de processos hidrosféricos através de plataformas autônomas
+            Sistema de monitoramento contínuo desenvolvido pelo INPE para coleta automática de dados
+            limnológicos e meteorológicos em reservatórios
           </SectionSubtitle>
         </SectionHeader>
 
         <ContentGrid>
           <TextContent>
             <Description>
-              O SIMA é um sistema de hardware e software desenvolvido para coleta e monitoramento em
-              tempo real de processos hidrosféricos. Utiliza uma plataforma autônoma ancorada
-              equipada com sensores, eletrônica de armazenamento, bateria e antena de transmissão.
+              O SIMA (Sistema Integrado de Monitoração Ambiental) é um sistema desenvolvido pelo
+              INPE para monitoramento contínuo de reservatórios hidrelétricos. O sistema coleta
+              dados automaticamente de parâmetros meteorológicos, hidrológicos e de qualidade da
+              água, fornecendo séries temporais contínuas para análise ambiental e científica.
             </Description>
 
             <FeaturesList>

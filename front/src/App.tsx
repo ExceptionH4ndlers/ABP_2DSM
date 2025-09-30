@@ -1,20 +1,23 @@
-import { ThemeProvider } from "styled-components";
-import theme from "./styles/theme";
-import GlobalStyle from "./styles/GlobalStyle";
-import PortalPage from "./pages/PortalPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import BarraBrasil from "./components/BarraBrasil";
 import Navigation from "./components/Navigation";
+import HomePage from "./pages/HomePage";
+import SimaSPAPage from "./pages/SimaSPAPage";
+import FurnasPage from "./pages/FurnasPage";
+import BalcarPage from "./pages/BalcarPage";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalStyle />
-      <div className="w-full min-h-screen flex flex-col overflow-x-hidden">
-        <BarraBrasil />
-        <Navigation />
-        <PortalPage />
-      </div>
-    </ThemeProvider>
+    <Router>
+      <BarraBrasil />
+      <Navigation />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/sima" element={<SimaSPAPage />} />
+        <Route path="/furnas" element={<FurnasPage />} />
+        <Route path="/balcar" element={<BalcarPage />} />
+      </Routes>
+    </Router>
   );
 }
 

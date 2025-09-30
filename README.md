@@ -171,6 +171,123 @@ npm run dev
 - **Back-end (API Node)**: http://localhost:3001
   - Exemplo: http://localhost:3001/sima/sima/all?page=1&limit=20
 
+---
+
+### 📤 Exportação de Dados em CSV
+
+Este projeto oferece a funcionalidade de **exportação de dados em formato CSV**, permitindo que os usuários consultem, filtrem e salvem os dados para uso em ferramentas como **Excel, LibreOffice, R e Python**.
+
+---
+
+### ✅ Funcionalidades Disponíveis
+
+- Exportação de **todos os registros** da base de dados.
+- Exportação de **registros filtrados**, com base nos filtros aplicados na interface.
+- Inclusão de **cabeçalhos** (nomes das colunas) e **metadados** (como data de exportação e filtros aplicados).
+- Arquivos compatíveis com:
+  - Microsoft Excel (.csv com codificação UTF-8)
+  - LibreOffice Calc
+  - Linguagens de análise de dados: R, Python, etc.
+
+---
+
+### 📁 Como Gerar e Utilizar os Arquivos CSV
+
+#### 1. Acesse a área de exportação
+- Navegue até a tela/listagem da tabela desejada (por exemplo: `Campos da Tabela`, `Estações`, `Sensores`).
+- Aplique os filtros necessários (opcional).
+
+#### 2. Clique em “Exportar CSV”
+- Um botão **Exportar CSV** estará visível.
+- Sem filtros: todos os registros serão exportados.
+- Com filtros: apenas os registros filtrados serão exportados.
+
+#### 3. Download automático
+- O arquivo será baixado automaticamente para o seu dispositivo.
+- O nome seguirá o padrão:
+exportacao_nomeTabela_YYYY-MM-DD_HH-MM.csv
+
+---
+
+### 🧾 Estrutura dos Arquivos CSV Gerados
+
+#### 🧩 Exemplo: `tbcampotabela.csv`
+
+##### Cabeçalho
+idcampotabela;idsensor;nomecampo;rotulo;unidademedida;ordem
+
+##### Dados
+1;;sonda_bateria;Bateria da PTT;V;26
+2;8;sonda_chl;Clorofila;ug/l;25
+3;10;sonda_DO;Conc. de DO;mg/l;20
+
+---
+
+#### 🧩 Exemplo: `tbestacao.csv`
+
+##### Cabeçalho
+idestacao;idHexadecimal;rotulo;lat;lng;inicio;fim
+
+##### Dados
+30842;e1ea9;Balbina;-1.903697222;-59.46910833;2013-08-16;
+30913;e3074;Ibitinga 3;-21.76121;-48.98112;2013-03-22;
+30931;e34fd;Itumbiara 3;-18.283875;-48.906598;2009-11-18;2011-09-25
+
+---
+
+#### 🧩 Exemplo: `tbsensor.csv`
+
+##### Cabeçalho
+idSensor;nome;fabricante;modelo;faixa;precisao
+
+##### Dados
+1;Vento;R. M. Young Company;Marine Model 05106;0° a 360° Azimute;±3°
+8;Sensor de Clorofila;Yellow Spring;YSI 6025;0 a 400 ug/l;0.1 ug/l
+10;Sensor de Oxigênio Dissolvido;Yellow Spring;YSI 6562;0 a 50 mg/l;0.01 mg/l
+
+---
+
+### 📌 Metadados no CSV
+
+Ao início ou fim do arquivo, podem estar presentes linhas de metadados, iniciadas com `#`, contendo informações úteis como:
+
+Dados exportados em: 2025-09-26 14:32
+Tabela: tbcampotabela
+Total de registros exportados: 32
+Filtros aplicados: idsensor = 10
+
+> ⚠️ Linhas iniciadas com `#` são **ignoradas por leitores CSV padrão**, mas fornecem **contexto útil** para análise.
+
+---
+
+### 📥 Como Abrir os Arquivos CSV
+
+#### 📊 Excel / LibreOffice
+- Abra diretamente no software.
+- Se necessário, escolha a codificação UTF-8.
+- O separador padrão é `;` (ponto e vírgula). Altere nas configurações de importação, se necessário.
+
+#### 📈 R
+```r
+dados <- read.csv2("caminho/do/arquivo.csv", header = TRUE, sep = ";", comment.char = "#")
+
+#### 🐍 Python (pandas)
+import pandas as pd
+
+dados = pd.read_csv("caminho/do/arquivo.csv", sep=";", comment="#")
+
+---
+
+⚠️ Observações Importantes
+
+Arquivos CSV são gerados com codificação UTF-8, garantindo suporte a acentos e caracteres especiais.
+
+Para volumes grandes de dados, a geração pode levar alguns segundos.
+
+Para exportar registros específicos, aplique os filtros desejados antes da exportação.
+
+---
+
 ### 🛠️ Boas Práticas Aplicadas
 
 - Separação clara de camadas (DB / API / Front)

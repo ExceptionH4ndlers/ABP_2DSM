@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Waves, Database, MapPin, TrendingUp, ArrowDown } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 
 const HeroContainer = styled.section`
   min-height: 100vh;
@@ -69,81 +69,6 @@ const HeroSubtitle = styled.p`
   }
 `;
 
-const StatsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-`;
-
-const StatCard = styled.div`
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-  }
-
-  ${({ theme }) => theme.media.mobile} {
-    padding: 1rem;
-  }
-`;
-
-const StatIcon = styled.div`
-  width: 48px;
-  height: 48px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 1rem;
-  color: white;
-
-  ${({ theme }) => theme.media.mobile} {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 0.75rem;
-  }
-`;
-
-const StatNumber = styled.div`
-  font-size: 2rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 0.5rem;
-
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 1.5rem;
-  }
-`;
-
-const StatLabel = styled.div`
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 500;
-
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 0.8rem;
-  }
-`;
-
 const ScrollIndicator = styled.div`
   position: absolute;
   bottom: 2rem;
@@ -199,40 +124,6 @@ function HeroSection() {
           Acesso integrado aos dados de monitoramento ambiental dos reservatórios de Furnas Centrais
           Elétricas S.A. através dos projetos SIMA, Balanço de Carbono e BALCAR
         </HeroSubtitle>
-
-        <StatsGrid>
-          <StatCard>
-            <StatIcon>
-              <Waves size={24} />
-            </StatIcon>
-            <StatNumber>3</StatNumber>
-            <StatLabel>Projetos Integrados</StatLabel>
-          </StatCard>
-
-          <StatCard>
-            <StatIcon>
-              <Database size={24} />
-            </StatIcon>
-            <StatNumber>15+</StatNumber>
-            <StatLabel>Parâmetros Monitorados</StatLabel>
-          </StatCard>
-
-          <StatCard>
-            <StatIcon>
-              <MapPin size={24} />
-            </StatIcon>
-            <StatNumber>10+</StatNumber>
-            <StatLabel>Reservatórios</StatLabel>
-          </StatCard>
-
-          <StatCard>
-            <StatIcon>
-              <TrendingUp size={24} />
-            </StatIcon>
-            <StatNumber>24/7</StatNumber>
-            <StatLabel>Monitoramento Contínuo</StatLabel>
-          </StatCard>
-        </StatsGrid>
       </HeroContent>
 
       <ScrollIndicator onClick={scrollToNext}>
