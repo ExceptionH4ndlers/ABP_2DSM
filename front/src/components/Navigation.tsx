@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Menu, X, ChevronDown, Home, Map, Database } from "lucide-react";
+import { Menu, X, ChevronDown, Home, Map, Database, Target } from "lucide-react";
 
 const NavigationContainer = styled.nav`
   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
@@ -242,6 +242,7 @@ function Navigation() {
   const isSimaActive =
     activeSection === "sima" ||
     activeSection === "sima-home" ||
+    activeSection === "sima-equipe" ||
     activeSection === "sima-mapa" ||
     activeSection === "sima-dados";
 
@@ -273,6 +274,11 @@ function Navigation() {
           if (element) {
             element.scrollIntoView({ behavior: "smooth" });
           }
+        } else if (sectionId === "equipe") {
+          const element = document.getElementById("equipe");
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
         } else if (sectionId) {
           const element = document.getElementById(sectionId);
           if (element) {
@@ -286,6 +292,11 @@ function Navigation() {
           if (sectionId === "home" || sectionId === "") {
             // Para home ou navegação geral, ir para o topo da página
             window.scrollTo({ top: 0, behavior: "smooth" });
+          } else if (sectionId === "equipe") {
+            const element = document.getElementById("equipe");
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
           } else if (sectionId) {
             const element = document.getElementById(sectionId);
             if (element) {
@@ -347,6 +358,10 @@ function Navigation() {
               <DropdownItem onClick={() => navigateToSection("/sima")}>
                 <Home size={16} />
                 Home
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/sima-equipe")}>
+                <Target size={16} />
+                Equipe
               </DropdownItem>
               <DropdownItem onClick={() => navigateToSection("/sima-mapa")}>
                 <Map size={16} />

@@ -87,6 +87,48 @@ const SectionSubtitle = styled.p`
   line-height: 1.6;
 `;
 
+const TeamSubtitle = styled.h3`
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 2rem 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+`;
+
+const TeamList = styled.div`
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+`;
+
+const TeamRow = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+`;
+
+const TeamMember = styled.div`
+  color: #374151;
+  padding: 0.5rem 0;
+`;
+
+const TeamEmail = styled.span`
+  color: #3b82f6;
+  font-weight: 500;
+`;
+
+const TeamLink = styled.span`
+  color: #3b82f6;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: #1e40af;
+  }
+`;
+
 const SectionText = styled.p`
   font-size: 1.1rem;
   color: #64748b;
@@ -927,6 +969,99 @@ function SimaSPAPage() {
             <FuncionamentoImage src={sondaSima} alt="Sonda SIMA no Reservatório de Funil" />
             <ImageCaption>Sonda SIMA no Reservatório de Funil durante calibração</ImageCaption>
           </ImageWrapper>
+        </Section>
+
+        {/* Seção Equipe */}
+        <Section id="equipe">
+          <SectionTitle>
+            <Target size={40} />
+            Equipe
+          </SectionTitle>
+          
+          <TeamSubtitle>Coordenação</TeamSubtitle>
+          <TeamList>
+            <TeamRow>
+              <TeamMember>
+                <strong><TeamLink onClick={() => window.open("http://lattes.cnpq.br/2691497637313274", "_blank")}>José Luiz Stech</TeamLink></strong> (<TeamEmail>stech@dsr.inpe.br</TeamEmail>)
+              </TeamMember>
+              <TeamMember>
+                <strong><TeamLink onClick={() => window.open("http://lattes.cnpq.br/7939379291404418", "_blank")}>Enner Herenio de Alcântara</TeamLink></strong>
+              </TeamMember>
+            </TeamRow>
+          </TeamList>
+
+          <TeamSubtitle>Colaboradores</TeamSubtitle>
+          <TeamList>
+            <TeamRow>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/5535667070825818", "_blank")}>André Carlos Prates Cimbleris</TeamLink></TeamMember>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/8150880476098677", "_blank")}>Arcilan Trevenzoli Assireu</TeamLink></TeamMember>
+            </TeamRow>
+            <TeamRow>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/7642043789034070", "_blank")}>Artur Luiz da Costa da Silva</TeamLink></TeamMember>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/7466500214796269", "_blank")}>Augusto Cesar Fonseca Saraiva</TeamLink></TeamMember>
+            </TeamRow>
+            <TeamRow>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/1596449770636962", "_blank")}>Cláudio Clemente Faria Barbosa</TeamLink></TeamMember>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/4775535537651746", "_blank")}>Donato Seiji Abe</TeamLink></TeamMember>
+            </TeamRow>
+            <TeamRow>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/9857505876280820", "_blank")}>Evlyn Márcia Leão de Moraes Novo</TeamLink></TeamMember>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/0567809153346429", "_blank")}>Fábio Roland</TeamLink></TeamMember>
+            </TeamRow>
+            <TeamRow>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/3852581196429739", "_blank")}>João Antônio Lorenzzetti</TeamLink></TeamMember>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/0030922264947314", "_blank")}>Jorge Machado Damazio</TeamLink></TeamMember>
+            </TeamRow>
+            <TeamRow>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/4155308755013168", "_blank")}>Marco Aurélio dos Santos</TeamLink></TeamMember>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/8471974730664804", "_blank")}>Maria Elvira Piñeiro Maceira</TeamLink></TeamMember>
+            </TeamRow>
+            <TeamRow>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/5149356080083086", "_blank")}>Nelson Luís da Costa Dias</TeamLink></TeamMember>
+            </TeamRow>
+          </TeamList>
+
+          <TeamSubtitle>Desenvolvimento do Sistema de Coleta de Dados</TeamSubtitle>
+          <TeamList>
+            <TeamRow>
+              <TeamMember>
+                <strong>Neuron Eletrônica</strong>
+              </TeamMember>
+            </TeamRow>
+          </TeamList>
+
+          <TeamSubtitle>Manutenção do Sistema de Coleta de Dados</TeamSubtitle>
+          <TeamList>
+            <TeamRow>
+              <TeamMember>Alexandre Donizetti da Silva (Neuron Eletrônica)</TeamMember>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/4915211809920432", "_blank")}>Carlos Alberto Sampaio de Araújo</TeamLink></TeamMember>
+            </TeamRow>
+            <TeamRow>
+              <TeamMember>Geraldo Orlando Mendes</TeamMember>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/7596795539833144", "_blank")}>Joaquim Antônio Dionísio Leão</TeamLink></TeamMember>
+            </TeamRow>
+            <TeamRow>
+              <TeamMember><TeamLink onClick={() => window.open("http://lattes.cnpq.br/6286335301335965", "_blank")}>Vitor Bruno</TeamLink></TeamMember>
+            </TeamRow>
+          </TeamList>
+
+          <TeamSubtitle>Gerente de Rede do Portal</TeamSubtitle>
+          <TeamList>
+            <TeamRow>
+              <TeamMember>
+                <strong>João Benedito Diehl</strong>
+              </TeamMember>
+            </TeamRow>
+          </TeamList>
+
+          <TeamSubtitle>Web e Banco de Dados</TeamSubtitle>
+          <TeamList>
+            <TeamRow>
+              <TeamMember>
+                <strong><TeamLink onClick={() => window.open("http://lattes.cnpq.br/3013376353724630", "_blank")}>Arley Ferreira de Souza</TeamLink></strong> (<TeamEmail>arley@dpi.inpe.br</TeamEmail>)
+              </TeamMember>
+            </TeamRow>
+          </TeamList>
         </Section>
 
         {/* Seção Apoio */}
