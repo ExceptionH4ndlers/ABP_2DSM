@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Home, Map, Database, Target, BookOpen } from "lucide-react";
 
 const NavigationContainer = styled.nav`
   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
@@ -41,31 +42,13 @@ const Logo = styled.div`
   }
 `;
 
-const LogoIcon = styled.div`
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  font-size: 1.2rem;
-
-  ${({ theme }) => theme.media.mobile} {
-    width: 35px;
-    height: 35px;
-    font-size: 1rem;
-  }
-`;
-
-const NavLinks = styled.div<{ isOpen: boolean }>`
+const NavLinks = styled.div<{ $isOpen: boolean }>`
   display: flex;
   align-items: center;
   gap: 2rem;
 
   ${({ theme }) => theme.media.tablet} {
-    display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+    display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
     position: absolute;
     top: 100%;
     left: 0;
@@ -78,7 +61,7 @@ const NavLinks = styled.div<{ isOpen: boolean }>`
   }
 `;
 
-const NavLink = styled.a<{ isActive?: boolean }>`
+const NavLink = styled.a<{ $isActive?: boolean }>`
   color: white;
   text-decoration: none;
   font-weight: 500;
@@ -86,7 +69,7 @@ const NavLink = styled.a<{ isActive?: boolean }>`
   border-radius: 8px;
   transition: all 0.2s ease;
   position: relative;
-  background: ${({ isActive }) => (isActive ? "rgba(255, 255, 255, 0.2)" : "transparent")};
+  background: ${({ $isActive }) => ($isActive ? "rgba(255, 255, 255, 0.2)" : "transparent")};
 
   &:hover {
     background: rgba(255, 255, 255, 0.15);
@@ -125,54 +108,25 @@ const MobileMenuButton = styled.button`
   }
 `;
 
-const Dropdown = styled.div<{ isOpen: boolean }>`
+const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+`;
+
+const NavContentWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+`;
+
+const DropdownContainer = styled.div`
   position: relative;
   display: inline-block;
 `;
 
-const DropdownContent = styled.div<{ isOpen: boolean }>`
-  display: ${({ isOpen }) => (isOpen ? "block" : "none")};
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  min-width: 200px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  padding: 0.5rem 0;
-  margin-top: 0.5rem;
-  z-index: 1001;
-
-  ${({ theme }) => theme.media.tablet} {
-    position: static;
-    box-shadow: none;
-    background: rgba(255, 255, 255, 0.1);
-    margin-top: 0;
-    border-radius: 0;
-  }
-`;
-
-const DropdownItem = styled.a`
-  display: block;
-  padding: 0.75rem 1rem;
-  color: #374151;
-  text-decoration: none;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background: #f3f4f6;
-  }
-
-  ${({ theme }) => theme.media.tablet} {
-    color: white;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-  }
-`;
-
-const DropdownButton = styled.button`
+const DropdownButton = styled.button<{ $isActive?: boolean }>`
   background: none;
   border: none;
   color: white;
@@ -184,96 +138,259 @@ const DropdownButton = styled.button`
   align-items: center;
   gap: 0.5rem;
   transition: all 0.2s ease;
+  background: ${({ $isActive }) => ($isActive ? "rgba(255, 255, 255, 0.2)" : "transparent")};
 
   &:hover {
     background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
   }
 
   ${({ theme }) => theme.media.tablet} {
     width: 100%;
-    justify-content: center;
+    text-align: center;
     padding: 1rem;
     border-radius: 0;
+    justify-content: center;
+
+    &:hover {
+      transform: none;
+      background: rgba(255, 255, 255, 0.1);
+    }
   }
 `;
 
-const ChevronIcon = styled(ChevronDown)<{ isOpen: boolean }>`
-  transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
-  transition: transform 0.2s ease;
+const DropdownMenu = styled.div<{ $isOpen: boolean }>`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  z-index: 1000;
+  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
+  visibility: ${({ $isOpen }) => ($isOpen ? "visible" : "hidden")};
+  transform: ${({ $isOpen }) => ($isOpen ? "translateY(0)" : "translateY(-10px)")};
+  transition: all 0.2s ease;
+  border: 1px solid #e2e8f0;
+
+  ${({ theme }) => theme.media.tablet} {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    background: rgba(255, 255, 255, 0.1);
+    margin-top: 0.5rem;
+    display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
+  }
+`;
+
+const DropdownItem = styled.button`
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #374151;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  border-radius: 0;
+
+  &:first-child {
+    border-radius: 12px 12px 0 0;
+  }
+
+  &:last-child {
+    border-radius: 0 0 12px 12px;
+  }
+
+  &:hover {
+    background: #f3f4f6;
+  }
+
+  ${({ theme }) => theme.media.tablet} {
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    &:first-child,
+    &:last-child {
+      border-radius: 0;
+    }
+  }
 `;
 
 function Navigation() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isSimaDropdownOpen, setIsSimaDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["home", "sima", "balanco-carbono", "balcar", "dashboard"];
-      const scrollPosition = window.scrollY + 100;
+  const activeSection = location.pathname === "/" ? "home" : location.pathname.substring(1);
+  const isSimaActive =
+    activeSection === "sima" ||
+    activeSection === "sima-home" ||
+    activeSection === "sima-equipe" ||
+    activeSection === "sima-publicacoes" ||
+    activeSection === "sima-apoio" ||
+    activeSection === "sima-mapa" ||
+    activeSection === "sima-dados";
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
+  // Títulos específicos para cada página
+  const getPageTitle = () => {
+    switch (location.pathname) {
+      case "/":
+        return "Portal Limnológico";
+      case "/sima":
+        return "SIMA - Portal de Dados Hidrológicos";
+      case "/furnas":
+        return "Balanço de Carbono - Furnas";
+      case "/balcar":
+        return "BALCAR - Balanço de Carbono";
+      default:
+        return "Portal Limnológico";
+    }
+  };
+
+  const navigateToSection = (path: string) => {
+    if (path.startsWith("/sima")) {
+      const sectionId = path.replace("/sima", "").replace("-", "");
+
+      // Se já estamos na página SIMA, apenas fazer scroll
+      if (location.pathname === "/sima") {
+        if (sectionId === "home" || sectionId === "") {
+          // Para home, ir para a seção "Sobre o SIMA"
+          const element = document.getElementById("home");
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        } else if (sectionId === "equipe") {
+          const element = document.getElementById("equipe");
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        } else if (sectionId) {
+          const element = document.getElementById(sectionId);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
           }
         }
+      } else {
+        // Se não estamos na página SIMA, navegar primeiro
+        navigate("/sima");
+        setTimeout(() => {
+          if (sectionId === "home" || sectionId === "") {
+            // Para home ou navegação geral, ir para o topo da página
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } else if (sectionId === "equipe") {
+            const element = document.getElementById("equipe");
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+          } else if (sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+          }
+        }, 100);
+      }
+    } else {
+      navigate(path);
+    }
+    setIsMobileMenuOpen(false);
+    setIsSimaDropdownOpen(false);
+  };
+
+  const handleSimaDropdownToggle = () => {
+    setIsSimaDropdownOpen(!isSimaDropdownOpen);
+  };
+
+  // Fechar dropdown quando clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsSimaDropdownOpen(false);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
-    }
-  };
 
   return (
     <NavigationContainer>
       <NavContent>
-        <Logo>
-          <LogoIcon>INPE</LogoIcon>
-          Portal Limnologia
-        </Logo>
+        <NavContentWrapper>
+          <Logo>{getPageTitle()}</Logo>
+        </NavContentWrapper>
 
-        <NavLinks isOpen={isMobileMenuOpen}>
+        <NavLinks $isOpen={isMobileMenuOpen}>
           <NavLink
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              scrollToSection("home");
+              navigateToSection("/");
             }}
-            isActive={activeSection === "home"}
+            $isActive={activeSection === "home"}
           >
             Início
           </NavLink>
 
-          <NavLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("sima");
-            }}
-            isActive={activeSection === "sima"}
-          >
-            SIMA
-          </NavLink>
+          <DropdownContainer ref={dropdownRef}>
+            <DropdownButton onClick={handleSimaDropdownToggle} $isActive={isSimaActive}>
+              SIMA
+              <ChevronDown size={16} />
+            </DropdownButton>
+            <DropdownMenu $isOpen={isSimaDropdownOpen}>
+              <DropdownItem onClick={() => navigateToSection("/sima")}>
+                <Home size={16} />
+                Home
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/sima-equipe")}>
+                <Target size={16} />
+                Equipe
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/sima-publicacoes")}>
+                <BookOpen size={16} />
+                Publicações
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/sima-apoio")}>
+                <Target size={16} />
+                Apoio Institucional
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/sima-mapa")}>
+                <Map size={16} />
+                Mapa
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/sima-dados")}>
+                <Database size={16} />
+                Banco de Dados
+              </DropdownItem>
+            </DropdownMenu>
+          </DropdownContainer>
 
           <NavLink
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              scrollToSection("balanco-carbono");
+              navigateToSection("/furnas");
             }}
-            isActive={activeSection === "balanco-carbono"}
+            $isActive={activeSection === "furnas"}
           >
             Balanço de Carbono
           </NavLink>
@@ -282,56 +399,19 @@ function Navigation() {
             href="#"
             onClick={(e) => {
               e.preventDefault();
-              scrollToSection("balcar");
+              navigateToSection("/balcar");
             }}
-            isActive={activeSection === "balcar"}
+            $isActive={activeSection === "balcar"}
           >
             BALCAR
           </NavLink>
-
-          <Dropdown isOpen={dropdownOpen}>
-            <DropdownButton onClick={() => setDropdownOpen(!dropdownOpen)}>
-              Dados
-              <ChevronIcon isOpen={dropdownOpen} size={16} />
-            </DropdownButton>
-            <DropdownContent isOpen={dropdownOpen}>
-              <DropdownItem
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("dashboard");
-                  setDropdownOpen(false);
-                }}
-              >
-                Dashboard Interativo
-              </DropdownItem>
-              <DropdownItem
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("mapas");
-                  setDropdownOpen(false);
-                }}
-              >
-                Mapas Interativos
-              </DropdownItem>
-              <DropdownItem
-                href="#"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("graficos");
-                  setDropdownOpen(false);
-                }}
-              >
-                Gráficos Temporais
-              </DropdownItem>
-            </DropdownContent>
-          </Dropdown>
         </NavLinks>
 
-        <MobileMenuButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </MobileMenuButton>
+        <ButtonGroup>
+          <MobileMenuButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </MobileMenuButton>
+        </ButtonGroup>
       </NavContent>
     </NavigationContainer>
   );
