@@ -173,11 +173,104 @@ npm run dev
 
 ---
 
-### 📤 Exportação de Dados em CSV
+<details>
+<summary><b>📤 Exportação de Dados em CSV</b></summary>
 
 Este projeto oferece a funcionalidade de **exportação de dados em formato CSV**, permitindo que os usuários consultem, filtrem e salvem os dados para uso em ferramentas como **Excel, LibreOffice, R e Python**.
 
----
+### 🔧 **Como Funciona o Sistema de Exportação CSV**
+
+O sistema utiliza um **parser CSV personalizado** desenvolvido em TypeScript que:
+
+#### 📊 **Processamento de Dados**
+- **Extrai dados dinamicamente** do banco PostgreSQL
+- **Gera cabeçalhos automaticamente** baseados nos campos disponíveis
+- **Aplica filtros** conforme especificado pelo usuário
+- **Valida dados** antes da exportação
+- **Formata datas** em diferentes padrões (ISO, BR, US)
+
+#### 🏗️ **Arquitetura do Parser**
+```typescript
+// Estrutura principal do parser
+class SimaCsvParser {
+  // Gera cabeçalhos dinamicamente
+  private generateHeaders(options, sampleData): string[]
+  
+  // Cria metadados do arquivo
+  private generateMetadata(data, options): CsvMetadata
+  
+  // Formata linhas de dados
+  private formatDataRow(data, options): string[]
+  
+  // Gera CSV completo
+  public generateCsv(data, options): Promise<string>
+  
+  // Baixa arquivo automaticamente
+  public downloadCsv(data, filename, options): Promise<void>
+}
+```
+
+#### ⚙️ **Opções de Configuração**
+- **Separador**: `;` (padrão), `,` ou `\t`
+- **Encoding**: UTF-8 (padrão) ou ISO-8859-1
+- **Formato de data**: ISO, BR ou US
+- **Metadados**: Incluir/excluir informações do arquivo
+- **Cabeçalhos**: Incluir/excluir nomes das colunas
+
+### 🌐 **Compatibilidade Multiplataforma**
+
+#### 📊 **Microsoft Excel**
+- **Codificação**: UTF-8 com BOM para caracteres especiais
+- **Separador**: Ponto e vírgula (`;`) - padrão brasileiro
+- **Formato**: Abre diretamente sem configurações adicionais
+- **Metadados**: Linhas iniciadas com `#` são ignoradas automaticamente
+
+#### 📈 **LibreOffice Calc**
+- **Codificação**: UTF-8
+- **Separador**: Detecta automaticamente o ponto e vírgula
+- **Importação**: Use "Arquivo > Abrir" e selecione UTF-8
+- **Compatibilidade**: 100% compatível com Excel
+
+#### 🔬 **R (Linguagem de Estatística)**
+```r
+# Carregamento básico
+library(readr)
+dados <- read_csv2("arquivo.csv", locale = locale(encoding = "UTF-8"))
+
+# Com metadados ignorados
+dados <- read.csv2("arquivo.csv", 
+                   header = TRUE, 
+                   sep = ";", 
+                   comment.char = "#",
+                   encoding = "UTF-8")
+
+# Para análise de séries temporais
+dados$datahora <- as.POSIXct(dados$datahora, format = "%Y-%m-%d %H:%M:%S")
+```
+
+#### 🐍 **Python (Pandas)**
+```python
+import pandas as pd
+
+# Carregamento básico
+dados = pd.read_csv("arquivo.csv", 
+                   sep=";", 
+                   comment="#",
+                   encoding="utf-8")
+
+# Para análise de séries temporais
+dados['datahora'] = pd.to_datetime(dados['datahora'])
+
+# Para análise estatística
+import numpy as np
+estatisticas = dados.describe()
+```
+
+#### 📊 **Outras Ferramentas**
+- **SPSS**: Importa diretamente com separador `;`
+- **SAS**: Use `PROC IMPORT` com `DELIMITER=';'`
+- **Stata**: `import delimited` com `delimiter(";")`
+- **MATLAB**: `readtable()` detecta automaticamente o formato
 
 ### ✅ Funcionalidades Disponíveis
 
@@ -189,15 +282,13 @@ Este projeto oferece a funcionalidade de **exportação de dados em formato CSV*
   - LibreOffice Calc
   - Linguagens de análise de dados: R, Python, etc.
 
----
-
 ### 📁 Como Gerar e Utilizar os Arquivos CSV
 
 #### 1. Acesse a área de exportação
 - Navegue até a tela/listagem da tabela desejada (por exemplo: `Campos da Tabela`, `Estações`, `Sensores`).
 - Aplique os filtros necessários (opcional).
 
-#### 2. Clique em “Exportar CSV”
+#### 2. Clique em "Exportar CSV"
 - Um botão **Exportar CSV** estará visível.
 - Sem filtros: todos os registros serão exportados.
 - Com filtros: apenas os registros filtrados serão exportados.
@@ -206,8 +297,6 @@ Este projeto oferece a funcionalidade de **exportação de dados em formato CSV*
 - O arquivo será baixado automaticamente para o seu dispositivo.
 - O nome seguirá o padrão:
 exportacao_nomeTabela_YYYY-MM-DD_HH-MM.csv
-
----
 
 ### 🧾 Estrutura dos Arquivos CSV Gerados
 
@@ -221,8 +310,6 @@ idcampotabela;idsensor;nomecampo;rotulo;unidademedida;ordem
 2;8;sonda_chl;Clorofila;ug/l;25
 3;10;sonda_DO;Conc. de DO;mg/l;20
 
----
-
 #### 🧩 Exemplo: `tbestacao.csv`
 
 ##### Cabeçalho
@@ -232,8 +319,6 @@ idestacao;idHexadecimal;rotulo;lat;lng;inicio;fim
 30842;e1ea9;Balbina;-1.903697222;-59.46910833;2013-08-16;
 30913;e3074;Ibitinga 3;-21.76121;-48.98112;2013-03-22;
 30931;e34fd;Itumbiara 3;-18.283875;-48.906598;2009-11-18;2011-09-25
-
----
 
 #### 🧩 Exemplo: `tbsensor.csv`
 
@@ -245,58 +330,79 @@ idSensor;nome;fabricante;modelo;faixa;precisao
 8;Sensor de Clorofila;Yellow Spring;YSI 6025;0 a 400 ug/l;0.1 ug/l
 10;Sensor de Oxigênio Dissolvido;Yellow Spring;YSI 6562;0 a 50 mg/l;0.01 mg/l
 
----
+### 📌 **Metadados no CSV**
 
-### 📌 Metadados no CSV
+Ao início do arquivo, estão presentes linhas de metadados, iniciadas com `#`, contendo informações úteis como:
 
-Ao início ou fim do arquivo, podem estar presentes linhas de metadados, iniciadas com `#`, contendo informações úteis como:
+```csv
+# METADADOS DO ARQUIVO CSV SIMA
+# Título: Dados SIMA - Estação e1ea9
+# Descrição: Dados de monitoramento hidrosférico coletados pelo Sistema Integrado de Monitoramento Ambiental (SIMA)
+# Fonte: SIMA - Sistema Integrado de Monitoramento Ambiental
+# Data de Geração: 2025-09-26T14:32:00.000Z
+# Versão: 1.0
+# Estação: Balbina
+# Coordenadas: Lat -1.903697222, Lng -59.46910833
+# Período: 2013-08-16 a 2025-09-26
+# Total de Registros: 32
+# Campos Incluídos: 25
+#
+# ESTRUTURA DOS DADOS:
+# ID_SIMA: Identificador único do registro
+# ID_ESTACAO: Identificador da estação de coleta
+# DATA_HORA: Data e hora da coleta
+#
+# DADOS:
+```
 
-Dados exportados em: 2025-09-26 14:32
-Tabela: tbcampotabela
-Total de registros exportados: 32
-Filtros aplicados: idsensor = 10
+> ⚠️ **Importante**: Linhas iniciadas com `#` são **ignoradas por leitores CSV padrão**, mas fornecem **contexto útil** para análise e documentação.
 
-> ⚠️ Linhas iniciadas com `#` são **ignoradas por leitores CSV padrão**, mas fornecem **contexto útil** para análise.
+### 📥 **Como Abrir os Arquivos CSV**
 
----
+#### 📊 **Excel / LibreOffice**
+- Abra diretamente no software
+- Se necessário, escolha a codificação UTF-8
+- O separador padrão é `;` (ponto e vírgula). Altere nas configurações de importação, se necessário
 
-### 📥 Como Abrir os Arquivos CSV
-
-#### 📊 Excel / LibreOffice
-- Abra diretamente no software.
-- Se necessário, escolha a codificação UTF-8.
-- O separador padrão é `;` (ponto e vírgula). Altere nas configurações de importação, se necessário.
-
-#### 📈 R
+#### 📈 **R**
 ```r
-dados <- read.csv2("caminho/do/arquivo.csv", header = TRUE, sep = ";", comment.char = "#")
+# Método recomendado
+dados <- read.csv2("caminho/do/arquivo.csv", 
+                   header = TRUE, 
+                   sep = ";", 
+                   comment.char = "#",
+                   encoding = "UTF-8")
 
-#### 🐍 Python (pandas)
+# Para análise de séries temporais
+dados$datahora <- as.POSIXct(dados$datahora)
+```
+
+#### 🐍 **Python (pandas)**
+```python
 import pandas as pd
 
-dados = pd.read_csv("caminho/do/arquivo.csv", sep=";", comment="#")
+# Carregamento básico
+dados = pd.read_csv("caminho/do/arquivo.csv", 
+                   sep=";", 
+                   comment="#")
 
----
+# Para análise de séries temporais
+dados['datahora'] = pd.to_datetime(dados['datahora'])
+```
 
-⚠️ Observações Importantes
+### ⚠️ **Observações Importantes**
 
-Arquivos CSV são gerados com codificação UTF-8, garantindo suporte a acentos e caracteres especiais.
-
-Para volumes grandes de dados, a geração pode levar alguns segundos.
-
-Para exportar registros específicos, aplique os filtros desejados antes da exportação.
-
----
-
-### 🛠️ Boas Práticas Aplicadas
-
-- Separação clara de camadas (DB / API / Front)
-- Containers independentes para cada banco
-- Hot reload para server e front em dev
-- ESLint + Prettier (garantindo padronização de código)
-- CI no GitHub Actions
+- **Codificação**: Arquivos CSV são gerados com codificação UTF-8, garantindo suporte a acentos e caracteres especiais
+- **Performance**: Para volumes grandes de dados, a geração pode levar alguns segundos
+- **Filtros**: Para exportar registros específicos, aplique os filtros desejados antes da exportação
+- **Validação**: O sistema valida automaticamente os dados antes da exportação
+- **Compatibilidade**: Arquivos são compatíveis com todas as principais ferramentas de análise de dados
+- **Metadados**: Informações contextuais são preservadas para facilitar a análise posterior
 
 </details>
+
+</details>
+
 
 <details>
 <summary><b>🏃‍♂️ Artefatos Scrum - Acesso Rápido</b></summary>
@@ -371,6 +477,88 @@ Conforme o projeto evolui, novos artefatos serão adicionados:
 
 </details>
 
+<details>
+<summary><b>📊 Arquivos CSV dos Bancos de Dados</b></summary>
+
+Este projeto utiliza três bancos de dados distintos, cada um com seus próprios arquivos CSV contendo dados específicos das campanhas e monitoramento ambiental.
+
+### 🗂️ **Estrutura dos Arquivos CSV**
+
+#### 📁 **BALCAR Campanha**
+
+| **Arquivo** | **Descrição** | **Link Direto** |
+|-------------|---------------|-----------------|
+| `tbcampanha.csv` | Dados das campanhas BALCAR | [`tbcampanha.csv`](balcar-campanha/csv/tbcampanha.csv) |
+| `tbfluxoinpe.csv` | Fluxos de dados do INPE | [`tbfluxoinpe.csv`](balcar-campanha/csv/tbfluxoinpe.csv) |
+| `tbinstituicao.csv` | Informações das instituições | [`tbinstituicao.csv`](balcar-campanha/csv/tbinstituicao.csv) |
+| `tbreservatorio.csv` | Dados dos reservatórios | [`tbreservatorio.csv`](balcar-campanha/csv/tbreservatorio.csv) |
+| `tbsitio.csv` | Informações dos sítios de coleta | [`tbsitio.csv`](balcar-campanha/csv/tbsitio.csv) |
+| `tbtabelacampo.csv` | Campos das tabelas | [`tbtabelacampo.csv`](balcar-campanha/csv/tbtabelacampo.csv) |
+
+#### 📁 **Furnas Campanha**
+
+| **Arquivo** | **Descrição** | **Link Direto** |
+|-------------|---------------|-----------------|
+| `tbabioticocoluna.csv` | Dados abióticos da coluna d'água | [`tbabioticocoluna.csv`](furnas-campanha/csv/tbabioticocoluna.csv) |
+| `tbabioticosuperficie.csv` | Dados abióticos da superfície | [`tbabioticosuperficie.csv`](furnas-campanha/csv/tbabioticosuperficie.csv) |
+| `tbaguamateriaorganicasedimento.csv` | Água e matéria orgânica no sedimento | [`tbaguamateriaorganicasedimento.csv`](furnas-campanha/csv/tbaguamateriaorganicasedimento.csv) |
+| `tbbioticocoluna.csv` | Dados bióticos da coluna d'água | [`tbbioticocoluna.csv`](furnas-campanha/csv/tbbioticocoluna.csv) |
+| `tbbioticosuperficie.csv` | Dados bióticos da superfície | [`tbbioticosuperficie.csv`](furnas-campanha/csv/tbbioticosuperficie.csv) |
+| `tbbolhas.csv` | Dados de bolhas de gás | [`tbbolhas.csv`](furnas-campanha/csv/tbbolhas.csv) |
+| `tbcamarasolo.csv` | Dados de câmaras de solo | [`tbcamarasolo.csv`](furnas-campanha/csv/tbcamarasolo.csv) |
+| `tbcampanha.csv` | Dados das campanhas Furnas | [`tbcampanha.csv`](furnas-campanha/csv/tbcampanha.csv) |
+| `tbcampanhaportabela.csv` | Portas das tabelas de campanha | [`tbcampanhaportabela.csv`](furnas-campanha/csv/tbcampanhaportabela.csv) |
+| `tbcampoportabela.csv` | Campos das tabelas de campanha | [`tbcampoportabela.csv`](furnas-campanha/csv/tbcampoportabela.csv) |
+| `tbcarbono.csv` | Dados de carbono | [`tbcarbono.csv`](furnas-campanha/csv/tbcarbono.csv) |
+| `tbconcentracaogasagua.csv` | Concentração de gases na água | [`tbconcentracaogasagua.csv`](furnas-campanha/csv/tbconcentracaogasagua.csv) |
+| `tbconcentracaogassedimento.csv` | Concentração de gases no sedimento | [`tbconcentracaogassedimento.csv`](furnas-campanha/csv/tbconcentracaogassedimento.csv) |
+| `tbdadosprecipitacao.csv` | Dados de precipitação | [`tbdadosprecipitacao.csv`](furnas-campanha/csv/tbdadosprecipitacao.csv) |
+| `tbdadosrepresa.csv` | Dados das represas | [`tbdadosrepresa.csv`](furnas-campanha/csv/tbdadosrepresa.csv) |
+| `tbdifusao.csv` | Dados de difusão | [`tbdifusao.csv`](furnas-campanha/csv/tbdifusao.csv) |
+| `tbdupladessorcaoagua.csv` | Dessorção dupla da água | [`tbdupladessorcaoagua.csv`](furnas-campanha/csv/tbdupladessorcaoagua.csv) |
+| `tbfluxobolhasinpe.csv` | Fluxo de bolhas do INPE | [`tbfluxobolhasinpe.csv`](furnas-campanha/csv/tbfluxobolhasinpe.csv) |
+| `tbfluxocarbono.csv` | Fluxo de carbono | [`tbfluxocarbono.csv`](furnas-campanha/csv/tbfluxocarbono.csv) |
+| `tbfluxodifusivo.csv` | Fluxo difusivo | [`tbfluxodifusivo.csv`](furnas-campanha/csv/tbfluxodifusivo.csv) |
+| `tbfluxodifusivoinpe.csv` | Fluxo difusivo do INPE | [`tbfluxodifusivoinpe.csv`](furnas-campanha/csv/tbfluxodifusivoinpe.csv) |
+| `tbgasesembolhas.csv` | Gases em bolhas | [`tbgasesembolhas.csv`](furnas-campanha/csv/tbgasesembolhas.csv) |
+| `tbhoriba.csv` | Dados do equipamento Horiba | [`tbhoriba.csv`](furnas-campanha/csv/tbhoriba.csv) |
+| `tbinstituicao.csv` | Informações das instituições | [`tbinstituicao.csv`](furnas-campanha/csv/tbinstituicao.csv) |
+| `tbionsnaaguaintersticialdosedimento.csv` | Íons na água intersticial do sedimento | [`tbionsnaaguaintersticialdosedimento.csv`](furnas-campanha/csv/tbionsnaaguaintersticialdosedimento.csv) |
+| `tbmedidacampocoluna.csv` | Medidas de campo da coluna | [`tbmedidacampocoluna.csv`](furnas-campanha/csv/tbmedidacampocoluna.csv) |
+| `tbmedidacamposuperficie.csv` | Medidas de campo da superfície | [`tbmedidacamposuperficie.csv`](furnas-campanha/csv/tbmedidacamposuperficie.csv) |
+| `tbnutrientessedimento.csv` | Nutrientes no sedimento | [`tbnutrientessedimento.csv`](furnas-campanha/csv/tbnutrientessedimento.csv) |
+| `tbparametrosbiologicosfisicosagua.csv` | Parâmetros biológicos e físicos da água | [`tbparametrosbiologicosfisicosagua.csv`](furnas-campanha/csv/tbparametrosbiologicosfisicosagua.csv) |
+| `tbpfq.csv` | Dados PFQ | [`tbpfq.csv`](furnas-campanha/csv/tbpfq.csv) |
+| `tbreservatorio.csv` | Dados dos reservatórios | [`tbreservatorio.csv`](furnas-campanha/csv/tbreservatorio.csv) |
+| `tbsitio.csv` | Informações dos sítios | [`tbsitio.csv`](furnas-campanha/csv/tbsitio.csv) |
+| `tbtabela.csv` | Estrutura das tabelas | [`tbtabela.csv`](furnas-campanha/csv/tbtabela.csv) |
+| `tbtc.csv` | Dados TC | [`tbtc.csv`](furnas-campanha/csv/tbtc.csv) |
+| `tbvariaveisfisicasquimicasdaagua.csv` | Variáveis físicas e químicas da água | [`tbvariaveisfisicasquimicasdaagua.csv`](furnas-campanha/csv/tbvariaveisfisicasquimicasdaagua.csv) |
+
+#### 📁 **SIMA (Sistema Integrado de Monitoramento Ambiental)**
+
+| **Arquivo** | **Descrição** | **Link Direto** |
+|-------------|---------------|-----------------|
+| `tbcampotabela.csv` | Campos das tabelas SIMA | [`tbcampotabela.csv`](sima/csv/tbcampotabela.csv) |
+| `tbestacao.csv` | Dados das estações | [`tbestacao.csv`](sima/csv/tbestacao.csv) |
+| `tbsensor.csv` | Informações dos sensores | [`tbsensor.csv`](sima/csv/tbsensor.csv) |
+| `tbsima.csv` | Dados principais do SIMA | [`tbsima.csv`](sima/csv/tbsima.csv) |
+| `tbsimaoffline.csv` | Dados offline do SIMA | [`tbsimaoffline.csv`](sima/csv/tbsimaoffline.csv) |
+
+### 📋 **Como Utilizar os Arquivos CSV**
+
+1. **Para desenvolvimento**: Use os scripts SQL (`create-table.sql` e `copy-table.sql`) para criar e popular as tabelas
+2. **Para análise**: Importe os arquivos diretamente em ferramentas como Excel, R ou Python
+3. **Para consulta**: Acesse os dados através da interface web do projeto
+
+### 🔧 **Scripts de Importação**
+
+Cada pasta de banco contém scripts SQL para facilitar a importação:
+- `create-table.sql`: Cria a estrutura das tabelas
+- `copy-table.sql`: Importa os dados dos arquivos CSV
+
+</details>
+
 ## 👥 Nossa Equipe
 
 ### 🎯 Gestão
@@ -390,8 +578,4 @@ Conforme o projeto evolui, novos artefatos serão adicionados:
 | **Gabrielly Neu dos Santos** | [![GitHub](https://img.shields.io/badge/GitHub-000000?style=flat&logo=github&logoColor=white)](https://github.com/Gabrielly209) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/gabrielly-neu-753906239) |
 | **Leonardo da Silva Irineu** | [![GitHub](https://img.shields.io/badge/GitHub-000000?style=flat&logo=github&logoColor=white)](https://github.com/Leo-Slv) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/leonardo-irineu-8418b0288) |
 
-## 👨‍🏫 Coordenação e Orientação
 
-| **Focal Point** |
-|---------------|
-| **André Olimpio** | 
