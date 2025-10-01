@@ -3,7 +3,7 @@ import BarraBrasil from "./components/BarraBrasil";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/HomePage";
 import SimaSPAPage from "./pages/SimaSPAPage";
-import FurnasPage from "./pages/FurnasPage";
+import FurnasSPAPage from "./pages/FurnasSPAPage";
 import BalcarPage from "./pages/BalcarPage";
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/sima" element={<SimaSPAPage />} />
-        <Route path="/furnas" element={<FurnasPage />} />
+        <Route path="/furnas" element={<FurnasSPAPage />} />
         <Route path="/balcar" element={<BalcarPage />} />
       </Routes>
     </Router>

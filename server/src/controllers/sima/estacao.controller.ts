@@ -9,6 +9,30 @@ function addOneDay(dateStr: string): string {
   return d.toISOString().slice(0, 10); // retorna só YYYY-MM-DD
 }
 
+export const getAllSimple = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // Consulta simples para obter todas as estações
+    const result = await simaPool.query(
+      `SELECT idestacao, rotulo FROM tbestacao ORDER BY rotulo ASC`
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result.rows,
+    });
+  } catch (error: any) {
+    logger.error("Erro ao consultar tbestacao simples", {
+      message: error.message,
+      stack: error.stack,
+    });
+
+    res.status(500).json({
+      success: false,
+      error: "Erro interno ao consultar as estações.",
+    });
+  }
+};
+
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   try {
     const page = parseInt(req.query.page as string, 10);
