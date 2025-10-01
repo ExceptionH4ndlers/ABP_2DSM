@@ -6,7 +6,7 @@ import { logger } from "../../configs/logger";
 function addOneDay(dateStr: string): string {
   const d = new Date(dateStr);
   d.setDate(d.getDate() + 1);
-  return d.toISOString().slice(0, 10); // retorna só YYYY-MM-DD
+  return d.toISOString().slice(0, 10);
 }
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
@@ -16,46 +16,36 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const startDate = req.query.startDate as string;
     const endDate = req.query.endDate as string;
     const estacao = req.query.estacao as string;
-    const sortOrder = (req.query.sortOrder as string) || "desc"; // Padrão: mais recente primeiro
+    const sortOrder = (req.query.sortOrder as string) || "desc";
 
-    // Validações
+    // Validações básicas
     if (!page || page < 1) {
-      res.status(400).json({
-        success: false,
-        error: "Parâmetro 'page' inválido.",
-      });
+      res.status(400).json({ success: false, error: "Parâmetro 'page' inválido." });
       return;
     }
-
     if (!limit || limit < 1) {
-      res.status(400).json({
-        success: false,
-        error: "Parâmetro 'limit' inválido.",
-      });
+      res.status(400).json({ success: false, error: "Parâmetro 'limit' inválido." });
       return;
     }
-
     if (!startDate || !endDate) {
-      res.status(400).json({
-        success: false,
-        error: "Parâmetros 'startDate' e 'endDate' são obrigatórios.",
-      });
+      res
+        .status(400)
+        .json({ success: false, error: "Parâmetros 'startDate' e 'endDate' são obrigatórios." });
       return;
     }
 
     const offset = (page - 1) * limit;
-
-    // Ajusta datas para timestamp range correto
     const startDateTime = `${startDate} 00:00:00`;
     const endDateTime = `${addOneDay(endDate)} 00:00:00`;
 
-    // Monta a query base
+    // Cláusulas base
     let whereClause = "WHERE datahora >= $3 AND datahora < $4";
-    let queryParams = [limit, offset, startDateTime, endDateTime];
     let countWhereClause = "WHERE datahora >= $1 AND datahora < $2";
-    let countParams = [startDateTime, endDateTime];
 
-    // Adiciona filtro de estação se fornecido
+    const queryParams: (string | number)[] = [limit, offset, startDateTime, endDateTime];
+    const countParams: (string | number)[] = [startDateTime, endDateTime];
+
+    // Filtro opcional por estação
     if (estacao) {
       whereClause += " AND idestacao = $5";
       countWhereClause += " AND idestacao = $3";
@@ -63,7 +53,7 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
       countParams.push(estacao);
     }
 
-    // Consulta paginada com filtros
+    // Consulta principal
     const result = await simaPool.query(
       `SELECT * FROM tbsima
        ${whereClause}
@@ -72,7 +62,7 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
       queryParams,
     );
 
-    // Total de registros dentro do filtro
+    // Contagem total
     const countResult = await simaPool.query(
       `SELECT COUNT(*) FROM tbsima
        ${countWhereClause}`,
