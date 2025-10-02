@@ -7,10 +7,20 @@ import {
   ChevronDown,
   Target,
   FileText,
+  BookOpen,
+  BarChart3,
+  Users,
 } from "lucide-react";
 import furnasLogo from "../../img/furnas/carbon_budget_p_m.jpg";
 
-type ActiveItemKey = "conteudo" | "panorama" | "mapa" | "dados";
+type ActiveItemKey =
+  | "conteudo"
+  | "panorama"
+  | "metodologia"
+  | "resultados"
+  | "participantes"
+  | "mapa"
+  | "dados";
 
 export type FurnasSidebarProps = {
   collapsed: boolean;
@@ -33,10 +43,19 @@ const Sidebar = styled.aside<{ $collapsed: boolean }>`
   top: 0;
   left: 0;
 
-  &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-track { background: transparent; }
-  &::-webkit-scrollbar-thumb { background: rgba(173, 216, 230, 0.3); border-radius: 3px; }
-  &::-webkit-scrollbar-thumb:hover { background: rgba(173, 216, 230, 0.5); }
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(173, 216, 230, 0.3);
+    border-radius: 3px;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(173, 216, 230, 0.5);
+  }
 
   scrollbar-width: thin;
   scrollbar-color: rgba(173, 216, 230, 0.3) transparent;
@@ -67,8 +86,13 @@ const SidebarLogo = styled.div<{ $collapsed: boolean }>`
   text-align: ${({ $collapsed }) => ($collapsed ? "center" : "left")};
   cursor: pointer;
   transition: all 0.3s ease;
-  &:hover { background: rgba(173, 216, 230, 0.1); transform: scale(1.02); }
-  &:active { transform: scale(0.98); }
+  &:hover {
+    background: rgba(173, 216, 230, 0.1);
+    transform: scale(1.02);
+  }
+  &:active {
+    transform: scale(0.98);
+  }
 `;
 
 const LogoContainer = styled.div<{ $collapsed: boolean }>`
@@ -94,7 +118,17 @@ const ClickIndicator = styled.div<{ $collapsed: boolean }>`
   font-size: 0.7rem;
   font-weight: bold;
   animation: pulse 2s infinite;
-  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
 `;
 
 const LogoImage = styled.img<{ $collapsed: boolean }>`
@@ -104,7 +138,9 @@ const LogoImage = styled.img<{ $collapsed: boolean }>`
   transition: width 0.3s ease;
   margin: 0 auto;
   display: block;
-  @media (max-width: 1024px) { width: ${({ $collapsed }) => ($collapsed ? "100%" : "30%")}; }
+  @media (max-width: 1024px) {
+    width: ${({ $collapsed }) => ($collapsed ? "100%" : "30%")};
+  }
 `;
 
 const SidebarMenu = styled.nav`
@@ -131,8 +167,15 @@ const MenuItem = styled.button<{ $collapsed: boolean }>`
   cursor: pointer;
   width: 100%;
   text-align: left;
-  &:hover { background: rgba(173, 216, 230, 0.2); color: white; transform: translateX(4px); }
-  &.active { background: rgba(93, 173, 226, 0.3); color: white; }
+  &:hover {
+    background: rgba(173, 216, 230, 0.2);
+    color: white;
+    transform: translateX(4px);
+  }
+  &.active {
+    background: rgba(93, 173, 226, 0.3);
+    color: white;
+  }
 `;
 
 const DropdownContainer = styled.div`
@@ -156,15 +199,17 @@ const DropdownButton = styled.button<{ $collapsed: boolean }>`
   width: 100%;
   cursor: pointer;
   position: relative;
-  &:hover { background: rgba(173, 216, 230, 0.2); color: white; transform: translateX(4px); }
+  &:hover {
+    background: rgba(173, 216, 230, 0.2);
+    color: white;
+    transform: translateX(4px);
+  }
 `;
 
 const DropdownMenu = styled.div<{ $isOpen: boolean; $collapsed: boolean }>`
   position: ${({ $collapsed }) => ($collapsed ? "fixed" : "absolute")};
   ${({ $collapsed }) =>
-    $collapsed
-      ? `left: 90px; top: 50%; transform: translateY(-50%);`
-      : `left: 0; top: 100%;`}
+    $collapsed ? `left: 90px; top: 50%; transform: translateY(-50%);` : `left: 0; top: 100%;`}
   background: #196d95;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(25, 109, 149, 0.3);
@@ -196,9 +241,16 @@ const DropdownItem = styled.button`
   transition: background 0.2s ease;
   border-radius: 0;
   font-size: 0.9rem;
-  &:first-child { border-radius: 8px 8px 0 0; }
-  &:last-child { border-radius: 0 0 8px 8px; }
-  &:hover { background: rgba(173, 216, 230, 0.2); color: white; }
+  &:first-child {
+    border-radius: 8px 8px 0 0;
+  }
+  &:last-child {
+    border-radius: 0 0 8px 8px;
+  }
+  &:hover {
+    background: rgba(173, 216, 230, 0.2);
+    color: white;
+  }
 `;
 
 const MenuIcon = styled.span<{ $collapsed: boolean }>`
@@ -209,11 +261,15 @@ const MenuIcon = styled.span<{ $collapsed: boolean }>`
   justify-content: center;
 `;
 
-export function FurnasSidebar({ collapsed, setCollapsed, activeItem = "conteudo" }: FurnasSidebarProps) {
+export function FurnasSidebar({
+  collapsed,
+  setCollapsed,
+  activeItem = "conteudo",
+}: FurnasSidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  
+
   const isOnMainPage = location.pathname === "/furnas";
 
   useEffect(() => {
@@ -273,33 +329,90 @@ export function FurnasSidebar({ collapsed, setCollapsed, activeItem = "conteudo"
           </DropdownButton>
 
           <DropdownMenu $isOpen={isDropdownOpen && !collapsed} $collapsed={collapsed}>
-            <DropdownItem onClick={() => { navigate("/"); setIsDropdownOpen(false); }}>Início</DropdownItem>
-            <DropdownItem onClick={() => { navigate("/sima"); setIsDropdownOpen(false); }}>SIMA</DropdownItem>
-            <DropdownItem onClick={() => { navigate("/balcar"); setIsDropdownOpen(false); }}>BALCAR</DropdownItem>
+            <DropdownItem
+              onClick={() => {
+                navigate("/");
+                setIsDropdownOpen(false);
+              }}
+            >
+              Início
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => {
+                navigate("/sima");
+                setIsDropdownOpen(false);
+              }}
+            >
+              SIMA
+            </DropdownItem>
+            <DropdownItem
+              onClick={() => {
+                navigate("/balcar");
+                setIsDropdownOpen(false);
+              }}
+            >
+              BALCAR
+            </DropdownItem>
           </DropdownMenu>
         </DropdownContainer>
 
         {!collapsed && (
-          <div style={{ height: "1px", background: "rgba(255, 255, 255, 0.2)", margin: "1rem 0" }} />
+          <div
+            style={{ height: "1px", background: "rgba(255, 255, 255, 0.2)", margin: "1rem 0" }}
+          />
         )}
 
-        <MenuItem 
-          onClick={() => navigate("/furnas")} 
-          className={activeItem === "conteudo" ? "active" : ""} 
+        <MenuItem
+          onClick={() => navigate("/furnas")}
+          className={activeItem === "conteudo" ? "active" : ""}
           $collapsed={collapsed}
         >
-          <MenuIcon $collapsed={collapsed}><FileText size={16} /></MenuIcon>
+          <MenuIcon $collapsed={collapsed}>
+            <FileText size={16} />
+          </MenuIcon>
           {!collapsed && "Conteúdo Principal"}
         </MenuItem>
-        <MenuItem 
-          onClick={() => navigate("/furnas/panorama")} 
-          className={activeItem === "panorama" ? "active" : ""} 
+        <MenuItem
+          onClick={() => navigate("/furnas/panorama")}
+          className={activeItem === "panorama" ? "active" : ""}
           $collapsed={collapsed}
         >
-          <MenuIcon $collapsed={collapsed}><Target size={16} /></MenuIcon>
+          <MenuIcon $collapsed={collapsed}>
+            <Target size={16} />
+          </MenuIcon>
           {!collapsed && "Panorama"}
         </MenuItem>
-        <MenuItem 
+        <MenuItem
+          onClick={() => navigate("/furnas/metodologia")}
+          className={activeItem === "metodologia" ? "active" : ""}
+          $collapsed={collapsed}
+        >
+          <MenuIcon $collapsed={collapsed}>
+            <BookOpen size={16} />
+          </MenuIcon>
+          {!collapsed && "Metodologia"}
+        </MenuItem>
+        <MenuItem
+          onClick={() => navigate("/furnas/resultados")}
+          className={activeItem === "resultados" ? "active" : ""}
+          $collapsed={collapsed}
+        >
+          <MenuIcon $collapsed={collapsed}>
+            <BarChart3 size={16} />
+          </MenuIcon>
+          {!collapsed && "Resultados"}
+        </MenuItem>
+        <MenuItem
+          onClick={() => navigate("/furnas/participantes")}
+          className={activeItem === "participantes" ? "active" : ""}
+          $collapsed={collapsed}
+        >
+          <MenuIcon $collapsed={collapsed}>
+            <Users size={16} />
+          </MenuIcon>
+          {!collapsed && "Participantes"}
+        </MenuItem>
+        <MenuItem
           onClick={() => {
             if (isOnMainPage) {
               // Se já está na página principal, faz scroll para a seção
@@ -311,14 +424,16 @@ export function FurnasSidebar({ collapsed, setCollapsed, activeItem = "conteudo"
               // Se está em outra página, navega para a página principal com hash
               navigate("/furnas#mapa");
             }
-          }} 
-          className={activeItem === "mapa" ? "active" : ""} 
+          }}
+          className={activeItem === "mapa" ? "active" : ""}
           $collapsed={collapsed}
         >
-          <MenuIcon $collapsed={collapsed}><MapPin size={16} /></MenuIcon>
+          <MenuIcon $collapsed={collapsed}>
+            <MapPin size={16} />
+          </MenuIcon>
           {!collapsed && "Mapa Interativo"}
         </MenuItem>
-        <MenuItem 
+        <MenuItem
           onClick={() => {
             if (isOnMainPage) {
               // Se já está na página principal, faz scroll para a seção
@@ -330,11 +445,13 @@ export function FurnasSidebar({ collapsed, setCollapsed, activeItem = "conteudo"
               // Se está em outra página, navega para a página principal com hash
               navigate("/furnas#dados");
             }
-          }} 
-          className={activeItem === "dados" ? "active" : ""} 
+          }}
+          className={activeItem === "dados" ? "active" : ""}
           $collapsed={collapsed}
         >
-          <MenuIcon $collapsed={collapsed}><Database size={16} /></MenuIcon>
+          <MenuIcon $collapsed={collapsed}>
+            <Database size={16} />
+          </MenuIcon>
           {!collapsed && "Banco de Dados"}
         </MenuItem>
       </SidebarMenu>
@@ -343,5 +460,3 @@ export function FurnasSidebar({ collapsed, setCollapsed, activeItem = "conteudo"
 }
 
 export default FurnasSidebar;
-
-
