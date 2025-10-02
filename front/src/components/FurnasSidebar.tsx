@@ -10,6 +10,7 @@ import {
   BookOpen,
   BarChart3,
   Users,
+  Search,
 } from "lucide-react";
 import furnasLogo from "../../img/furnas/carbon_budget_p_m.jpg";
 
@@ -19,6 +20,7 @@ type ActiveItemKey =
   | "metodologia"
   | "resultados"
   | "participantes"
+  | "pesquisas"
   | "mapa"
   | "dados";
 
@@ -411,6 +413,16 @@ export function FurnasSidebar({
             <Users size={16} />
           </MenuIcon>
           {!collapsed && "Participantes"}
+        </MenuItem>
+        <MenuItem
+          onClick={() => navigate("/furnas/pesquisas")}
+          className={activeItem === "pesquisas" ? "active" : ""}
+          $collapsed={collapsed}
+        >
+          <MenuIcon $collapsed={collapsed}>
+            <Search size={16} />
+          </MenuIcon>
+          {!collapsed && "Pesquisas Correlatas"}
         </MenuItem>
         <MenuItem
           onClick={() => {

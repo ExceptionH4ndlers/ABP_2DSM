@@ -8,6 +8,7 @@ import FurnasPanoramaPage from "./pages/FurnasPanoramaPage";
 import FurnasMetodologiaPage from "./pages/FurnasMetodologiaPage";
 import FurnasResultadosPage from "./pages/FurnasResultadosPage";
 import FurnasParticipantesPage from "./pages/FurnasParticipantesPage";
+import FurnasPesquisasCorrelatasPage from "./pages/FurnasPesquisasCorrelatasPage";
 import BalcarPage from "./pages/BalcarPage";
 
 function AppContent() {
@@ -17,7 +18,8 @@ function AppContent() {
     location.pathname !== "/furnas/panorama" &&
     location.pathname !== "/furnas/metodologia" &&
     location.pathname !== "/furnas/resultados" &&
-    location.pathname !== "/furnas/participantes";
+    location.pathname !== "/furnas/participantes" &&
+    location.pathname !== "/furnas/pesquisas";
 
   return (
     <>
@@ -31,6 +33,7 @@ function AppContent() {
         <Route path="/furnas/metodologia" element={<FurnasMetodologiaPage />} />
         <Route path="/furnas/resultados" element={<FurnasResultadosPage />} />
         <Route path="/furnas/participantes" element={<FurnasParticipantesPage />} />
+        <Route path="/furnas/pesquisas" element={<FurnasPesquisasCorrelatasPage />} />
         <Route path="/balcar" element={<BalcarPage />} />
       </Routes>
     </>
