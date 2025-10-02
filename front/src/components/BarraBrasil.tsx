@@ -5,6 +5,8 @@ import styled from "styled-components";
 const BarraBrasilContainer = styled.div`
   width: 100%;
   overflow: hidden;
+  position: relative;
+  z-index: 1001;
 
   #barra-brasil {
     width: 100% !important;

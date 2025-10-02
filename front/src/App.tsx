@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import BarraBrasil from "./components/BarraBrasil";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/HomePage";
@@ -6,17 +6,28 @@ import SimaSPAPage from "./pages/SimaSPAPage";
 import FurnasSPAPage from "./pages/FurnasSPAPage";
 import BalcarPage from "./pages/BalcarPage";
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+  const shouldShowNavigation = location.pathname !== "/furnas";
+
   return (
-    <Router>
+    <>
       <BarraBrasil />
-      <Navigation />
+      {shouldShowNavigation && <Navigation />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/sima" element={<SimaSPAPage />} />
         <Route path="/furnas" element={<FurnasSPAPage />} />
         <Route path="/balcar" element={<BalcarPage />} />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
