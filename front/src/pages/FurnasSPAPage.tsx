@@ -29,7 +29,7 @@ const FurnasSPAContainer = styled.div`
 `;
 
 const Sidebar = styled.aside<{ $collapsed: boolean }>`
-  width: ${({ $collapsed }) => ($collapsed ? '80px' : '280px')};
+  width: ${({ $collapsed }) => ($collapsed ? "80px" : "280px")};
   background: #196d95;
   backdrop-filter: blur(10px);
   border-right: 1px solid #d1d5db;
@@ -66,20 +66,20 @@ const Sidebar = styled.aside<{ $collapsed: boolean }>`
   scrollbar-color: rgba(173, 216, 230, 0.3) transparent;
 
   @media (max-width: 1024px) {
-    width: ${({ $collapsed }) => ($collapsed ? '80px' : '240px')};
+    width: ${({ $collapsed }) => ($collapsed ? "80px" : "240px")};
   }
 
   @media (max-width: 768px) {
-    width: ${({ $collapsed }) => ($collapsed ? '0' : '100%')};
+    width: ${({ $collapsed }) => ($collapsed ? "0" : "100%")};
     position: fixed;
-    left: ${({ $collapsed }) => ($collapsed ? '-100%' : '0')};
+    left: ${({ $collapsed }) => ($collapsed ? "-100%" : "0")};
     transition: left 0.3s ease;
   }
 `;
 
 const SidebarHeader = styled.div<{ $collapsed: boolean }>`
   background: #196d95;
-  padding: 0.5rem ${({ $collapsed }) => ($collapsed ? '0.5rem' : '1rem')};
+  padding: 0.5rem ${({ $collapsed }) => ($collapsed ? "0.5rem" : "1rem")};
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,8 +87,8 @@ const SidebarHeader = styled.div<{ $collapsed: boolean }>`
 `;
 
 const SidebarLogo = styled.div<{ $collapsed: boolean }>`
-  padding: 1rem ${({ $collapsed }) => ($collapsed ? '0.5rem' : '1rem')};
-  text-align: ${({ $collapsed }) => ($collapsed ? 'center' : 'left')};
+  padding: 1rem ${({ $collapsed }) => ($collapsed ? "0.5rem" : "1rem")};
+  text-align: ${({ $collapsed }) => ($collapsed ? "center" : "left")};
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -119,7 +119,7 @@ const ClickIndicator = styled.div<{ $collapsed: boolean }>`
   border-radius: 50%;
   width: 20px;
   height: 20px;
-  display: ${({ $collapsed }) => ($collapsed ? 'flex' : 'none')};
+  display: ${({ $collapsed }) => ($collapsed ? "flex" : "none")};
   align-items: center;
   justify-content: center;
   font-size: 0.7rem;
@@ -127,14 +127,20 @@ const ClickIndicator = styled.div<{ $collapsed: boolean }>`
   animation: pulse 2s infinite;
 
   @keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 `;
 
 const LogoImage = styled.img<{ $collapsed: boolean }>`
-  width: ${({ $collapsed }) => ($collapsed ? '100%' : '35%')};
+  width: ${({ $collapsed }) => ($collapsed ? "100%" : "35%")};
   height: auto;
   filter: contrast(1.1) brightness(1.05);
   transition: width 0.3s ease;
@@ -142,7 +148,7 @@ const LogoImage = styled.img<{ $collapsed: boolean }>`
   display: block;
 
   @media (max-width: 1024px) {
-    width: ${({ $collapsed }) => ($collapsed ? '100%' : '30%')};
+    width: ${({ $collapsed }) => ($collapsed ? "100%" : "30%")};
   }
 `;
 
@@ -156,7 +162,7 @@ const SidebarMenu = styled.nav`
 const MenuItem = styled.a<{ $collapsed: boolean }>`
   display: flex;
   align-items: center;
-  padding: 0.75rem ${({ $collapsed }) => ($collapsed ? '0.5rem' : '1rem')};
+  padding: 0.75rem ${({ $collapsed }) => ($collapsed ? "0.5rem" : "1rem")};
   margin: 0.25rem 0;
   color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
@@ -164,7 +170,7 @@ const MenuItem = styled.a<{ $collapsed: boolean }>`
   transition: all 0.3s ease;
   font-size: 0.95rem;
   font-weight: 500;
-  justify-content: ${({ $collapsed }) => ($collapsed ? 'center' : 'flex-start')};
+  justify-content: ${({ $collapsed }) => ($collapsed ? "center" : "flex-start")};
   position: relative;
 
   &:hover {
@@ -178,7 +184,9 @@ const MenuItem = styled.a<{ $collapsed: boolean }>`
     color: white;
   }
 
-  ${({ $collapsed }) => $collapsed && `
+  ${({ $collapsed }) =>
+    $collapsed &&
+    `
     /* Tooltip removido */
   `}
 `;
@@ -191,7 +199,7 @@ const DropdownContainer = styled.div`
 const DropdownButton = styled.button<{ $collapsed: boolean }>`
   display: flex;
   align-items: center;
-  padding: 0.75rem ${({ $collapsed }) => ($collapsed ? '0.5rem' : '1rem')};
+  padding: 0.75rem ${({ $collapsed }) => ($collapsed ? "0.5rem" : "1rem")};
   margin: 0;
   color: rgba(255, 255, 255, 0.8);
   background: none;
@@ -200,7 +208,7 @@ const DropdownButton = styled.button<{ $collapsed: boolean }>`
   transition: all 0.3s ease;
   font-size: 0.95rem;
   font-weight: 500;
-  justify-content: ${({ $collapsed }) => ($collapsed ? 'center' : 'space-between')};
+  justify-content: ${({ $collapsed }) => ($collapsed ? "center" : "space-between")};
   width: 100%;
   cursor: pointer;
   position: relative;
@@ -211,33 +219,41 @@ const DropdownButton = styled.button<{ $collapsed: boolean }>`
     transform: translateX(4px);
   }
 
-  ${({ $collapsed }) => $collapsed && `
+  ${({ $collapsed }) =>
+    $collapsed &&
+    `
     /* Tooltip removido */
   `}
 `;
 
 const DropdownMenu = styled.div<{ $isOpen: boolean; $collapsed: boolean }>`
-  position: ${({ $collapsed }) => ($collapsed ? 'fixed' : 'absolute')};
-  ${({ $collapsed }) => $collapsed ? `
+  position: ${({ $collapsed }) => ($collapsed ? "fixed" : "absolute")};
+  ${({ $collapsed }) =>
+    $collapsed
+      ? `
     left: 90px;
     top: 50%;
     transform: translateY(-50%);
-  ` : `
+  `
+      : `
     left: 0;
     top: 100%;
   `}
   background: #196d95;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(25, 109, 149, 0.3);
-  min-width: ${({ $collapsed }) => ($collapsed ? '140px' : '150px')};
+  min-width: ${({ $collapsed }) => ($collapsed ? "140px" : "150px")};
   z-index: 1000;
   opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
-  visibility: ${({ $isOpen }) => ($isOpen ? 'visible' : 'hidden')};
-  transform: ${({ $isOpen, $collapsed }) => 
-    $isOpen 
-      ? ($collapsed ? 'translateY(-50%)' : 'translateY(0)') 
-      : ($collapsed ? 'translateY(-50%) translateX(-10px)' : 'translateY(-10px)')
-  };
+  visibility: ${({ $isOpen }) => ($isOpen ? "visible" : "hidden")};
+  transform: ${({ $isOpen, $collapsed }) =>
+    $isOpen
+      ? $collapsed
+        ? "translateY(-50%)"
+        : "translateY(0)"
+      : $collapsed
+        ? "translateY(-50%) translateX(-10px)"
+        : "translateY(-10px)"};
   transition: all 0.3s ease;
   border: 1px solid rgba(173, 216, 230, 0.3);
 `;
@@ -270,7 +286,7 @@ const DropdownItem = styled.button`
 `;
 
 const MenuIcon = styled.span<{ $collapsed: boolean }>`
-  margin-right: ${({ $collapsed }) => ($collapsed ? '0' : '0.75rem')};
+  margin-right: ${({ $collapsed }) => ($collapsed ? "0" : "0.75rem")};
   font-size: 1.1rem;
   display: flex;
   align-items: center;
@@ -279,15 +295,17 @@ const MenuIcon = styled.span<{ $collapsed: boolean }>`
 
 const MainContent = styled.main<{ $collapsed: boolean }>`
   flex: 1;
-  margin-left: ${({ $collapsed }) => ($collapsed ? '80px' : '280px')};
+  margin-left: ${({ $collapsed }) => ($collapsed ? "80px" : "280px")};
   padding: 2rem;
-  max-width: calc(100vw - ${({ $collapsed }) => ($collapsed ? '80px' : '280px')});
+  max-width: calc(100vw - ${({ $collapsed }) => ($collapsed ? "80px" : "280px")});
   overflow-x: visible;
-  transition: margin-left 0.3s ease, max-width 0.3s ease;
+  transition:
+    margin-left 0.3s ease,
+    max-width 0.3s ease;
 
   @media (max-width: 1024px) {
-    margin-left: ${({ $collapsed }) => ($collapsed ? '80px' : '240px')};
-    max-width: ${({ $collapsed }) => ($collapsed ? 'calc(100vw - 80px)' : 'calc(100vw - 240px)')};
+    margin-left: ${({ $collapsed }) => ($collapsed ? "80px" : "240px")};
+    max-width: ${({ $collapsed }) => ($collapsed ? "calc(100vw - 80px)" : "calc(100vw - 240px)")};
   }
 
   @media (max-width: 768px) {
@@ -548,7 +566,7 @@ const StyledTable = styled.table`
   }
 
   th {
-  font-weight: 600;
+    font-weight: 600;
     color: #374151;
     font-size: 0.9rem;
     position: sticky;
@@ -588,17 +606,17 @@ function FurnasSPAPage() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (!target.closest('[data-dropdown]')) {
+      if (!target.closest("[data-dropdown]")) {
         setIsDropdownOpen(false);
       }
     };
 
     if (isDropdownOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isDropdownOpen]);
 
@@ -635,20 +653,22 @@ function FurnasSPAPage() {
   return (
     <FurnasSPAContainer>
       <Sidebar $collapsed={sidebarCollapsed}>
-        <SidebarHeader $collapsed={sidebarCollapsed}>
-        </SidebarHeader>
+        <SidebarHeader $collapsed={sidebarCollapsed}></SidebarHeader>
 
-        <SidebarLogo $collapsed={sidebarCollapsed} onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
+        <SidebarLogo
+          $collapsed={sidebarCollapsed}
+          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+        >
           <LogoContainer $collapsed={sidebarCollapsed}>
             <LogoImage src={furnasLogo} alt="Logo Furnas" $collapsed={sidebarCollapsed} />
             <ClickIndicator $collapsed={sidebarCollapsed}>!</ClickIndicator>
           </LogoContainer>
         </SidebarLogo>
-        
+
         <SidebarMenu>
           {/* Dropdown de Navegação Global */}
           <DropdownContainer data-dropdown>
-            <DropdownButton 
+            <DropdownButton
               onClick={() => {
                 if (sidebarCollapsed) {
                   setSidebarCollapsed(false);
@@ -662,15 +682,33 @@ function FurnasSPAPage() {
               {!sidebarCollapsed && "Navegação"}
               <ChevronDown size={16} />
             </DropdownButton>
-            
-            <DropdownMenu $isOpen={isDropdownOpen && !sidebarCollapsed} $collapsed={sidebarCollapsed}>
-              <DropdownItem onClick={() => { navigate('/'); setIsDropdownOpen(false); }}>
+
+            <DropdownMenu
+              $isOpen={isDropdownOpen && !sidebarCollapsed}
+              $collapsed={sidebarCollapsed}
+            >
+              <DropdownItem
+                onClick={() => {
+                  navigate("/");
+                  setIsDropdownOpen(false);
+                }}
+              >
                 Início
               </DropdownItem>
-              <DropdownItem onClick={() => { navigate('/sima'); setIsDropdownOpen(false); }}>
+              <DropdownItem
+                onClick={() => {
+                  navigate("/sima");
+                  setIsDropdownOpen(false);
+                }}
+              >
                 SIMA
               </DropdownItem>
-              <DropdownItem onClick={() => { navigate('/balcar'); setIsDropdownOpen(false); }}>
+              <DropdownItem
+                onClick={() => {
+                  navigate("/balcar");
+                  setIsDropdownOpen(false);
+                }}
+              >
                 BALCAR
               </DropdownItem>
             </DropdownMenu>
@@ -678,56 +716,80 @@ function FurnasSPAPage() {
 
           {/* Separador visual */}
           {!sidebarCollapsed && (
-            <div style={{ 
-              height: '1px', 
-              background: 'rgba(255, 255, 255, 0.2)', 
-              margin: '1rem 0' 
-            }} />
+            <div
+              style={{
+                height: "1px",
+                background: "rgba(255, 255, 255, 0.2)",
+                margin: "1rem 0",
+              }}
+            />
           )}
 
           {/* Links Locais do Projeto */}
           <MenuItem href="#home" className="active" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><Home size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <Home size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Panorama"}
           </MenuItem>
           <MenuItem href="#metodologia" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><BookOpen size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <BookOpen size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Metodologia"}
           </MenuItem>
           <MenuItem href="#banco-dados" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><Database size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <Database size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Banco de Dados"}
           </MenuItem>
           <MenuItem href="#resultados" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><BarChart3 size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <BarChart3 size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Resultados Esperados"}
           </MenuItem>
           <MenuItem href="#participantes" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><Users size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <Users size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Participantes"}
           </MenuItem>
           <MenuItem href="#usinas" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><Zap size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <Zap size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Usinas Hidrelétricas"}
           </MenuItem>
           <MenuItem href="#pesquisas" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><FileText size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <FileText size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Pesquisas Correlatas"}
           </MenuItem>
           <MenuItem href="#publicacoes" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><FileText size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <FileText size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Publicações"}
           </MenuItem>
           <MenuItem href="#imagens" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><Image size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <Image size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Imagens"}
           </MenuItem>
           <MenuItem href="#links" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><Link size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <Link size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Links"}
           </MenuItem>
           <MenuItem href="#videos" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}><Play size={16} /></MenuIcon>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <Play size={16} />
+            </MenuIcon>
             {!sidebarCollapsed && "Vídeos"}
           </MenuItem>
         </SidebarMenu>
@@ -741,18 +803,16 @@ function FurnasSPAPage() {
           </SectionTitleWithLogo>
 
           <SectionText>
-            O projeto Balanço de Carbono representa um esforço pioneiro na quantificação 
-            das emissões de gases de efeito estufa (GEE) em reservatórios hidrelétricos 
-            brasileiros. Desenvolvido em parceria com a Furnas Centrais Elétricas, este 
-            projeto científico visa compreender e quantificar os fluxos de carbono em 
-            ambientes aquáticos continentais.
+            O projeto Balanço de Carbono representa um esforço pioneiro na quantificação das
+            emissões de gases de efeito estufa (GEE) em reservatórios hidrelétricos brasileiros.
+            Desenvolvido em parceria com a Furnas Centrais Elétricas, este projeto científico visa
+            compreender e quantificar os fluxos de carbono em ambientes aquáticos continentais.
           </SectionText>
 
           <SectionText>
-            Com 79 campanhas científicas realizadas em diversos reservatórios, o projeto 
-            coletou dados essenciais sobre emissões de CH₄, CO₂ e N₂O, contribuindo para 
-            o desenvolvimento de modelos espaciais específicos para ambientes de cerrado 
-            e outras regiões brasileiras.
+            Com 79 campanhas científicas realizadas em diversos reservatórios, o projeto coletou
+            dados essenciais sobre emissões de CH₄, CO₂ e N₂O, contribuindo para o desenvolvimento
+            de modelos espaciais específicos para ambientes de cerrado e outras regiões brasileiras.
           </SectionText>
         </Section>
 
@@ -767,27 +827,25 @@ function FurnasSPAPage() {
           </SectionSubtitle>
 
           <SectionText>
-            <strong>Quantificação de Emissões:</strong> Medir e quantificar as emissões 
-            de gases de efeito estufa (CH₄, CO₂, N₂O) em reservatórios hidrelétricos, 
-            contribuindo para o inventário nacional de emissões.
+            <strong>Quantificação de Emissões:</strong> Medir e quantificar as emissões de gases de
+            efeito estufa (CH₄, CO₂, N₂O) em reservatórios hidrelétricos, contribuindo para o
+            inventário nacional de emissões.
           </SectionText>
 
           <SectionText>
-            <strong>Desenvolvimento de Modelos:</strong> Criar modelos espaciais e 
-            temporais para prever emissões de carbono em diferentes tipos de reservatórios 
-            e condições ambientais.
+            <strong>Desenvolvimento de Modelos:</strong> Criar modelos espaciais e temporais para
+            prever emissões de carbono em diferentes tipos de reservatórios e condições ambientais.
           </SectionText>
 
           <SectionText>
-            <strong>Impacto Ambiental:</strong> Avaliar o impacto ambiental dos 
-            reservatórios hidrelétricos e propor medidas de mitigação para reduzir 
-            as emissões de gases de efeito estufa.
+            <strong>Impacto Ambiental:</strong> Avaliar o impacto ambiental dos reservatórios
+            hidrelétricos e propor medidas de mitigação para reduzir as emissões de gases de efeito
+            estufa.
           </SectionText>
 
           <SectionText>
-            <strong>Base Científica:</strong> Fornecer dados científicos robustos para 
-            políticas públicas e regulamentações ambientais relacionadas à geração 
-            hidrelétrica.
+            <strong>Base Científica:</strong> Fornecer dados científicos robustos para políticas
+            públicas e regulamentações ambientais relacionadas à geração hidrelétrica.
           </SectionText>
         </Section>
 
@@ -802,27 +860,26 @@ function FurnasSPAPage() {
           </SectionSubtitle>
 
           <SectionText>
-            <strong>Campanhas de Campo:</strong> Realização de 79 campanhas científicas 
-            em reservatórios estratégicos, com coleta sistemática de dados ambientais, 
-            hidrológicos e biogeoquímicos.
+            <strong>Campanhas de Campo:</strong> Realização de 79 campanhas científicas em
+            reservatórios estratégicos, com coleta sistemática de dados ambientais, hidrológicos e
+            biogeoquímicos.
           </SectionText>
 
           <SectionText>
-            <strong>Medições Gasosas:</strong> Utilização de técnicas avançadas para 
-            medição de concentrações e fluxos de CH₄, CO₂ e N₂O em diferentes 
-            compartimentos (água, sedimento, atmosfera).
+            <strong>Medições Gasosas:</strong> Utilização de técnicas avançadas para medição de
+            concentrações e fluxos de CH₄, CO₂ e N₂O em diferentes compartimentos (água, sedimento,
+            atmosfera).
           </SectionText>
 
           <SectionText>
-            <strong>Análise Espacial:</strong> Desenvolvimento de modelos espaciais 
-            específicos para ambientes de cerrado, considerando variabilidade temporal 
-            e espacial das emissões.
+            <strong>Análise Espacial:</strong> Desenvolvimento de modelos espaciais específicos para
+            ambientes de cerrado, considerando variabilidade temporal e espacial das emissões.
           </SectionText>
 
           <SectionText>
-            <strong>Integração de Dados:</strong> Combinação de dados in situ com 
-            informações de sensoriamento remoto e modelagem hidrodinâmica para uma 
-            compreensão holística dos processos.
+            <strong>Integração de Dados:</strong> Combinação de dados in situ com informações de
+            sensoriamento remoto e modelagem hidrodinâmica para uma compreensão holística dos
+            processos.
           </SectionText>
         </Section>
 
@@ -832,17 +889,15 @@ function FurnasSPAPage() {
             <MapPin size={40} />
             Localização dos Reservatórios
           </SectionTitle>
-          <SectionSubtitle>
-            Reservatórios estudados no projeto Balanço de Carbono
-          </SectionSubtitle>
+          <SectionSubtitle>Reservatórios estudados no projeto Balanço de Carbono</SectionSubtitle>
 
           <MapPlaceholder>
             <MapPin size={48} style={{ marginBottom: "1rem", opacity: 0.5 }} />
             <h3>Mapa Interativo dos Reservatórios</h3>
             <p>
-              Visualização geográfica dos reservatórios hidrelétricos estudados 
-              no projeto, incluindo dados de localização, características 
-              ambientais e resultados das campanhas científicas.
+              Visualização geográfica dos reservatórios hidrelétricos estudados no projeto,
+              incluindo dados de localização, características ambientais e resultados das campanhas
+              científicas.
             </p>
           </MapPlaceholder>
         </Section>
@@ -952,7 +1007,10 @@ function FurnasSPAPage() {
                 </thead>
                 <tbody>
                   <tr>
-                    <td colSpan={8} style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}>
+                    <td
+                      colSpan={8}
+                      style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}
+                    >
                       Selecione os filtros e clique em "Buscar Dados" para visualizar os resultados
                     </td>
                   </tr>

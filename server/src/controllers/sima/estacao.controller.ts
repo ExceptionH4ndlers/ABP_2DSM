@@ -13,7 +13,7 @@ export const getAllSimple = async (req: Request, res: Response): Promise<void> =
   try {
     // Consulta simples para obter todas as estações
     const result = await simaPool.query(
-      `SELECT idestacao, rotulo FROM tbestacao ORDER BY rotulo ASC`
+      `SELECT idestacao, rotulo FROM tbestacao ORDER BY rotulo ASC`,
     );
 
     res.status(200).json({

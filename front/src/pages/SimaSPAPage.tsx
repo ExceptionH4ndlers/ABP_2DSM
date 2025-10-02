@@ -498,7 +498,7 @@ const StyledTable = styled.table`
   th:nth-child(34),
   td:nth-child(33),
   td:nth-child(34) {
-    background: #fecaca;  
+    background: #fecaca;
   }
 
   /* Precipitação */
