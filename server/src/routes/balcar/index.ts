@@ -7,5 +7,4 @@ const router = express.Router();
 router.use("/reservatorio", reservatorio);
 router.use("/instituicao", instituicao);
 
-
 export default router;
