@@ -21,6 +21,7 @@ type ActiveItemKey =
   | "resultados"
   | "participantes"
   | "pesquisas"
+  | "publicacoes"
   | "mapa"
   | "dados";
 
@@ -423,6 +424,16 @@ export function FurnasSidebar({
             <Search size={16} />
           </MenuIcon>
           {!collapsed && "Pesquisas Correlatas"}
+        </MenuItem>
+        <MenuItem
+          onClick={() => navigate("/furnas/publicacoes")}
+          className={activeItem === "publicacoes" ? "active" : ""}
+          $collapsed={collapsed}
+        >
+          <MenuIcon $collapsed={collapsed}>
+            <BookOpen size={16} />
+          </MenuIcon>
+          {!collapsed && "Publicações"}
         </MenuItem>
         <MenuItem
           onClick={() => {
