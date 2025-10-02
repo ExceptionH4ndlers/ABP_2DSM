@@ -2,22 +2,15 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import {
-  Target,
-  Activity,
   MapPin,
   Database,
   Filter,
   Search,
-  Home,
   BookOpen,
-  BarChart3,
-  Users,
-  Zap,
-  FileText,
-  Image,
-  Link,
-  Play,
   ChevronDown,
+  Target,
+  Users,
+  FileText,
 } from "lucide-react";
 import { CsvExportButton } from "../components/CsvExportButton";
 import furnasLogo from "../../img/furnas/carbon_budget_p_m.jpg";
@@ -344,21 +337,6 @@ const SectionSubtitle = styled.p`
   line-height: 1.6;
 `;
 
-const SectionTitleWithLogo = styled.h2`
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #000000;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  justify-content: center;
-
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2rem;
-  }
-`;
-
 const SectionText = styled.p`
   font-size: 1.1rem;
   color: #000000;
@@ -536,6 +514,112 @@ const TableContainer = styled.div`
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+`;
+
+const ParticipantsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+  justify-items: center;
+  align-items: start;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+
+  /* INPE no topo centralizado */
+  & > :nth-child(1) {
+    grid-column: 2 / 4;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  /* Base - 4 cards distribuídos */
+  & > :nth-child(2) {
+    grid-column: 1;
+  }
+
+  & > :nth-child(3) {
+    grid-column: 2;
+  }
+
+  & > :nth-child(4) {
+    grid-column: 3;
+  }
+
+  & > :nth-child(5) {
+    grid-column: 4;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    
+    & > * {
+      grid-column: 1 !important;
+    }
+  }
+`;
+
+const ParticipantCard = styled.div`
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-color: #196d95;
+  }
+`;
+
+const ParticipantLogo = styled.img`
+  max-width: 160px;
+  max-height: 100px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  filter: grayscale(0.1) contrast(1.1) brightness(1.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  ${ParticipantCard}:hover & {
+    filter: grayscale(0) contrast(1.2) brightness(1.1);
+    transform: scale(1.05);
+  }
+`;
+
+const ParticipantName = styled.h3`
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+`;
+
+const ParticipantLink = styled.a`
+  color: #196d95;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: #0f4c75;
+    text-decoration: underline;
+  }
+
+  /* Quando envolve apenas a logo, não aplicar decoração */
+  img + & {
+    margin-top: 0.5rem;
+  }
 `;
 
 const StyledTable = styled.table`
@@ -726,168 +810,220 @@ function FurnasSPAPage() {
           )}
 
           {/* Links Locais do Projeto */}
-          <MenuItem href="#home" className="active" $collapsed={sidebarCollapsed}>
+          <MenuItem href="#conteudo" className="active" $collapsed={sidebarCollapsed}>
             <MenuIcon $collapsed={sidebarCollapsed}>
-              <Home size={16} />
+              <FileText size={16} />
+            </MenuIcon>
+            {!sidebarCollapsed && "Conteúdo"}
+          </MenuItem>
+          <MenuItem href="/furnas/panorama" $collapsed={sidebarCollapsed}>
+            <MenuIcon $collapsed={sidebarCollapsed}>
+              <Target size={16} />
             </MenuIcon>
             {!sidebarCollapsed && "Panorama"}
           </MenuItem>
-          <MenuItem href="#metodologia" $collapsed={sidebarCollapsed}>
+          <MenuItem href="#mapa" $collapsed={sidebarCollapsed}>
             <MenuIcon $collapsed={sidebarCollapsed}>
-              <BookOpen size={16} />
+              <MapPin size={16} />
             </MenuIcon>
-            {!sidebarCollapsed && "Metodologia"}
+            {!sidebarCollapsed && "Mapa Interativo"}
           </MenuItem>
-          <MenuItem href="#banco-dados" $collapsed={sidebarCollapsed}>
+          <MenuItem href="#dados" $collapsed={sidebarCollapsed}>
             <MenuIcon $collapsed={sidebarCollapsed}>
               <Database size={16} />
             </MenuIcon>
             {!sidebarCollapsed && "Banco de Dados"}
           </MenuItem>
-          <MenuItem href="#resultados" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}>
-              <BarChart3 size={16} />
-            </MenuIcon>
-            {!sidebarCollapsed && "Resultados Esperados"}
-          </MenuItem>
-          <MenuItem href="#participantes" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}>
-              <Users size={16} />
-            </MenuIcon>
-            {!sidebarCollapsed && "Participantes"}
-          </MenuItem>
-          <MenuItem href="#usinas" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}>
-              <Zap size={16} />
-            </MenuIcon>
-            {!sidebarCollapsed && "Usinas Hidrelétricas"}
-          </MenuItem>
-          <MenuItem href="#pesquisas" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}>
-              <FileText size={16} />
-            </MenuIcon>
-            {!sidebarCollapsed && "Pesquisas Correlatas"}
-          </MenuItem>
-          <MenuItem href="#publicacoes" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}>
-              <FileText size={16} />
-            </MenuIcon>
-            {!sidebarCollapsed && "Publicações"}
-          </MenuItem>
-          <MenuItem href="#imagens" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}>
-              <Image size={16} />
-            </MenuIcon>
-            {!sidebarCollapsed && "Imagens"}
-          </MenuItem>
-          <MenuItem href="#links" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}>
-              <Link size={16} />
-            </MenuIcon>
-            {!sidebarCollapsed && "Links"}
-          </MenuItem>
-          <MenuItem href="#videos" $collapsed={sidebarCollapsed}>
-            <MenuIcon $collapsed={sidebarCollapsed}>
-              <Play size={16} />
-            </MenuIcon>
-            {!sidebarCollapsed && "Vídeos"}
-          </MenuItem>
         </SidebarMenu>
       </Sidebar>
 
       <MainContent $collapsed={sidebarCollapsed}>
-        {/* Seção Sobre o Balanço de Carbono */}
-        <Section id="home">
-          <SectionTitleWithLogo>
-            Projeto Balanço de Carbono em Reservatórios Hidrelétricos
-          </SectionTitleWithLogo>
-
-          <SectionText>
-            O projeto Balanço de Carbono representa um esforço pioneiro na quantificação das
-            emissões de gases de efeito estufa (GEE) em reservatórios hidrelétricos brasileiros.
-            Desenvolvido em parceria com a Furnas Centrais Elétricas, este projeto científico visa
-            compreender e quantificar os fluxos de carbono em ambientes aquáticos continentais.
-          </SectionText>
-
-          <SectionText>
-            Com 79 campanhas científicas realizadas em diversos reservatórios, o projeto coletou
-            dados essenciais sobre emissões de CH₄, CO₂ e N₂O, contribuindo para o desenvolvimento
-            de modelos espaciais específicos para ambientes de cerrado e outras regiões brasileiras.
-          </SectionText>
-        </Section>
-
-        {/* Seção Objetivos */}
-        <Section id="objetivos">
+        {/* Seção Objetivos Gerais */}
+        <Section id="conteudo">
           <SectionTitle>
             <Target size={40} />
-            Objetivos do Projeto
+            Objetivos Gerais
           </SectionTitle>
           <SectionSubtitle>
-            Compreender os processos biogeoquímicos em reservatórios hidrelétricos
+            Metas principais do projeto Balanço de Carbono em Reservatórios Hidrelétricos
           </SectionSubtitle>
 
           <SectionText>
-            <strong>Quantificação de Emissões:</strong> Medir e quantificar as emissões de gases de
-            efeito estufa (CH₄, CO₂, N₂O) em reservatórios hidrelétricos, contribuindo para o
-            inventário nacional de emissões.
+            <strong>• Determinar as emissões de gases de efeito estufa:</strong> gás carbônico,
+            metano e óxido nitroso, dos reservatórios de FURNAS Centrais Elétricas S.A.;
           </SectionText>
 
           <SectionText>
-            <strong>Desenvolvimento de Modelos:</strong> Criar modelos espaciais e temporais para
-            prever emissões de carbono em diferentes tipos de reservatórios e condições ambientais.
+            <strong>• Identificar as rotas do ciclo do carbono:</strong> nesses reservatórios e os
+            fatores ambientais envolvidos;
           </SectionText>
 
           <SectionText>
-            <strong>Impacto Ambiental:</strong> Avaliar o impacto ambiental dos reservatórios
-            hidrelétricos e propor medidas de mitigação para reduzir as emissões de gases de efeito
-            estufa.
+            <strong>• Avaliar a influência dos fatores:</strong> morfológicos, morfométricos,
+            biogeoquímicos e operacionais dos reservatórios na emissão de gases de efeito estufa;
           </SectionText>
 
           <SectionText>
-            <strong>Base Científica:</strong> Fornecer dados científicos robustos para políticas
-            públicas e regulamentações ambientais relacionadas à geração hidrelétrica.
+            <strong>• Determinar o padrão de emissão existente:</strong> anteriormente à construção
+            de reservatórios;
+          </SectionText>
+
+          <SectionText>
+            <strong>• Elaborar um modelo espacial e temporal:</strong> de emissão de gases para
+            reservatórios implantados em ambientes de Cerrado.
           </SectionText>
         </Section>
 
-        {/* Seção Metodologia */}
-        <Section id="metodologia">
+        {/* Seção Introdução */}
+        <Section>
           <SectionTitle>
-            <Activity size={40} />
-            Metodologia Científica
+            <BookOpen size={40} />
+            Introdução
+          </SectionTitle>
+          <SectionSubtitle>Contexto científico e regulatório do projeto</SectionSubtitle>
+
+          <SectionText>
+            A crescente emissão de gases de efeito estufa, devido às atividades humanas, pode causar
+            severas consequências ambientais em escalas regionais e global, tendendo a afetar mais
+            os países em desenvolvimento, localizados em baixas latitudes, do que os países do
+            hemisfério Norte.
+          </SectionText>
+
+          <SectionText>
+            O Brasil, ao ratificar a Convenção Quadro das Nações Unidas sobre Mudanças do Clima,
+            comprometeu-se a elaborar e atualizar inventários de suas fontes de emissão, bem como
+            das remoções por sumidouros dos principais gases de efeito estufa (GHG): gás carbônico,
+            metano e óxido nitroso. O conhecimento dessas fontes e sumidouros é o primeiro passo na
+            busca de medidas mitigadoras.
+          </SectionText>
+
+          <SectionText>
+            A partir da última década, a comunidade científica tem questionado se os reservatórios
+            destinados à geração hidrelétrica contribuem substancialmente para o aumento do efeito
+            estufa. Assim, tornam-se necessárias investigações nessa área. Além disso, é importante
+            que o setor elétrico nacional verifique as opções disponíveis para redução das emissões
+            de gases de efeito estufa por unidade de energia gerada, de modo que possa se qualificar
+            para o mercado mundial das Reduções Certificadas de Emissão.
+          </SectionText>
+
+          <SectionText>
+            O presente projeto constitui a etapa inicial na realização do balanço de carbono de
+            FURNAS CENTRAIS ELÉTRICAS S.A., onde as emissões originadas dos reservatórios das usinas
+            hidrelétricas poderão ser comparadas às emissões produzidas pela geração termelétrica e,
+            então, contrastadas com o carbono fixado por meio dos projetos de reflorestamento da
+            Empresa.
+          </SectionText>
+
+          <SectionText>
+            Este projeto foi desenvolvido de acordo com a lei 9.991/2000, que estabelece um
+            investimento mínimo anual de 1% de seu lucro líquido, das companhias geradoras de
+            eletricidade, em pesquisa e desenvolvimento no setor elétrico. Os procedimentos para os
+            projetos são determinados pela{" "}
+            <a 
+              href="https://www.gov.br/aneel/pt-br" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ 
+                color: "#196d95", 
+                textDecoration: "underline",
+                fontWeight: "600"
+              }}
+            >
+              Agência Nacional de Energia Elétrica (ANEEL)
+            </a>.
+          </SectionText>
+
+          <SectionText>
+            <strong>Gerente do Projeto:</strong> André Carlos Prates Cimbleris
+            <br />
+            <strong>Telefone:</strong> (21)2528-5436
+          </SectionText>
+        </Section>
+
+        {/* Seção Participantes */}
+        <Section>
+          <SectionTitle>
+            <Users size={40} />
+            Participantes
           </SectionTitle>
           <SectionSubtitle>
-            Abordagem multidisciplinar para análise de fluxos de carbono
+            Instituições parceiras no projeto Balanço de Carbono
           </SectionSubtitle>
 
-          <SectionText>
-            <strong>Campanhas de Campo:</strong> Realização de 79 campanhas científicas em
-            reservatórios estratégicos, com coleta sistemática de dados ambientais, hidrológicos e
-            biogeoquímicos.
-          </SectionText>
+          <ParticipantsGrid>
+            {/* INPE no topo centralizado */}
+            <ParticipantCard>
+              <ParticipantLink 
+                href="https://www.gov.br/inpe/pt-br" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <ParticipantLogo 
+                  src="/img/furnas/inpe_logo_participante.jpg" 
+                  alt="Instituto Nacional de Pesquisas Espaciais" 
+                />
+              </ParticipantLink>
+              <ParticipantName>Instituto Nacional de Pesquisas Espaciais</ParticipantName>
+            </ParticipantCard>
 
-          <SectionText>
-            <strong>Medições Gasosas:</strong> Utilização de técnicas avançadas para medição de
-            concentrações e fluxos de CH₄, CO₂ e N₂O em diferentes compartimentos (água, sedimento,
-            atmosfera).
-          </SectionText>
+            {/* Base - 4 participantes */}
+            <ParticipantCard>
+              <ParticipantLink 
+                href="https://www.furnas.com.br/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <ParticipantLogo 
+                  src="/img/furnas/furnaslogo_participante.jpg" 
+                  alt="FURNAS Centrais Elétricas S.A." 
+                />
+              </ParticipantLink>
+              <ParticipantName>FURNAS Centrais Elétricas S.A.</ParticipantName>
+            </ParticipantCard>
 
-          <SectionText>
-            <strong>Análise Espacial:</strong> Desenvolvimento de modelos espaciais específicos para
-            ambientes de cerrado, considerando variabilidade temporal e espacial das emissões.
-          </SectionText>
+            <ParticipantCard>
+              <ParticipantLogo 
+                src="/img/furnas/logo_ufjf_participante.gif" 
+                alt="Universidade Federal de Juiz de Fora" 
+              />
+              <ParticipantName>Universidade Federal de Juiz de Fora</ParticipantName>
+            </ParticipantCard>
 
-          <SectionText>
-            <strong>Integração de Dados:</strong> Combinação de dados in situ com informações de
-            sensoriamento remoto e modelagem hidrodinâmica para uma compreensão holística dos
-            processos.
-          </SectionText>
+            <ParticipantCard>
+              <ParticipantLink 
+                href="https://coppe.ufrj.br/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <ParticipantLogo 
+                  src="/img/furnas/coppe_participante.jpg" 
+                  alt="UFRJ - Programas de Pós-graduação de Engenharia" 
+                />
+              </ParticipantLink>
+              <ParticipantName>UFRJ - Programas de Pós-graduação de Engenharia</ParticipantName>
+            </ParticipantCard>
+
+            <ParticipantCard>
+              <ParticipantLink 
+                href="https://www.iie.com.br/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
+                <ParticipantLogo 
+                  src="/img/furnas/iiega_logo_participante.jpg" 
+                  alt="Instituto Internacional de Ecologia e Gerenciamento Ambiental" 
+                />
+              </ParticipantLink>
+              <ParticipantName>Instituto Internacional de Ecologia e Gerenciamento Ambiental</ParticipantName>
+            </ParticipantCard>
+          </ParticipantsGrid>
         </Section>
 
         {/* Seção Mapa */}
         <Section id="mapa">
           <SectionTitle>
             <MapPin size={40} />
-            Localização dos Reservatórios
+            Mapa Interativo
           </SectionTitle>
           <SectionSubtitle>Reservatórios estudados no projeto Balanço de Carbono</SectionSubtitle>
 
@@ -987,7 +1123,7 @@ function FurnasSPAPage() {
 
           {loading ? (
             <LoadingContainer>
-              <Activity size={24} style={{ marginRight: "0.5rem" }} />
+              <Search size={24} style={{ marginRight: "0.5rem" }} />
               Carregando dados das campanhas científicas...
             </LoadingContainer>
           ) : (
