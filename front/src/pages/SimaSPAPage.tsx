@@ -35,6 +35,7 @@ import {
 } from "lucide-react";
 import { CsvExportButton } from "../components/CsvExportButton";
 import { useSimaApi } from "../hooks/useSimaApi";
+import { useEstacoes } from "../hooks/useEstacoes";
 import estruturaSima1 from "../../img/sima/estrutura_sima1.png";
 import estruturaSima2 from "../../img/sima/estrutura_sima2.png";
 import funcionamentoSima from "../../img/sima/funcionamento_sima.png";
@@ -177,11 +178,43 @@ const ControlsSection = styled.div`
 
 const ControlsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 2fr 1fr 1fr 1fr;
   gap: 1.5rem;
   margin-bottom: 1.5rem;
   width: 100%;
   max-width: 100%;
+`;
+
+const DateRangeGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const DateRangeContainer = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+`;
+
+const DateRangeInput = styled.input`
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease;
+  flex: 1;
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+  }
+`;
+
+const DateRangeSeparator = styled.span`
+  color: #6b7280;
+  font-weight: 500;
+  font-size: 0.9rem;
 `;
 
 const ControlGroup = styled.div`
@@ -194,20 +227,6 @@ const ControlLabel = styled.label`
   font-weight: 600;
   color: #374151;
   font-size: 0.9rem;
-`;
-
-const ControlInput = styled.input`
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  transition: border-color 0.2s ease;
-  width: 100%;
-
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-  }
 `;
 
 const ControlSelect = styled.select`
@@ -721,26 +740,26 @@ const FilterChips = styled.div`
   flex-wrap: wrap;
 `;
 
-const FilterChip = styled.button<{ active?: boolean }>`
+const FilterChip = styled.button<{ $active?: boolean }>`
   padding: 0.5rem 1rem;
   border-radius: 9999px;
-  border: 1px solid ${({ active }) => (active ? "#1e3a8a" : "#e5e7eb")};
-  background: ${({ active }) => (active ? "linear-gradient(135deg, #1e3a8a, #3b82f6)" : "white")};
-  color: ${({ active }) => (active ? "#fff" : "#1f2937")};
+  border: 1px solid ${({ $active }) => ($active ? "#1e3a8a" : "#e5e7eb")};
+  background: ${({ $active }) => ($active ? "linear-gradient(135deg, #1e3a8a, #3b82f6)" : "white")};
+  color: ${({ $active }) => ($active ? "#fff" : "#1f2937")};
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  box-shadow: ${({ active }) =>
-    active ? "0 6px 14px rgba(30, 58, 138, 0.25)" : "0 2px 6px rgba(2, 6, 23, 0.04)"};
+  box-shadow: ${({ $active }) =>
+    $active ? "0 6px 14px rgba(30, 58, 138, 0.25)" : "0 2px 6px rgba(2, 6, 23, 0.04)"};
 
   &:hover {
     border-color: #1e40af;
-    background: ${({ active }) =>
-      active ? "linear-gradient(135deg, #1e3a8a, #2563eb)" : "#f8fafc"};
-    color: ${({ active }) => (active ? "#fff" : "#1e40af")};
+    background: ${({ $active }) =>
+      $active ? "linear-gradient(135deg, #1e3a8a, #2563eb)" : "#f8fafc"};
+    color: ${({ $active }) => ($active ? "#fff" : "#1e40af")};
   }
 `;
 
@@ -771,7 +790,7 @@ const PublicationCard = styled.div`
   }
 `;
 
-const AccentBar = styled.div<{ category: string }>`
+const AccentBar = styled.div<{ $category: string }>`
   position: absolute;
   top: 0;
   left: 0;
@@ -779,8 +798,8 @@ const AccentBar = styled.div<{ category: string }>`
   width: 100%;
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  background: ${({ category }) => {
-    switch (category) {
+  background: ${({ $category }) => {
+    switch ($category) {
       case "artigo":
         return "linear-gradient(90deg, #1e40af, #60a5fa)";
       case "livro":
@@ -801,7 +820,7 @@ const PublicationHeader = styled.div`
   margin-bottom: 1.5rem;
 `;
 
-const PublicationCategory = styled.div<{ category: string }>`
+const PublicationCategory = styled.div<{ $category: string }>`
   display: inline-block;
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
@@ -810,8 +829,8 @@ const PublicationCategory = styled.div<{ category: string }>`
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 1rem;
-  background: ${({ category }) => {
-    switch (category) {
+  background: ${({ $category }) => {
+    switch ($category) {
       case "artigo":
         return "#f0f9ff";
       case "livro":
@@ -826,8 +845,8 @@ const PublicationCategory = styled.div<{ category: string }>`
         return "#f9fafb";
     }
   }};
-  color: ${({ category }) => {
-    switch (category) {
+  color: ${({ $category }) => {
+    switch ($category) {
       case "artigo":
         return "#1e40af";
       case "livro":
@@ -843,8 +862,8 @@ const PublicationCategory = styled.div<{ category: string }>`
     }
   }};
   border: 1px solid
-    ${({ category }) => {
-      switch (category) {
+    ${({ $category }) => {
+      switch ($category) {
         case "artigo":
           return "#dbeafe";
         case "livro":
@@ -1546,6 +1565,7 @@ const getCategoryName = (category: string) => {
 
 function SimaSPAPage() {
   const { data, loading, error, pagination, fetchData } = useSimaApi();
+  const { estacoes } = useEstacoes();
   const [filters, setFilters] = useState({
     startDate: "2004-01-12", // Menor data disponível no banco SIMA
     endDate: "2016-12-03", // Maior data disponível no banco SIMA
@@ -1673,37 +1693,13 @@ function SimaSPAPage() {
     });
   };
 
-  // Lista de estações disponíveis no banco SIMA
-  const estacoes = [
+  // Lista de estações disponíveis no banco SIMA (agora dinâmica)
+  const estacoesOptions = [
     { value: "", label: "Todas as estações" },
-    { value: "30842", label: "Estação 30842" },
-    { value: "30913", label: "Estação 30913" },
-    { value: "30915", label: "Estação 30915" },
-    { value: "309151", label: "Estação 309151" },
-    { value: "30916", label: "Estação 30916" },
-    { value: "30931", label: "Estação 30931" },
-    { value: "309311", label: "Estação 309311" },
-    { value: "30932", label: "Estação 30932" },
-    { value: "30933", label: "Estação 30933" },
-    { value: "30934", label: "Estação 30934" },
-    { value: "30935", label: "Estação 30935" },
-    { value: "30936", label: "Estação 30936" },
-    { value: "30937", label: "Estação 30937" },
-    { value: "30938", label: "Estação 30938" },
-    { value: "30946", label: "Estação 30946" },
-    { value: "31966", label: "Estação 31966" },
-    { value: "319660", label: "Estação 319660" },
-    { value: "319661", label: "Estação 319661" },
-    { value: "31967", label: "Estação 31967" },
-    { value: "32445", label: "Estação 32445" },
-    { value: "324451", label: "Estação 324451" },
-    { value: "32446", label: "Estação 32446" },
-    { value: "324460", label: "Estação 324460" },
-    { value: "324461", label: "Estação 324461" },
-    { value: "324462", label: "Estação 324462" },
-    { value: "32459", label: "Estação 32459" },
-    { value: "funilB", label: "Estação Funil B" },
-    { value: "moraes", label: "Estação Moraes" },
+    ...estacoes.map((estacao) => ({
+      value: estacao.idestacao,
+      label: estacao.rotulo,
+    })),
   ];
   return (
     <SimaSPAContainer>
@@ -2139,32 +2135,32 @@ function SimaSPAPage() {
 
               <FilterChips>
                 <FilterChip
-                  active={publicationFilters.selectedCategories.includes("artigo")}
+                  $active={publicationFilters.selectedCategories.includes("artigo")}
                   onClick={() => toggleCategory("artigo")}
                 >
                   Artigos ({publicationsData.filter((p) => p.category === "artigo").length})
                 </FilterChip>
                 <FilterChip
-                  active={publicationFilters.selectedCategories.includes("livro")}
+                  $active={publicationFilters.selectedCategories.includes("livro")}
                   onClick={() => toggleCategory("livro")}
                 >
                   Livro ({publicationsData.filter((p) => p.category === "livro").length})
                 </FilterChip>
                 <FilterChip
-                  active={publicationFilters.selectedCategories.includes("capitulo")}
+                  $active={publicationFilters.selectedCategories.includes("capitulo")}
                   onClick={() => toggleCategory("capitulo")}
                 >
                   Capítulos de livros (
                   {publicationsData.filter((p) => p.category === "capitulo").length})
                 </FilterChip>
                 <FilterChip
-                  active={publicationFilters.selectedCategories.includes("evento")}
+                  $active={publicationFilters.selectedCategories.includes("evento")}
                   onClick={() => toggleCategory("evento")}
                 >
                   Eventos ({publicationsData.filter((p) => p.category === "evento").length})
                 </FilterChip>
                 <FilterChip
-                  active={publicationFilters.selectedCategories.includes("tese")}
+                  $active={publicationFilters.selectedCategories.includes("tese")}
                   onClick={() => toggleCategory("tese")}
                 >
                   Teses e dissertações (
@@ -2182,9 +2178,9 @@ function SimaSPAPage() {
               )}
               {filteredPublications.map((publication) => (
                 <PublicationCard key={publication.id}>
-                  <AccentBar category={publication.category} />
+                  <AccentBar $category={publication.category} />
                   <PublicationHeader>
-                    <PublicationCategory category={publication.category}>
+                    <PublicationCategory $category={publication.category}>
                       {getCategoryName(publication.category)}
                     </PublicationCategory>
                     <PublicationTitle>{publication.title}</PublicationTitle>
@@ -2310,29 +2306,29 @@ function SimaSPAPage() {
 
           <ControlsSection>
             <ControlsGrid>
-              <ControlGroup>
-                <ControlLabel>Data Início</ControlLabel>
-                <ControlInput
-                  type="date"
-                  value={filters.startDate}
-                  onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
-                />
-              </ControlGroup>
-              <ControlGroup>
-                <ControlLabel>Data Fim</ControlLabel>
-                <ControlInput
-                  type="date"
-                  value={filters.endDate}
-                  onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
-                />
-              </ControlGroup>
+              <DateRangeGroup>
+                <ControlLabel>Período</ControlLabel>
+                <DateRangeContainer>
+                  <DateRangeInput
+                    type="date"
+                    value={filters.startDate}
+                    onChange={(e) => setFilters({ ...filters, startDate: e.target.value })}
+                  />
+                  <DateRangeSeparator>até</DateRangeSeparator>
+                  <DateRangeInput
+                    type="date"
+                    value={filters.endDate}
+                    onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
+                  />
+                </DateRangeContainer>
+              </DateRangeGroup>
               <ControlGroup>
                 <ControlLabel>Estação</ControlLabel>
                 <ControlSelect
                   value={filters.estacao}
                   onChange={(e) => updateDatesForStation(e.target.value)}
                 >
-                  {estacoes.map((estacao) => (
+                  {estacoesOptions.map((estacao) => (
                     <option key={estacao.value} value={estacao.value}>
                       {estacao.label}
                     </option>
@@ -2510,7 +2506,7 @@ function SimaSPAPage() {
                           <strong>{item.idsima}</strong>
                         </td>
                         <td>
-                          <strong>{item.idestacao}</strong>
+                          <strong>{item.nome_estacao || item.idestacao}</strong>
                         </td>
                         <td>
                           <strong>{new Date(item.datahora).toLocaleString("pt-BR")}</strong>

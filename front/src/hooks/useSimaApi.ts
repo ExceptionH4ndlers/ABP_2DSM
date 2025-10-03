@@ -3,6 +3,7 @@ import { useState } from "react";
 export interface SimaApiData {
   idsima: number;
   idestacao: string;
+  nome_estacao?: string; // Nome da estação obtido do JOIN
   datahora: string;
   regno?: number;
   nofsamples?: number;
@@ -90,7 +91,7 @@ export const useSimaApi = () => {
         queryParams.append("sortOrder", params.sortOrder);
       }
 
-      const response = await fetch(`${API_BASE_URL}/sima/all?${queryParams}`);
+      const response = await fetch(`${API_BASE_URL}/sima/sima/all?${queryParams}`);
 
       if (!response.ok) {
         throw new Error(`Erro na API: ${response.status}`);
