@@ -34,7 +34,7 @@ export const getAll = async (req: Request, res: Response): Promise<Response> => 
       ORDER BY a.idcampanha ASC
       LIMIT $1 OFFSET $2
       `,
-      [limit, offset]
+      [limit, offset],
     );
 
     // Consulta total de registros

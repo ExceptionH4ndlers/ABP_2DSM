@@ -2,16 +2,13 @@ import { Request, Response } from "express";
 import { furnasPool } from "../../configs/db";
 import { logger } from "../../configs/logger";
 
-
 const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 10;
-
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   try {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || PAGE_SIZE;
     const offset = (page - 1) * limit;
-
 
     // consulta na tabela tbcampoportabela com paginação
     const result = await furnasPool.query(
@@ -33,11 +30,9 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
       [limit, offset],
     );
 
-
     // consulta total de registros
     const countResult = await furnasPool.query("SELECT COUNT(*) FROM tbcampoportabela");
     const total = Number(countResult.rows[0].count);
-
 
     // dados formatados
     const data = result.rows.map((row: any) => ({
@@ -51,7 +46,6 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
       ordem: row.ordem,
       tipo: row.tipo,
     }));
-
 
     res.status(200).json({
       success: true,
@@ -67,12 +61,9 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
       stack: error.stack,
     });
 
-
     res.status(500).json({
       success: false,
       error: "Erro ao realizar a operação.",
     });
   }
 };
-
-
