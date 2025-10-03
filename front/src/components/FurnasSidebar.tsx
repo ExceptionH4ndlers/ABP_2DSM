@@ -366,7 +366,18 @@ export function FurnasSidebar({
         )}
 
         <MenuItem
-          onClick={() => navigate("/furnas")}
+          onClick={() => {
+            if (isOnMainPage) {
+              // Se já está na página principal, faz scroll para a seção
+              const conteudoElement = document.getElementById("conteudo");
+              if (conteudoElement) {
+                conteudoElement.scrollIntoView({ behavior: "smooth" });
+              }
+            } else {
+              // Se está em outra página, navega para a página principal com hash
+              navigate("/furnas#conteudo");
+            }
+          }}
           className={activeItem === "conteudo" ? "active" : ""}
           $collapsed={collapsed}
         >
