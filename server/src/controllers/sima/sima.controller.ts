@@ -39,7 +39,7 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const endDateTime = `${addOneDay(endDate)} 00:00:00`;
 
     // Cláusulas base
-    let whereClause = "WHERE datahora >= $3 AND datahora < $4";
+    let whereClause = "WHERE s.datahora >= $3 AND s.datahora < $4";
     let countWhereClause = "WHERE datahora >= $1 AND datahora < $2";
 
     const queryParams: (string | number)[] = [limit, offset, startDateTime, endDateTime];
@@ -47,17 +47,18 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
 
     // Filtro opcional por estação
     if (estacao) {
-      whereClause += " AND idestacao = $5";
+      whereClause += " AND s.idestacao = $5";
       countWhereClause += " AND idestacao = $3";
       queryParams.push(estacao);
       countParams.push(estacao);
     }
 
-    // Consulta principal
+    // Consulta principal com JOIN para obter nome da estação
     const result = await simaPool.query(
-      `SELECT * FROM tbsima
+      `SELECT s.*, e.rotulo AS nome_estacao FROM tbsima s
+       INNER JOIN tbestacao e ON s.idestacao = e.idestacao
        ${whereClause}
-       ORDER BY datahora ${sortOrder === "asc" ? "ASC" : "DESC"}
+       ORDER BY s.datahora ${sortOrder === "asc" ? "ASC" : "DESC"}
        LIMIT $1 OFFSET $2`,
       queryParams,
     );

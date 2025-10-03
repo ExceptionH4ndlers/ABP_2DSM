@@ -1,6 +1,7 @@
 export interface Sima {
   idsima: number;
   idestacao: string;
+  nome_estacao?: string; // Nome da estação obtido do JOIN
   datahora: string;
   regno?: number;
   nofsamples?: number;
