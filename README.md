@@ -1,66 +1,534 @@
 # 🌊 Sistema de Visualização e Disseminação de Dados Limnológicos
 
-Sistema web desenvolvido para visualização e disseminação de dados limnológicos coletados pelo INPE em cooperação com UFRJ, UFJF e IIE, com o objetivo de subsidiar estudos sobre o Balanço de Carbono nos Reservatórios de Furnas Centrais Elétricas S.A.
+## 📋 Projeto ABP - Aprendizagem Baseada em Projetos
+
+**Faculdade de Tecnologia Professor Francisco de Moura – FATEC Jacareí**  
+**Versão do documento: 11/09/2025**  
+**Período/Curso: 2º DSM - 2025-2**
+
+### 🎯 Informações do Projeto
+
+| **Categoria** | **Detalhes** |
+|----------------|--------------|
+| 📍 **Instituição** | FATEC Jacareí |
+| 📚 **Curso** | Desenvolvimento de Software Multiplataforma (DSM) |
+| 🔄 **Metodologia** | Aprendizagem Baseada em Projetos (ABP) |
+| 👤 **Focal Point** | André Olímpio |
+| 🤝 **Parceiro** | INPE – Laboratório de Instrumentação de Sistemas Aquáticos (labISA) |
+| 👥 **Contatos** | Cláudio Clemente Faria Barbosa, Evlyn Márcia Leão de Moraes Novo |
+| 📅 **Kick off** | 16/09/2025 |
+| 📊 **Status** | Em desenvolvimento |
+
+### 🌊 Tema do Semestre
+
+**Aplicação Web para visualização e disseminação de dados limnológicos**
+
+### 🔍 Desafio (Problema)
+
+O INPE, a UFRJ, a UFJF e o IIE, em cooperação com Furnas Centrais Elétricas S.A., participaram de dois projetos voltados à coleta de dados limnológicos e meteorológicos, com o objetivo de subsidiar estudos sobre o **Balanço de Carbono nos Reservatórios de Furnas Centrais Elétricas S.A.**
+
+Cada instituição foi responsável pela coleta de dados em campo, cabendo ao INPE o monitoramento por meio do **SIMA (Sistema Integrado de Monitoração Ambiental)**, um conjunto de hardware e software desenvolvido para a coleta e a monitoração em tempo real de sistemas hidrológicos.
+
+#### 📊 Tipos de Dados Coletados
+
+- **Parâmetros limnológicos**: Coletados manualmente em diversos locais dos reservatórios, em curtos períodos de tempo (chamados de **campanhas**)
+- **Dados do SIMA**: Coletados automaticamente durante longos períodos, em um único ponto do reservatório
+
+**Objetivo**: Para que esse vasto conjunto de informações possa ser utilizado em pesquisas no Brasil e no exterior, faz-se necessária a criação de uma plataforma que possibilite a disseminação e o acesso aberto a esses dados.
+
+---
 
 <details>
-<summary><b>📋 Informações do Projeto</b></summary>
+<summary><b>📋 Análise de Requisitos</b></summary>
 
-### 📊 Dados Básicos
-
-| Categoria | Detalhes |
-|-----------|----------|
-| 📍 Instituição | FATEC Jacareí |
-| 📚 Curso | DSM - 2º Semestre 2025 |
-| 🔄 Metodologia | Aprendizagem Baseada em Projetos (ABP) |
-| 👤 Focal Point | André Olimpio |
-| 🤝 Parceiro | INPE - Laboratório de Instrumentação de Sistemas Aquáticos (labISA) |
-| 📅 Kick off | 16/09/2025 |
-| 📊 Status | Em desenvolvimento |
-
-### 🎯 Tema do Semestre
-
-Desenvolver uma aplicação web para visualização e disseminação de dados limnológicos, permitindo acesso aberto a informações coletadas em campanhas e pelo SIMA (Sistema Integrado de Monitoração Ambiental).
-
-### 🔍 Desafio e Tipos de Dados
-
-O INPE, UFRJ, UFJF e IIE, em cooperação com Furnas Centrais Elétricas S.A., coletaram vasto conjunto de dados limnológicos e meteorológicos. Para que essas informações possam ser utilizadas em pesquisas no Brasil e no exterior, é necessária uma plataforma que possibilite a disseminação e o acesso aberto a esses dados.
-
-#### 📊 Tipos de Dados
-
-- **Parâmetros limnológicos**: Coletados manualmente em diversos locais dos reservatórios, em curtos períodos de tempo (campanhas)
-- **Dados do SIMA**: Coletados automaticamente durante longos períodos, em um único ponto do reservatório
+Esta seção contém a análise detalhada dos requisitos funcionais, não funcionais e restrições do projeto, baseada no documento oficial da ABP.
 
 ### ⚙️ Requisitos Funcionais
 
-- **RF01**: Visualizar todos os parâmetros armazenados, filtrando por instituição, reservatório e período de tempo
-- **RF02**: Consultar e visualizar os dados no formato de tabelas
-- **RF03**: Consultar e exportar os dados no formato CSV
-- **RF04**: Consultar e visualizar a localização dos dados em um mapa interativo
-- **RF05**: Exibir os dados de séries temporais (parâmetros coletados pelo SIMA) em gráficos
+#### **RF01: Painel Interativo de Visualização**
+- **Descrição**: Permitir aos usuários visualizar todos os parâmetros armazenados, filtrando por instituição, reservatório e período de tempo – em formato semelhante a um painel interativo.
+- **Critérios de Aceitação**:
+  - ✅ Interface com filtros por instituição (INPE, UFRJ, UFJF, IIE)
+  - ✅ Filtros por reservatório específico
+  - ✅ Seleção de período de tempo (data início/fim)
+  - ✅ Visualização em formato de dashboard/painel
+  - ✅ Atualização dinâmica dos dados conforme filtros aplicados
+
+#### **RF02: Visualização em Tabelas**
+- **Descrição**: Consultar e visualizar os dados no formato de tabelas.
+- **Critérios de Aceitação**:
+  - ✅ Tabelas paginadas para grandes volumes de dados
+  - ✅ Ordenação por colunas
+  - ✅ Busca textual nos dados
+  - ✅ Responsividade para diferentes tamanhos de tela
+
+#### **RF03: Exportação CSV**
+- **Descrição**: Consultar e exportar os dados no formato CSV.
+- **Critérios de Aceitação**:
+  - ✅ Exportação de dados filtrados
+  - ✅ Formato CSV compatível com Excel/LibreOffice
+  - ✅ Inclusão de metadados no arquivo
+  - ✅ Download automático do arquivo
+
+#### **RF04: Mapa Interativo**
+- **Descrição**: Consultar e visualizar a localização dos dados em um mapa interativo.
+- **Critérios de Aceitação**:
+  - ✅ Mapa com localização das estações SIMA
+  - ✅ Marcadores para pontos de coleta de campanhas
+  - ✅ Informações detalhadas ao clicar nos marcadores
+  - ✅ Zoom e navegação no mapa
+
+#### **RF05: Gráficos de Séries Temporais**
+- **Descrição**: Exibir os dados de séries temporais (parâmetros coletados pelo SIMA) em gráficos.
+- **Critérios de Aceitação**:
+  - ✅ Gráficos de linha para séries temporais
+  - ✅ Múltiplos parâmetros no mesmo gráfico
+  - ✅ Zoom e pan nos gráficos
+  - ✅ Exportação de gráficos
 
 ### 🛠️ Requisitos Não Funcionais
 
-- **RNF01**: Interface intuitiva, clara e de fácil navegação para usuários sem conhecimento técnico
-- **RNF02**: Desempenho otimizado com carregamento rápido dos dados
-- **RNF03**: Interface seguindo padrões institucionais do INPE
+#### **RNF01: Usabilidade Crítica**
+- **Descrição**: A usabilidade será um requisito crítico, exigindo uma interface intuitiva, clara e de fácil navegação, mesmo para usuários sem conhecimento técnico aprofundado.
+- **Métricas**:
+  - Tempo de aprendizado < 15 minutos
+  - Taxa de erro do usuário < 5%
+  - Satisfação do usuário > 4.0/5.0
+
+#### **RNF02: Performance Otimizada**
+- **Descrição**: A aplicação deve apresentar desempenho otimizado, garantindo carregamento rápido dos dados.
+- **Métricas**:
+  - Tempo de carregamento inicial < 3 segundos
+  - Tempo de resposta das consultas < 2 segundos
+  - Suporte a 100 usuários simultâneos
+
+#### **RNF03: Padrões Institucionais**
+- **Descrição**: A interface deve seguir os padrões institucionais do INPE e a identidade visual definida pelo cliente.
+- **Critérios**:
+  - Cores e logo do INPE
+  - Tipografia institucional
+  - Layout responsivo e acessível
 
 ### 🔧 Restrições de Projeto
 
-- **RP01**: Dados armazenados no SGBD PostgreSQL
-- **RP02**: Back-end desenvolvido em Node.js com TypeScript
-- **RP03**: Front-end desenvolvido em React com TypeScript
-- **RP04**: Aplicação utilizando containers independentes para banco de dados, back-end e front-end
+#### **RP01: Banco de Dados PostgreSQL**
+- **Justificativa**: Requisito específico do cliente para compatibilidade com sistemas existentes
+- **Impacto**: Define a escolha tecnológica do banco de dados
 
+#### **RP02: Back-end Node.js + TypeScript**
+- **Justificativa**: Padronização tecnológica e facilidade de desenvolvimento
+- **Impacto**: Define a stack tecnológica do servidor
 
-### 🚀 Tecnologias Utilizadas
+#### **RP03: Front-end React + TypeScript**
+- **Justificativa**: Modernidade, reutilização de componentes e tipagem estática
+- **Impacto**: Define a stack tecnológica do cliente
 
-- **Frontend**: React + TypeScript
-- **Backend**: Node.js + TypeScript
-- **Banco de Dados**: PostgreSQL
-- **Containerização**: Docker
-- **Metodologia**: Scrum/Agile
+#### **RP04: Containerização Docker**
+- **Justificativa**: Facilita deployment, isolamento e escalabilidade
+- **Impacto**: Define a arquitetura de deployment
 
-### 🏗️ Arquitetura e Estrutura Técnica
+</details>
+
+<details>
+<summary><b>🏃‍♂️ Metodologia Scrum</b></summary>
+
+Esta seção documenta a estrutura completa da metodologia Scrum aplicada no projeto, incluindo papéis, cerimônias, artefatos e métricas de qualidade.
+
+### 📊 Estrutura da Equipe Scrum
+
+| **Papel** | **Responsável** | **Responsabilidades** |
+|-----------|-----------------|------------------------|
+| **Product Owner** | Alicia Silva Dias | Definição de requisitos, priorização do backlog, validação de funcionalidades |
+| **Scrum Master** | João Victor Lopes Rosa | Facilitação das cerimônias, remoção de impedimentos, coaching da equipe |
+| **Development Team** | Pedro Claudino, Manuela Lemes, Gabrielly Neu, Leonardo Irineu | Desenvolvimento, testes, documentação técnica |
+
+### 📅 Cerimônias Scrum
+
+#### **Sprint Planning**
+- **Frequência**: Início de cada Sprint (2 semanas)
+- **Duração**: 2 horas
+- **Objetivo**: Planejar o trabalho do Sprint, definir Sprint Goal
+
+#### **Daily Scrum**
+- **Frequência**: Diariamente
+- **Duração**: 15 minutos
+- **Objetivo**: Sincronização da equipe, identificação de impedimentos
+
+#### **Sprint Review**
+- **Frequência**: Final de cada Sprint
+- **Duração**: 1 hora
+- **Objetivo**: Demonstração do incremento para stakeholders
+
+#### **Sprint Retrospective**
+- **Frequência**: Final de cada Sprint
+- **Duração**: 1 hora
+- **Objetivo**: Melhoria contínua do processo
+
+### 📋 Artefatos Scrum
+
+#### **Product Backlog**
+- **Responsável**: Product Owner
+- **Conteúdo**: Histórias de usuário, requisitos funcionais e não funcionais
+- **Localização**: [`Scrum/Product Backlog/Product Backlog Completo.pdf`](Scrum/Product%20Backlog/Product%20Backlog%20Completo.pdf)
+
+#### **Sprint Backlog**
+- **Responsável**: Development Team
+- **Conteúdo**: Tarefas técnicas para implementar as histórias do Sprint
+- **Localização**: [`Scrum/Sprints/Sprint 1/Sprint Backlog.pdf`](Scrum/Sprints/Sprint%201/Sprint%20Backlog/Sprint%20Backlog.pdf)
+
+#### **Incremento**
+- **Responsável**: Development Team
+- **Conteúdo**: Funcionalidades prontas para produção
+- **Critério**: Definition of Done atendida
+
+### 📈 Acompanhamento do Progresso
+
+#### **Burndown Chart**
+- **Objetivo**: Visualizar o progresso do Sprint
+- **Localização**: [`Scrum/Burndown Chart/Sprint 1/BurndownIdeal.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownIdeal.png)
+
+#### **Velocity Tracking**
+- **Métrica**: Story Points completados por Sprint
+- **Objetivo**: Planejamento de Sprints futuros
+
+### 📝 Registros das Dailys
+
+| **Data** | **ATA** | **Principais Discussões** |
+|----------|---------|---------------------------|
+| 12/09/2025 | [`ATA_DAILY_12.09.2025.pdf`](Dailys/ATA_DAILY_12.09.2025.pdf) | Kick-off do projeto, definição de papéis |
+| 16/09/2025 | [`ATA_DAILY_16.09.2025.pdf`](Dailys/ATA_DAILY_16.09.2025.pdf) | Setup do ambiente de desenvolvimento |
+| 18/09/2025 | [`ATA_DAILY_18.09.2025.pdf`](Dailys/ATA_DAILY_18.09.2025.pdf) | Análise dos requisitos funcionais |
+| 22/09/2025 | [`ATA_DAILY_22.09.2025.pdf`](Dailys/ATA_DAILY_22.09.2025.pdf) | Implementação da estrutura base |
+| 24/09/2025 | [`ATA_DAILY_24.09.2025.pdf`](Dailys/ATA_DAILY_24.09.2025.pdf) | Desenvolvimento das APIs |
+| 26/09/2025 | [`ATA_DAILY_26.09.2025.pdf`](Dailys/ATA_DAILY_26.09.2025.pdf) | Integração frontend-backend |
+
+### 🎯 Definition of Done
+
+Para que uma história de usuário seja considerada "Done", deve atender aos seguintes critérios:
+
+- [ ] **Funcionalidade implementada** conforme especificação
+- [ ] **Testes unitários** escritos e passando
+- [ ] **Code review** aprovado por outro membro da equipe
+- [ ] **Documentação** atualizada (README, comentários no código)
+- [ ] **Deploy** realizado com sucesso no ambiente de desenvolvimento
+- [ ] **Validação** pelo Product Owner
+- [ ] **Sem bugs** conhecidos ou críticos
+
+### 📊 Métricas de Qualidade
+
+#### **Código**
+- Cobertura de testes > 80%
+- Complexidade ciclomática < 10
+- Duplicação de código < 5%
+
+#### **Performance**
+- Tempo de resposta API < 2 segundos
+- Carregamento inicial < 3 segundos
+- Uso de memória < 512MB
+
+#### **Usabilidade**
+- Tempo de aprendizado < 15 minutos
+- Taxa de erro < 5%
+- Satisfação do usuário > 4.0/5.0
+
+</details>
+
+<details>
+<summary><b>🏗️ Análise Técnica e Arquitetura</b></summary>
+
+Esta seção apresenta a análise técnica detalhada do projeto, incluindo stack tecnológica, arquitetura do sistema, estrutura de dados e considerações de segurança e escalabilidade.
+
+### 🎯 Stack Tecnológica (Baseada nas Restrições)
+
+#### **Frontend: React + TypeScript**
+- **Justificativa**: RP03 - Requisito específico do projeto
+- **Benefícios**:
+  - Componentização e reutilização de código
+  - Tipagem estática para redução de bugs
+  - Ecossistema maduro e comunidade ativa
+  - Compatibilidade com ferramentas de desenvolvimento modernas
+
+#### **Backend: Node.js + TypeScript**
+- **Justificativa**: RP02 - Requisito específico do projeto
+- **Benefícios**:
+  - Mesma linguagem frontend/backend (TypeScript)
+  - Performance adequada para APIs REST
+  - Ecossistema npm rico em bibliotecas
+  - Facilidade de deployment e escalabilidade
+
+#### **Banco de Dados: PostgreSQL**
+- **Justificativa**: RP01 - Requisito específico do cliente
+- **Benefícios**:
+  - Suporte robusto a dados científicos complexos
+  - Funcionalidades avançadas (JSON, arrays, tipos customizados)
+  - Compatibilidade com sistemas existentes do INPE
+  - Performance otimizada para consultas analíticas
+
+#### **Containerização: Docker**
+- **Justificativa**: RP04 - Requisito específico do projeto
+- **Benefícios**:
+  - Isolamento de ambientes
+  - Facilidade de deployment
+  - Consistência entre desenvolvimento e produção
+  - Escalabilidade horizontal
+
+### 🏛️ Arquitetura do Sistema
+
+#### **Padrão Arquitetural: Microserviços com Containers**
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Frontend      │    │   Backend       │    │   Databases     │
+│   React App     │◄──►│   Node.js API   │◄──►│   PostgreSQL    │
+│   (Port 3002)   │    │   (Port 3001)   │    │   (Ports 5433+) │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+#### **Separação de Responsabilidades**
+
+1. **Frontend Container**
+   - Interface de usuário
+   - Consumo de APIs
+   - Gerenciamento de estado
+   - Validação de entrada
+
+2. **Backend Container**
+   - Lógica de negócio
+   - APIs REST
+   - Validação de dados
+   - Integração com bancos
+
+3. **Database Containers** (3 instâncias)
+   - **SIMA**: Dados de monitoramento ambiental
+   - **Furnas Campanha**: Dados de campanhas Furnas
+   - **Balcar Campanha**: Dados de campanhas BALCAR
+
+### 📊 Estrutura de Dados
+
+#### **Banco SIMA**
+- **Propósito**: Dados coletados automaticamente pelo SIMA
+- **Tabelas principais**: `tbsima`, `tbestacao`, `tbsensor`
+- **Volume**: Alto (séries temporais contínuas)
+- **Características**: Dados em tempo real, alta frequência
+
+#### **Banco Furnas Campanha**
+- **Propósito**: Dados coletados manualmente em campanhas
+- **Tabelas principais**: `tbcampanha`, `tbreservatorio`, `tbsitio`
+- **Volume**: Médio (dados pontuais)
+- **Características**: Dados georreferenciados, múltiplos parâmetros
+
+#### **Banco Balcar Campanha**
+- **Propósito**: Dados específicos do projeto BALCAR
+- **Tabelas principais**: `tbcampanha`, `tbinstituicao`, `tbfluxoinpe`
+- **Volume**: Baixo a médio
+- **Características**: Dados institucionais, fluxos específicos
+
+### 🔄 Fluxo de Dados
+
+#### **1. Coleta de Dados**
+```
+SIMA Hardware → PostgreSQL SIMA → API Backend → Frontend
+Campanhas → PostgreSQL Furnas/Balcar → API Backend → Frontend
+```
+
+#### **2. Visualização**
+```
+Frontend → API Backend → PostgreSQL → Processamento → Resposta JSON → Frontend
+```
+
+#### **3. Exportação**
+```
+Frontend → API Backend → PostgreSQL → Parser CSV → Download
+```
+
+### 🛡️ Considerações de Segurança
+
+#### **Isolamento de Containers**
+- Cada serviço em container independente
+- Rede Docker isolada (`abp-network`)
+- Volumes persistentes para dados críticos
+
+#### **Controle de Acesso**
+- CORS configurado para domínios específicos
+- Validação de entrada em todas as APIs
+- Sanitização de dados antes do banco
+
+#### **Backup e Recuperação**
+- Volumes Docker persistentes
+- Scripts de backup automático
+- Procedimentos de recuperação documentados
+
+### 📈 Escalabilidade
+
+#### **Horizontal Scaling**
+- Múltiplas instâncias do backend
+- Load balancer para distribuição de carga
+- Cache Redis para sessões (futuro)
+
+#### **Vertical Scaling**
+- Aumento de recursos dos containers
+- Otimização de queries PostgreSQL
+- Índices estratégicos nos bancos
+
+### 🔧 Monitoramento e Logs
+
+#### **Estrutura de Logs**
+- **Winston** para logging estruturado
+- **Níveis**: error, warn, info, debug
+- **Rotação** automática de arquivos
+- **Formato** JSON para análise
+
+#### **Métricas Importantes**
+- Tempo de resposta das APIs
+- Uso de memória e CPU
+- Conexões ativas no banco
+- Erros e exceções
+
+</details>
+
+<details>
+<summary><b>📊 Diagramas UML e Modelagem</b></summary>
+
+Esta seção documenta todos os diagramas UML do projeto, incluindo estrutura de classes, casos de uso e ferramentas de modelagem utilizadas.
+
+### 🎯 Diagramas do Projeto
+
+O projeto possui diagramas UML estruturados para cada módulo do sistema, facilitando a compreensão da arquitetura e relacionamentos entre entidades.
+
+#### 📁 **Estrutura dos Diagramas**
+
+| **Diagrama** | **Arquivo** | **Descrição** | **Ferramenta** |
+|--------------|-------------|---------------|----------------|
+| **SIMA** | [`sima.asta`](diagramas/sima.asta) | Diagrama de classes do Sistema Integrado de Monitoramento Ambiental | Astah Professional |
+| **Furnas Campanha** | [`furnas_campanha.asta`](diagramas/furnas_campanha.asta) | Diagrama de classes das campanhas Furnas | Astah Professional |
+| **Balcar Campanha** | [`balcar_campanha.asta`](diagramas/balcar_campanha.asta) | Diagrama de classes das campanhas BALCAR | Astah Professional |
+| **Use Case ABP** | [`UseCase_ABP.asta`](diagramas/UseCase_ABP.asta) | Diagrama de casos de uso do projeto ABP | Astah Professional |
+
+#### 🏗️ **Modelagem de Classes**
+
+O projeto utiliza **TypeScript** para implementação das classes modeladas nos diagramas UML:
+
+```typescript
+// Exemplo de classe do módulo BALCAR
+export class Reservatorio {
+  constructor(
+    public idreservatorio: number,
+    public nome: string,
+    public lat: number,
+    public lng: number
+  ) {}
+
+  getReservatorio(): string {
+    return `Reservatório: ${this.nome} (ID: ${this.idreservatorio})`;
+  }
+}
+```
+
+#### 📋 **Principais Entidades Modeladas**
+
+##### **SIMA (Sistema Integrado de Monitoramento Ambiental)**
+- **Estacao**: Representa estações de monitoramento
+- **Sensor**: Sensores utilizados nas estações
+- **Sima**: Dados coletados pelo sistema
+- **CampoTabela**: Campos das tabelas de dados
+
+##### **Furnas Campanha**
+- **Campanha**: Campanhas de coleta de dados
+- **Reservatorio**: Reservatórios monitorados
+- **Sitio**: Sítios específicos de coleta
+- **Instituicao**: Instituições participantes
+- **DadosAbioticos**: Parâmetros abióticos coletados
+- **DadosBioticos**: Parâmetros bióticos coletados
+
+##### **Balcar Campanha**
+- **Campanha**: Campanhas específicas do projeto BALCAR
+- **Reservatorio**: Reservatórios do projeto BALCAR
+- **Instituicao**: Instituições participantes
+- **Sitio**: Sítios de coleta BALCAR
+- **FluxoInpe**: Fluxos de dados do INPE
+
+#### 🎯 **Casos de Uso Principais**
+
+O diagrama de casos de uso (`UseCase_ABP.asta`) documenta as principais funcionalidades do sistema:
+
+- **Visualizar Dados**: Consulta e visualização de parâmetros
+- **Filtrar Dados**: Aplicação de filtros por instituição, reservatório e período
+- **Exportar CSV**: Exportação de dados em formato CSV
+- **Visualizar Mapa**: Localização geográfica dos dados
+- **Gerar Gráficos**: Visualização de séries temporais
+
+#### 🔧 **Ferramentas de Modelagem**
+
+- **Astah Professional**: Ferramenta principal para criação dos diagramas UML
+- **TypeScript**: Implementação das classes modeladas
+- **PostgreSQL**: Persistência das entidades modeladas
+
+#### 📚 **Benefícios da Modelagem UML**
+
+1. **Documentação Visual**: Facilita compreensão da arquitetura
+2. **Comunicação**: Melhora comunicação entre equipe e stakeholders
+3. **Implementação**: Guia para desenvolvimento das classes TypeScript
+4. **Manutenção**: Facilita futuras modificações e expansões
+5. **Padronização**: Segue padrões UML estabelecidos
+
+#### 📖 **Como Visualizar os Diagramas**
+
+1. **Instalar Astah Professional** (versão gratuita disponível)
+2. **Abrir arquivos .asta** na ferramenta
+3. **Navegar pelos diagramas** usando a estrutura de pastas
+4. **Exportar imagens** se necessário para documentação
+
+#### 🔄 **Atualização dos Diagramas**
+
+Os diagramas são atualizados conforme o projeto evolui:
+- **Sprint Planning**: Revisão dos diagramas existentes
+- **Desenvolvimento**: Atualização quando novas entidades são criadas
+- **Sprint Review**: Validação dos diagramas com stakeholders
+- **Retrospectiva**: Melhoria da modelagem baseada em feedback
+
+</details>
+
+<details>
+<summary><b>🚀 Como Executar o Projeto</b></summary>
+
+Esta seção contém instruções práticas para executar o projeto, incluindo configuração com Docker, acesso às aplicações e estrutura dos bancos de dados.
+
+### ▶️ Com Docker (Recomendado)
+```bash
+# Subir todos os containers
+docker compose -f docker-compose.dev.yml up --build -d
+
+# Parar os containers
+docker compose -f docker-compose.dev.yml down
+```
+
+### 🌐 Acessando a Aplicação
+
+- **Front-end (React)**: http://localhost:3002
+- **Back-end (API Node)**: http://localhost:3001
+  - Exemplo: http://localhost:3001/sima/sima/all?page=1&limit=20
+
+### 🗄️ Bancos de Dados
+
+O sistema utiliza três bancos PostgreSQL independentes:
+
+| **Banco** | **Porta** | **Descrição** | **Container** |
+|-----------|-----------|---------------|---------------|
+| **Furnas Campanha** | 5433 | Dados das campanhas Furnas | `postgres-furnas-campanha` |
+| **SIMA** | 5434 | Dados do Sistema Integrado de Monitoramento Ambiental | `postgres-sima` |
+| **Balcar Campanha** | 5435 | Dados das campanhas BALCAR | `postgres-balcar-campanha` |
+
+**Credenciais padrão:**
+- Usuário: `postgres`
+- Senha: `postgres`
+- Host: `localhost` (ou nome do container no Docker)
+
+</details>
+
+<details>
+<summary><b>📂 Estrutura do Projeto</b></summary>
+
+Esta seção apresenta a organização completa do projeto, incluindo estrutura de pastas, configurações técnicas e pipeline CI/CD.
 
 #### 📂 Estrutura de Pastas
 
@@ -139,7 +607,12 @@ app/
 - Pipeline roda automaticamente em push e pull requests para a branch `main`
 - Estrutura de Jobs: `server-ci`, `front-ci` e `docker-ci`
 
-### ▶️ Como Executar o Projeto
+</details>
+
+<details>
+<summary><b>📤 Exportação de Dados em CSV</b></summary>
+
+Esta seção detalha o sistema completo de exportação CSV, incluindo compatibilidade com diferentes ferramentas, exemplos de uso e estrutura dos arquivos gerados.
 
 #### Com Docker (Recomendado)
 ```bash
@@ -559,7 +1032,10 @@ Cada pasta de banco contém scripts SQL para facilitar a importação:
 
 </details>
 
-## 👥 Nossa Equipe
+<details>
+<summary><b>👥 Nossa Equipe</b></summary>
+
+Esta seção apresenta todos os membros da equipe do projeto, incluindo papéis Scrum, links para GitHub e LinkedIn.
 
 ### 🎯 Gestão
 
@@ -578,4 +1054,79 @@ Cada pasta de banco contém scripts SQL para facilitar a importação:
 | **Gabrielly Neu dos Santos** | [![GitHub](https://img.shields.io/badge/GitHub-000000?style=flat&logo=github&logoColor=white)](https://github.com/Gabrielly209) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/gabrielly-neu-753906239) |
 | **Leonardo da Silva Irineu** | [![GitHub](https://img.shields.io/badge/GitHub-000000?style=flat&logo=github&logoColor=white)](https://github.com/Leo-Slv) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/leonardo-irineu-8418b0288) |
 
+</details>
+
+<details>
+<summary><b>🎓 Contexto Acadêmico - ABP</b></summary>
+
+Esta seção apresenta o contexto educacional do projeto, incluindo objetivos de aprendizagem, resultados esperados e impacto para estudantes, INPE e comunidade científica.
+
+### 📚 Objetivos de Aprendizagem
+
+Este projeto ABP visa desenvolver competências essenciais para profissionais de desenvolvimento de software:
+
+#### **Competências Técnicas**
+- **Desenvolvimento Full-Stack**: React + Node.js + PostgreSQL
+- **Containerização**: Docker e Docker Compose
+- **APIs REST**: Design e implementação de endpoints
+- **Banco de Dados**: Modelagem e otimização de consultas
+- **TypeScript**: Tipagem estática e desenvolvimento robusto
+
+#### **Competências Metodológicas**
+- **Scrum**: Metodologia ágil aplicada na prática
+- **Gestão de Projeto**: Planejamento, execução e acompanhamento
+- **Trabalho em Equipe**: Colaboração e comunicação eficaz
+- **Documentação**: Criação de documentação técnica completa
+
+#### **Competências de Domínio**
+- **Ciência de Dados**: Manipulação e visualização de dados científicos
+- **Sistemas Ambientais**: Compreensão de monitoramento hidrológico
+- **Usabilidade**: Design de interfaces para usuários não-técnicos
+
+### 🎯 Resultados Esperados
+
+#### **Para os Estudantes**
+- Experiência prática em desenvolvimento de software real
+- Portfólio com projeto de impacto científico
+- Competências alinhadas com mercado de trabalho
+- Certificação em metodologias ágeis
+
+#### **Para o INPE**
+- Plataforma funcional para disseminação de dados
+- Interface moderna e intuitiva
+- Base para futuras expansões
+- Documentação técnica completa
+
+#### **Para a Comunidade Científica**
+- Acesso aberto a dados limnológicos
+- Ferramentas de análise e visualização
+- Facilitação de pesquisas colaborativas
+- Padronização de acesso a dados ambientais
+
+### 📈 Impacto e Contribuição
+
+Este projeto representa uma ponte entre:
+- **Academia** (FATEC Jacareí) e **Pesquisa** (INPE)
+- **Teoria** (conceitos de desenvolvimento) e **Prática** (aplicação real)
+- **Tecnologia** (ferramentas modernas) e **Ciência** (dados ambientais)
+- **Estudantes** (aprendizado) e **Sociedade** (benefício científico)
+
+</details>
+
+---
+
+<div align="center">
+
+**🌊 Sistema de Visualização e Disseminação de Dados Limnológicos**
+
+*Projeto ABP - FATEC Jacareí | DSM 2025-2*
+
+*Desenvolvido com ❤️ pela equipe ExceptionHandlers*
+
+[![Made with TypeScript](https://img.shields.io/badge/Made%20with-TypeScript-blue.svg)](https://www.typescriptlang.org/)
+[![Powered by React](https://img.shields.io/badge/Powered%20by-React-61dafb.svg)](https://reactjs.org/)
+[![Database PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-336791.svg)](https://www.postgresql.org/)
+[![Containerized with Docker](https://img.shields.io/badge/Containerized%20with-Docker-2496ED.svg)](https://www.docker.com/)
+
+</div>
 
