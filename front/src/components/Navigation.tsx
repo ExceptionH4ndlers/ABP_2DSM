@@ -309,6 +309,12 @@ function Navigation() {
       }
     } else {
       navigate(path);
+      // Para Furnas, garantir que vá para o topo da página
+      if (path === "/furnas") {
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }, 100);
+      }
     }
     setIsMobileMenuOpen(false);
     setIsSimaDropdownOpen(false);
