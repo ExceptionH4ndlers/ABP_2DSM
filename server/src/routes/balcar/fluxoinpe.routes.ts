@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAll } from "../../controllers/balcar/campanha.controller";
+import { getAll } from "../../controllers/balcar/fluxoinpe.controller";
 
 const router = Router();
 
