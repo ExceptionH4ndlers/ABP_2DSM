@@ -240,18 +240,9 @@ function Navigation() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const activeSection = location.pathname === "/" ? "home" : location.pathname.substring(1);
-  const isSimaActive =
-    activeSection === "sima" ||
-    activeSection === "sima-home" ||
-    activeSection === "sima-equipe" ||
-    activeSection === "sima-publicacoes" ||
-    activeSection === "sima-apoio" ||
-    activeSection === "sima-mapa" ||
-    activeSection === "sima-dados";
+  const isSimaActive = activeSection.startsWith("sima");
 
-  const isBalcarActive =
-    activeSection === "balcar" ||
-    activeSection === "balcar-descricao";
+  const isBalcarActive = activeSection.startsWith("balcar");
 
   // Títulos específicos para cada página
   const getPageTitle = () => {
@@ -271,6 +262,14 @@ function Navigation() {
 
   const navigateToSection = (path: string) => {
     if (path.startsWith("/sima")) {
+      // rota dedicada de publicações do SIMA
+      if (path === "/sima/publicacoes") {
+        navigate(path);
+        setIsMobileMenuOpen(false);
+        setIsSimaDropdownOpen(false);
+        setIsBalcarDropdownOpen(false);
+        return;
+      }
       const sectionId = path.replace("/sima", "").replace("-", "");
 
       // Se já estamos na página SIMA, apenas fazer scroll
@@ -347,6 +346,7 @@ function Navigation() {
     }
     setIsMobileMenuOpen(false);
     setIsSimaDropdownOpen(false);
+    setIsBalcarDropdownOpen(false);
   };
 
   const handleSimaDropdownToggle = () => {
@@ -404,10 +404,10 @@ function Navigation() {
                 Home
               </DropdownItem>
               <DropdownItem onClick={() => navigateToSection("/sima-equipe")}>
-                <Target size={16} />
+                <Users size={16} />
                 Equipe
               </DropdownItem>
-              <DropdownItem onClick={() => navigateToSection("/sima-publicacoes")}>
+              <DropdownItem onClick={() => navigateToSection("/sima/publicacoes")}>
                 <BookOpen size={16} />
                 Publicações
               </DropdownItem>
@@ -450,6 +450,10 @@ function Navigation() {
               <DropdownItem onClick={() => navigateToSection("/balcar/descricao")}>
                 <FileText size={16} />
                 Descrição
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/balcar/publicacoes")}>
+                <BookOpen size={16} />
+                Publicações
               </DropdownItem>
               <DropdownItem onClick={() => navigateToSection("/balcar-equipe")}>
                 <Users size={16} />

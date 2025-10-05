@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { MapPin, Database, BookOpen, Building2, Archive, DollarSign, Users } from "lucide-react";
+import { MapPin, Database, Building2, Archive, DollarSign, Users } from "lucide-react";
 import logoBalcar from "../../img/logoBalcar.png";
 import logoInpe from "../../img/balcar/logoInpe.png";
 import logoIie from "../../img/balcar/logoIie.png";
@@ -366,15 +366,7 @@ function BalcarSPAPage() {
 
         
 
-        <Section id="publicacoes">
-          <SectionTitle>
-            <BookOpen size={20} /> Publicações
-          </SectionTitle>
-          <SectionSubtitle>
-            Artigos, relatórios e materiais técnicos relacionados ao BALCAR.
-          </SectionSubtitle>
-          <Placeholder>Lista de publicações — a definir.</Placeholder>
-        </Section>
+        
 
         <Section id="apoio">
           <SectionTitle>

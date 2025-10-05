@@ -3,6 +3,7 @@ import BarraBrasil from "./components/BarraBrasil";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/HomePage";
 import SimaSPAPage from "./pages/SimaSPAPage";
+import SimaPublicacoesPage from "./pages/SimaPublicacoesPage";
 import FurnasSPAPage from "./pages/FurnasSPAPage";
 import FurnasPanoramaPage from "./pages/FurnasPanoramaPage";
 import FurnasMetodologiaPage from "./pages/FurnasMetodologiaPage";
@@ -12,6 +13,7 @@ import FurnasPesquisasCorrelatasPage from "./pages/FurnasPesquisasCorrelatasPage
 import FurnasPublicacoesPage from "./pages/FurnasPublicacoesPage";
 import BalcarPage from "./pages/BalcarSPAPage";
 import BalcarDescricaoPage from "./pages/BalcarDescricaoPage";
+import BalcarPublicacoesPage from "./pages/BalcarPublicacoesPage";
 
 function AppContent() {
   const location = useLocation();
@@ -31,6 +33,7 @@ function AppContent() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/sima" element={<SimaSPAPage />} />
+        <Route path="/sima/publicacoes" element={<SimaPublicacoesPage />} />
         <Route path="/furnas" element={<FurnasSPAPage />} />
         <Route path="/furnas/panorama" element={<FurnasPanoramaPage />} />
         <Route path="/furnas/metodologia" element={<FurnasMetodologiaPage />} />
@@ -40,6 +43,7 @@ function AppContent() {
         <Route path="/furnas/publicacoes" element={<FurnasPublicacoesPage />} />
         <Route path="/balcar" element={<BalcarPage />} />
         <Route path="/balcar/descricao" element={<BalcarDescricaoPage />} />
+        <Route path="/balcar/publicacoes" element={<BalcarPublicacoesPage />} />
       </Routes>
     </>
   );

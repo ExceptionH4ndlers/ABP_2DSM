@@ -32,6 +32,7 @@ import {
   FileText,
   Book,
   Layers,
+  Users,
 } from "lucide-react";
 import { CsvExportButton } from "../components/CsvExportButton";
 import { useSimaApi } from "../hooks/useSimaApi";
@@ -81,6 +82,57 @@ const SectionSubtitle = styled.p`
   color: #64748b;
   margin-bottom: 2rem;
   line-height: 1.6;
+`;
+
+// Shared team layout (matching BALCAR)
+const GroupTitle = styled.h3`
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 1rem 0 0.75rem 0;
+`;
+
+const TeamGroup = styled.div`
+  margin-bottom: 1.5rem;
+`;
+
+const TeamGrid = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.75rem 1rem;
+`;
+
+const PersonItem = styled.li`
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+`;
+
+const PersonName = styled.span`
+  color: #111827;
+  font-weight: 600;
+`;
+
+const NameLink = styled.a`
+  color: #111827;
+  font-weight: 600;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+`;
+
+const PersonMeta = styled.div`
+  color: #6b7280;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+`;
+
+const InstitutionTag = styled.span`
+  font-weight: 600;
+  color: #374151;
 `;
 
 const TeamSubtitle = styled.h3`
@@ -977,7 +1029,7 @@ const formatValue = (value: number | null | undefined, decimals: number = 1) => 
 };
 
 // Dados das publicações
-const publicationsData = [
+export const publicationsData = [
   // Artigos
   {
     id: 1,
@@ -1892,343 +1944,133 @@ function SimaSPAPage() {
           </ImageWrapper>
         </Section>
 
-        {/* Seção Equipe */}
+        {/* Seção Equipe (layout igual ao BALCAR) */}
         <Section id="equipe">
           <SectionTitle>
-            <Target size={40} />
+            <Users size={40} />
             Equipe
           </SectionTitle>
 
-          <TeamSubtitle>Coordenação</TeamSubtitle>
-          <TeamList>
-            <TeamRow>
-              <TeamMember>
-                <strong>
-                  <TeamLink
-                    onClick={() => window.open("http://lattes.cnpq.br/2691497637313274", "_blank")}
-                  >
-                    José Luiz Stech
-                  </TeamLink>
-                </strong>{" "}
-                (<TeamEmail>stech@dsr.inpe.br</TeamEmail>)
-              </TeamMember>
-              <TeamMember>
-                <strong>
-                  <TeamLink
-                    onClick={() => window.open("http://lattes.cnpq.br/7939379291404418", "_blank")}
-                  >
-                    Enner Herenio de Alcântara
-                  </TeamLink>
-                </strong>
-              </TeamMember>
-            </TeamRow>
-          </TeamList>
+          <TeamGroup>
+            <GroupTitle>Coordenação</GroupTitle>
+            <TeamGrid>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/2691497637313274" target="_blank" rel="noopener noreferrer">José Luiz Stech</NameLink>
+                <PersonMeta>Coordenação • <InstitutionTag>INPE</InstitutionTag> • stech@dsr.inpe.br</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/7939379291404418" target="_blank" rel="noopener noreferrer">Enner Herenio de Alcântara</NameLink>
+                <PersonMeta>Coordenação</PersonMeta>
+              </PersonItem>
+            </TeamGrid>
+          </TeamGroup>
 
-          <TeamSubtitle>Colaboradores</TeamSubtitle>
-          <TeamList>
-            <TeamRow>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/5535667070825818", "_blank")}
-                >
-                  André Carlos Prates Cimbleris
-                </TeamLink>
-              </TeamMember>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/8150880476098677", "_blank")}
-                >
-                  Arcilan Trevenzoli Assireu
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-            <TeamRow>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/7642043789034070", "_blank")}
-                >
-                  Artur Luiz da Costa da Silva
-                </TeamLink>
-              </TeamMember>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/7466500214796269", "_blank")}
-                >
-                  Augusto Cesar Fonseca Saraiva
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-            <TeamRow>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/1596449770636962", "_blank")}
-                >
-                  Cláudio Clemente Faria Barbosa
-                </TeamLink>
-              </TeamMember>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/4775535537651746", "_blank")}
-                >
-                  Donato Seiji Abe
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-            <TeamRow>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/9857505876280820", "_blank")}
-                >
-                  Evlyn Márcia Leão de Moraes Novo
-                </TeamLink>
-              </TeamMember>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/0567809153346429", "_blank")}
-                >
-                  Fábio Roland
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-            <TeamRow>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/3852581196429739", "_blank")}
-                >
-                  João Antônio Lorenzzetti
-                </TeamLink>
-              </TeamMember>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/0030922264947314", "_blank")}
-                >
-                  Jorge Machado Damazio
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-            <TeamRow>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/4155308755013168", "_blank")}
-                >
-                  Marco Aurélio dos Santos
-                </TeamLink>
-              </TeamMember>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/8471974730664804", "_blank")}
-                >
-                  Maria Elvira Piñeiro Maceira
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-            <TeamRow>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/5149356080083086", "_blank")}
-                >
-                  Nelson Luís da Costa Dias
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-          </TeamList>
+          <TeamGroup>
+            <GroupTitle>Colaboradores</GroupTitle>
+            <TeamGrid>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/5535667070825818" target="_blank" rel="noopener noreferrer">André Carlos Prates Cimbleris</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/8150880476098677" target="_blank" rel="noopener noreferrer">Arcilan Trevenzoli Assireu</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/7642043789034070" target="_blank" rel="noopener noreferrer">Artur Luiz da Costa da Silva</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/7466500214796269" target="_blank" rel="noopener noreferrer">Augusto Cesar Fonseca Saraiva</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/1596449770636962" target="_blank" rel="noopener noreferrer">Cláudio Clemente Faria Barbosa</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/4775535537651746" target="_blank" rel="noopener noreferrer">Donato Seiji Abe</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/9857505876280820" target="_blank" rel="noopener noreferrer">Evlyn Márcia Leão de Moraes Novo</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/0567809153346429" target="_blank" rel="noopener noreferrer">Fábio Roland</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/3852581196429739" target="_blank" rel="noopener noreferrer">João Antônio Lorenzzetti</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/0030922264947314" target="_blank" rel="noopener noreferrer">Jorge Machado Damazio</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/4155308755013168" target="_blank" rel="noopener noreferrer">Marco Aurélio dos Santos</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/8471974730664804" target="_blank" rel="noopener noreferrer">Maria Elvira Piñeiro Maceira</NameLink>
+                <PersonMeta>Colaboradora</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/5149356080083086" target="_blank" rel="noopener noreferrer">Nelson Luís da Costa Dias</NameLink>
+                <PersonMeta>Colaborador</PersonMeta>
+              </PersonItem>
+            </TeamGrid>
+          </TeamGroup>
 
-          <TeamSubtitle>Desenvolvimento do Sistema de Coleta de Dados</TeamSubtitle>
-          <TeamList>
-            <TeamRow>
-              <TeamMember>
-                <strong>Neuron Eletrônica</strong>
-              </TeamMember>
-            </TeamRow>
-          </TeamList>
+          <TeamGroup>
+            <GroupTitle>Desenvolvimento do Sistema de Coleta de Dados</GroupTitle>
+            <TeamGrid>
+              <PersonItem>
+                <PersonName>Neuron Eletrônica</PersonName>
+                <PersonMeta>Desenvolvimento</PersonMeta>
+              </PersonItem>
+            </TeamGrid>
+          </TeamGroup>
 
-          <TeamSubtitle>Manutenção do Sistema de Coleta de Dados</TeamSubtitle>
-          <TeamList>
-            <TeamRow>
-              <TeamMember>Alexandre Donizetti da Silva (Neuron Eletrônica)</TeamMember>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/4915211809920432", "_blank")}
-                >
-                  Carlos Alberto Sampaio de Araújo
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-            <TeamRow>
-              <TeamMember>Geraldo Orlando Mendes</TeamMember>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/7596795539833144", "_blank")}
-                >
-                  Joaquim Antônio Dionísio Leão
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-            <TeamRow>
-              <TeamMember>
-                <TeamLink
-                  onClick={() => window.open("http://lattes.cnpq.br/6286335301335965", "_blank")}
-                >
-                  Vitor Bruno
-                </TeamLink>
-              </TeamMember>
-            </TeamRow>
-          </TeamList>
+          <TeamGroup>
+            <GroupTitle>Manutenção do Sistema de Coleta de Dados</GroupTitle>
+            <TeamGrid>
+              <PersonItem>
+                <PersonName>Alexandre Donizetti da Silva</PersonName>
+                <PersonMeta>Neuron Eletrônica</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/4915211809920432" target="_blank" rel="noopener noreferrer">Carlos Alberto Sampaio de Araújo</NameLink>
+                <PersonMeta>Manutenção</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <PersonName>Geraldo Orlando Mendes</PersonName>
+                <PersonMeta>Manutenção</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/7596795539833144" target="_blank" rel="noopener noreferrer">Joaquim Antônio Dionísio Leão</NameLink>
+                <PersonMeta>Manutenção</PersonMeta>
+              </PersonItem>
+              <PersonItem>
+                <NameLink href="http://lattes.cnpq.br/6286335301335965" target="_blank" rel="noopener noreferrer">Vitor Bruno</NameLink>
+                <PersonMeta>Manutenção</PersonMeta>
+              </PersonItem>
+            </TeamGrid>
+          </TeamGroup>
 
-          <TeamSubtitle>Gerente de Rede do Portal</TeamSubtitle>
-          <TeamList>
-            <TeamRow>
-              <TeamMember>
-                <strong>João Benedito Diehl</strong>
-              </TeamMember>
-            </TeamRow>
-          </TeamList>
-
-          <TeamSubtitle>Web e Banco de Dados</TeamSubtitle>
-          <TeamList>
-            <TeamRow>
-              <TeamMember>
-                <strong>
-                  <TeamLink
-                    onClick={() => window.open("http://lattes.cnpq.br/3013376353724630", "_blank")}
-                  >
-                    Arley Ferreira de Souza
-                  </TeamLink>
-                </strong>{" "}
-                (<TeamEmail>arley@dpi.inpe.br</TeamEmail>)
-              </TeamMember>
-            </TeamRow>
-          </TeamList>
+          <TeamGroup>
+            <GroupTitle>Gerente de Rede do Portal</GroupTitle>
+            <TeamGrid>
+              <PersonItem>
+                <PersonName>João Benedito Diehl</PersonName>
+                <PersonMeta>Gerente de Rede</PersonMeta>
+              </PersonItem>
+            </TeamGrid>
+          </TeamGroup>
         </Section>
 
-        {/* Seção Publicações */}
-        <Section id="publicacoes">
-          <SectionTitle>
-            <BookOpen size={40} />
-            Publicações Científicas
-          </SectionTitle>
-          <SectionSubtitle>
-            Explore as publicações científicas relacionadas ao SIMA e aos projetos de monitoramento
-            ambiental
-          </SectionSubtitle>
-
-          <PublicationsContainer>
-            <StickyFilters>
-              <SearchContainer>
-                <InputWrapper>
-                  <SearchIconLeft>
-                    <Search size={18} />
-                  </SearchIconLeft>
-                  <SearchInput
-                    type="text"
-                    placeholder="Buscar por título, autor ou revista..."
-                    value={publicationFilters.searchTerm}
-                    onChange={(e) =>
-                      setPublicationFilters((prev) => ({ ...prev, searchTerm: e.target.value }))
-                    }
-                  />
-                </InputWrapper>
-                <ClearFiltersButton onClick={clearPublicationFilters}>
-                  Limpar Filtros
-                </ClearFiltersButton>
-              </SearchContainer>
-
-              <FilterChips>
-                <FilterChip
-                  $active={publicationFilters.selectedCategories.includes("artigo")}
-                  onClick={() => toggleCategory("artigo")}
-                >
-                  Artigos ({publicationsData.filter((p) => p.category === "artigo").length})
-                </FilterChip>
-                <FilterChip
-                  $active={publicationFilters.selectedCategories.includes("livro")}
-                  onClick={() => toggleCategory("livro")}
-                >
-                  Livro ({publicationsData.filter((p) => p.category === "livro").length})
-                </FilterChip>
-                <FilterChip
-                  $active={publicationFilters.selectedCategories.includes("capitulo")}
-                  onClick={() => toggleCategory("capitulo")}
-                >
-                  Capítulos de livros (
-                  {publicationsData.filter((p) => p.category === "capitulo").length})
-                </FilterChip>
-                <FilterChip
-                  $active={publicationFilters.selectedCategories.includes("evento")}
-                  onClick={() => toggleCategory("evento")}
-                >
-                  Eventos ({publicationsData.filter((p) => p.category === "evento").length})
-                </FilterChip>
-                <FilterChip
-                  $active={publicationFilters.selectedCategories.includes("tese")}
-                  onClick={() => toggleCategory("tese")}
-                >
-                  Teses e dissertações (
-                  {publicationsData.filter((p) => p.category === "tese").length})
-                </FilterChip>
-              </FilterChips>
-            </StickyFilters>
-
-            <PublicationsGrid>
-              {filteredPublications.length === 0 && (
-                <EmptyState>
-                  <FileText size={32} style={{ opacity: 0.5, marginBottom: "0.5rem" }} />
-                  Nenhuma publicação encontrada com os filtros atuais.
-                </EmptyState>
-              )}
-              {filteredPublications.map((publication) => (
-                <PublicationCard key={publication.id}>
-                  <AccentBar $category={publication.category} />
-                  <PublicationHeader>
-                    <PublicationCategory $category={publication.category}>
-                      {getCategoryName(publication.category)}
-                    </PublicationCategory>
-                    <PublicationTitle>{publication.title}</PublicationTitle>
-                    <PublicationAuthors>{publication.authors}</PublicationAuthors>
-                  </PublicationHeader>
-
-                  <PublicationDetails>
-                    <PublicationDetail>
-                      <Book size={16} /> {publication.journal}
-                    </PublicationDetail>
-                    {publication.volume && (
-                      <PublicationDetail>
-                        <Layers size={16} /> Volume: {publication.volume}
-                      </PublicationDetail>
-                    )}
-                    {publication.pages && (
-                      <PublicationDetail>
-                        <FileText size={16} /> Páginas: {publication.pages}
-                      </PublicationDetail>
-                    )}
-                    <PublicationDetail>
-                      <Calendar size={16} /> {publication.year}
-                    </PublicationDetail>
-                    {publication.issn && (
-                      <PublicationDetail>
-                        <Hash size={16} /> ISSN: {publication.issn}
-                      </PublicationDetail>
-                    )}
-                  </PublicationDetails>
-
-                  {publication.link && (
-                    <PublicationCTA
-                      href={publication.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Acessar publicação <ExternalLink size={16} />
-                    </PublicationCTA>
-                  )}
-                </PublicationCard>
-              ))}
-            </PublicationsGrid>
-
-            <ResultsCount>
-              {filteredPublications.length} de {publicationsData.length} publicações encontradas
-            </ResultsCount>
-          </PublicationsContainer>
-        </Section>
+        {/* Publicações movidas para página dedicada /sima/publicacoes */}
 
         {/* Seção Apoio */}
         <Section id="apoio">
