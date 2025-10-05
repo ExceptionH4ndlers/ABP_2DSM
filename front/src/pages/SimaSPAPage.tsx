@@ -1,6 +1,32 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Target, Clock, Activity, Shield, MapPin, Database, Filter, Search, ChevronLeft, ChevronRight, Thermometer, Droplets, Wind, Sun, Waves, Zap, Gauge, Eye, Droplet, TestTube, Navigation, Battery, CloudRain, AlertCircle, Users } from "lucide-react";
+import {
+  Target,
+  Clock,
+  Activity,
+  Shield,
+  MapPin,
+  Database,
+  Filter,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  Thermometer,
+  Droplets,
+  Wind,
+  Sun,
+  Waves,
+  Zap,
+  Gauge,
+  Eye,
+  Droplet,
+  TestTube,
+  Navigation,
+  Battery,
+  CloudRain,
+  AlertCircle,
+  Users,
+} from "lucide-react";
 import { useSimaApi } from "../hooks/useSimaApi";
 import { useEstacoes } from "../hooks/useEstacoes";
 import { ExportCsvButton } from "../components/ExportCsvButton";
@@ -89,7 +115,9 @@ const NameLink = styled.a`
   color: #111827;
   font-weight: 600;
   text-decoration: none;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const PersonMeta = styled.div`
@@ -1448,11 +1476,25 @@ function SimaSPAPage() {
             <GroupTitle>Coordenação</GroupTitle>
             <TeamGrid>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/2691497637313274" target="_blank" rel="noopener noreferrer">José Luiz Stech</NameLink>
-                <PersonMeta>Coordenação • <InstitutionTag>INPE</InstitutionTag> • stech@dsr.inpe.br</PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/2691497637313274"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  José Luiz Stech
+                </NameLink>
+                <PersonMeta>
+                  Coordenação • <InstitutionTag>INPE</InstitutionTag> • stech@dsr.inpe.br
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7939379291404418" target="_blank" rel="noopener noreferrer">Enner Herenio de Alcântara</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/7939379291404418"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Enner Herenio de Alcântara
+                </NameLink>
                 <PersonMeta>Coordenação</PersonMeta>
               </PersonItem>
             </TeamGrid>
@@ -1462,55 +1504,133 @@ function SimaSPAPage() {
             <GroupTitle>Colaboradores</GroupTitle>
             <TeamGrid>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/5535667070825818" target="_blank" rel="noopener noreferrer">André Carlos Prates Cimbleris</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/5535667070825818"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  André Carlos Prates Cimbleris
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/8150880476098677" target="_blank" rel="noopener noreferrer">Arcilan Trevenzoli Assireu</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/8150880476098677"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Arcilan Trevenzoli Assireu
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7642043789034070" target="_blank" rel="noopener noreferrer">Artur Luiz da Costa da Silva</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/7642043789034070"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Artur Luiz da Costa da Silva
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7466500214796269" target="_blank" rel="noopener noreferrer">Augusto Cesar Fonseca Saraiva</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/7466500214796269"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Augusto Cesar Fonseca Saraiva
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/1596449770636962" target="_blank" rel="noopener noreferrer">Cláudio Clemente Faria Barbosa</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/1596449770636962"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Cláudio Clemente Faria Barbosa
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/4775535537651746" target="_blank" rel="noopener noreferrer">Donato Seiji Abe</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/4775535537651746"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Donato Seiji Abe
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/9857505876280820" target="_blank" rel="noopener noreferrer">Evlyn Márcia Leão de Moraes Novo</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/9857505876280820"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Evlyn Márcia Leão de Moraes Novo
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/0567809153346429" target="_blank" rel="noopener noreferrer">Fábio Roland</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/0567809153346429"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Fábio Roland
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/3852581196429739" target="_blank" rel="noopener noreferrer">João Antônio Lorenzzetti</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/3852581196429739"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  João Antônio Lorenzzetti
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/0030922264947314" target="_blank" rel="noopener noreferrer">Jorge Machado Damazio</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/0030922264947314"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Jorge Machado Damazio
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/4155308755013168" target="_blank" rel="noopener noreferrer">Marco Aurélio dos Santos</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/4155308755013168"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Marco Aurélio dos Santos
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/8471974730664804" target="_blank" rel="noopener noreferrer">Maria Elvira Piñeiro Maceira</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/8471974730664804"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Maria Elvira Piñeiro Maceira
+                </NameLink>
                 <PersonMeta>Colaboradora</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/5149356080083086" target="_blank" rel="noopener noreferrer">Nelson Luís da Costa Dias</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/5149356080083086"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Nelson Luís da Costa Dias
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
             </TeamGrid>
@@ -1534,7 +1654,13 @@ function SimaSPAPage() {
                 <PersonMeta>Neuron Eletrônica</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/4915211809920432" target="_blank" rel="noopener noreferrer">Carlos Alberto Sampaio de Araújo</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/4915211809920432"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Carlos Alberto Sampaio de Araújo
+                </NameLink>
                 <PersonMeta>Manutenção</PersonMeta>
               </PersonItem>
               <PersonItem>
@@ -1542,11 +1668,23 @@ function SimaSPAPage() {
                 <PersonMeta>Manutenção</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7596795539833144" target="_blank" rel="noopener noreferrer">Joaquim Antônio Dionísio Leão</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/7596795539833144"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Joaquim Antônio Dionísio Leão
+                </NameLink>
                 <PersonMeta>Manutenção</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/6286335301335965" target="_blank" rel="noopener noreferrer">Vitor Bruno</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/6286335301335965"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Vitor Bruno
+                </NameLink>
                 <PersonMeta>Manutenção</PersonMeta>
               </PersonItem>
             </TeamGrid>
@@ -1934,7 +2072,7 @@ function SimaSPAPage() {
           )}
         </Section>
       </MainContent>
-      
+
       <CsvExportModal
         $isOpen={isCsvModalOpen}
         onClose={() => setIsCsvModalOpen(false)}

@@ -1,4 +1,4 @@
-import type { Pool } from "pg";
+import type { Pool, QueryResult } from "pg";
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -9,8 +9,7 @@ export async function queryWithRetry<T = any>(
   sql: string,
   params: Array<string | number> = [],
   options?: { retries?: number; delayMs?: number },
-): Promise<{ rows: T[] }>
-{
+): Promise<{ rows: T[] }> {
   const maxRetries = options?.retries ?? 5;
   const baseDelay = options?.delayMs ?? 1000;
 
@@ -19,7 +18,8 @@ export async function queryWithRetry<T = any>(
   // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
-      return await pool.query(sql, params);
+      const res: QueryResult = await pool.query(sql, params);
+      return { rows: res.rows as unknown as T[] };
     } catch (err: any) {
       const isConnError =
         err?.code === "ECONNREFUSED" ||
@@ -38,5 +38,3 @@ export async function queryWithRetry<T = any>(
     }
   }
 }
-
-

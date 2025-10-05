@@ -5,7 +5,10 @@ import { Download, Settings, AlertCircle, CheckCircle, Filter } from "lucide-rea
 import { useCsvExport } from "../hooks/useCsvExport";
 import type { CsvExportOptions } from "../utils/csvParser";
 
-interface EstacaoItem { idestacao: string; rotulo: string }
+interface EstacaoItem {
+  idestacao: string;
+  rotulo: string;
+}
 
 interface CsvExportModalProps {
   $isOpen: boolean;
@@ -498,9 +501,18 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
               }}
             >
               <option value="">Todas as estações</option>
-              {(((estacoes as EstacaoItem[])) && (estacoes as EstacaoItem[]).length > 0
-                ? (estacoes as EstacaoItem[]).map((es: EstacaoItem) => ({ value: es.idestacao, label: es.rotulo }))
-                : Array.from(new Set((data as Array<Record<string, unknown>>).map((d) => String(((d as Record<string, unknown>).idestacao as string) || ""))))
+              {((estacoes as EstacaoItem[]) && (estacoes as EstacaoItem[]).length > 0
+                ? (estacoes as EstacaoItem[]).map((es: EstacaoItem) => ({
+                    value: es.idestacao,
+                    label: es.rotulo,
+                  }))
+                : Array.from(
+                    new Set(
+                      (data as Array<Record<string, unknown>>).map((d) =>
+                        String(((d as Record<string, unknown>).idestacao as string) || ""),
+                      ),
+                    ),
+                  )
                     .filter((s) => s)
                     .sort()
                     .map((id) => ({ value: id, label: id }))

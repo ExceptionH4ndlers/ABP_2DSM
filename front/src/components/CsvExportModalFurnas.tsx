@@ -18,7 +18,7 @@ interface CsvExportModalFurnasProps {
 const Overlay = styled.div<{ $isOpen: boolean }>`
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
   align-items: center;
   justify-content: center;
@@ -34,7 +34,7 @@ const Content = styled.div`
   max-width: 560px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 `;
 
 const Title = styled.h2`
@@ -158,7 +158,10 @@ export const CsvExportModalFurnas: React.FC<CsvExportModalFurnasProps> = ({
 
         <FormGroup>
           <Label>Formato de Data</Label>
-          <Select value={options.formatoData} onChange={(e) => updateOptions("formatoData", e.target.value)}>
+          <Select
+            value={options.formatoData}
+            onChange={(e) => updateOptions("formatoData", e.target.value)}
+          >
             <option value="BR">Brasileiro (DD/MM/AAAA HH:MM)</option>
             <option value="ISO">ISO 8601 (AAAA-MM-DDTHH:MM:SS)</option>
             <option value="US">Americano (MM/DD/AAAA HH:MM)</option>
@@ -167,7 +170,10 @@ export const CsvExportModalFurnas: React.FC<CsvExportModalFurnasProps> = ({
 
         <FormGroup>
           <Label>Separador</Label>
-          <Select value={options.separador} onChange={(e) => updateOptions("separador", e.target.value)}>
+          <Select
+            value={options.separador}
+            onChange={(e) => updateOptions("separador", e.target.value)}
+          >
             <option value=";">Ponto e vírgula (;)</option>
             <option value=",">Vírgula (,)</option>
             <option value="\t">Tabulação</option>
@@ -176,7 +182,10 @@ export const CsvExportModalFurnas: React.FC<CsvExportModalFurnasProps> = ({
 
         <FormGroup>
           <Label>Codificação</Label>
-          <Select value={options.encoding} onChange={(e) => updateOptions("encoding", e.target.value)}>
+          <Select
+            value={options.encoding}
+            onChange={(e) => updateOptions("encoding", e.target.value)}
+          >
             <option value="UTF-8">UTF-8</option>
             <option value="ISO-8859-1">ISO-8859-1</option>
           </Select>
@@ -209,13 +218,38 @@ export const CsvExportModalFurnas: React.FC<CsvExportModalFurnasProps> = ({
             <Filter size={16} style={{ marginRight: 6 }} /> Período
           </Label>
           <Row>
-            <Input type="date" value={dataInicio} onChange={(e) => { setDataInicio(e.target.value); updateFilters("dataInicio", e.target.value); }} />
-            <Input type="date" value={dataFim} onChange={(e) => { setDataFim(e.target.value); updateFilters("dataFim", e.target.value); }} />
+            <Input
+              type="date"
+              value={dataInicio}
+              onChange={(e) => {
+                setDataInicio(e.target.value);
+                updateFilters("dataInicio", e.target.value);
+              }}
+            />
+            <Input
+              type="date"
+              value={dataFim}
+              onChange={(e) => {
+                setDataFim(e.target.value);
+                updateFilters("dataFim", e.target.value);
+              }}
+            />
           </Row>
         </FormGroup>
 
         {exportError && (
-          <div style={{ background: "#fef2f2", border: "1px solid #fecaca", color: "#dc2626", padding: "0.75rem", borderRadius: 8, display: "flex", alignItems: "center", gap: 8 }}>
+          <div
+            style={{
+              background: "#fef2f2",
+              border: "1px solid #fecaca",
+              color: "#dc2626",
+              padding: "0.75rem",
+              borderRadius: 8,
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
             <AlertCircle size={18} /> {exportError}
           </div>
         )}
@@ -232,5 +266,3 @@ export const CsvExportModalFurnas: React.FC<CsvExportModalFurnasProps> = ({
 };
 
 export default CsvExportModalFurnas;
-
-

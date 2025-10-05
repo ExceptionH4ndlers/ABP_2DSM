@@ -117,7 +117,10 @@ const ClearButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  &:hover { background: #f1f5f9; border-color: #94a3b8; }
+  &:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+  }
 `;
 
 const FilterChip = styled.button<{ $active?: boolean }>`
@@ -334,8 +337,7 @@ const publicationsData: Publication[] = [
   {
     id: 0,
     category: "artigo",
-    authors:
-      "ABE, D. S.; ADAMS, D. D.; SIDAGIS-GALLI, C.; CIMBLERIS, A. C. P.; TUNDISI, J. G.",
+    authors: "ABE, D. S.; ADAMS, D. D.; SIDAGIS-GALLI, C.; CIMBLERIS, A. C. P.; TUNDISI, J. G.",
     title:
       "Carbon gas cycling in the sediments of Serra da Mesa and Manso reservoirs, central Brazil",
     journal:
@@ -359,37 +361,32 @@ const publicationsData: Publication[] = [
     pages: "603-606",
     year: "2005",
     issn: null,
-    link:
-      "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/dynamic-chamber-photoacoustic-sensor-2005.pdf",
+    link: "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/dynamic-chamber-photoacoustic-sensor-2005.pdf",
   },
   {
     id: 2,
     category: "artigo",
     authors:
       "RAMOS, F. M.; LIMA, I. B. T.; ROSA, R. R.; MAZZI, E. A.; CARVALHO, J. C.; RASERA, M. F. F. L.; OMETTO, J. P. H. B.; ASSIREU, A. T.; STECH, J. L.",
-    title:
-      "Extreme event dynamics in methane ebullition fluxes from tropical reservoirs",
+    title: "Extreme event dynamics in methane ebullition fluxes from tropical reservoirs",
     journal: "Geophysical Research Letters",
     volume: "33",
     pages: "L21404",
     year: "2006",
     issn: null,
-    link:
-      "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/Extreme_event_dynamics_methane_tropical.pdf",
+    link: "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/Extreme_event_dynamics_methane_tropical.pdf",
   },
   {
     id: 3,
     category: "artigo",
     authors: "SANTOS, M. A.; ROSA, L. P.; MATVIENKO, B.; SIKAR, E.; SANTOS, E. O.",
-    title:
-      "Gross greenhouse gas fluxes from hydro-power reservoir compared to thermo-power plants",
+    title: "Gross greenhouse gas fluxes from hydro-power reservoir compared to thermo-power plants",
     journal: "Energy Policy",
     volume: "34(1)",
     pages: "481-488",
     year: "2005",
     issn: null,
-    link:
-      "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/energypolicyhydroversusthermo.pdf",
+    link: "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/energypolicyhydroversusthermo.pdf",
   },
   {
     id: 4,
@@ -404,33 +401,28 @@ const publicationsData: Publication[] = [
     pages: "573-576",
     year: "2005",
     issn: null,
-    link:
-      "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/greenhouse_gases_initial_findings.pdf",
+    link: "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/greenhouse_gases_initial_findings.pdf",
   },
   {
     id: 5,
     category: "artigo",
     authors:
       "ROLAND, F.; VIDAL, L. O.; PACHECO, F. S.; BARROS, N. O.; ASSIREU, A. T.; OMETTO, J. P. H. B.; CIMBLERIS, A. C. P.; COLE, J. J.",
-    title:
-      "Variability of carbon dioxide flux from tropical (Cerrado) hydroelectric reservoirs",
+    title: "Variability of carbon dioxide flux from tropical (Cerrado) hydroelectric reservoirs",
     journal: "Aquatic Sciences",
     volume: "72(3)",
     pages: "283-293",
     year: "2010",
     issn: null,
-    link:
-      "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/VariabilityCarbonDioxideFluxTropical.pdf",
+    link: "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/VariabilityCarbonDioxideFluxTropical.pdf",
   },
   {
     id: 46,
     category: "artigo",
-    authors:
-      "LIMA, I. B. T.; NOVO, E. M. L. M.; STECH, J. L.; LORENZZETTI, J. A.",
+    authors: "LIMA, I. B. T.; NOVO, E. M. L. M.; STECH, J. L.; LORENZZETTI, J. A.",
     title:
       "The use of remote sensing and automated water quality systems for estimating greenhouse gas emissions from hydroelectric reservoirs",
-    journal:
-      "Greenhouse gas emissions from hydropower reservoirs and water quality",
+    journal: "Greenhouse gas emissions from hydropower reservoirs and water quality",
     volume: null,
     pages: "47-65",
     year: "2004",
@@ -444,14 +436,12 @@ const publicationsData: Publication[] = [
       "ASSIREU, A. T.; ROLAND, F.; NOVO, E. M. L. M.; BARROS, N. O.; STECH, J. L.; PACHECO, F. S.",
     title:
       "Existe relação entre a complexidade geométrica do entorno dos reservatórios e a variabilidade espacial dos parâmetros limnológicos?",
-    journal:
-      "Anais XIII Simpósio Brasileiro de Sensoriamento Remoto, Florianópolis",
+    journal: "Anais XIII Simpósio Brasileiro de Sensoriamento Remoto, Florianópolis",
     volume: null,
     pages: "3263-3269",
     year: "2007",
     issn: null,
-    link:
-      "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/ComplexidadeGeometricaVariabilidadeEspacial.pdf",
+    link: "http://www.dsr.inpe.br/hidrosfera/balanco/arquivos/ComplexidadeGeometricaVariabilidadeEspacial.pdf",
   },
   {
     id: 7,
@@ -459,14 +449,12 @@ const publicationsData: Publication[] = [
     authors: "ALCÂNTARA, E. H.",
     title:
       "Sensoriamento remoto da temperatura e dos fluxos de calor na superfície da água no reservatório de Itumbiara (GO)",
-    journal:
-      "Tese (Doutorado em Sensoriamento Remoto) - Instituto Nacional de Pesquisas Espaciais",
+    journal: "Tese (Doutorado em Sensoriamento Remoto) - Instituto Nacional de Pesquisas Espaciais",
     volume: null,
     pages: "136 p",
     year: "2010",
     issn: null,
-    link:
-      "http://mtc-m19.sid.inpe.br/rep/sid.inpe.br/mtc-m19@80/2010/07.26.20.24?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
+    link: "http://mtc-m19.sid.inpe.br/rep/sid.inpe.br/mtc-m19@80/2010/07.26.20.24?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
   },
   {
     id: 8,
@@ -480,8 +468,7 @@ const publicationsData: Publication[] = [
     pages: "217 p",
     year: "2006",
     issn: null,
-    link:
-      "http://mtc-m17.sid.inpe.br/rep/sid.inpe.br/mtc-m17@80/2007/02.15.17.09?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
+    link: "http://mtc-m17.sid.inpe.br/rep/sid.inpe.br/mtc-m17@80/2007/02.15.17.09?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
   },
   {
     id: 9,
@@ -495,8 +482,7 @@ const publicationsData: Publication[] = [
     pages: "81 p",
     year: "2011",
     issn: null,
-    link:
-      "http://mtc-m19.sid.inpe.br/rep/sid.inpe.br/mtc-m19/2011/09.13.07.48?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
+    link: "http://mtc-m19.sid.inpe.br/rep/sid.inpe.br/mtc-m19/2011/09.13.07.48?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
   },
   {
     id: 10,
@@ -510,8 +496,7 @@ const publicationsData: Publication[] = [
     pages: "91 p",
     year: "2010",
     issn: null,
-    link:
-      "http://mtc-m19.sid.inpe.br/rep/sid.inpe.br/mtc-m19@80/2010/03.15.18.39?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
+    link: "http://mtc-m19.sid.inpe.br/rep/sid.inpe.br/mtc-m19@80/2010/03.15.18.39?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
   },
   {
     id: 11,
@@ -525,8 +510,7 @@ const publicationsData: Publication[] = [
     pages: "117 p",
     year: "2009",
     issn: null,
-    link:
-      "http://mtc-m18.sid.inpe.br/rep/sid.inpe.br/mtc-m18@80/2009/05.06.19.17?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
+    link: "http://mtc-m18.sid.inpe.br/rep/sid.inpe.br/mtc-m18@80/2009/05.06.19.17?languagebutton=pt-BR&searchsite=bibdigital.sid.inpe.br:80",
   },
   {
     id: 12,
@@ -561,8 +545,7 @@ const publicationsData: Publication[] = [
     category: "capitulo",
     authors:
       "ASSIREU, A. T.; STECH, J. L.; MARINHO, M. M.; CESAR, D. E.; LORENZZETTI, J. A.; FERREIRA, R. M.; PACHECO, F. S.; ROLAND, F.",
-    title:
-      "Princípios físicos e químicos a serviço da limnologia - um exercício",
+    title: "Princípios físicos e químicos a serviço da limnologia - um exercício",
     journal: "Lições de Limnologia",
     volume: null,
     pages: "229-242",
@@ -585,10 +568,8 @@ const publicationsData: Publication[] = [
   {
     id: 16,
     category: "capitulo",
-    authors:
-      "ROSA, L. P.; SANTOS, M. A.; MATVIENKO, B.; SANTOS, E. O.; SILVA, M. B.; SIKAR, E.",
-    title:
-      "Long term monitoring of greenhouse gas emissions at two brazilian hydro reservoirs",
+    authors: "ROSA, L. P.; SANTOS, M. A.; MATVIENKO, B.; SANTOS, E. O.; SILVA, M. B.; SIKAR, E.",
+    title: "Long term monitoring of greenhouse gas emissions at two brazilian hydro reservoirs",
     journal: "Greenhouse Gas Emissions from Hydropower Reservoirs and Water Quality",
     volume: "1",
     pages: "121-136",
@@ -600,8 +581,7 @@ const publicationsData: Publication[] = [
     id: 17,
     category: "capitulo",
     authors: "SANTOS, M. A.; MATVIENKO, B.; ROSA, L. P.; SIKAR, E.",
-    title:
-      "Carbon dioxide and methane emissions from hydroelectric reservoirs in Brazil",
+    title: "Carbon dioxide and methane emissions from hydroelectric reservoirs in Brazil",
     journal: "Global Warming and Hydroelectric Reservoirs",
     volume: "1",
     pages: "81-94",
@@ -624,8 +604,7 @@ const publicationsData: Publication[] = [
   {
     id: 19,
     category: "capitulo",
-    authors:
-      "LIMA, I. B. T.; NOVO, E. M. L. M.; STECH, J. L.; LORENZZETTI, J. A.",
+    authors: "LIMA, I. B. T.; NOVO, E. M. L. M.; STECH, J. L.; LORENZZETTI, J. A.",
     title:
       "The use of remote sensing and automated water quality systems for estimating greenhouse gas emissions from hydroelectric reservoirs",
     journal: "Greenhouse gas emissions from hydropower reservoirs and water quality",
@@ -668,8 +647,7 @@ const publicationsData: Publication[] = [
     category: "evento",
     authors:
       "ROLAND, F.; HUSZAR, V. L. M.; BARROS, N. O.; FERREIRA, R. M.; ASSIREU, A. T.; CIMBLERIS, A. C. P.; BRUM, P. R.; COLE, J. J.",
-    title:
-      "Contribution of planktonic respiration to greenhouse emissions in tropical reservoirs",
+    title: "Contribution of planktonic respiration to greenhouse emissions in tropical reservoirs",
     journal: "SIL - 2007, Montreal, Canada",
     volume: null,
     pages: null,
@@ -682,8 +660,7 @@ const publicationsData: Publication[] = [
     category: "evento",
     authors:
       "CIMBLERIS, A. C. P.; SANTOS, M. A.; MATVIENKO, B.; MOZETO, A.; STECH, J. L.; LIMA, I. B. T.; TUNDISI, J. G.; ABE, D. S.; SIDAGIS-GALLI, C. V.; ROLAND, F.; CESAR, D. E.; BRUM, P. R.",
-    title:
-      "Carbon budget in hydroelectric reservoirs of Furnas Centrais Elétricas S.A., Brazil",
+    title: "Carbon budget in hydroelectric reservoirs of Furnas Centrais Elétricas S.A., Brazil",
     journal: "SIL - 2004, Lahti, Finland",
     volume: null,
     pages: null,
@@ -710,8 +687,7 @@ const publicationsData: Publication[] = [
     category: "evento",
     authors:
       "RAMOS, F. M.; LIMA, I. B.; MAZZI, E. A.; OMETTO, J. P.; RASERA, M. F.; ASSIREU, A. T.; ROSA, R. R.; STECH, J. L.",
-    title:
-      "Extreme event dynamics in methane bubbling from tropical reservoirs",
+    title: "Extreme event dynamics in methane bubbling from tropical reservoirs",
     journal: "ASLO - 2006, Victoria, Canada",
     volume: null,
     pages: null,
@@ -736,8 +712,7 @@ const publicationsData: Publication[] = [
   {
     id: 27,
     category: "evento",
-    authors:
-      "LORENZZETTI, J. A.; LIMA, I. B.; ASIREU, A. T.; STECH, J. L.",
+    authors: "LORENZZETTI, J. A.; LIMA, I. B.; ASIREU, A. T.; STECH, J. L.",
     title:
       "The effect of cold fronts over the emission patterns of CO2 and CH4 in Brazilian Tropical Reservoirs",
     journal: "ASLO - 2006, Victoria, Canada",
@@ -764,8 +739,7 @@ const publicationsData: Publication[] = [
   {
     id: 29,
     category: "evento",
-    authors:
-      "ABE, D. S.; ADAMS, D. D.; SIDAGIS-GALLI, C.; TUNDISI, J. G.; CIMBLERIS, A. C. P.",
+    authors: "ABE, D. S.; ADAMS, D. D.; SIDAGIS-GALLI, C.; TUNDISI, J. G.; CIMBLERIS, A. C. P.",
     title:
       "Carbon gas cycling in the sediments of Serra da Mesa and Manso reservoirs, central Brazil",
     journal: "SIL - 2004, Lahti, Finland",
@@ -833,8 +807,7 @@ const publicationsData: Publication[] = [
     category: "evento",
     authors:
       "SANTOS, M. A.; MATVIENKO, B.; SIKAR, E.; SILVA, M. B.; ALMEIDA, C. H. E.; SANTOS, E. O.",
-    title:
-      "Greenhouse gases and the carbon circulation in a reservoir and its watershed",
+    title: "Greenhouse gases and the carbon circulation in a reservoir and its watershed",
     journal: "SIL - 2004, Lahti, Finland",
     volume: null,
     pages: null,
@@ -845,8 +818,7 @@ const publicationsData: Publication[] = [
   {
     id: 35,
     category: "evento",
-    authors:
-      "SIDAGIS-GALLI, C.; ADAMS, D. D.; ABE, D. S.; SIKAR, E.; TUNDISI, J. G.",
+    authors: "SIDAGIS-GALLI, C.; ADAMS, D. D.; ABE, D. S.; SIKAR, E.; TUNDISI, J. G.",
     title:
       "Sediment CH4 and CO2 concentrations and diffuse emission fluxes related to limnological factors in the Lobo-Broa reservoir, São Paulo State, Brazil",
     journal: "SIL - 2004, Lahti, Finland",
@@ -861,8 +833,7 @@ const publicationsData: Publication[] = [
     category: "evento",
     authors:
       "STECH, J. L.; LIMA, I. B. T.; NOVO, E. M. L. M.; SILVA, C. M.; ASSIREU, A. T.; CARVALHO, J. C.; LORENZZETTI, J. A.; BARBOSA, C. C.; ROSA, R. R.",
-    title:
-      "Telemetric monitoring system for ecohydrology applications in aquatic environments",
+    title: "Telemetric monitoring system for ecohydrology applications in aquatic environments",
     journal: "SIL - 2004, Lahti, Finland",
     volume: null,
     pages: null,
@@ -926,8 +897,7 @@ const publicationsData: Publication[] = [
   {
     id: 41,
     category: "evento",
-    authors:
-      "MATVIENKO, B.; SIKAR, E.; SANTOS, M.; ROSA, L.; SILVA, M.; SANTOS, E.; ROCHA, C.",
+    authors: "MATVIENKO, B.; SIKAR, E.; SANTOS, M.; ROSA, L.; SILVA, M.; SANTOS, E.; ROCHA, C.",
     title:
       "Concentrarion profile at the air-water interface and its bearing on mentane flux measurement",
     journal: "SIL - 2007, Montreal, Canada",
@@ -942,8 +912,7 @@ const publicationsData: Publication[] = [
     category: "evento",
     authors:
       "ROCHA, C. H. E. D’A.; SANTOS, M. A.; MATVIENKO, B.; ROSA, L. P.; SANTOS, E. O.; SIKAR, E.; SILVA, M. B.; JUNIOR, A. M. P. B.",
-    title:
-      "Evaluation of dissolved carbon dioxide and methane at three tropical hydroelectric",
+    title: "Evaluation of dissolved carbon dioxide and methane at three tropical hydroelectric",
     journal: "SIL - 2007, Montreal, Canada",
     volume: null,
     pages: null,
@@ -970,8 +939,7 @@ const publicationsData: Publication[] = [
     category: "evento",
     authors:
       "SIKAR, E.; MATVIENKO, B.; SANTOS, M.; ROSA, L.; SILVA, M.; SANTOS, E.; ROCHA, C.; JUNIOR, A. B.",
-    title:
-      "Tropical reservoirs are on average 2.7 times bigger carbon sinks than soils",
+    title: "Tropical reservoirs are on average 2.7 times bigger carbon sinks than soils",
     journal: "SIL - 2007, Montreal, Canada",
     volume: null,
     pages: null,
@@ -982,10 +950,8 @@ const publicationsData: Publication[] = [
   {
     id: 45,
     category: "evento",
-    authors:
-      "SILVA, M.; MATVIENKO, B.; SANTOS, M.; SIKAR, E.; ROSA, L.; SANTOS E.; ROCHA, C.",
-    title:
-      "Does methane from hydro-reservoirs fiz out from the water upon turbine discharge?",
+    authors: "SILVA, M.; MATVIENKO, B.; SANTOS, M.; SIKAR, E.; ROSA, L.; SANTOS E.; ROCHA, C.",
+    title: "Does methane from hydro-reservoirs fiz out from the water upon turbine discharge?",
     journal: "SIL - 2007, Montreal, Canada",
     volume: null,
     pages: null,
@@ -1025,8 +991,7 @@ const publicationsData: Publication[] = [
       "ABE, D. S.; ADAMS, D. D.; SIDAGIS-GALLI, C.; TUNDISI, J. G.; CIMBLERIS, A. C. P.; BRUM, P. R.",
     title:
       "Trophic classifications between temperate and tropical aquatic ecosystems: is such terminology unrealistic for sedimentary carbon cycling?",
-    journal:
-      "11th World Lakes Conference - Abstracts Volume, Nairobi",
+    journal: "11th World Lakes Conference - Abstracts Volume, Nairobi",
     volume: "1",
     pages: "105-105",
     year: "2005",
@@ -1039,8 +1004,7 @@ const publicationsData: Publication[] = [
     authors:
       "CIMBLERIS, A. C. P.; SANTOS, M. A.; MATVIENKO, B.; STECH, J. L.; LIMA, I. B. T.; TUNDISI, J. G.; ABE, D. S.; SIDAGIS-GALLI, C. V.; ROLAND, F.; CESAR, D. E.; BRUM, P. R.",
     title: "Carbon budget in hydroelectric reservoirs of FURNAS Centrais Elétricas, Brazil",
-    journal:
-      "Proceedings of the International Association of Theoretical and Applied Limnology",
+    journal: "Proceedings of the International Association of Theoretical and Applied Limnology",
     volume: "29",
     pages: "563",
     year: "2005",
@@ -1059,7 +1023,8 @@ function BalcarPublicacoesPage() {
       pub.authors.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (pub.journal ? pub.journal.toLowerCase().includes(searchTerm.toLowerCase()) : false);
 
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(pub.category);
+    const matchesCategory =
+      selectedCategories.length === 0 || selectedCategories.includes(pub.category);
     return matchesSearch && matchesCategory;
   });
 
@@ -1098,7 +1063,9 @@ function BalcarPublicacoesPage() {
           <SectionTitle>
             <BookOpen size={40} /> Publicações Científicas
           </SectionTitle>
-          <SectionSubtitle>Catálogo de publicações relacionadas ao BALCAR com filtros e busca.</SectionSubtitle>
+          <SectionSubtitle>
+            Catálogo de publicações relacionadas ao BALCAR com filtros e busca.
+          </SectionSubtitle>
 
           <PublicationsContainer>
             <ToolbarRow>
@@ -1126,7 +1093,11 @@ function BalcarPublicacoesPage() {
                 { key: "evento", label: "Eventos" },
                 { key: "tese", label: "Teses e dissertações" },
               ].map((c) => (
-                <FilterChip key={c.key} $active={selectedCategories.includes(c.key)} onClick={() => toggleCategory(c.key)}>
+                <FilterChip
+                  key={c.key}
+                  $active={selectedCategories.includes(c.key)}
+                  onClick={() => toggleCategory(c.key)}
+                >
                   {c.label} ({publicationsData.filter((p) => p.category === c.key).length})
                 </FilterChip>
               ))}
@@ -1171,7 +1142,11 @@ function BalcarPublicacoesPage() {
                   </PublicationDetails>
 
                   {publication.link && (
-                    <PublicationCTA href={publication.link} target="_blank" rel="noopener noreferrer">
+                    <PublicationCTA
+                      href={publication.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Acessar publicação <ExternalLink size={16} />
                     </PublicationCTA>
                   )}
@@ -1186,4 +1161,3 @@ function BalcarPublicacoesPage() {
 }
 
 export default BalcarPublicacoesPage;
-

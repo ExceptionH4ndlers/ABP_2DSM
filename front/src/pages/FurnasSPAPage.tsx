@@ -1,7 +1,23 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import FurnasSidebar from "../components/FurnasSidebar";
-import { MapPin, Database, Filter, Search, BookOpen, Target, Users, ChevronLeft, ChevronRight, Hash, Calendar, Package, Percent, Zap, Waves } from "lucide-react";
+import {
+  MapPin,
+  Database,
+  Filter,
+  Search,
+  BookOpen,
+  Target,
+  Users,
+  ChevronLeft,
+  ChevronRight,
+  Hash,
+  Calendar,
+  Package,
+  Percent,
+  Zap,
+  Waves,
+} from "lucide-react";
 import { ExportCsvButton } from "../components/ExportCsvButton";
 import { CsvExportModalFurnas } from "../components/CsvExportModalFurnas";
 // CSV export via backend
@@ -488,7 +504,7 @@ function FurnasSPAPage() {
         "SELECT d.idDadosRepresa, d.dataMedida, d.nivelReservatorio, d.volUtilReservatorio, d.porVolUtilReservatorio, d.geracao, d.vazaoAfluente, d.vazaoDefluente FROM tbdadosrepresa d INNER JOIN tbreservatorio r ON d.idReservatorio = r.idReservatorio WHERE d.dataMedida BETWEEN $1 AND $2 AND r.nome = $3";
     }
     sql += ` ORDER BY ${filters.reservatorio ? "d.dataMedida" : "dataMedida"} ${filters.sortOrder === "asc" ? "ASC" : "DESC"}`;
-    
+
     // Primeiro, contar o total de registros (remover ORDER BY e substituir o SELECT)
     const countSql = sql
       .replace(/\s+ORDER BY[\s\S]*$/i, "")
@@ -501,23 +517,25 @@ function FurnasSPAPage() {
       .then(async (r) => {
         if (!r.ok) throw new Error("Falha ao contar registros");
         const countJson = await r.json();
-        const total = Array.isArray(countJson) && countJson.length > 0 ? parseInt(countJson[0].count) : 0;
-        
+        const total =
+          Array.isArray(countJson) && countJson.length > 0 ? parseInt(countJson[0].count) : 0;
+
         // Agora buscar os dados paginados
         const offset = (page - 1) * filters.limit;
         const paginatedParams = [...params, filters.limit, offset];
-        const paginatedSql = sql + ` LIMIT $${paginatedParams.length - 1} OFFSET $${paginatedParams.length}`;
-        
+        const paginatedSql =
+          sql + ` LIMIT $${paginatedParams.length - 1} OFFSET $${paginatedParams.length}`;
+
         const dataRes = await fetch("http://localhost:3001/furnas/query/select", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sql: paginatedSql, params: paginatedParams }),
         });
-        
+
         if (!dataRes.ok) throw new Error("Falha ao buscar dados");
         const json = await dataRes.json();
         setRows(Array.isArray(json) ? json : []);
-        
+
         // Atualizar paginação
         const totalPages = Math.ceil(total / filters.limit);
         setPagination({
@@ -553,7 +571,8 @@ function FurnasSPAPage() {
     try {
       // Buscar dados do reservatório específico para obter as datas
       const params: Array<string | number> = [reservatorio];
-      const sql = "SELECT d.dataMedida FROM tbdadosrepresa d INNER JOIN tbreservatorio r ON d.idReservatorio = r.idReservatorio WHERE r.nome = $1 ORDER BY d.dataMedida";
+      const sql =
+        "SELECT d.dataMedida FROM tbdadosrepresa d INNER JOIN tbreservatorio r ON d.idReservatorio = r.idReservatorio WHERE r.nome = $1 ORDER BY d.dataMedida";
 
       const response = await fetch("http://localhost:3001/furnas/query/select", {
         method: "POST",
@@ -569,7 +588,7 @@ function FurnasSPAPage() {
           const dates = result
             .map((item: { datamedida: string }) => new Date(item.datamedida))
             .filter((date: Date) => !isNaN(date.getTime())); // Filtrar apenas datas válidas
-          
+
           if (dates.length > 0) {
             const minDate = new Date(Math.min(...dates.map((d: Date) => d.getTime())));
             const maxDate = new Date(Math.max(...dates.map((d: Date) => d.getTime())));
@@ -990,8 +1009,12 @@ function FurnasSPAPage() {
                 <tbody>
                   {rows.length === 0 ? (
                     <tr>
-                      <td colSpan={8} style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}>
-                        Selecione os filtros e clique em "Buscar Dados" para visualizar os resultados
+                      <td
+                        colSpan={8}
+                        style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}
+                      >
+                        Selecione os filtros e clique em "Buscar Dados" para visualizar os
+                        resultados
                       </td>
                     </tr>
                   ) : (
@@ -1042,7 +1065,7 @@ function FurnasSPAPage() {
           )}
 
           {rows.length === 0 && !loading && !error && (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+            <div style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}>
               Nenhum dado encontrado para o período selecionado.
             </div>
           )}

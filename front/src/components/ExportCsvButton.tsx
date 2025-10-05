@@ -111,8 +111,7 @@ const StyledButton = styled.button<{ $variant: string; $size: string }>`
 `;
 
 export const ExportCsvButton: React.FC<ExportButtonProps> = ({
-  data,
-  filename,
+  // data e filename são aceitos para compatibilidade futura, mas não usados aqui
   variant = "primary",
   size = "medium",
   disabled = false,

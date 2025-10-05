@@ -21,5 +21,3 @@ export async function runSelect(req: Request, res: Response) {
     return res.status(500).json({ error: "Erro na consulta", details: String(err) });
   }
 }
-
-

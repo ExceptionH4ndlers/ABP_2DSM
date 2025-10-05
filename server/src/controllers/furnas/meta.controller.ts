@@ -24,5 +24,3 @@ export async function listColumns(req: Request, res: Response) {
     res.status(500).json({ error: "Erro ao listar colunas", details: String(err) });
   }
 }
-
-

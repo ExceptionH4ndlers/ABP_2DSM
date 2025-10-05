@@ -7,5 +7,3 @@ router.get("/tables", listTables);
 router.get("/tables/:table/columns", listColumns);
 
 export default router;
-
-

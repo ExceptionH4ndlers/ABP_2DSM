@@ -1,6 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import { MapPin, Database, Building2, Archive, DollarSign, Users, Download, Hash, Calendar, Filter, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  MapPin,
+  Database,
+  Building2,
+  Archive,
+  DollarSign,
+  Users,
+  Download,
+  Hash,
+  Calendar,
+  Filter,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { CsvExportModalBalcar } from "../components/CsvExportModalBalcar";
 import logoBalcar from "../../img/logoBalcar.png";
 import logoInpe from "../../img/balcar/logoInpe.png";
@@ -13,7 +27,6 @@ const BalcarSPAContainer = styled.div`
   min-height: 100vh;
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
 `;
-
 
 const MainContent = styled.main`
   padding: 2rem;
@@ -112,7 +125,7 @@ const StyledTable = styled.table`
 
   th,
   td {
-  text-align: center;
+    text-align: center;
     border-bottom: 1px solid #e2e8f0;
     white-space: nowrap;
     min-width: 160px;
@@ -291,7 +304,7 @@ const HeroLogoWrapper = styled.div`
 const HeroLogo = styled.img`
   height: 120px;
   object-fit: contain;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.08));
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.08));
 `;
 
 const HeroContainer = styled.div`
@@ -357,7 +370,9 @@ const NameLink = styled.a`
   color: #111827;
   font-weight: 600;
   text-decoration: none;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const PersonMeta = styled.div`
@@ -372,7 +387,6 @@ const InstitutionTag = styled.span`
 `;
 
 // removed unused styled blocks related to the old "Sobre a Base de Dados" section
-
 
 const SupportGrid = styled.div`
   display: grid;
@@ -454,7 +468,13 @@ function BalcarSPAPage() {
     limit: number;
     reservatorio: string;
     sortOrder: "asc" | "desc";
-  }>({ startDate: "2003-11-01", endDate: "2011-12-31", limit: 10, reservatorio: "", sortOrder: "desc" });
+  }>({
+    startDate: "2003-11-01",
+    endDate: "2011-12-31",
+    limit: 10,
+    reservatorio: "",
+    sortOrder: "desc",
+  });
 
   const fetchData = async (page: number = 1) => {
     try {
@@ -469,7 +489,7 @@ function BalcarSPAPage() {
         sql += ` AND r.nome = $${params.length}`;
       }
       sql += ` ORDER BY c.datainicio ${filters.sortOrder === "asc" ? "ASC" : "DESC"}`;
-      
+
       // Primeiro, contar o total de registros (remover ORDER BY e substituir o SELECT)
       const countSql = sql
         .replace(/\s+ORDER BY[\s\S]*$/i, "")
@@ -479,11 +499,12 @@ function BalcarSPAPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sql: countSql, params }),
       });
-      
+
       if (!countRes.ok) throw new Error("Falha ao contar registros");
       const countJson = await countRes.json();
-      const total = Array.isArray(countJson) && countJson.length > 0 ? parseInt(countJson[0].count) : 0;
-      
+      const total =
+        Array.isArray(countJson) && countJson.length > 0 ? parseInt(countJson[0].count) : 0;
+
       // Agora buscar os dados paginados
       const offset = (page - 1) * filters.limit;
       params.push(filters.limit, offset);
@@ -497,7 +518,7 @@ function BalcarSPAPage() {
       if (!res.ok) throw new Error("Falha ao buscar dados");
       const json = await res.json();
       setRows(Array.isArray(json) ? json : []);
-      
+
       // Atualizar paginação
       const totalPages = Math.ceil(total / filters.limit);
       setPagination({
@@ -535,7 +556,8 @@ function BalcarSPAPage() {
     try {
       // Buscar dados do reservatório específico para obter as datas
       const params: Array<string | number> = [reservatorio];
-      const sql = "SELECT c.datainicio, c.datafim FROM tbcampanha c INNER JOIN tbreservatorio r ON c.idreservatorio = r.idreservatorio WHERE r.nome = $1 ORDER BY c.datainicio";
+      const sql =
+        "SELECT c.datainicio, c.datafim FROM tbcampanha c INNER JOIN tbreservatorio r ON c.idreservatorio = r.idreservatorio WHERE r.nome = $1 ORDER BY c.datainicio";
 
       const response = await fetch("http://localhost:3001/balcar/query/select", {
         method: "POST",
@@ -551,11 +573,11 @@ function BalcarSPAPage() {
           const dates = result
             .map((item: { datainicio: string; datafim: string }) => [
               new Date(item.datainicio),
-              new Date(item.datafim)
+              new Date(item.datafim),
             ])
             .flat()
             .filter((date: Date) => !isNaN(date.getTime())); // Filtrar apenas datas válidas
-          
+
           if (dates.length > 0) {
             const minDate = new Date(Math.min(...dates.map((d: Date) => d.getTime())));
             const maxDate = new Date(Math.max(...dates.map((d: Date) => d.getTime())));
@@ -643,8 +665,8 @@ function BalcarSPAPage() {
           </SectionTitle>
           <SectionText>
             Este portal constitui a interface de acesso aos dados do Projeto Balanço de Carbono nos
-            Reservatórios de FURNAS Centrais Elétricas S.A. A base de dados é formada por coletas
-            in situ de equipes que tinham como objetivo obter dados para:
+            Reservatórios de FURNAS Centrais Elétricas S.A. A base de dados é formada por coletas in
+            situ de equipes que tinham como objetivo obter dados para:
           </SectionText>
           <BulletList>
             <li>
@@ -660,8 +682,7 @@ function BalcarSPAPage() {
               operacionais dos reservatórios na emissão de gases de efeito estufa;
             </li>
             <li>
-              determinar o padrão de emissão existente, anteriormente à construção de
-              reservatórios;
+              determinar o padrão de emissão existente, anteriormente à construção de reservatórios;
             </li>
             <li>
               elaborar um modelo espacial e temporal de emissão de gases para reservatórios
@@ -681,30 +702,31 @@ function BalcarSPAPage() {
           </SectionTitle>
           <SectionText>
             Os dados são formados por coletas realizadas em 79 campanhas com datas e localidades
-            (reservatórios) distintos com o objetivo de coletar parâmetros na interface água-sedimento,
-            coluna d'água e interface água-atmosfera. Mais detalhes sobre a base de dados podem ser
-            encontrados em "descrição".
+            (reservatórios) distintos com o objetivo de coletar parâmetros na interface
+            água-sedimento, coluna d'água e interface água-atmosfera. Mais detalhes sobre a base de
+            dados podem ser encontrados em "descrição".
           </SectionText>
           <SectionText>
-            Cada instituição participante tinha como objetivo estudar uma componente, e por consequência
-            fazer leituras de parâmetros relacionados:
+            Cada instituição participante tinha como objetivo estudar uma componente, e por
+            consequência fazer leituras de parâmetros relacionados:
           </SectionText>
           <BulletList>
             <li>
-              <strong>IIE:</strong> estimativas de fluxos de gases de efeito estufa e das concentrações
-              de carbono e nutrientes na interface água-sedimento;
+              <strong>IIE:</strong> estimativas de fluxos de gases de efeito estufa e das
+              concentrações de carbono e nutrientes na interface água-sedimento;
             </li>
             <li>
-              <strong>INPE:</strong> fluxos de gases metano (CH₄) e dióxido de carbono (CO₂) na interface
-              água-atmosfera;
+              <strong>INPE:</strong> fluxos de gases metano (CH₄) e dióxido de carbono (CO₂) na
+              interface água-atmosfera;
             </li>
             <li>
               <strong>UFJF:</strong> determinação da produção primária, metabolismo bacteriano e
               concentrações de nutrientes na coluna d'água;
             </li>
             <li>
-              <strong>UFRJ/COPPE:</strong> estimativa de fluxos de gases de efeito estufa na interface
-              água-atmosfera e determinação do aporte e das taxas de sedimentação de carbono.
+              <strong>UFRJ/COPPE:</strong> estimativa de fluxos de gases de efeito estufa na
+              interface água-atmosfera e determinação do aporte e das taxas de sedimentação de
+              carbono.
             </li>
           </BulletList>
         </Section>
@@ -714,11 +736,11 @@ function BalcarSPAPage() {
             <DollarSign size={20} /> Fomento
           </SectionTitle>
           <SectionText>
-            Os recursos utilizados para a coleta da base de dados foram fornecidos por FURNAS Centrais
-            Elétricas S.A. no âmbito da lei 9.991/2000, que estabelece um investimento mínimo anual de
-            1% de seu lucro líquido, das companhias geradoras de eletricidade, em pesquisa e
-            desenvolvimento no setor elétrico. Os procedimentos para os projetos são determinados pela
-            Agência Nacional de Energia Elétrica (ANEEL).
+            Os recursos utilizados para a coleta da base de dados foram fornecidos por FURNAS
+            Centrais Elétricas S.A. no âmbito da lei 9.991/2000, que estabelece um investimento
+            mínimo anual de 1% de seu lucro líquido, das companhias geradoras de eletricidade, em
+            pesquisa e desenvolvimento no setor elétrico. Os procedimentos para os projetos são
+            determinados pela Agência Nacional de Energia Elétrica (ANEEL).
           </SectionText>
         </Section>
 
@@ -730,7 +752,13 @@ function BalcarSPAPage() {
             <GroupTitle>Coordenação Geral</GroupTitle>
             <TeamGrid>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/5535667070825818" target="_blank" rel="noopener noreferrer">André Carlos Prates Cimbleris</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/5535667070825818"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  André Carlos Prates Cimbleris
+                </NameLink>
                 <PersonMeta>Coordenação Geral</PersonMeta>
               </PersonItem>
             </TeamGrid>
@@ -740,20 +768,52 @@ function BalcarSPAPage() {
             <GroupTitle>Coordenação por Instituição</GroupTitle>
             <TeamGrid>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/4775535537651746" target="_blank" rel="noopener noreferrer">Donato Seiji Abe</NameLink>
-                <PersonMeta><InstitutionTag>IIE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/4775535537651746"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Donato Seiji Abe
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>IIE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/2691497637313274" target="_blank" rel="noopener noreferrer">José Luiz Stech</NameLink>
-                <PersonMeta><InstitutionTag>INPE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/2691497637313274"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  José Luiz Stech
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>INPE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/0567809153346429" target="_blank" rel="noopener noreferrer">Fábio Roland</NameLink>
-                <PersonMeta><InstitutionTag>UFJF</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/0567809153346429"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Fábio Roland
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>UFJF</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/4155308755013168" target="_blank" rel="noopener noreferrer">Marco Aurélio dos Santos</NameLink>
-                <PersonMeta><InstitutionTag>UFRJ/COPPE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/4155308755013168"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Marco Aurélio dos Santos
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>UFRJ/COPPE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
             </TeamGrid>
           </TeamGroup>
@@ -762,44 +822,124 @@ function BalcarSPAPage() {
             <GroupTitle>Responsáveis pelas Coletas e Análises</GroupTitle>
             <TeamGrid>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/8150880476098677" target="_blank" rel="noopener noreferrer">Arcilan Trevenzoli Assireu</NameLink>
-                <PersonMeta><InstitutionTag>INPE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/8150880476098677"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Arcilan Trevenzoli Assireu
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>INPE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/5987354282647527" target="_blank" rel="noopener noreferrer">Bohdan Matvienko Sikar</NameLink>
-                <PersonMeta><InstitutionTag>UFRJ/COPPE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/5987354282647527"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Bohdan Matvienko Sikar
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>UFRJ/COPPE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7663009286545108" target="_blank" rel="noopener noreferrer">Corina Verónica Sidagis Galli</NameLink>
-                <PersonMeta><InstitutionTag>IIE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/7663009286545108"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Corina Verónica Sidagis Galli
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>IIE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/1002426943626438" target="_blank" rel="noopener noreferrer">Ednaldo Oliveira dos Santos</NameLink>
-                <PersonMeta><InstitutionTag>UFRJ/COPPE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/1002426943626438"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ednaldo Oliveira dos Santos
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>UFRJ/COPPE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/2838003403761263" target="_blank" rel="noopener noreferrer">Elizabeth Matvienko Sikar</NameLink>
-                <PersonMeta><InstitutionTag>UFRJ/COPPE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/2838003403761263"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Elizabeth Matvienko Sikar
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>UFRJ/COPPE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7510713692919710" target="_blank" rel="noopener noreferrer">Felipe Siqueira Pacheco</NameLink>
-                <PersonMeta><InstitutionTag>UFJF</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/7510713692919710"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Felipe Siqueira Pacheco
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>UFJF</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/1341263338653176" target="_blank" rel="noopener noreferrer">Ivan Bergier Tavares de Lima</NameLink>
-                <PersonMeta><InstitutionTag>INPE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/1341263338653176"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Ivan Bergier Tavares de Lima
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>INPE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7301878639558446" target="_blank" rel="noopener noreferrer">Luciano Marani</NameLink>
-                <PersonMeta><InstitutionTag>INPE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/7301878639558446"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Luciano Marani
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>INPE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7511312374795216" target="_blank" rel="noopener noreferrer">Nathan Oliveira Barros</NameLink>
-                <PersonMeta><InstitutionTag>UFJF</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/7511312374795216"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Nathan Oliveira Barros
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>UFJF</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/0578519055132957" target="_blank" rel="noopener noreferrer">Plínio Carlos Alvalá</NameLink>
-                <PersonMeta><InstitutionTag>INPE</InstitutionTag></PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/0578519055132957"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Plínio Carlos Alvalá
+                </NameLink>
+                <PersonMeta>
+                  <InstitutionTag>INPE</InstitutionTag>
+                </PersonMeta>
               </PersonItem>
             </TeamGrid>
           </TeamGroup>
@@ -815,17 +955,11 @@ function BalcarSPAPage() {
           </TeamGroup>
         </Section>
 
-        
-
-        
-
         <Section id="apoio">
           <SectionTitle>
             <Building2 size={20} /> Apoio Institucional
           </SectionTitle>
-          <SectionSubtitle>
-            Instituições parceiras e financiadoras.
-          </SectionSubtitle>
+          <SectionSubtitle>Instituições parceiras e financiadoras.</SectionSubtitle>
           <SupportGrid>
             <SupportCard>
               <a href="https://www.furnas.com.br/" target="_blank" rel="noopener noreferrer">
@@ -919,7 +1053,9 @@ function BalcarSPAPage() {
                 <ControlLabel>Ordenação</ControlLabel>
                 <ControlSelect
                   value={filters.sortOrder}
-                  onChange={(e) => setFilters({ ...filters, sortOrder: e.target.value as "asc" | "desc" })}
+                  onChange={(e) =>
+                    setFilters({ ...filters, sortOrder: e.target.value as "asc" | "desc" })
+                  }
                 >
                   <option value="desc">Mais recente → Mais antigo</option>
                   <option value="asc">Mais antigo → Mais recente</option>
@@ -933,7 +1069,13 @@ function BalcarSPAPage() {
               </SearchButton>
               <ClearButton
                 onClick={() =>
-                  setFilters({ startDate: "2003-11-01", endDate: "2011-12-31", limit: 10, reservatorio: "", sortOrder: "desc" })
+                  setFilters({
+                    startDate: "2003-11-01",
+                    endDate: "2011-12-31",
+                    limit: 10,
+                    reservatorio: "",
+                    sortOrder: "desc",
+                  })
                 }
               >
                 <Filter size={20} /> Limpar Filtros
@@ -979,9 +1121,7 @@ function BalcarSPAPage() {
                         : "-"}
                     </td>
                     <td>
-                      {r.datafim
-                        ? new Date(String(r.datafim)).toLocaleDateString("pt-BR")
-                        : "-"}
+                      {r.datafim ? new Date(String(r.datafim)).toLocaleDateString("pt-BR") : "-"}
                     </td>
                     <td>{String(r.reservatorio ?? "-")}</td>
                     <td>{String(r.instituicao ?? "-")}</td>
@@ -1023,7 +1163,7 @@ function BalcarSPAPage() {
           )}
 
           {rows.length === 0 && !loading && !error && (
-            <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+            <div style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}>
               Nenhum dado encontrado para o período selecionado.
             </div>
           )}

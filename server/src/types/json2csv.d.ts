@@ -4,5 +4,3 @@ declare module "json2csv" {
     parse(data: T[]): string;
   }
 }
-
-

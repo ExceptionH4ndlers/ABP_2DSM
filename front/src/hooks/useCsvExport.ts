@@ -26,7 +26,10 @@ export const useCsvExport = (): UseCsvExportReturn => {
         setExportError(null);
 
         let dataToExport = data;
-        const isSimaShape = Array.isArray(dataToExport) && dataToExport[0] && (dataToExport[0] as any).idsima !== undefined;
+        const isSimaShape =
+          Array.isArray(dataToExport) &&
+          dataToExport[0] &&
+          (dataToExport[0] as any).idsima !== undefined;
 
         // Se há filtros no modal, sempre buscar dados da API (ignorar dados da tabela)
         if (
@@ -89,7 +92,11 @@ export const useCsvExport = (): UseCsvExportReturn => {
         };
 
         if (isSimaShape) {
-          await simaCsvParser.downloadCsv(dataToExport as SimaData[], defaultFilename, defaultOptions);
+          await simaCsvParser.downloadCsv(
+            dataToExport as SimaData[],
+            defaultFilename,
+            defaultOptions,
+          );
         } else {
           // Genérico: aplica metadados, cabeçalhos, separador e encoding
           const keys = Object.keys(dataToExport[0] || {});
@@ -109,7 +116,10 @@ export const useCsvExport = (): UseCsvExportReturn => {
             }
           };
 
-          const escapeVal = (v: string) => (v.includes(",") || v.includes('"') || v.includes("\n") ? `"${v.replace(/"/g, '""')}"` : v);
+          const escapeVal = (v: string) =>
+            v.includes(",") || v.includes('"') || v.includes("\n")
+              ? `"${v.replace(/"/g, '""')}"`
+              : v;
 
           const lines: string[] = [];
 
@@ -133,7 +143,8 @@ export const useCsvExport = (): UseCsvExportReturn => {
           (dataToExport as any[]).forEach((row) => {
             const vals = keys.map((k) => {
               const val = (row as any)[k];
-              const isDateLike = typeof val === "string" && /\d{4}-\d{2}-\d{2}/.test(val.toString());
+              const isDateLike =
+                typeof val === "string" && /\d{4}-\d{2}-\d{2}/.test(val.toString());
               const out = isDateLike ? formatDate(val) : String(val ?? "");
               return escapeVal(out);
             });
@@ -141,7 +152,12 @@ export const useCsvExport = (): UseCsvExportReturn => {
           });
 
           const content = lines.join("\n");
-          const blob = new Blob([content], { type: defaultOptions.encoding === "ISO-8859-1" ? "text/csv;charset=iso-8859-1" : "text/csv;charset=utf-8" });
+          const blob = new Blob([content], {
+            type:
+              defaultOptions.encoding === "ISO-8859-1"
+                ? "text/csv;charset=iso-8859-1"
+                : "text/csv;charset=utf-8",
+          });
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
@@ -204,7 +220,8 @@ export const useCsvExport = (): UseCsvExportReturn => {
               return d.toISOString();
           }
         };
-        const escapeVal = (v: string) => (v.includes(",") || v.includes('"') || v.includes("\n") ? `"${v.replace(/"/g, '""')}"` : v);
+        const escapeVal = (v: string) =>
+          v.includes(",") || v.includes('"') || v.includes("\n") ? `"${v.replace(/"/g, '""')}"` : v;
         const lines: string[] = [];
         if (defaultOptions.incluirMetadados) {
           lines.push(`# METADADOS DO ARQUIVO CSV`);

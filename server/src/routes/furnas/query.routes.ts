@@ -6,5 +6,3 @@ const router = Router();
 router.post("/select", runSelect);
 
 export default router;
-
-
