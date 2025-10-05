@@ -10,7 +10,8 @@ import FurnasResultadosPage from "./pages/FurnasResultadosPage";
 import FurnasParticipantesPage from "./pages/FurnasParticipantesPage";
 import FurnasPesquisasCorrelatasPage from "./pages/FurnasPesquisasCorrelatasPage";
 import FurnasPublicacoesPage from "./pages/FurnasPublicacoesPage";
-import BalcarPage from "./pages/BalcarPage";
+import BalcarPage from "./pages/BalcarSPAPage";
+import BalcarDescricaoPage from "./pages/BalcarDescricaoPage";
 
 function AppContent() {
   const location = useLocation();
@@ -38,6 +39,7 @@ function AppContent() {
         <Route path="/furnas/pesquisas" element={<FurnasPesquisasCorrelatasPage />} />
         <Route path="/furnas/publicacoes" element={<FurnasPublicacoesPage />} />
         <Route path="/balcar" element={<BalcarPage />} />
+        <Route path="/balcar/descricao" element={<BalcarDescricaoPage />} />
       </Routes>
     </>
   );

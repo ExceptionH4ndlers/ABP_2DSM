@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Menu, X, ChevronDown, Home, Map, Database, Target, BookOpen } from "lucide-react";
+import { Menu, X, ChevronDown, Home, Map, Database, Target, BookOpen, FileText, Users } from "lucide-react";
 
 const NavigationContainer = styled.nav`
   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
@@ -236,6 +236,7 @@ function Navigation() {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSimaDropdownOpen, setIsSimaDropdownOpen] = useState(false);
+  const [isBalcarDropdownOpen, setIsBalcarDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const activeSection = location.pathname === "/" ? "home" : location.pathname.substring(1);
@@ -247,6 +248,10 @@ function Navigation() {
     activeSection === "sima-apoio" ||
     activeSection === "sima-mapa" ||
     activeSection === "sima-dados";
+
+  const isBalcarActive =
+    activeSection === "balcar" ||
+    activeSection === "balcar-descricao";
 
   // Títulos específicos para cada página
   const getPageTitle = () => {
@@ -307,13 +312,37 @@ function Navigation() {
           }
         }, 100);
       }
-    } else {
-      navigate(path);
-      // Para Furnas, garantir que vá para o topo da página
-      if (path === "/furnas") {
-        setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }, 100);
+  } else {
+      // Navegação com âncoras para BALCAR
+      if (path.startsWith("/balcar") && path.includes("-")) {
+        const sectionId = path.replace("/balcar", "").replace("-", "");
+        if (location.pathname === "/balcar") {
+          if (sectionId === "home" || sectionId === "") {
+            const element = document.getElementById("home");
+            if (element) element.scrollIntoView({ behavior: "smooth" });
+          } else {
+            const element = document.getElementById(sectionId);
+            if (element) element.scrollIntoView({ behavior: "smooth" });
+          }
+        } else {
+          navigate("/balcar");
+          setTimeout(() => {
+            if (sectionId === "home" || sectionId === "") {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            } else {
+              const element = document.getElementById(sectionId);
+              if (element) element.scrollIntoView({ behavior: "smooth" });
+            }
+          }, 100);
+        }
+      } else {
+        navigate(path);
+        // Para Furnas, garantir que vá para o topo da página
+        if (path === "/furnas") {
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }, 100);
+        }
       }
     }
     setIsMobileMenuOpen(false);
@@ -322,6 +351,12 @@ function Navigation() {
 
   const handleSimaDropdownToggle = () => {
     setIsSimaDropdownOpen(!isSimaDropdownOpen);
+    setIsBalcarDropdownOpen(false);
+  };
+
+  const handleBalcarDropdownToggle = () => {
+    setIsBalcarDropdownOpen(!isBalcarDropdownOpen);
+    setIsSimaDropdownOpen(false);
   };
 
   // Fechar dropdown quando clicar fora
@@ -329,6 +364,7 @@ function Navigation() {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsSimaDropdownOpen(false);
+        setIsBalcarDropdownOpen(false);
       }
     };
 
@@ -401,16 +437,34 @@ function Navigation() {
             Balanço de Carbono
           </NavLink>
 
-          <NavLink
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              navigateToSection("/balcar");
-            }}
-            $isActive={activeSection === "balcar"}
-          >
-            BALCAR
-          </NavLink>
+          <DropdownContainer ref={dropdownRef}>
+            <DropdownButton onClick={handleBalcarDropdownToggle} $isActive={isBalcarActive}>
+              BALCAR
+              <ChevronDown size={16} />
+            </DropdownButton>
+            <DropdownMenu $isOpen={isBalcarDropdownOpen}>
+              <DropdownItem onClick={() => navigateToSection("/balcar")}>
+                <Home size={16} />
+                Home
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/balcar/descricao")}>
+                <FileText size={16} />
+                Descrição
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/balcar-equipe")}>
+                <Users size={16} />
+                Equipe
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/balcar-mapa")}>
+                <Map size={16} />
+                Mapa Interativo
+              </DropdownItem>
+              <DropdownItem onClick={() => navigateToSection("/balcar-dados")}>
+                <Database size={16} />
+                Banco de Dados
+              </DropdownItem>
+            </DropdownMenu>
+          </DropdownContainer>
         </NavLinks>
 
         <ButtonGroup>
