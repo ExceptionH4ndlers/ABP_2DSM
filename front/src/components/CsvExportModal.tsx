@@ -3,13 +3,17 @@ import styled from "styled-components";
 import type { DefaultTheme } from "styled-components";
 import { Download, Settings, AlertCircle, CheckCircle, Filter } from "lucide-react";
 import { useCsvExport } from "../hooks/useCsvExport";
-import type { SimaData, CsvExportOptions } from "../utils/csvParser";
+import type { CsvExportOptions } from "../utils/csvParser";
+
+interface EstacaoItem { idestacao: string; rotulo: string }
 
 interface CsvExportModalProps {
   $isOpen: boolean;
   onClose: () => void;
-  data: SimaData[];
+  data: unknown[];
   defaultFilename?: string;
+  estacoes?: EstacaoItem[];
+  selectedEstacao?: string;
 }
 
 const ModalOverlay = styled.div<{ $isOpen: boolean }>`
@@ -239,6 +243,8 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
   onClose,
   data,
   defaultFilename = "dados_sima.csv",
+  estacoes,
+  selectedEstacao,
 }) => {
   const { isExporting, exportError, exportCsv, clearError } = useCsvExport();
 
@@ -256,6 +262,16 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
   });
 
   const [filename, setFilename] = useState(defaultFilename);
+
+  // Pré-seleciona a estação atual quando o modal abre
+  React.useEffect(() => {
+    if ($isOpen && selectedEstacao) {
+      setOptions((prev) => ({
+        ...prev,
+        filtros: { ...(prev.filtros || {}), estacao: selectedEstacao },
+      }));
+    }
+  }, [$isOpen, selectedEstacao]);
 
   // Função para validar campos obrigatórios
   const validateRequiredFields = () => {
@@ -350,20 +366,10 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
 
   // Calcular estatísticas dos dados
   const dataStats = {
-    totalRegistros: data.length,
-    estacoesUnicas: new Set(data.map((d) => d.idestacao)).size,
-    periodoInicio:
-      data.length > 0
-        ? new Date(Math.min(...data.map((d) => new Date(d.datahora).getTime()))).toLocaleDateString(
-            "pt-BR",
-          )
-        : "N/A",
-    periodoFim:
-      data.length > 0
-        ? new Date(Math.max(...data.map((d) => new Date(d.datahora).getTime()))).toLocaleDateString(
-            "pt-BR",
-          )
-        : "N/A",
+    totalRegistros: Array.isArray(data) ? data.length : 0,
+    estacoesUnicas: 0,
+    periodoInicio: "",
+    periodoFim: "",
   };
 
   return (
@@ -492,13 +498,17 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
               }}
             >
               <option value="">Todas as estações</option>
-              {Array.from(new Set(data.map((d) => d.idestacao)))
-                .sort()
-                .map((estacao) => (
-                  <option key={estacao} value={estacao}>
-                    {estacao}
-                  </option>
-                ))}
+              {(((estacoes as EstacaoItem[])) && (estacoes as EstacaoItem[]).length > 0
+                ? (estacoes as EstacaoItem[]).map((es: EstacaoItem) => ({ value: es.idestacao, label: es.rotulo }))
+                : Array.from(new Set((data as Array<Record<string, unknown>>).map((d) => String(((d as Record<string, unknown>).idestacao as string) || ""))))
+                    .filter((s) => s)
+                    .sort()
+                    .map((id) => ({ value: id, label: id }))
+              ).map((opt: { value: string; label: string }) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </Select>
           </FormGroup>
         </FormSection>

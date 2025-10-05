@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import FurnasSidebar from "../components/FurnasSidebar";
-import { MapPin, Database, Filter, Search, BookOpen, Target, Users } from "lucide-react";
-import { CsvExportButton } from "../components/CsvExportButton";
+import { MapPin, Database, Filter, Search, BookOpen, Target, Users, ChevronLeft, ChevronRight, Hash, Calendar, Package, Percent, Zap, Waves } from "lucide-react";
+import { ExportCsvButton } from "../components/ExportCsvButton";
+import { CsvExportModalFurnas } from "../components/CsvExportModalFurnas";
+// CSV export via backend
 
 const FurnasSPAContainer = styled.div`
   min-height: 100vh;
@@ -167,43 +169,49 @@ const ActionButtons = styled.div`
   justify-content: center;
   flex-wrap: wrap;
 `;
+// usando ExportCsvButton compartilhado (importado)
 
-const SearchButton = styled.button`
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-  border: none;
-  border-radius: 12px;
-  padding: 1rem 2rem;
+const ActionButton = styled.button`
+  background: #6b7280;
+  border: 1px solid #9ca3af;
+  border-radius: 8px;
+  padding: 0.8rem 1.5rem;
   color: white;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: transform 0.2s ease;
-
-  &:hover:not(:disabled) {
-    transform: translateY(-2px);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-`;
-
-const ClearButton = styled.button`
-  background: white;
-  border: 2px solid #9ca3af;
-  border-radius: 12px;
-  padding: 1rem 2rem;
-  color: #374151;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   transition: all 0.2s ease;
+  font-size: 0.9rem;
+  flex: 1;
+  min-width: 150px;
+
+  &:hover {
+    background: #4b5563;
+    border-color: #6b7280;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+`;
+
+const SearchButton = styled(ActionButton)`
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border: none;
+  color: #ffffff;
+
+  &:hover {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  }
+`;
+
+const ClearButton = styled(ActionButton)`
+  background: white;
+  border-color: #9ca3af;
+  color: #374151;
 
   &:hover {
     background: #f9fafb;
@@ -405,38 +413,243 @@ const StyledTable = styled.table`
   }
 `;
 
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+`;
+
+const PaginationButton = styled.button`
+  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+`;
+
+const PaginationInfo = styled.span`
+  color: #64748b;
+  font-weight: 500;
+`;
+
 function FurnasSPAPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
   const [filters, setFilters] = useState({
-    startDate: "2006-01-01", // Período do projeto Furnas
+    startDate: "2006-01-01", // será ajustado pelo MIN/MAX do banco
     endDate: "2013-12-31",
     limit: 10,
-    reservatorio: "", // Filtro por reservatório
+    reservatorio: "",
     sortOrder: "desc",
   });
+  const [reservatorios, setReservatorios] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [rows, setRows] = useState<Array<Record<string, unknown>>>([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0,
+  });
+  const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 
-  const handleSearch = () => {
+  const handleSearch = (page: number = 1) => {
     setLoading(true);
     setError(null);
-    // Simular busca de dados
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    // Monta SQL com filtros
+    const params: Array<string | number> = [filters.startDate, filters.endDate];
+    let sql =
+      "SELECT idDadosRepresa, dataMedida, nivelReservatorio, volUtilReservatorio, porVolUtilReservatorio, geracao, vazaoAfluente, vazaoDefluente FROM tbdadosrepresa WHERE dataMedida BETWEEN $1 AND $2";
+    // filtro por reservatório via join, se selecionado
+    if (filters.reservatorio) {
+      params.push(filters.reservatorio);
+      sql =
+        "SELECT d.idDadosRepresa, d.dataMedida, d.nivelReservatorio, d.volUtilReservatorio, d.porVolUtilReservatorio, d.geracao, d.vazaoAfluente, d.vazaoDefluente FROM tbdadosrepresa d INNER JOIN tbreservatorio r ON d.idReservatorio = r.idReservatorio WHERE d.dataMedida BETWEEN $1 AND $2 AND r.nome = $3";
+    }
+    sql += ` ORDER BY ${filters.reservatorio ? "d.dataMedida" : "dataMedida"} ${filters.sortOrder === "asc" ? "ASC" : "DESC"}`;
+    
+    // Primeiro, contar o total de registros (remover ORDER BY e substituir o SELECT)
+    const countSql = sql
+      .replace(/\s+ORDER BY[\s\S]*$/i, "")
+      .replace(/^SELECT[\s\S]*?FROM/i, "SELECT COUNT(*) as count FROM");
+    fetch("http://localhost:3001/furnas/query/select", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ sql: countSql, params }),
+    })
+      .then(async (r) => {
+        if (!r.ok) throw new Error("Falha ao contar registros");
+        const countJson = await r.json();
+        const total = Array.isArray(countJson) && countJson.length > 0 ? parseInt(countJson[0].count) : 0;
+        
+        // Agora buscar os dados paginados
+        const offset = (page - 1) * filters.limit;
+        const paginatedParams = [...params, filters.limit, offset];
+        const paginatedSql = sql + ` LIMIT $${paginatedParams.length - 1} OFFSET $${paginatedParams.length}`;
+        
+        const dataRes = await fetch("http://localhost:3001/furnas/query/select", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sql: paginatedSql, params: paginatedParams }),
+        });
+        
+        if (!dataRes.ok) throw new Error("Falha ao buscar dados");
+        const json = await dataRes.json();
+        setRows(Array.isArray(json) ? json : []);
+        
+        // Atualizar paginação
+        const totalPages = Math.ceil(total / filters.limit);
+        setPagination({
+          page,
+          limit: filters.limit,
+          total,
+          totalPages,
+        });
+      })
+      .catch((e) => setError(e instanceof Error ? e.message : "Erro desconhecido"))
+      .finally(() => setLoading(false));
+  };
+
+  // Função para buscar datas específicas de um reservatório
+  const updateDatesForReservatorio = async (reservatorio: string) => {
+    // Atualizar o reservatório primeiro
+    setFilters((prev) => ({
+      ...prev,
+      reservatorio: reservatorio,
+    }));
+
+    // Se for "todos os reservatórios", usar as datas gerais
+    if (!reservatorio) {
+      setFilters((prev) => ({
+        ...prev,
+        startDate: "2003-01-01", // Data mais antiga geral
+        endDate: "2011-12-31", // Data mais recente geral
+        reservatorio: reservatorio,
+      }));
+      return;
+    }
+
+    try {
+      // Buscar dados do reservatório específico para obter as datas
+      const params: Array<string | number> = [reservatorio];
+      const sql = "SELECT d.dataMedida FROM tbdadosrepresa d INNER JOIN tbreservatorio r ON d.idReservatorio = r.idReservatorio WHERE r.nome = $1 ORDER BY d.dataMedida";
+
+      const response = await fetch("http://localhost:3001/furnas/query/select", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sql, params }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+
+        if (Array.isArray(result) && result.length > 0) {
+          // Encontrar a data mais antiga e mais recente
+          const dates = result
+            .map((item: { datamedida: string }) => new Date(item.datamedida))
+            .filter((date: Date) => !isNaN(date.getTime())); // Filtrar apenas datas válidas
+          
+          if (dates.length > 0) {
+            const minDate = new Date(Math.min(...dates.map((d: Date) => d.getTime())));
+            const maxDate = new Date(Math.max(...dates.map((d: Date) => d.getTime())));
+
+            // Atualizar os filtros com as novas datas
+            setFilters((prev) => ({
+              ...prev,
+              startDate: minDate.toISOString().split("T")[0],
+              endDate: maxDate.toISOString().split("T")[0],
+            }));
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao buscar datas do reservatório:", error);
+    }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    handleSearch(newPage);
   };
 
   const handleClearFilters = () => {
-    setFilters({
-      startDate: "2006-01-01",
-      endDate: "2013-12-31",
-      limit: 10,
-      reservatorio: "",
-      sortOrder: "desc",
-    });
+    setFilters((prev) => ({ ...prev, reservatorio: "", limit: 10, sortOrder: "desc" }));
+    setRows([]);
   };
+
+  // export via modal; função direta removida
+
+  // Carrega período MIN/MAX uma vez ao montar
+  useEffect(() => {
+    (async () => {
+      try {
+        const resPeriod = await fetch("http://localhost:3001/furnas/query/select", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sql: "SELECT MIN(dataMedida) AS min_data, MAX(dataMedida) AS max_data FROM tbdadosrepresa",
+            params: [],
+          }),
+        });
+        if (resPeriod.ok) {
+          const arr = await resPeriod.json();
+          const rec = Array.isArray(arr) && arr[0] ? arr[0] : null;
+          if (rec?.min_data && rec?.max_data) {
+            setFilters((f) => ({
+              ...f,
+              startDate: String(rec.min_data).slice(0, 10),
+              endDate: String(rec.max_data).slice(0, 10),
+            }));
+          }
+        }
+      } catch {
+        // mantém defaults em caso de falha
+      }
+    })();
+  }, []);
+
+  // Carrega apenas reservatórios que possuem dados (independente do período)
+  useEffect(() => {
+    (async () => {
+      try {
+        const sql =
+          "SELECT DISTINCT r.nome FROM tbreservatorio r INNER JOIN tbdadosrepresa d ON d.idreservatorio = r.idreservatorio ORDER BY r.nome";
+        const resReserv = await fetch("http://localhost:3001/furnas/query/select", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ sql, params: [] }),
+        });
+        if (resReserv.ok) {
+          const data: Array<{ nome: string }> = await resReserv.json();
+          setReservatorios(data.map((d) => d.nome).filter(Boolean));
+        } else {
+          setReservatorios([]);
+        }
+      } catch {
+        setReservatorios([]);
+      }
+    })();
+  }, []);
 
   return (
     <FurnasSPAContainer>
@@ -680,12 +893,14 @@ function FurnasSPAPage() {
                 <ControlLabel>Reservatório</ControlLabel>
                 <ControlSelect
                   value={filters.reservatorio}
-                  onChange={(e) => setFilters({ ...filters, reservatorio: e.target.value })}
+                  onChange={(e) => updateDatesForReservatorio(e.target.value)}
                 >
                   <option value="">Todos os reservatórios</option>
-                  <option value="furnas">Furnas</option>
-                  <option value="itumbiara">Itumbiara</option>
-                  <option value="embarcacao">Embarcação</option>
+                  {reservatorios.map((nome) => (
+                    <option key={nome} value={nome}>
+                      {nome}
+                    </option>
+                  ))}
                 </ControlSelect>
               </ControlGroup>
               <ControlGroup>
@@ -713,7 +928,7 @@ function FurnasSPAPage() {
             </ControlsGrid>
 
             <ActionButtons>
-              <SearchButton onClick={handleSearch} disabled={loading}>
+              <SearchButton onClick={() => handleSearch(1)} disabled={loading}>
                 <Search size={20} />
                 {loading ? "Buscando..." : "Buscar Dados"}
               </SearchButton>
@@ -721,7 +936,12 @@ function FurnasSPAPage() {
                 <Filter size={20} />
                 Limpar Filtros
               </ClearButton>
-              <CsvExportButton data={[]} filename="dados_furnas.csv" />
+              <ExportCsvButton
+                data={rows as unknown[]}
+                filename="dados_furnas.csv"
+                onClick={() => setIsCsvModalOpen(true)}
+                disabled={loading}
+              />
             </ActionButtons>
           </ControlsSection>
 
@@ -741,31 +961,103 @@ function FurnasSPAPage() {
               <StyledTable>
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Reservatório</th>
-                    <th>Data</th>
-                    <th>CH₄ (mg/m²/d)</th>
-                    <th>CO₂ (mg/m²/d)</th>
-                    <th>N₂O (mg/m²/d)</th>
-                    <th>Temperatura (°C)</th>
-                    <th>Profundidade (m)</th>
+                    <th>
+                      <Hash size={16} /> ID
+                    </th>
+                    <th>
+                      <Calendar size={16} /> Data
+                    </th>
+                    <th>
+                      <Waves size={16} /> Nível
+                    </th>
+                    <th>
+                      <Package size={16} /> Vol. Útil
+                    </th>
+                    <th>
+                      <Percent size={16} /> % Vol. Útil
+                    </th>
+                    <th>
+                      <Zap size={16} /> Geração
+                    </th>
+                    <th>
+                      <Waves size={16} /> Vazão Afluente
+                    </th>
+                    <th>
+                      <Waves size={16} /> Vazão Defluente
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td
-                      colSpan={8}
-                      style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}
-                    >
-                      Selecione os filtros e clique em "Buscar Dados" para visualizar os resultados
-                    </td>
-                  </tr>
+                  {rows.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}>
+                        Selecione os filtros e clique em "Buscar Dados" para visualizar os resultados
+                      </td>
+                    </tr>
+                  ) : (
+                    rows.map((r: Record<string, unknown>) => (
+                      <tr key={String(r.iddadosrepresa)}>
+                        <td>{String(r.iddadosrepresa ?? "-")}</td>
+                        <td>
+                          {r.datamedida
+                            ? new Date(String(r.datamedida)).toLocaleDateString("pt-BR")
+                            : "-"}
+                        </td>
+                        <td>{String(r.nivelreservatorio ?? "-")}</td>
+                        <td>{String(r.volutilreservatorio ?? "-")}</td>
+                        <td>{String(r.porvolutilreservatorio ?? "-")}</td>
+                        <td>{String(r.geracao ?? "-")}</td>
+                        <td>{String(r.vazaoafluente ?? "-")}</td>
+                        <td>{String(r.vazaodefluente ?? "-")}</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </StyledTable>
             </TableContainer>
           )}
+
+          {rows.length > 0 && (
+            <PaginationContainer>
+              <PaginationButton
+                onClick={() => handlePageChange(pagination.page - 1)}
+                disabled={pagination.page <= 1}
+              >
+                <ChevronLeft size={16} />
+                Anterior
+              </PaginationButton>
+
+              <PaginationInfo>
+                Página {pagination.page} de {pagination.totalPages} ({pagination.total} registros)
+              </PaginationInfo>
+
+              <PaginationButton
+                onClick={() => handlePageChange(pagination.page + 1)}
+                disabled={pagination.page >= pagination.totalPages}
+              >
+                Próxima
+                <ChevronRight size={16} />
+              </PaginationButton>
+            </PaginationContainer>
+          )}
+
+          {rows.length === 0 && !loading && !error && (
+            <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+              Nenhum dado encontrado para o período selecionado.
+            </div>
+          )}
         </Section>
       </MainContent>
+      <CsvExportModalFurnas
+        $isOpen={isCsvModalOpen}
+        onClose={() => setIsCsvModalOpen(false)}
+        defaultFilename="dados_furnas.csv"
+        startDate={filters.startDate}
+        endDate={filters.endDate}
+        reservatorios={reservatorios}
+        reservatorioSelecionado={filters.reservatorio}
+        data={rows}
+      />
     </FurnasSPAContainer>
   );
 }

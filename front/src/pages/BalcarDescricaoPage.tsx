@@ -208,13 +208,13 @@ const ParameterItem = styled.li<{ $institution?: string }>`
 
 function BalcarDescricaoPage() {
   return (
-    <Section>
-      <SectionTitle>
+        <Section>
+          <SectionTitle>
         <FileText size={20} /> Sobre a Base de Dados
-      </SectionTitle>
-      <SectionText>
+          </SectionTitle>
+          <SectionText>
         A base de dados é formada pelos resultados de 79 campanhas realizadas pelas instituições participantes nos reservatórios listados abaixo. As datas compreendem o período de início e fim de cada campanha no reservatório. As datas de cada campanha podem variar de uma instituição para outra.
-      </SectionText>
+          </SectionText>
       <SectionText>
         Ao lado são listados os conjuntos de dados coletados por cada instituição.
       </SectionText>
@@ -222,9 +222,9 @@ function BalcarDescricaoPage() {
         Os dados fornecidos por Furnas não são provenientes de campanhas.
       </SectionText>
 
-      <SectionTitle>
+          <SectionTitle>
         <Calendar size={20} /> Campanhas por Reservatório
-      </SectionTitle>
+          </SectionTitle>
       <SectionText>
         A seguir são apresentadas as datas das campanhas realizadas por cada instituição participante nos diferentes reservatórios estudados.
       </SectionText>
@@ -293,37 +293,37 @@ function BalcarDescricaoPage() {
       <SectionText>
         A seguir são apresentados os conjuntos de dados coletados por cada instituição participante, incluindo informações sobre quantidade de coletas, campanhas, locais e parâmetros medidos.
       </SectionText>
-
-      <DatasetSection>
-        <DatasetTitle>FURNAS</DatasetTitle>
-        <InstitutionHeader $institution="FURNAS">
-          <InstitutionInfo>
-            <InstitutionName>FURNAS Centrais Elétricas</InstitutionName>
-            <InstitutionDescription>Dados operacionais e meteorológicos</InstitutionDescription>
-          </InstitutionInfo>
-        </InstitutionHeader>
-        <InstituicaoDatasetGrid>
-          <DatasetCard $institution="FURNAS">
-            <DatasetCardTitle $institution="FURNAS">
-              <InstitutionIcon $institution="FURNAS">📊</InstitutionIcon>
-              Dados de Precipitação
-            </DatasetCardTitle>
-            <DatasetStats>
+          
+          <DatasetSection>
+            <DatasetTitle>FURNAS</DatasetTitle>
+            <InstitutionHeader $institution="FURNAS">
+              <InstitutionInfo>
+                <InstitutionName>FURNAS Centrais Elétricas</InstitutionName>
+                <InstitutionDescription>Dados operacionais e meteorológicos</InstitutionDescription>
+              </InstitutionInfo>
+            </InstitutionHeader>
+            <InstituicaoDatasetGrid>
+              <DatasetCard $institution="FURNAS">
+                <DatasetCardTitle $institution="FURNAS">
+                  <InstitutionIcon $institution="FURNAS">📊</InstitutionIcon>
+                  Dados de Precipitação
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="FURNAS"><StatLabel>Quantidade de coletas:</StatLabel> 20.683</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="FURNAS">Precipitação (Medida diária)</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="FURNAS">
-            <DatasetCardTitle $institution="FURNAS">
-              <InstitutionIcon $institution="FURNAS">🌊</InstitutionIcon>
-              Nível do Reservatório
-            </DatasetCardTitle>
-            <DatasetStats>
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="FURNAS">
+                <DatasetCardTitle $institution="FURNAS">
+                  <InstitutionIcon $institution="FURNAS">🌊</InstitutionIcon>
+                  Nível do Reservatório
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="FURNAS"><StatLabel>Quantidade de coletas:</StatLabel> 8.470</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="FURNAS">Nível (Nível da água do reservatório à 0h00)</ParameterItem>
               <ParameterItem $institution="FURNAS">Volume útil (Volume útil do reservatório à 0h00)</ParameterItem>
               <ParameterItem $institution="FURNAS">Per. volume útil (Percentual do volume útil à 0h00)</ParameterItem>
@@ -334,46 +334,46 @@ function BalcarDescricaoPage() {
               <ParameterItem $institution="FURNAS">Vazão turbinada (Média diária)</ParameterItem>
               <ParameterItem $institution="FURNAS">Vazão vertida (Média diária)</ParameterItem>
               <ParameterItem $institution="FURNAS">Vazão turb. em vazio (Média diária)</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-        </InstituicaoDatasetGrid>
+                </ParameterList>
+              </DatasetCard>
+            </InstituicaoDatasetGrid>
 
-        <DatasetTitle>IIE</DatasetTitle>
-        <InstitutionHeader $institution="IIE">
-          <InstitutionInfo>
-            <InstitutionName>Instituto Internacional de Ecologia</InstitutionName>
-            <InstitutionDescription>Interface água-sedimento e parâmetros físico-químicos</InstitutionDescription>
-          </InstitutionInfo>
-        </InstitutionHeader>
-        <InstituicaoDatasetGrid>
-          <DatasetCard $institution="IIE">
-            <DatasetCardTitle $institution="IIE">
-              <InstitutionIcon $institution="IIE">🏔️</InstitutionIcon>
-              Água e Matéria Orgânica no Sedimento
-            </DatasetCardTitle>
-            <DatasetStats>
+            <DatasetTitle>IIE</DatasetTitle>
+            <InstitutionHeader $institution="IIE">
+              <InstitutionInfo>
+                <InstitutionName>Instituto Internacional de Ecologia</InstitutionName>
+                <InstitutionDescription>Interface água-sedimento e parâmetros físico-químicos</InstitutionDescription>
+              </InstitutionInfo>
+            </InstitutionHeader>
+            <InstituicaoDatasetGrid>
+              <DatasetCard $institution="IIE">
+                <DatasetCardTitle $institution="IIE">
+                  <InstitutionIcon $institution="IIE">🏔️</InstitutionIcon>
+                  Água e Matéria Orgânica no Sedimento
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="IIE"><StatLabel>Quantidade de coletas:</StatLabel> 1.283</StatItem>
               <StatItem $institution="IIE"><StatLabel>Quantidade de campanhas:</StatLabel> 27</StatItem>
               <StatItem $institution="IIE"><StatLabel>Locais distintos de coleta:</StatLabel> 243</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="IIE">Profundidade (Intervalo de profundidade da fatia de sedimento)</ParameterItem>
               <ParameterItem $institution="IIE">Cota (Nível da água)</ParameterItem>
               <ParameterItem $institution="IIE">Água (Conteúdo de água no sedimento)</ParameterItem>
               <ParameterItem $institution="IIE">Matéria orgânica (Conteúdo de matéria orgânica no sedimento)</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="IIE">
-            <DatasetCardTitle $institution="IIE">
-              <InstitutionIcon $institution="IIE">💨</InstitutionIcon>
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="IIE">
+                <DatasetCardTitle $institution="IIE">
+                  <InstitutionIcon $institution="IIE">💨</InstitutionIcon>
               Concentração de Gás na Água
-            </DatasetCardTitle>
-            <DatasetStats>
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="IIE"><StatLabel>Quantidade de coletas:</StatLabel> 1.008</StatItem>
               <StatItem $institution="IIE"><StatLabel>Quantidade de campanhas:</StatLabel> 27</StatItem>
               <StatItem $institution="IIE"><StatLabel>Locais distintos de coleta:</StatLabel> 244</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="IIE">Cota (Nível da água)</ParameterItem>
               <ParameterItem $institution="IIE">Altura (Altura sobre a interface)</ParameterItem>
               <ParameterItem $institution="IIE">Réplica</ParameterItem>
@@ -452,37 +452,37 @@ function BalcarDescricaoPage() {
               <ParameterItem $institution="IIE">Cota (Nível da água)</ParameterItem>
               <ParameterItem $institution="IIE">F⁻, Cl⁻, NO₂⁻, Br⁻, NO₃⁻, PO₄³⁻, SO₄²⁻</ParameterItem>
               <ParameterItem $institution="IIE">Na⁺, NH₄⁺, K⁺, Mg, Ca²⁺, Acetato</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="IIE">
-            <DatasetCardTitle $institution="IIE">
-              <InstitutionIcon $institution="IIE">🧪</InstitutionIcon>
-              Nutrientes no Sedimento
-            </DatasetCardTitle>
-            <DatasetStats>
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="IIE">
+                <DatasetCardTitle $institution="IIE">
+                  <InstitutionIcon $institution="IIE">🧪</InstitutionIcon>
+                  Nutrientes no Sedimento
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="IIE"><StatLabel>Quantidade de coletas:</StatLabel> 1.233</StatItem>
               <StatItem $institution="IIE"><StatLabel>Quantidade de campanhas:</StatLabel> 27</StatItem>
               <StatItem $institution="IIE"><StatLabel>Locais distintos de coleta:</StatLabel> 238</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="IIE">Profundidade (Intervalo de profundidade da fatia de sedimento)</ParameterItem>
               <ParameterItem $institution="IIE">Cota (Nível da água)</ParameterItem>
               <ParameterItem $institution="IIE">N₂ (Concentração de Nitrogênio Total Kjeldahl)</ParameterItem>
               <ParameterItem $institution="IIE">PT (Concentração de Fósforo Total)</ParameterItem>
               <ParameterItem $institution="IIE">TC (Concentração de Carbono Total)</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="IIE">
-            <DatasetCardTitle $institution="IIE">
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="IIE">
+                <DatasetCardTitle $institution="IIE">
               <InstitutionIcon $institution="IIE">🧪</InstitutionIcon>
               Variáveis Físicas e Químicas da Água
-            </DatasetCardTitle>
-            <DatasetStats>
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="IIE"><StatLabel>Quantidade de coletas:</StatLabel> 446</StatItem>
               <StatItem $institution="IIE"><StatLabel>Quantidade de campanhas:</StatLabel> 27</StatItem>
               <StatItem $institution="IIE"><StatLabel>Locais distintos de coleta:</StatLabel> 197</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="IIE">Profundidade (Profundidade de coleta)</ParameterItem>
               <ParameterItem $institution="IIE">Secchi (Profundidade do disco de Secchi)</ParameterItem>
               <ParameterItem $institution="IIE">Cota (Nível da água)</ParameterItem>
@@ -492,74 +492,74 @@ function BalcarDescricaoPage() {
               <ParameterItem $institution="IIE">NT (Nitrogênio Orgânico Total)</ParameterItem>
               <ParameterItem $institution="IIE">PT (Fósforo Total)</ParameterItem>
               <ParameterItem $institution="IIE">TDC (Carbono total dissolvido)</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-        </InstituicaoDatasetGrid>
+                </ParameterList>
+              </DatasetCard>
+            </InstituicaoDatasetGrid>
 
-        <DatasetTitle>INPE</DatasetTitle>
-        <InstitutionHeader $institution="INPE">
-          <InstitutionInfo>
-            <InstitutionName>Instituto Nacional de Pesquisas Espaciais</InstitutionName>
-            <InstitutionDescription>Fluxos de gases na interface água-atmosfera</InstitutionDescription>
-          </InstitutionInfo>
-        </InstitutionHeader>
-        <InstituicaoDatasetGrid>
-          <DatasetCard $institution="INPE">
-            <DatasetCardTitle $institution="INPE">
-              <InstitutionIcon $institution="INPE">🫧</InstitutionIcon>
-              Fluxo de Bolhas
-            </DatasetCardTitle>
-            <DatasetStats>
+            <DatasetTitle>INPE</DatasetTitle>
+            <InstitutionHeader $institution="INPE">
+              <InstitutionInfo>
+                <InstitutionName>Instituto Nacional de Pesquisas Espaciais</InstitutionName>
+                <InstitutionDescription>Fluxos de gases na interface água-atmosfera</InstitutionDescription>
+              </InstitutionInfo>
+            </InstitutionHeader>
+            <InstituicaoDatasetGrid>
+              <DatasetCard $institution="INPE">
+                <DatasetCardTitle $institution="INPE">
+                  <InstitutionIcon $institution="INPE">🫧</InstitutionIcon>
+                  Fluxo de Bolhas
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="INPE"><StatLabel>Quantidade de coletas:</StatLabel> 297</StatItem>
               <StatItem $institution="INPE"><StatLabel>Quantidade de campanhas:</StatLabel> 2</StatItem>
               <StatItem $institution="INPE"><StatLabel>Locais distintos de coleta:</StatLabel> 1</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="INPE">Profundidade (Profundidade média)</ParameterItem>
               <ParameterItem $institution="INPE">CH₄ (Fluxo de Bolhas)</ParameterItem>
               <ParameterItem $institution="INPE">Desvio padrão</ParameterItem>
               <ParameterItem $institution="INPE">Nro. de amostras</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="INPE">
-            <DatasetCardTitle $institution="INPE">
-              <InstitutionIcon $institution="INPE">🌬️</InstitutionIcon>
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="INPE">
+                <DatasetCardTitle $institution="INPE">
+                  <InstitutionIcon $institution="INPE">🌬️</InstitutionIcon>
               Fluxo Difusivo (INPE)
-            </DatasetCardTitle>
-            <DatasetStats>
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="INPE"><StatLabel>Quantidade de coletas:</StatLabel> 380</StatItem>
               <StatItem $institution="INPE"><StatLabel>Quantidade de campanhas:</StatLabel> 4</StatItem>
               <StatItem $institution="INPE"><StatLabel>Locais distintos de coleta:</StatLabel> 3</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="INPE">Profundidade</ParameterItem>
               <ParameterItem $institution="INPE">CO₂ (Fluxo de CO₂ na interface água-ar)</ParameterItem>
               <ParameterItem $institution="INPE">Desvio padrão CO₂, Nro. de amostras CO₂</ParameterItem>
               <ParameterItem $institution="INPE">CH₄ (Fluxo de CH₄ difusivo+bolhas na interface água-ar)</ParameterItem>
               <ParameterItem $institution="INPE">Desvio Padrão CH₄, Nro. de amostras CH₄</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-        </InstituicaoDatasetGrid>
+                </ParameterList>
+              </DatasetCard>
+            </InstituicaoDatasetGrid>
 
-        <DatasetTitle>UFJF</DatasetTitle>
-        <InstitutionHeader $institution="UFJF">
-          <InstitutionInfo>
-            <InstitutionName>Universidade Federal de Juiz de Fora</InstitutionName>
-            <InstitutionDescription>Produção primária e metabolismo na coluna d'água</InstitutionDescription>
-          </InstitutionInfo>
-        </InstitutionHeader>
-        <InstituicaoDatasetGrid>
-          <DatasetCard $institution="UFJF">
-            <DatasetCardTitle $institution="UFJF">
-              <InstitutionIcon $institution="UFJF">🧪</InstitutionIcon>
-              Abióticos na Coluna d'Água
-            </DatasetCardTitle>
-            <DatasetStats>
+            <DatasetTitle>UFJF</DatasetTitle>
+            <InstitutionHeader $institution="UFJF">
+              <InstitutionInfo>
+                <InstitutionName>Universidade Federal de Juiz de Fora</InstitutionName>
+                <InstitutionDescription>Produção primária e metabolismo na coluna d'água</InstitutionDescription>
+              </InstitutionInfo>
+            </InstitutionHeader>
+            <InstituicaoDatasetGrid>
+              <DatasetCard $institution="UFJF">
+                <DatasetCardTitle $institution="UFJF">
+                  <InstitutionIcon $institution="UFJF">🧪</InstitutionIcon>
+                  Abióticos na Coluna d'Água
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="UFJF"><StatLabel>Quantidade de coletas:</StatLabel> 120</StatItem>
               <StatItem $institution="UFJF"><StatLabel>Quantidade de campanhas:</StatLabel> 20</StatItem>
               <StatItem $institution="UFJF"><StatLabel>Locais distintos de coleta:</StatLabel> 9</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="UFJF">Profundidade (Profundidade de coleta)</ParameterItem>
               <ParameterItem $institution="UFJF">DIC (Carbono inorgânico dissolvido)</ParameterItem>
               <ParameterItem $institution="UFJF">NT (Nitrogênio), PT (Fósforo Total)</ParameterItem>
@@ -580,19 +580,19 @@ function BalcarDescricaoPage() {
               <ParameterItem $institution="UFJF">DIC (Carbono inorgânico dissolvido)</ParameterItem>
               <ParameterItem $institution="UFJF">NT (Nitrogênio), PT (Fósforo Total)</ParameterItem>
               <ParameterItem $institution="UFJF">Delta 13C, Delta 15N</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="UFJF">
-            <DatasetCardTitle $institution="UFJF">
-              <InstitutionIcon $institution="UFJF">🔬</InstitutionIcon>
-              Bióticos na Coluna d'Água
-            </DatasetCardTitle>
-            <DatasetStats>
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="UFJF">
+                <DatasetCardTitle $institution="UFJF">
+                  <InstitutionIcon $institution="UFJF">🔬</InstitutionIcon>
+                  Bióticos na Coluna d'Água
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="UFJF"><StatLabel>Quantidade de coletas:</StatLabel> 120</StatItem>
               <StatItem $institution="UFJF"><StatLabel>Quantidade de campanhas:</StatLabel> 20</StatItem>
               <StatItem $institution="UFJF"><StatLabel>Locais distintos de coleta:</StatLabel> 9</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="UFJF">Profundidade (Profundidade de coleta)</ParameterItem>
               <ParameterItem $institution="UFJF">DOC, POC, TOC (Carbono orgânico)</ParameterItem>
               <ParameterItem $institution="UFJF">Densidade bactéria, Biomassa bactéria</ParameterItem>
@@ -617,19 +617,19 @@ function BalcarDescricaoPage() {
               <ParameterItem $institution="UFJF">Clorofila, Biomassa carbono total fito</ParameterItem>
               <ParameterItem $institution="UFJF">Densidade total fito, Biomassa zoo</ParameterItem>
               <ParameterItem $institution="UFJF">Densidade total zoo</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="UFJF">
-            <DatasetCardTitle $institution="UFJF">
-              <InstitutionIcon $institution="UFJF">📈</InstitutionIcon>
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="UFJF">
+                <DatasetCardTitle $institution="UFJF">
+                  <InstitutionIcon $institution="UFJF">📈</InstitutionIcon>
               Fluxos de Carbono
-            </DatasetCardTitle>
-            <DatasetStats>
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="UFJF"><StatLabel>Quantidade de coletas:</StatLabel> 19</StatItem>
               <StatItem $institution="UFJF"><StatLabel>Quantidade de campanhas:</StatLabel> 19</StatItem>
               <StatItem $institution="UFJF"><StatLabel>Locais distintos de coleta:</StatLabel> 8</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="UFJF">Produção fitoplanctônica</ParameterItem>
               <ParameterItem $institution="UFJF">Carbono orgânico excretado</ParameterItem>
               <ParameterItem $institution="UFJF">Respiração fito</ParameterItem>
@@ -703,29 +703,29 @@ function BalcarDescricaoPage() {
               <ParameterItem $institution="UFJF">Taxa de sedimentação</ParameterItem>
               <ParameterItem $institution="UFJF">Delta 13C, Delta 15N</ParameterItem>
               <ParameterItem $institution="UFJF">Intensidade luminosa</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-        </InstituicaoDatasetGrid>
+                </ParameterList>
+              </DatasetCard>
+            </InstituicaoDatasetGrid>
 
-        <DatasetTitle>UFRJ</DatasetTitle>
-        <InstitutionHeader $institution="UFRJ">
-          <InstitutionInfo>
-            <InstitutionName>Universidade Federal do Rio de Janeiro - COPPE</InstitutionName>
-            <InstitutionDescription>Fluxos de gases e sedimentação de carbono</InstitutionDescription>
-          </InstitutionInfo>
-        </InstitutionHeader>
-        <InstituicaoDatasetGrid>
-          <DatasetCard $institution="UFRJ">
-            <DatasetCardTitle $institution="UFRJ">
-              <InstitutionIcon $institution="UFRJ">🫧</InstitutionIcon>
-              Bolhas
-            </DatasetCardTitle>
-            <DatasetStats>
+            <DatasetTitle>UFRJ</DatasetTitle>
+            <InstitutionHeader $institution="UFRJ">
+              <InstitutionInfo>
+                <InstitutionName>Universidade Federal do Rio de Janeiro - COPPE</InstitutionName>
+                <InstitutionDescription>Fluxos de gases e sedimentação de carbono</InstitutionDescription>
+              </InstitutionInfo>
+            </InstitutionHeader>
+            <InstituicaoDatasetGrid>
+              <DatasetCard $institution="UFRJ">
+                <DatasetCardTitle $institution="UFRJ">
+                  <InstitutionIcon $institution="UFRJ">🫧</InstitutionIcon>
+                  Bolhas
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de coletas:</StatLabel> 396</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de campanhas:</StatLabel> 27</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Locais distintos de coleta:</StatLabel> 119</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="UFRJ">Profundidade (Profundidade de coleta)</ParameterItem>
               <ParameterItem $institution="UFRJ">Nro. de funis</ParameterItem>
               <ParameterItem $institution="UFRJ">Volume coletado</ParameterItem>
@@ -787,19 +787,19 @@ function BalcarDescricaoPage() {
               <ParameterItem $institution="UFRJ">TOC (Carbono orgânico total)</ParameterItem>
               <ParameterItem $institution="UFRJ">DIC (Carbono inorgânico dissolvido)</ParameterItem>
               <ParameterItem $institution="UFRJ">TC (Carbono total)</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="UFRJ">
-            <DatasetCardTitle $institution="UFRJ">
-              <InstitutionIcon $institution="UFRJ">🌬️</InstitutionIcon>
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="UFRJ">
+                <DatasetCardTitle $institution="UFRJ">
+                  <InstitutionIcon $institution="UFRJ">🌬️</InstitutionIcon>
               Difusão
-            </DatasetCardTitle>
-            <DatasetStats>
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de coletas:</StatLabel> 654</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de campanhas:</StatLabel> 27</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Locais distintos de coleta:</StatLabel> 368</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="UFRJ">CH₄ (Metano)</ParameterItem>
               <ParameterItem $institution="UFRJ">CO₂ (Dióxido de carbono)</ParameterItem>
               <ParameterItem $institution="UFRJ">N₂O (Óxido nitroso)</ParameterItem>
@@ -808,57 +808,57 @@ function BalcarDescricaoPage() {
               <ParameterItem $institution="UFRJ">Profundidade (Profundidade de coleta)</ParameterItem>
               <ParameterItem $institution="UFRJ">Altitude (Altitude do local da medida)</ParameterItem>
               <ParameterItem $institution="UFRJ">Vel. do vento</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="UFRJ">
-            <DatasetCardTitle $institution="UFRJ">
-              <InstitutionIcon $institution="UFRJ">💧</InstitutionIcon>
-              Dupla Dessorção da Água
-            </DatasetCardTitle>
-            <DatasetStats>
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="UFRJ">
+                <DatasetCardTitle $institution="UFRJ">
+                  <InstitutionIcon $institution="UFRJ">💧</InstitutionIcon>
+                  Dupla Dessorção da Água
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de coletas:</StatLabel> 535</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de campanhas:</StatLabel> 19</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Locais distintos de coleta:</StatLabel> 45</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="UFRJ">Profundidade (Profundidade de coleta)</ParameterItem>
               <ParameterItem $institution="UFRJ">CO₂ (Volume de água: 250 ml)</ParameterItem>
               <ParameterItem $institution="UFRJ">O₂ (Volume de água: 250 ml)</ParameterItem>
               <ParameterItem $institution="UFRJ">N₂ (Volume de água: 250 ml)</ParameterItem>
               <ParameterItem $institution="UFRJ">CH₄ (Volume de água: 250 ml)</ParameterItem>
               <ParameterItem $institution="UFRJ">N₂O (Volume de água: 250 ml)</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="UFRJ">
-            <DatasetCardTitle $institution="UFRJ">
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="UFRJ">
+                <DatasetCardTitle $institution="UFRJ">
               <InstitutionIcon $institution="UFRJ">🫧</InstitutionIcon>
               Gases em Bolhas
-            </DatasetCardTitle>
-            <DatasetStats>
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de coletas:</StatLabel> 20</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de campanhas:</StatLabel> 7</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Locais distintos de coleta:</StatLabel> 11</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="UFRJ">Profundidade (Profundidade de coleta)</ParameterItem>
               <ParameterItem $institution="UFRJ">CO₂ (Máximo volume de gás extraível de 250 ml)</ParameterItem>
               <ParameterItem $institution="UFRJ">O₂ (Máximo volume de gás extraível de 250 ml)</ParameterItem>
               <ParameterItem $institution="UFRJ">N₂ (Máximo volume de gás extraível de 250 ml)</ParameterItem>
               <ParameterItem $institution="UFRJ">CH₄ (Máximo volume de gás extraível de 250 ml)</ParameterItem>
               <ParameterItem $institution="UFRJ">N₂O (Máximo volume de gás extraível de 250 ml)</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-          <DatasetCard $institution="UFRJ">
-            <DatasetCardTitle $institution="UFRJ">
+                </ParameterList>
+              </DatasetCard>
+              <DatasetCard $institution="UFRJ">
+                <DatasetCardTitle $institution="UFRJ">
               <InstitutionIcon $institution="UFRJ">🧪</InstitutionIcon>
               Parâmetros Físicos e Químicos
-            </DatasetCardTitle>
-            <DatasetStats>
+                </DatasetCardTitle>
+                <DatasetStats>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de coletas:</StatLabel> 1.547</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Quantidade de campanhas:</StatLabel> 27</StatItem>
               <StatItem $institution="UFRJ"><StatLabel>Locais distintos de coleta:</StatLabel> 103</StatItem>
-            </DatasetStats>
-            <ParameterList>
+                </DatasetStats>
+                <ParameterList>
               <ParameterItem $institution="UFRJ">Profundidade (Profundidade de coleta)</ParameterItem>
               <ParameterItem $institution="UFRJ">Cota (Nível da água)</ParameterItem>
               <ParameterItem $institution="UFRJ">Temp. do ar, Temp. da água</ParameterItem>
@@ -866,10 +866,10 @@ function BalcarDescricaoPage() {
               <ParameterItem $institution="UFRJ">pH</ParameterItem>
               <ParameterItem $institution="UFRJ">Potencial REDOX</ParameterItem>
               <ParameterItem $institution="UFRJ">Vel. do vento</ParameterItem>
-            </ParameterList>
-          </DatasetCard>
-        </InstituicaoDatasetGrid>
-      </DatasetSection>
+                </ParameterList>
+              </DatasetCard>
+            </InstituicaoDatasetGrid>
+          </DatasetSection>
 
       <ReservatorioSection>
         <ReservatorioTitle>Estreito</ReservatorioTitle>
@@ -1226,7 +1226,7 @@ function BalcarDescricaoPage() {
           </InstituicaoCard>
         </InstituicaoGrid>
       </ReservatorioSection>
-    </Section>
+        </Section>
   );
 }
 

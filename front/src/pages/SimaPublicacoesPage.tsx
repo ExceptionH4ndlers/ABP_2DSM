@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { BookOpen, FileText, Calendar, Hash, Layers, Book, ExternalLink } from "lucide-react";
-import { publicationsData as simaPublicationsData } from "./SimaSPAPage";
 
 // Container and section styles aligned with SimaSPAPage
 const PageContainer = styled.div`
@@ -335,7 +334,7 @@ type Publication = {
   issn: string | null;
   link: string | null;
 };
-const publicationsData: Publication[] = simaPublicationsData as Publication[];
+const publicationsData: Publication[] = [];
 
 function SimaPublicacoesPage() {
   const [searchTerm, setSearchTerm] = useState("");
