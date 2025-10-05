@@ -106,7 +106,7 @@ app/
 │   ├── vite.config.ts
 │   └── package.json
 │
-├── .github/workflows/ci.yml       # Pipeline de Integração Contínua
+├── .github/workflows/             # (planejado) Pipelines de Integração Contínua
 └── docker-compose.dev.yml         # Definições dos serviços Docker para ambiente de desenvolvimento
 ```
 
@@ -134,10 +134,9 @@ app/
 - Volumes persistentes para dados
 - Cada banco acessível em uma porta distinta (5433, 5434, 5435)
 
-**CI/CD**
-- GitHub Actions (`.github/workflows/ci.yml`)
-- Pipeline roda automaticamente em push e pull requests para a branch `main`
-- Estrutura de Jobs: `server-ci`, `front-ci` e `docker-ci`
+**CI/CD (planejado)**
+- Este repositório ainda não possui pipeline ativo em `.github/workflows`.
+- Plano: adicionar lint, build e testes para `server/` e `front/` em PRs na `main`.
 
 ### ▶️ Como Executar o Projeto
 
@@ -156,22 +155,253 @@ docker compose -f docker-compose.dev.yml down
 cd server
 npm install
 npm run dev
-# API disponível em: http://localhost:3001
+# API disponível em (local): http://localhost:3000
 
 # Front-end
 cd front
 npm install
 npm run dev
-# App disponível em: http://localhost:3002
+# App disponível em (local): http://localhost:5173
 ```
+
+> Observação: as portas mapeadas via Docker são diferentes das portas padrão em desenvolvimento local (Vite 5173 e API 3000).
+
+### 🔐 Variáveis de Ambiente (.env)
+
+Crie um arquivo `.env` em `server/` quando rodar localmente:
+
+```ini
+# Porta interna do servidor Express
+PORT=3000
+
+# Quando em Docker, o log usa HOST_PORT (mapeado para 3001 no compose)
+HOST_PORT=3001
+
+# Bancos quando executando LOCAL (conectando nos containers via host)
+DB_FURNAS_HOST=localhost
+DB_FURNAS_PORT=5433
+DB_FURNAS_USER=postgres
+DB_FURNAS_PASSWORD=postgres
+DB_FURNAS_NAME=bdfurnas-campanha
+
+DB_SIMA_HOST=localhost
+DB_SIMA_PORT=5434
+DB_SIMA_USER=postgres
+DB_SIMA_PASSWORD=postgres
+DB_SIMA_NAME=bdsima
+
+DB_BALCAR_HOST=localhost
+DB_BALCAR_PORT=5435
+DB_BALCAR_USER=postgres
+DB_BALCAR_PASSWORD=postgres
+DB_BALCAR_NAME=bdbalcar-campanha
+
+# CORS para o front local
+CORS_ORIGIN=http://localhost:5173
+
+# Página padrão de paginação
+PAGE_SIZE=20
+
+# Nível de log
+LOG_LEVEL=debug
+```
+
+No Docker, as variáveis já estão definidas no `docker-compose.dev.yml`.
 
 ### 🌐 Acessando a Aplicação
 
-- **Front-end (React)**: http://localhost:3002
-- **Back-end (API Node)**: http://localhost:3001
-  - Exemplo: http://localhost:3001/sima/sima/all?page=1&limit=20
+- **Front-end (React)**:
+  - Local: http://localhost:5173
+  - Docker: http://localhost:3002
+- **Back-end (API Node)**:
+  - Local: http://localhost:3000
+  - Docker: http://localhost:3001
+  - Exemplo (Docker): http://localhost:3001/sima/sima/all?page=1&limit=20
 
 ---
+
+<details>
+<summary><b>📡 Referência de API</b></summary>
+
+### 📡 Referência de API (resumo)
+
+Rotas base:
+
+- `/sima` — dados e metadados do SIMA
+- `/furnas` — dados de campanhas Furnas
+- `/balcar` — dados de campanhas BALCAR
+
+Exemplos (SIMA):
+
+```http
+GET /sima/sima/all?page=1&limit=20
+```
+
+</details>
+
+```http
+POST /sima/query/select
+Content-Type: application/json
+
+{
+  "query": "SELECT * FROM tbsima LIMIT 10"
+}
+```
+
+Observações:
+- Respostas paginadas respeitam `PAGE_SIZE` padrão (pode ser alterado via env).
+- O CORS permite origem do front configurada em `CORS_ORIGIN`.
+
+Endpoints úteis (Furnas):
+
+```http
+GET /furnas/campanha/all
+GET /furnas/reservatorio/all
+GET /furnas/meta/tables
+GET /furnas/meta/tables/:table/columns
+POST /furnas/query/select
+```
+
+Endpoints úteis (BALCAR):
+
+```http
+GET /balcar/campanha/all
+GET /balcar/reservatorio/all
+GET /balcar/instituicao/all
+GET /balcar/tabelacampo/all
+GET /balcar/meta/tables
+GET /balcar/meta/tables/:table/columns
+POST /balcar/query/select
+```
+
+Endpoints úteis (SIMA):
+
+```http
+GET /sima/sima/all
+GET /sima/simaoffline/all
+GET /sima/estacao/all
+GET /sima/estacao/simple
+GET /sima/meta/tables
+GET /sima/meta/tables/:table/columns
+POST /sima/query/select
+```
+
+---
+
+### 🧭 Guia rápido do usuário
+
+- **Navegação**: utilize o menu para acessar `SIMA`, `Furnas` e `BALCAR`.
+- **Filtragem**: aplique filtros por estação/tabela antes de consultar.
+- **Exportar CSV**: clique em “Exportar CSV” nas listagens; o arquivo baixa com cabeçalhos e metadados.
+- **Séries temporais (SIMA)**: selecione a estação e o período para visualizar os gráficos.
+
+---
+
+<details>
+<summary><b>✅ Qualidade e Processo</b></summary>
+
+### ✅ Definition of Done (DoD)
+
+- Código com lint e formatação OK (`npm run lint`, `npm run format`).
+- Build local sem erros no `front/` e `server/`.
+- Endpoint documentado em “Referência de API” (quando aplicável).
+- Testes manuais básicos executados (fluxos principais e exportação CSV).
+- Logs sem erros no `logs/error.log` durante o uso básico.
+- Critérios de aceite atendidos e revisados pelo time.
+
+---
+
+### ♿ Acessibilidade e Usabilidade
+
+- Contraste e tipografia legível; responsividade nas principais páginas.
+- Elementos interativos com feedback visual (loading, desabilitado, erro).
+- Títulos e rótulos claros; termos consistentes ao longo da UI.
+- Próximos passos: navegação por teclado, foco visível, descrição alternativa nas imagens do banner.
+
+---
+
+### 🧪 Checklist de Qualidade e Critérios de Aceite
+
+- Requisitos funcionais cobertos (RF01–RF05).
+- Exportação CSV com cabeçalhos e metadados conforme guia.
+- Tempo de resposta aceitável nas listagens e gráficos SIMA.
+- Tratamento de erros de rede exibindo mensagem amigável.
+- Compatibilidade validada em Chrome/Edge recentes.
+- Critérios de aceite específicos por história confirmados no Sprint Review.
+
+---
+
+### 🔎 Sprint 1 — Review (curto)
+
+- Objetivo: entregar MVP com visualização básica, consulta e exportação.
+- Demonstração: front navegável, API respondendo, bancos populados via scripts.
+- Feedback: priorizar filtros avançados, melhorar mensagens de erro e guias na UI.
+- Decisão: manter arquitetura atual; planejar automação de CI na Sprint 2.
+
+---
+
+</details>
+
+<details>
+<summary><b>🧰 Troubleshooting</b></summary>
+
+### 🧰 Troubleshooting
+
+- **Porta ocupada (5173 ou 3000)**: finalize o processo ou altere a porta no Vite/`.env`.
+- **API local não responde em 3001**: em desenvolvimento local a API roda em 3000; 3001 é o mapeamento do Docker.
+- **Erro de CORS**: ajuste `CORS_ORIGIN` no `.env` do `server/` para o endereço do front.
+- **Reimportar CSVs**: pare os containers Postgres, remova os volumes `*_data` e suba novamente para reexecutar `create-table.sql` e `copy-table.sql`.
+- **Hot reload no Docker**: já habilitado via `CHOKIDAR_USEPOLLING=true` e bind mounts em `docker-compose.dev.yml`.
+
+---
+
+### 🗃️ Guia SQL rápido (sem Docker)
+
+Pré-requisitos: PostgreSQL instalado e `psql` disponível no PATH.
+
+```bash
+# Criar bancos
+createdb bdfurnas-campanha
+createdb bdsima
+createdb bdbalcar-campanha
+
+# Executar scripts de criação
+psql -d bdfurnas-campanha -f furnas-campanha/create-table.sql
+psql -d bdfurnas-campanha -f furnas-campanha/copy-table.sql
+
+psql -d bdsima -f sima/create-table.sql
+psql -d bdsima -f sima/copy-table.sql
+
+psql -d bdbalcar-campanha -f balcar-campanha/create-table.sql
+psql -d bdbalcar-campanha -f balcar-campanha/copy-table.sql
+```
+
+Obs.: Ajuste usuário/senha via variáveis `PGUSER` e `PGPASSWORD` se necessário.
+
+---
+
+### 🔑 Dicas de ambiente
+
+- Em Windows, use PowerShell/WSL para executar `psql`.
+- Se precisar resetar dados, remova volumes Docker e suba novamente.
+
+</details>
+<details>
+<summary><b>🎨 Design e Diagramas</b></summary>
+
+### 🎨 Design e Diagramas
+
+- Protótipos (PDFs): pasta `figma/` (várias telas).
+- Diagramas (Astah): pasta `diagramas/` (`*.asta`).
+- Modelos conceituais dos bancos: `balcar-campanha/*-modelo.xml`, `furnas-campanha/*-modelo.xml`, `sima/sima-modelo.xml`.
+
+---
+
+### 🧾 Logs
+
+- Logs de aplicação ficam em `logs/` (`combined.log`, `error.log`), gerenciados por `winston`.
+
+</details>
 
 <details>
 <summary><b>📤 Exportação de Dados em CSV</b></summary>
@@ -523,7 +753,7 @@ O passo a passo seguido para a validação foi o seguinte:
 
 #### 🏗️ **Infraestrutura Sólida**
 - **Docker configurado**: Ambiente de desenvolvimento containerizado funcionando
-- **CI/CD implementado**: Pipeline de integração contínua ativo
+- **CI/CD (planejado)**: Pipeline em definição para automatizar lint/build/test
 - **Estrutura de projeto definida**: Organização clara entre front-end, back-end e bancos de dados
 
 ### 📈 **Lições Aprendidas**
