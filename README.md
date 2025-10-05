@@ -484,6 +484,18 @@ Conforme o projeto evolui, novos artefatos serão adicionados:
 
 A primeira sprint do projeto foi marcada por desafios significativos que impactaram nossa produtividade, mas mesmo assim conseguimos entregar um MVP funcional próximo ao planejado.
 
+## 🧩 Validação de Tasks
+
+As tasks foram validadas conforme os requisitos estabelecidos e a participação e contribuição de cada integrante no projeto, considerando as ideias definidas tanto pelo grupo quanto pelos professores.
+
+### 🔍 Processo de Validação
+
+O passo a passo seguido para a validação foi o seguinte:
+
+1. Verificar se a task estava devidamente **commitada no repositório GitHub** do grupo;  
+2. Ir até a **mesa do integrante** responsável para observar como ele(a) desenvolveu cada detalhe, entender suas dúvidas e analisar os resultados obtidos;  
+3. Adicionar um **novo comentário no card correspondente no Trello**, descrevendo a avaliação feita sobre o resultado do integrante e a qualidade da entrega.
+
 ### 🚧 **Principais Desafios Enfrentados**
 
 #### 📢 **Comunicação e Coordenação**
