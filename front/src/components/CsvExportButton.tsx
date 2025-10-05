@@ -140,7 +140,7 @@ export const CsvExportButton: React.FC<ExportButtonProps> = ({
       <CsvExportModal
         $isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        data={data}
+        data={data as unknown as Array<Record<string, unknown>>}
         defaultFilename={filename}
       />
     </>

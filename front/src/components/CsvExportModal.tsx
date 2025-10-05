@@ -13,7 +13,7 @@ interface EstacaoItem {
 interface CsvExportModalProps {
   $isOpen: boolean;
   onClose: () => void;
-  data: unknown[];
+  data: Array<Record<string, unknown>>;
   defaultFilename?: string;
   estacoes?: EstacaoItem[];
   selectedEstacao?: string;

@@ -12,7 +12,7 @@ interface CsvExportModalFurnasProps {
   endDate: string;
   reservatorios: string[];
   reservatorioSelecionado: string;
-  data: unknown[];
+  data: Array<Record<string, unknown>>;
 }
 
 const Overlay = styled.div<{ $isOpen: boolean }>`

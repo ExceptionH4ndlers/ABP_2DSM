@@ -12,7 +12,7 @@ interface CsvExportModalBalcarProps {
   endDate: string;
   reservatorios: string[];
   reservatorioSelecionado: string;
-  data: unknown[];
+  data: Array<Record<string, unknown>>;
 }
 
 const Overlay = styled.div<{ $isOpen: boolean }>`
@@ -139,7 +139,7 @@ export const CsvExportModalBalcar: React.FC<CsvExportModalBalcarProps> = ({
   };
 
   const handleExport = async () => {
-    await exportCsv(data, filename, options);
+    await exportCsv(data as Array<Record<string, unknown>>, filename, options);
     clearError();
     onClose();
   };

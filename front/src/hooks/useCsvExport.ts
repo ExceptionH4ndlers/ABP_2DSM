@@ -2,12 +2,24 @@ import { useState, useCallback } from "react";
 import { simaCsvParser } from "../utils/csvParser";
 import type { SimaData, CsvExportOptions } from "../utils/csvParser";
 
+type GenericRow = Record<string, unknown>;
+
+function hasSimaShape(rows: unknown[]): rows is SimaData[] {
+  if (!Array.isArray(rows) || rows.length === 0) return false;
+  const first = rows[0] as Record<string, unknown>;
+  return "idsima" in first && "idestacao" in first && "datahora" in first;
+}
+
+function isDateLike(value: unknown): value is string | number | Date {
+  return typeof value === "string" || typeof value === "number" || value instanceof Date;
+}
+
 export interface UseCsvExportReturn {
   isExporting: boolean;
   exportError: string | null;
-  exportCsv: (data: any[], filename?: string, options?: CsvExportOptions) => Promise<void>;
-  generateCsvContent: (data: any[], options?: CsvExportOptions) => Promise<string>;
-  validateData: (data: any[]) => { isValid: boolean; errors: string[] };
+  exportCsv: (data: GenericRow[], filename?: string, options?: CsvExportOptions) => Promise<void>;
+  generateCsvContent: (data: GenericRow[], options?: CsvExportOptions) => Promise<string>;
+  validateData: (data: GenericRow[]) => { isValid: boolean; errors: string[] };
   clearError: () => void;
 }
 
@@ -20,16 +32,13 @@ export const useCsvExport = (): UseCsvExportReturn => {
   }, []);
 
   const exportCsv = useCallback(
-    async (data: any[], filename?: string, options?: CsvExportOptions) => {
+    async (data: GenericRow[], filename?: string, options?: CsvExportOptions) => {
       try {
         setIsExporting(true);
         setExportError(null);
 
-        let dataToExport = data;
-        const isSimaShape =
-          Array.isArray(dataToExport) &&
-          dataToExport[0] &&
-          (dataToExport[0] as any).idsima !== undefined;
+        let dataToExport = data as GenericRow[];
+        const simaShape = hasSimaShape(dataToExport);
 
         // Se há filtros no modal, sempre buscar dados da API (ignorar dados da tabela)
         if (
@@ -52,7 +61,7 @@ export const useCsvExport = (): UseCsvExportReturn => {
           queryParams.append("page", "1");
           queryParams.append("limit", "10000");
 
-          if (isSimaShape) {
+          if (simaShape) {
             const response = await fetch(`http://localhost:3001/sima/all?${queryParams}`);
 
             if (response.ok) {
@@ -71,8 +80,8 @@ export const useCsvExport = (): UseCsvExportReturn => {
           );
         }
 
-        if (isSimaShape) {
-          const validation = simaCsvParser.validateData(dataToExport as SimaData[]);
+        if (hasSimaShape(dataToExport)) {
+          const validation = simaCsvParser.validateData(dataToExport);
           if (!validation.isValid) {
             throw new Error(`Dados inválidos: ${validation.errors.join(", ")}`);
           }
@@ -91,20 +100,17 @@ export const useCsvExport = (): UseCsvExportReturn => {
           ...options,
         };
 
-        if (isSimaShape) {
-          await simaCsvParser.downloadCsv(
-            dataToExport as SimaData[],
-            defaultFilename,
-            defaultOptions,
-          );
+        if (hasSimaShape(dataToExport)) {
+          await simaCsvParser.downloadCsv(dataToExport, defaultFilename, defaultOptions);
         } else {
           // Genérico: aplica metadados, cabeçalhos, separador e encoding
-          const keys = Object.keys(dataToExport[0] || {});
+          const keys = Object.keys((dataToExport[0] || {}) as GenericRow);
 
-          const formatDate = (value: any): string => {
+          const formatDate = (value: unknown): string => {
             if (!value) return "";
-            const d = new Date(value);
-            if (isNaN(d.getTime())) return String(value);
+            if (!isDateLike(value)) return String(value);
+            const d = new Date(value as string | number | Date);
+            if (Number.isNaN(d.getTime())) return String(value);
             switch (defaultOptions.formatoData) {
               case "BR":
                 return d.toLocaleString("pt-BR");
@@ -125,14 +131,15 @@ export const useCsvExport = (): UseCsvExportReturn => {
 
           if (defaultOptions.incluirMetadados) {
             const hoje = new Date().toISOString();
-            const dataInicio = (defaultOptions.filtros as any)?.dataInicio || "";
-            const dataFim = (defaultOptions.filtros as any)?.dataFim || "";
-            const estacao = (defaultOptions.filtros as any)?.estacao || ""; // pode ser reservatório
+            const filtros = (defaultOptions.filtros || {}) as Record<string, string>;
+            const dataInicio = filtros.dataInicio || "";
+            const dataFim = filtros.dataFim || "";
+            const estacao = filtros.estacao || ""; // pode ser reservatório
             lines.push(`# METADADOS DO ARQUIVO CSV`);
             lines.push(`# Gerado em: ${hoje}`);
             if (dataInicio || dataFim) lines.push(`# Período: ${dataInicio} a ${dataFim}`);
             if (estacao) lines.push(`# Filtro: ${estacao}`);
-            lines.push(`# Total de Registros: ${(dataToExport as any[]).length}`);
+            lines.push(`# Total de Registros: ${dataToExport.length}`);
             lines.push("#");
           }
 
@@ -140,12 +147,11 @@ export const useCsvExport = (): UseCsvExportReturn => {
             lines.push(keys.join(defaultOptions.separador));
           }
 
-          (dataToExport as any[]).forEach((row) => {
+          (dataToExport as GenericRow[]).forEach((row) => {
             const vals = keys.map((k) => {
-              const val = (row as any)[k];
-              const isDateLike =
-                typeof val === "string" && /\d{4}-\d{2}-\d{2}/.test(val.toString());
-              const out = isDateLike ? formatDate(val) : String(val ?? "");
+              const val = row[k as keyof GenericRow];
+              const looksDate = typeof val === "string" && /\d{4}-\d{2}-\d{2}/.test(val.toString());
+              const out = looksDate ? formatDate(val) : String(val ?? "");
               return escapeVal(out);
             });
             lines.push(vals.join(defaultOptions.separador));
@@ -180,13 +186,13 @@ export const useCsvExport = (): UseCsvExportReturn => {
   );
 
   const generateCsvContent = useCallback(
-    async (data: any[], options?: CsvExportOptions): Promise<string> => {
+    async (data: GenericRow[], options?: CsvExportOptions): Promise<string> => {
       try {
         setExportError(null);
 
-        const isSimaShape = Array.isArray(data) && data[0] && (data[0] as any).idsima !== undefined;
-        if (isSimaShape) {
-          const validation = simaCsvParser.validateData(data as SimaData[]);
+        const simaShape = hasSimaShape(data);
+        if (simaShape) {
+          const validation = simaCsvParser.validateData(data);
           if (!validation.isValid) {
             throw new Error(`Dados inválidos: ${validation.errors.join(", ")}`);
           }
@@ -202,14 +208,15 @@ export const useCsvExport = (): UseCsvExportReturn => {
           ...options,
         };
 
-        if (isSimaShape) {
+        if (simaShape) {
           return await simaCsvParser.generateCsv(data as SimaData[], defaultOptions);
         }
-        const keys = Object.keys(data[0] || {});
-        const formatDate = (value: any): string => {
+        const keys = Object.keys((data[0] || {}) as GenericRow);
+        const formatDate = (value: unknown): string => {
           if (!value) return "";
-          const d = new Date(value);
-          if (isNaN(d.getTime())) return String(value);
+          if (!isDateLike(value)) return String(value);
+          const d = new Date(value as string | number | Date);
+          if (Number.isNaN(d.getTime())) return String(value);
           switch (defaultOptions.formatoData) {
             case "BR":
               return d.toLocaleString("pt-BR");
@@ -225,17 +232,17 @@ export const useCsvExport = (): UseCsvExportReturn => {
         const lines: string[] = [];
         if (defaultOptions.incluirMetadados) {
           lines.push(`# METADADOS DO ARQUIVO CSV`);
-          lines.push(`# Total de Registros: ${(data as any[]).length}`);
+          lines.push(`# Total de Registros: ${data.length}`);
           lines.push("#");
         }
         if (defaultOptions.incluirCabecalhos) {
           lines.push(keys.join(defaultOptions.separador));
         }
-        (data as any[]).forEach((row) => {
+        (data as GenericRow[]).forEach((row) => {
           const vals = keys.map((k) => {
-            const val = (row as any)[k];
-            const isDateLike = typeof val === "string" && /\d{4}-\d{2}-\d{2}/.test(val.toString());
-            const out = isDateLike ? formatDate(val) : String(val ?? "");
+            const val = row[k as keyof GenericRow];
+            const looksDate = typeof val === "string" && /\d{4}-\d{2}-\d{2}/.test(val.toString());
+            const out = looksDate ? formatDate(val) : String(val ?? "");
             return escapeVal(out);
           });
           lines.push(vals.join(defaultOptions.separador));
@@ -251,10 +258,9 @@ export const useCsvExport = (): UseCsvExportReturn => {
     [],
   );
 
-  const validateData = useCallback((data: any[]) => {
-    const isSimaShape = Array.isArray(data) && data[0] && (data[0] as any).idsima !== undefined;
-    if (isSimaShape) {
-      return simaCsvParser.validateData(data as SimaData[]);
+  const validateData = useCallback((data: GenericRow[]) => {
+    if (hasSimaShape(data)) {
+      return simaCsvParser.validateData(data);
     }
     return { isValid: true, errors: [] };
   }, []);

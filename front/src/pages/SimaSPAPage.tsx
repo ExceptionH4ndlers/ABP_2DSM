@@ -2076,7 +2076,7 @@ function SimaSPAPage() {
       <CsvExportModal
         $isOpen={isCsvModalOpen}
         onClose={() => setIsCsvModalOpen(false)}
-        data={data}
+        data={data as unknown as Array<Record<string, unknown>>}
         defaultFilename="dados_sima.csv"
         estacoes={estacoes}
         selectedEstacao={filters.estacao}
