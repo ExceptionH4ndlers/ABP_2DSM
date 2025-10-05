@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { simaPool } from "../../configs/db";
+import { queryWithRetry } from "../../utils/dbRetry";
 import { logger } from "../../configs/logger";
 
 // Função auxiliar para somar 1 dia à data no formato YYYY-MM-DD
@@ -12,8 +13,11 @@ function addOneDay(dateStr: string): string {
 export const getAllSimple = async (req: Request, res: Response): Promise<void> => {
   try {
     // Consulta simples para obter todas as estações
-    const result = await simaPool.query(
+    const result = await queryWithRetry(
+      simaPool,
       `SELECT idestacao, rotulo FROM tbestacao ORDER BY rotulo ASC`,
+      [],
+      { retries: 6, delayMs: 800 },
     );
 
     res.status(200).json({
@@ -72,19 +76,23 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const endDateTime = `${addOneDay(endDate)} 00:00:00`;
 
     // Consulta paginada na tabela tbestacao com filtro por data de 'inicio'
-    const result = await simaPool.query(
+    const result = await queryWithRetry(
+      simaPool,
       `SELECT * FROM tbestacao
        WHERE inicio >= $3 AND inicio < $4
        ORDER BY inicio DESC
        LIMIT $1 OFFSET $2`,
       [limit, offset, startDateTime, endDateTime],
+      { retries: 6, delayMs: 800 },
     );
 
     // Total de registros dentro do filtro
-    const countResult = await simaPool.query(
+    const countResult = await queryWithRetry(
+      simaPool,
       `SELECT COUNT(*) FROM tbestacao
        WHERE inicio >= $1 AND inicio < $2`,
       [startDateTime, endDateTime],
+      { retries: 6, delayMs: 800 },
     );
 
     const total = parseInt(countResult.rows[0].count, 10);

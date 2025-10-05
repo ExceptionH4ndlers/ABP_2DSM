@@ -1,7 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { BookOpen, FileText, Calendar, Hash, Layers, Book, ExternalLink } from "lucide-react";
-import { publicationsData as simaPublicationsData } from "./SimaSPAPage";
 
 // Container and section styles aligned with SimaSPAPage
 const PageContainer = styled.div`
@@ -118,7 +117,10 @@ const ClearButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  &:hover { background: #f1f5f9; border-color: #94a3b8; }
+  &:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+  }
 `;
 
 const FilterChip = styled.button<{ $active?: boolean }>`
@@ -335,7 +337,7 @@ type Publication = {
   issn: string | null;
   link: string | null;
 };
-const publicationsData: Publication[] = simaPublicationsData as Publication[];
+const publicationsData: Publication[] = [];
 
 function SimaPublicacoesPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -347,7 +349,8 @@ function SimaPublicacoesPage() {
       pub.authors.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (pub.journal ? pub.journal.toLowerCase().includes(searchTerm.toLowerCase()) : false);
 
-    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(pub.category);
+    const matchesCategory =
+      selectedCategories.length === 0 || selectedCategories.includes(pub.category);
     return matchesSearch && matchesCategory;
   });
 
@@ -386,22 +389,24 @@ function SimaPublicacoesPage() {
           <SectionTitle>
             <BookOpen size={40} /> Publicações Científicas
           </SectionTitle>
-          <SectionSubtitle>Explore o acervo de publicações relacionadas ao SIMA com filtros e busca.</SectionSubtitle>
+          <SectionSubtitle>
+            Explore o acervo de publicações relacionadas ao SIMA com filtros e busca.
+          </SectionSubtitle>
 
           <PublicationsContainer>
             <ToolbarRow>
               <SearchContainer>
-              <InputWrapper>
-                <SearchIconLeft>
-                  <FileText size={18} />
-                </SearchIconLeft>
-                <SearchInput
-                  type="text"
-                  placeholder="Buscar por título, autor ou revista..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </InputWrapper>
+                <InputWrapper>
+                  <SearchIconLeft>
+                    <FileText size={18} />
+                  </SearchIconLeft>
+                  <SearchInput
+                    type="text"
+                    placeholder="Buscar por título, autor ou revista..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </InputWrapper>
               </SearchContainer>
               <ClearButton onClick={clearFilters}>Limpar filtros</ClearButton>
             </ToolbarRow>
@@ -414,7 +419,11 @@ function SimaPublicacoesPage() {
                 { key: "evento", label: "Eventos" },
                 { key: "tese", label: "Teses e dissertações" },
               ].map((c) => (
-                <FilterChip key={c.key} $active={selectedCategories.includes(c.key)} onClick={() => toggleCategory(c.key)}>
+                <FilterChip
+                  key={c.key}
+                  $active={selectedCategories.includes(c.key)}
+                  onClick={() => toggleCategory(c.key)}
+                >
                   {c.label} ({publicationsData.filter((p) => p.category === c.key).length})
                 </FilterChip>
               ))}
@@ -459,7 +468,11 @@ function SimaPublicacoesPage() {
                   </PublicationDetails>
 
                   {publication.link && (
-                    <PublicationCTA href={publication.link} target="_blank" rel="noopener noreferrer">
+                    <PublicationCTA
+                      href={publication.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       Acessar publicação <ExternalLink size={16} />
                     </PublicationCTA>
                   )}
@@ -478,4 +491,3 @@ function SimaPublicacoesPage() {
 }
 
 export default SimaPublicacoesPage;
-

@@ -91,7 +91,7 @@ export const useSimaApi = () => {
         queryParams.append("sortOrder", params.sortOrder);
       }
 
-      const response = await fetch(`${API_BASE_URL}/sima/sima/all?${queryParams}`);
+      const response = await fetch(`${API_BASE_URL}/sima/all?${queryParams}`);
 
       if (!response.ok) {
         throw new Error(`Erro na API: ${response.status}`);

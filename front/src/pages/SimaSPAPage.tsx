@@ -25,18 +25,12 @@ import {
   Battery,
   CloudRain,
   AlertCircle,
-  BookOpen,
-  Calendar,
-  ExternalLink,
-  Hash,
-  FileText,
-  Book,
-  Layers,
   Users,
 } from "lucide-react";
-import { CsvExportButton } from "../components/CsvExportButton";
 import { useSimaApi } from "../hooks/useSimaApi";
 import { useEstacoes } from "../hooks/useEstacoes";
+import { ExportCsvButton } from "../components/ExportCsvButton";
+import { CsvExportModal } from "../components/CsvExportModal";
 import estruturaSima1 from "../../img/sima/estrutura_sima1.png";
 import estruturaSima2 from "../../img/sima/estrutura_sima2.png";
 import funcionamentoSima from "../../img/sima/funcionamento_sima.png";
@@ -121,7 +115,9 @@ const NameLink = styled.a`
   color: #111827;
   font-weight: 600;
   text-decoration: none;
-  &:hover { text-decoration: underline; }
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const PersonMeta = styled.div`
@@ -135,47 +131,8 @@ const InstitutionTag = styled.span`
   color: #374151;
 `;
 
-const TeamSubtitle = styled.h3`
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #1e40af;
-  margin: 2rem 0 1rem 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e2e8f0;
-`;
-
-const TeamList = styled.div`
-  margin-bottom: 1.5rem;
-  line-height: 1.8;
-`;
-
-const TeamRow = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-  margin-bottom: 0.75rem;
-`;
-
-const TeamMember = styled.div`
-  color: #374151;
-  padding: 0.5rem 0;
-`;
-
-const TeamEmail = styled.span`
-  color: #3b82f6;
-  font-weight: 500;
-`;
-
-const TeamLink = styled.span`
-  color: #3b82f6;
-  font-weight: 500;
-  cursor: pointer;
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: #1e40af;
-  }
-`;
+/* removidos estilos não usados de publicações antigas */
+// elementos antigos não utilizados removidos
 
 const SectionText = styled.p`
   font-size: 1.1rem;
@@ -333,13 +290,12 @@ const ActionButton = styled.button`
 `;
 
 const SearchButton = styled(ActionButton)`
-  background: white;
-  border-color: #9ca3af;
-  color: #374151;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border: none;
+  color: #ffffff;
 
   &:hover {
-    background: #f9fafb;
-    border-color: #6b7280;
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
   }
 `;
 
@@ -454,110 +410,7 @@ const StyledTable = styled.table`
     font-weight: 600;
   }
 
-  /* Categorias de parâmetros com cores mais definidas */
-  /* Identificação */
-  th:nth-child(4),
-  th:nth-child(5),
-  th:nth-child(6),
-  td:nth-child(4),
-  td:nth-child(5),
-  td:nth-child(6) {
-    background: #fef3c7;
-  }
-
-  /* Vento */
-  th:nth-child(7),
-  th:nth-child(8),
-  th:nth-child(9),
-  th:nth-child(10),
-  td:nth-child(7),
-  td:nth-child(8),
-  td:nth-child(9),
-  td:nth-child(10) {
-    background: #dbeafe;
-  }
-
-  /* Temperatura Água */
-  th:nth-child(11),
-  th:nth-child(12),
-  th:nth-child(13),
-  th:nth-child(14),
-  td:nth-child(11),
-  td:nth-child(12),
-  td:nth-child(13),
-  td:nth-child(14) {
-    background: #d1fae5;
-  }
-
-  /* Atmosfera */
-  th:nth-child(15),
-  th:nth-child(16),
-  th:nth-child(17),
-  th:nth-child(18),
-  td:nth-child(15),
-  td:nth-child(16),
-  td:nth-child(17),
-  td:nth-child(18) {
-    background: #fce7f3;
-  }
-
-  /* Radiação */
-  th:nth-child(19),
-  th:nth-child(20),
-  td:nth-child(19),
-  td:nth-child(20) {
-    background: #fef3c7;
-  }
-
-  /* Sistema */
-  th:nth-child(21),
-  th:nth-child(30),
-  td:nth-child(21),
-  td:nth-child(30) {
-    background: #e5e7eb;
-  }
-
-  /* Sonda Aquática */
-  th:nth-child(22),
-  th:nth-child(23),
-  th:nth-child(24),
-  th:nth-child(25),
-  th:nth-child(26),
-  th:nth-child(27),
-  th:nth-child(28),
-  th:nth-child(29),
-  td:nth-child(22),
-  td:nth-child(23),
-  td:nth-child(24),
-  td:nth-child(25),
-  td:nth-child(26),
-  td:nth-child(27),
-  td:nth-child(28),
-  td:nth-child(29) {
-    background: #dbeafe;
-  }
-
-  /* Correntes */
-  th:nth-child(31),
-  th:nth-child(32),
-  td:nth-child(31),
-  td:nth-child(32) {
-    background: #ddd6fe;
-  }
-
-  /* Gases */
-  th:nth-child(33),
-  th:nth-child(34),
-  td:nth-child(33),
-  td:nth-child(34) {
-    background: #fecaca;
-  }
-
-  /* Precipitação */
-  th:nth-child(35),
-  td:nth-child(35) {
-    background: #dbeafe;
-  }
+  /* Removidas cores por categoria; manter apenas zebra/hover */
 `;
 
 const ProblemsList = styled.ul`
@@ -721,306 +574,7 @@ const SmallLogo = styled.img`
 `;
 
 // Estilos para a seção de publicações
-const PublicationsContainer = styled.div`
-  background: #f8fafc;
-  border-radius: 16px;
-  padding: 2rem;
-  margin: 2rem 0;
-  border: 1px solid #e5e7eb;
-  box-shadow:
-    0 10px 20px rgba(2, 6, 23, 0.04),
-    0 2px 6px rgba(2, 6, 23, 0.04);
-`;
-
-const StickyFilters = styled.div`
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: rgba(248, 250, 252, 0.8);
-  backdrop-filter: blur(8px);
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 1rem;
-`;
-
-const SearchContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  align-items: center;
-  flex-wrap: wrap;
-`;
-
-const InputWrapper = styled.div`
-  position: relative;
-  flex: 1;
-  min-width: 300px;
-`;
-
-const SearchIconLeft = styled.div`
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #94a3b8;
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  padding: 0.75rem 1rem;
-  padding-left: 2.5rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-  background: white;
-
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-
-  &::placeholder {
-    color: #94a3b8;
-  }
-`;
-
-const FilterChips = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-`;
-
-const FilterChip = styled.button<{ $active?: boolean }>`
-  padding: 0.5rem 1rem;
-  border-radius: 9999px;
-  border: 1px solid ${({ $active }) => ($active ? "#1e3a8a" : "#e5e7eb")};
-  background: ${({ $active }) => ($active ? "linear-gradient(135deg, #1e3a8a, #3b82f6)" : "white")};
-  color: ${({ $active }) => ($active ? "#fff" : "#1f2937")};
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: ${({ $active }) =>
-    $active ? "0 6px 14px rgba(30, 58, 138, 0.25)" : "0 2px 6px rgba(2, 6, 23, 0.04)"};
-
-  &:hover {
-    border-color: #1e40af;
-    background: ${({ $active }) =>
-      $active ? "linear-gradient(135deg, #1e3a8a, #2563eb)" : "#f8fafc"};
-    color: ${({ $active }) => ($active ? "#fff" : "#1e40af")};
-  }
-`;
-
-const PublicationsGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
-`;
-
-const PublicationCard = styled.div`
-  background: white;
-  border-radius: 4px;
-  padding: 2rem;
-  border: 1px solid #d1d5db;
-  transition: all 0.25s ease;
-  position: relative;
-  box-shadow:
-    0 8px 16px rgba(2, 6, 23, 0.04),
-    0 2px 6px rgba(2, 6, 23, 0.04);
-
-  &:hover {
-    border-color: #1e40af;
-    box-shadow:
-      0 16px 30px rgba(30, 64, 175, 0.12),
-      0 6px 14px rgba(30, 64, 175, 0.06);
-    transform: translateY(-2px);
-  }
-`;
-
-const AccentBar = styled.div<{ $category: string }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 4px;
-  width: 100%;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  background: ${({ $category }) => {
-    switch ($category) {
-      case "artigo":
-        return "linear-gradient(90deg, #1e40af, #60a5fa)";
-      case "livro":
-        return "linear-gradient(90deg, #166534, #34d399)";
-      case "capitulo":
-        return "linear-gradient(90deg, #d97706, #fbbf24)";
-      case "evento":
-        return "linear-gradient(90deg, #7c3aed, #c4b5fd)";
-      case "tese":
-        return "linear-gradient(90deg, #dc2626, #fca5a5)";
-      default:
-        return "#e5e7eb";
-    }
-  }};
-`;
-
-const PublicationHeader = styled.div`
-  margin-bottom: 1.5rem;
-`;
-
-const PublicationCategory = styled.div<{ $category: string }>`
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 1rem;
-  background: ${({ $category }) => {
-    switch ($category) {
-      case "artigo":
-        return "#f0f9ff";
-      case "livro":
-        return "#f0fdf4";
-      case "capitulo":
-        return "#fffbeb";
-      case "evento":
-        return "#faf5ff";
-      case "tese":
-        return "#fef2f2";
-      default:
-        return "#f9fafb";
-    }
-  }};
-  color: ${({ $category }) => {
-    switch ($category) {
-      case "artigo":
-        return "#1e40af";
-      case "livro":
-        return "#166534";
-      case "capitulo":
-        return "#d97706";
-      case "evento":
-        return "#7c3aed";
-      case "tese":
-        return "#dc2626";
-      default:
-        return "#374151";
-    }
-  }};
-  border: 1px solid
-    ${({ $category }) => {
-      switch ($category) {
-        case "artigo":
-          return "#dbeafe";
-        case "livro":
-          return "#dcfce7";
-        case "capitulo":
-          return "#fed7aa";
-        case "evento":
-          return "#e9d5ff";
-        case "tese":
-          return "#fecaca";
-        default:
-          return "#e5e7eb";
-      }
-    }};
-`;
-
-const PublicationTitle = styled.h3`
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #0f172a;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.4;
-`;
-
-const PublicationAuthors = styled.p`
-  color: #475569;
-  font-size: 0.9rem;
-  margin: 0 0 0.5rem 0;
-  line-height: 1.5;
-  font-style: italic;
-`;
-
-const PublicationDetails = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 0.75rem 1rem;
-  margin-top: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e5e7eb;
-`;
-
-const PublicationDetail = styled.div`
-  color: #475569;
-  font-size: 0.9rem;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const PublicationCTA = styled.a`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #fff;
-  background: linear-gradient(135deg, #1e40af, #3b82f6);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-top: 1rem;
-  padding: 0.55rem 0.9rem;
-  border-radius: 8px;
-  transition: all 0.2s ease;
-  box-shadow: 0 6px 14px rgba(30, 64, 175, 0.25);
-
-  &:hover {
-    background: linear-gradient(135deg, #1e3a8a, #2563eb);
-    transform: translateY(-1px);
-  }
-`;
-
-const ClearFiltersButton = styled.button`
-  background: #f8fafc;
-  border: 1px solid #d1d5db;
-  border-radius: 4px;
-  padding: 0.75rem 1.5rem;
-  color: #374151;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-
-  &:hover {
-    background: #f1f5f9;
-    border-color: #9ca3af;
-  }
-`;
-
-const ResultsCount = styled.div`
-  color: #64748b;
-  font-size: 0.9rem;
-  margin-top: 1rem;
-  text-align: center;
-`;
-
-const EmptyState = styled.div`
-  text-align: center;
-  color: #64748b;
-  background: #ffffff;
-  border: 1px dashed #cbd5e1;
-  border-radius: 12px;
-  padding: 2rem;
-`;
+// blocos de publicações removidos nesta página
 
 // Função auxiliar para formatar valores
 const formatValue = (value: number | null | undefined, decimals: number = 1) => {
@@ -1028,8 +582,8 @@ const formatValue = (value: number | null | undefined, decimals: number = 1) => 
   return value.toFixed(decimals);
 };
 
-// Dados das publicações
-export const publicationsData = [
+// Dados das publicações (placeholder não utilizado nesta página)
+/* const publicationsData = [
   // Artigos
   {
     id: 1,
@@ -1595,25 +1149,10 @@ export const publicationsData = [
     issn: null,
     link: "http://mtc-m16d.sid.inpe.br/col/sid.inpe.br/mtc-m19/2013/05.14.17.42/doc/publicacao.pdf",
   },
-];
+]; */
 
 // Função para obter nome da categoria
-const getCategoryName = (category: string) => {
-  switch (category) {
-    case "artigo":
-      return "Artigos";
-    case "livro":
-      return "Livro";
-    case "capitulo":
-      return "Capítulos de livros";
-    case "evento":
-      return "Eventos";
-    case "tese":
-      return "Teses e dissertações";
-    default:
-      return "Publicação";
-  }
-};
+// funções antigas de publicações removidas
 
 function SimaSPAPage() {
   const { data, loading, error, pagination, fetchData } = useSimaApi();
@@ -1626,43 +1165,21 @@ function SimaSPAPage() {
     sortOrder: "desc", // Ordenação: "asc" (mais antigo → mais recente) ou "desc" (mais recente → mais antigo)
   });
 
+  const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+
   // Estado para publicações
-  const [publicationFilters, setPublicationFilters] = useState({
-    searchTerm: "",
-    selectedCategories: [] as string[],
-  });
+  // filtros de publicações não são usados nesta página
+  // desativado nesta página
+  // const [publicationFilters, setPublicationFilters] = useState({ searchTerm: "", selectedCategories: [] as string[] });
 
   // Filtrar publicações
-  const filteredPublications = publicationsData.filter((pub) => {
-    const matchesSearch =
-      pub.title.toLowerCase().includes(publicationFilters.searchTerm.toLowerCase()) ||
-      pub.authors.toLowerCase().includes(publicationFilters.searchTerm.toLowerCase()) ||
-      pub.journal.toLowerCase().includes(publicationFilters.searchTerm.toLowerCase());
-
-    const matchesCategory =
-      publicationFilters.selectedCategories.length === 0 ||
-      publicationFilters.selectedCategories.includes(pub.category);
-
-    return matchesSearch && matchesCategory;
-  });
+  // filtros de publicações movidos para página dedicada
 
   // Função para alternar categoria
-  const toggleCategory = (category: string) => {
-    setPublicationFilters((prev) => ({
-      ...prev,
-      selectedCategories: prev.selectedCategories.includes(category)
-        ? prev.selectedCategories.filter((c) => c !== category)
-        : [...prev.selectedCategories, category],
-    }));
-  };
+  // const toggleCategory = (_category: string) => undefined;
 
   // Função para limpar filtros
-  const clearPublicationFilters = () => {
-    setPublicationFilters({
-      searchTerm: "",
-      selectedCategories: [],
-    });
-  };
+  // const clearPublicationFilters = () => undefined;
 
   // Função para buscar datas específicas de uma estação
   const updateDatesForStation = async (estacao: string) => {
@@ -1743,6 +1260,10 @@ function SimaSPAPage() {
       estacao: "",
       sortOrder: "desc",
     });
+  };
+
+  const handleExportCsv = () => {
+    setIsCsvModalOpen(true);
   };
 
   // Lista de estações disponíveis no banco SIMA (agora dinâmica)
@@ -1955,11 +1476,25 @@ function SimaSPAPage() {
             <GroupTitle>Coordenação</GroupTitle>
             <TeamGrid>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/2691497637313274" target="_blank" rel="noopener noreferrer">José Luiz Stech</NameLink>
-                <PersonMeta>Coordenação • <InstitutionTag>INPE</InstitutionTag> • stech@dsr.inpe.br</PersonMeta>
+                <NameLink
+                  href="http://lattes.cnpq.br/2691497637313274"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  José Luiz Stech
+                </NameLink>
+                <PersonMeta>
+                  Coordenação • <InstitutionTag>INPE</InstitutionTag> • stech@dsr.inpe.br
+                </PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7939379291404418" target="_blank" rel="noopener noreferrer">Enner Herenio de Alcântara</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/7939379291404418"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Enner Herenio de Alcântara
+                </NameLink>
                 <PersonMeta>Coordenação</PersonMeta>
               </PersonItem>
             </TeamGrid>
@@ -1969,55 +1504,133 @@ function SimaSPAPage() {
             <GroupTitle>Colaboradores</GroupTitle>
             <TeamGrid>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/5535667070825818" target="_blank" rel="noopener noreferrer">André Carlos Prates Cimbleris</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/5535667070825818"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  André Carlos Prates Cimbleris
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/8150880476098677" target="_blank" rel="noopener noreferrer">Arcilan Trevenzoli Assireu</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/8150880476098677"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Arcilan Trevenzoli Assireu
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7642043789034070" target="_blank" rel="noopener noreferrer">Artur Luiz da Costa da Silva</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/7642043789034070"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Artur Luiz da Costa da Silva
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7466500214796269" target="_blank" rel="noopener noreferrer">Augusto Cesar Fonseca Saraiva</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/7466500214796269"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Augusto Cesar Fonseca Saraiva
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/1596449770636962" target="_blank" rel="noopener noreferrer">Cláudio Clemente Faria Barbosa</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/1596449770636962"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Cláudio Clemente Faria Barbosa
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/4775535537651746" target="_blank" rel="noopener noreferrer">Donato Seiji Abe</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/4775535537651746"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Donato Seiji Abe
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/9857505876280820" target="_blank" rel="noopener noreferrer">Evlyn Márcia Leão de Moraes Novo</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/9857505876280820"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Evlyn Márcia Leão de Moraes Novo
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/0567809153346429" target="_blank" rel="noopener noreferrer">Fábio Roland</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/0567809153346429"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Fábio Roland
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/3852581196429739" target="_blank" rel="noopener noreferrer">João Antônio Lorenzzetti</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/3852581196429739"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  João Antônio Lorenzzetti
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/0030922264947314" target="_blank" rel="noopener noreferrer">Jorge Machado Damazio</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/0030922264947314"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Jorge Machado Damazio
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/4155308755013168" target="_blank" rel="noopener noreferrer">Marco Aurélio dos Santos</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/4155308755013168"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Marco Aurélio dos Santos
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/8471974730664804" target="_blank" rel="noopener noreferrer">Maria Elvira Piñeiro Maceira</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/8471974730664804"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Maria Elvira Piñeiro Maceira
+                </NameLink>
                 <PersonMeta>Colaboradora</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/5149356080083086" target="_blank" rel="noopener noreferrer">Nelson Luís da Costa Dias</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/5149356080083086"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Nelson Luís da Costa Dias
+                </NameLink>
                 <PersonMeta>Colaborador</PersonMeta>
               </PersonItem>
             </TeamGrid>
@@ -2041,7 +1654,13 @@ function SimaSPAPage() {
                 <PersonMeta>Neuron Eletrônica</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/4915211809920432" target="_blank" rel="noopener noreferrer">Carlos Alberto Sampaio de Araújo</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/4915211809920432"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Carlos Alberto Sampaio de Araújo
+                </NameLink>
                 <PersonMeta>Manutenção</PersonMeta>
               </PersonItem>
               <PersonItem>
@@ -2049,11 +1668,23 @@ function SimaSPAPage() {
                 <PersonMeta>Manutenção</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/7596795539833144" target="_blank" rel="noopener noreferrer">Joaquim Antônio Dionísio Leão</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/7596795539833144"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Joaquim Antônio Dionísio Leão
+                </NameLink>
                 <PersonMeta>Manutenção</PersonMeta>
               </PersonItem>
               <PersonItem>
-                <NameLink href="http://lattes.cnpq.br/6286335301335965" target="_blank" rel="noopener noreferrer">Vitor Bruno</NameLink>
+                <NameLink
+                  href="http://lattes.cnpq.br/6286335301335965"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Vitor Bruno
+                </NameLink>
                 <PersonMeta>Manutenção</PersonMeta>
               </PersonItem>
             </TeamGrid>
@@ -2210,7 +1841,12 @@ function SimaSPAPage() {
                 <Filter size={20} />
                 Limpar Filtros
               </ClearButton>
-              <CsvExportButton data={data} filename="dados_sima.csv" />
+              <ExportCsvButton
+                data={data}
+                filename="dados_sima.csv"
+                onClick={handleExportCsv}
+                disabled={loading}
+              />
             </ActionButtons>
           </ControlsSection>
 
@@ -2436,6 +2072,15 @@ function SimaSPAPage() {
           )}
         </Section>
       </MainContent>
+
+      <CsvExportModal
+        $isOpen={isCsvModalOpen}
+        onClose={() => setIsCsvModalOpen(false)}
+        data={data as unknown as Array<Record<string, unknown>>}
+        defaultFilename="dados_sima.csv"
+        estacoes={estacoes}
+        selectedEstacao={filters.estacao}
+      />
     </SimaSPAContainer>
   );
 }

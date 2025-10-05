@@ -1,7 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { Menu, X, ChevronDown, Home, Map, Database, Target, BookOpen, FileText, Users } from "lucide-react";
+import {
+  Menu,
+  X,
+  ChevronDown,
+  Home,
+  Map,
+  Database,
+  Target,
+  BookOpen,
+  FileText,
+  Users,
+} from "lucide-react";
 
 const NavigationContainer = styled.nav`
   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
@@ -311,7 +322,7 @@ function Navigation() {
           }
         }, 100);
       }
-  } else {
+    } else {
       // Navegação com âncoras para BALCAR
       if (path.startsWith("/balcar") && path.includes("-")) {
         const sectionId = path.replace("/balcar", "").replace("-", "");

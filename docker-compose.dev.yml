@@ -18,6 +18,11 @@ services:
       - ./furnas-campanha/csv:/csv
     networks:
       - abp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bdfurnas-campanha"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   postgres-sima:
     image: postgres:17-alpine
@@ -36,6 +41,11 @@ services:
       - ./sima/csv:/csv
     networks:
       - abp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bdsima"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   postgres-balcar-campanha:
     image: postgres:17-alpine
@@ -54,6 +64,11 @@ services:
       - ./balcar-campanha/csv:/csv
     networks:
       - abp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bdbalcar-campanha"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   server-app:
     build:
@@ -64,9 +79,12 @@ services:
     networks:
       - abp-network
     depends_on:
-      - postgres-furnas-campanha
-      - postgres-sima
-      - postgres-balcar-campanha
+      postgres-furnas-campanha:
+        condition: service_healthy
+      postgres-sima:
+        condition: service_healthy
+      postgres-balcar-campanha:
+        condition: service_healthy
     environment:
       PORT: 3000
       HOST_PORT: 3001

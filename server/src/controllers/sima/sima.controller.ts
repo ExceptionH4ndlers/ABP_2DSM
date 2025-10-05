@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { simaPool } from "../../configs/db";
+import { queryWithRetry } from "../../utils/dbRetry";
 import { logger } from "../../configs/logger";
 
 // Função auxiliar para somar 1 dia à data no formato YYYY-MM-DD
@@ -54,20 +55,24 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Consulta principal com JOIN para obter nome da estação
-    const result = await simaPool.query(
+    const result = await queryWithRetry(
+      simaPool,
       `SELECT s.*, e.rotulo AS nome_estacao FROM tbsima s
        INNER JOIN tbestacao e ON s.idestacao = e.idestacao
        ${whereClause}
        ORDER BY s.datahora ${sortOrder === "asc" ? "ASC" : "DESC"}
        LIMIT $1 OFFSET $2`,
       queryParams,
+      { retries: 6, delayMs: 800 },
     );
 
     // Contagem total
-    const countResult = await simaPool.query(
+    const countResult = await queryWithRetry(
+      simaPool,
       `SELECT COUNT(*) FROM tbsima
        ${countWhereClause}`,
       countParams,
+      { retries: 6, delayMs: 800 },
     );
 
     const total = parseInt(countResult.rows[0].count, 10);
