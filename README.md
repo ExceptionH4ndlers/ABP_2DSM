@@ -645,7 +645,7 @@ Este dropdown contém todos os artefatos e documentos relacionados à metodologi
 |--------------|-----------------|---------------|
 | **📋 Product Backlog** | [`Product Backlog Completo.pdf`](Scrum/Product%20Backlog/Product%20Backlog%20Completo.pdf) | Documento completo com todas as histórias de usuário, requisitos funcionais e não funcionais do projeto |
 | **🏃‍♂️ Sprint Planning** | [`Sprint Backlog.pdf`](Scrum/Sprints/Sprint%201/Sprint%20Backlog/Sprint%20Backlog.pdf) | Tarefas e atividades planejadas para o Sprint 1, incluindo estimativas e responsáveis |
-| **📊 Burndown Chart** | [`BurndownIdeal.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownIdeal.png) | Gráfico de progresso ideal do Sprint 1 para acompanhamento da evolução das atividades |
+| **📊 Burndown Chart** | [`BurndownSP1.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownSP1.png) | Gráfico de progresso ideal do Sprint 1 para acompanhamento da evolução das atividades |
 
 ### 📅 **Dailys (Reuniões Diárias)**
 
