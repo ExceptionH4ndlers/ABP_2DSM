@@ -646,6 +646,7 @@ Este dropdown contém todos os artefatos e documentos relacionados à metodologi
 | **📋 Product Backlog** | [`Product Backlog Completo.pdf`](Scrum/Product%20Backlog/Product%20Backlog%20Completo.pdf) | Documento completo com todas as histórias de usuário, requisitos funcionais e não funcionais do projeto |
 | **🏃‍♂️ Sprint Planning** | [`Sprint Backlog.pdf`](Scrum/Sprints/Sprint%201/Sprint%20Backlog/Sprint%20Backlog.pdf) | Tarefas e atividades planejadas para o Sprint 1, incluindo estimativas e responsáveis |
 | **📊 Burndown Chart** | [`BurndownSP1.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownSP1.png) | Gráfico de progresso ideal do Sprint 1 para acompanhamento da evolução das atividades |
+| **📊 Burndown Chart Sprint 2** | [`BurndownSP2.png`](Scrum/Burndown%20Chart/Sprint%202/BurndownSP2.png) | Gráfico de progresso da Sprint 2 para acompanhamento da evolução das atividades |
 
 ### 📅 **Dailys (Reuniões Diárias)**
 
@@ -675,12 +676,17 @@ ABP_2DSM/
 │   ├── Product Backlog/             # Backlog do produto
 │   │   └── Product Backlog Completo.pdf
 │   ├── Sprints/                     # Artefatos dos Sprints
-│   │   └── Sprint 1/                # Sprint 1
+│   │   ├── Sprint 1/                # Sprint 1
+│   │   │   └── Sprint Backlog/      # Backlog do Sprint
+│   │   │       └── Sprint Backlog.pdf
+│   │   └── Sprint 2/                # Sprint 2
 │   │       └── Sprint Backlog/      # Backlog do Sprint
 │   │           └── Sprint Backlog.pdf
 │   └── Burndown Chart/              # Gráficos de progresso
-│       └── Sprint 1/                # Burndown do Sprint 1
-│           └── BurndownIdeal.png
+│       ├── Sprint 1/                # Burndown do Sprint 1
+│       │   └── BurndownIdeal.png
+│       └── Sprint 2/                # Burndown do Sprint 2
+│           └── BurndownSP2.png
 └── Dailys/                          # Registros das reuniões diárias
     ├── ATA_DAILY_12.09.2025.pdf     # Daily de 12/09/2025
     ├── ATA_DAILY_16.09.2025.pdf     # Daily de 16/09/2025
@@ -700,7 +706,8 @@ ABP_2DSM/
 ### 📝 **Próximos Artefatos**
 
 Conforme o projeto evolui, novos artefatos serão adicionados:
-- **Sprint 2**: Novos Sprint Backlogs e Burndown Charts
+- **Sprint 2**: Sprint Backlog, Burndown Chart e relatórios de revisão
+- **Sprint 3**: Novos Sprint Backlogs e Burndown Charts
 - **Sprint Review**: Relatórios de revisão dos Sprints
 - **Retrospectivas**: Análises de melhoria da equipe
 - **Novas Dailys**: Registros das reuniões diárias futuras
@@ -782,6 +789,51 @@ Para a Sprint 2, focaremos em:
 Apesar dos desafios significativos enfrentados na Sprint 1, conseguimos entregar um MVP funcional que atende aos requisitos básicos do projeto. Os problemas identificados serão abordados nas próximas sprints para melhorar nossa eficiência e qualidade de entrega.
 
 A experiência desta sprint nos ensinou muito sobre a importância do alinhamento inicial com os stakeholders (professores) e da clareza nos requisitos, lições valiosas que aplicaremos nas próximas iterações do projeto.
+
+</details>
+
+<details>
+<summary><b>🚀 Sprint 2 - Em Andamento</b></summary>
+
+### 📊 **Objetivos da Sprint 2**
+
+A Sprint 2 tem como foco principal expandir e aprimorar as funcionalidades entregues na Sprint 1, com ênfase em:
+
+- **Melhorias na Interface**: Refinamento da experiência do usuário baseado no feedback da Sprint 1
+- **Funcionalidades Avançadas**: Implementação de filtros mais sofisticados e melhorias na exportação CSV
+- **Performance**: Otimizações no carregamento de dados e responsividade da aplicação
+- **Documentação**: Aprimoramento da documentação técnica e guias de uso
+
+### 📈 **Acompanhamento do Progresso**
+
+O Burndown Chart da Sprint 2 está disponível para acompanhamento em tempo real:
+
+| **Artefato** | **Link Direto** | **Status** |
+|--------------|-----------------|------------|
+| **📊 Burndown Chart Sprint 2** | [`BurndownSP2.png`](Scrum/Burndown%20Chart/Sprint%202/BurndownSP2.png) | Ativo |
+
+### 🎯 **Principais Entregas Planejadas**
+
+- **Interface Aprimorada**: Melhorias na navegação e feedback visual
+- **Filtros Avançados**: Opções mais granulares de filtragem de dados
+- **Exportação CSV Melhorada**: Metadados mais ricos e opções de formatação
+- **Otimizações de Performance**: Carregamento mais rápido e melhor gestão de memória
+- **Testes e Validação**: Implementação de testes automatizados básicos
+
+### 📅 **Cronograma da Sprint 2**
+
+- **Início**: [Data de início da Sprint 2]
+- **Duração**: 2 semanas
+- **Sprint Review**: [Data planejada]
+- **Retrospectiva**: [Data planejada]
+
+### 🔄 **Metodologia Scrum**
+
+A Sprint 2 segue os mesmos princípios da Sprint 1:
+- Daily Scrums para sincronização da equipe
+- Sprint Planning para definição de tarefas
+- Sprint Review para demonstração das entregas
+- Retrospectiva para identificação de melhorias
 
 </details>
 
