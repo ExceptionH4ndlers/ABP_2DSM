@@ -8,6 +8,7 @@ import sitio from "./sitio.routes";
 import bolha from "./bolhas.routes";
 import meta from "./meta.routes";
 import query from "./query.routes";
+import bioticocoluna from "./bioticocoluna.routes";
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use("/sitio", sitio);
 router.use("/bolhas", bolha);
 router.use("/meta", meta);
 router.use("/query", query);
+router.use("/bioticocoluna", bioticocoluna);
 
 export default router;
