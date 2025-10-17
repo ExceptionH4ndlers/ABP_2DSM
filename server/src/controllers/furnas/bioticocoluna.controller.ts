@@ -40,7 +40,7 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
       ORDER BY a.datamedida DESC, a.horamedida DESC
       LIMIT $1 OFFSET $2
       `,
-      [limit, offset]
+      [limit, offset],
     );
 
     // Consulta para total de registros
