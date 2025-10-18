@@ -9,6 +9,7 @@ import bolha from "./bolhas.routes";
 import meta from "./meta.routes";
 import query from "./query.routes";
 import bioticocoluna from "./bioticocoluna.routes";
+import dadosrepresa from "./dadosrepresa.routes";
 
 const router = express.Router();
 
@@ -22,5 +23,6 @@ router.use("/bolhas", bolha);
 router.use("/meta", meta);
 router.use("/query", query);
 router.use("/bioticocoluna", bioticocoluna);
+router.use("/dadosrepresa", dadosrepresa);
 
 export default router;
