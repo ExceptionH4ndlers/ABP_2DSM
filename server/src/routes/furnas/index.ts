@@ -13,6 +13,7 @@ import dadosrepresa from "./dadosrepresa.routes";
 import carbono from "./carbono.routes";
 import bioticosuperficie from "./bioticosuperficie.routes";
 import abioticosuperficie from "./abioticosuperficie.routes";
+import dupladessorcaoagua from "./dupladessorcaoagua.routes";
 
 const router = express.Router();
 
@@ -30,5 +31,6 @@ router.use("/dadosrepresa", dadosrepresa);
 router.use("/carbono", carbono);
 router.use("/bioticosuperficie", bioticosuperficie);
 router.use("/abioticosuperficie", abioticosuperficie);
+router.use("/dupladessorcaoagua", dupladessorcaoagua);
 
 export default router;
