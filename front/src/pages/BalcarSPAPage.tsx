@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import {
   MapPin,
@@ -16,6 +16,8 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { CsvExportModalBalcar } from "../components/CsvExportModalBalcar";
+import { useMapData } from "../hooks/useMapData";
+import InteractiveMap from "../components/InteractiveMap";
 import logoBalcar from "../../img/logoBalcar.png";
 import logoInpe from "../../img/balcar/logoInpe.png";
 import logoIie from "../../img/balcar/logoIie.png";
@@ -60,13 +62,6 @@ const SectionSubtitle = styled.p`
   line-height: 1.6;
 `;
 
-const Placeholder = styled.div`
-  border: 2px dashed #cbd5e1;
-  border-radius: 16px;
-  padding: 2rem;
-  text-align: center;
-  color: #64748b;
-`;
 const ExportCsvButton = styled.button`
   background: linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%);
   border: none;
@@ -451,6 +446,21 @@ const PaginationInfo = styled.span`
 `;
 
 function BalcarSPAPage() {
+  // Hook para dados do mapa - apenas BALCAR
+  const { mapPoints, loading: mapLoading, error: mapError } = useMapData({
+    showSima: false,
+    showFurnas: false,
+    showBalcar: true
+  });
+
+  const [mapFilters, setMapFilters] = useState({
+    showSima: false,
+    showFurnas: false,
+    showBalcar: true
+  });
+
+  const [filtersPanelOpen, setFiltersPanelOpen] = React.useState(false);
+
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const [rows, setRows] = React.useState<Array<Record<string, unknown>>>([]);
@@ -996,7 +1006,35 @@ function BalcarSPAPage() {
           <SectionSubtitle>
             Visualização geográfica de campanhas, sítios e medições.
           </SectionSubtitle>
-          <Placeholder>Mapa interativo — integrar componente de mapa.</Placeholder>
+          <InteractiveMap
+            points={mapPoints}
+            loading={mapLoading}
+            error={mapError}
+            filters={mapFilters}
+            onFiltersChange={setMapFilters}
+            filtersOpen={filtersPanelOpen}
+            onFiltersOpenChange={setFiltersPanelOpen}
+            onMarkerClick={(point) => {
+              console.log('Reservatório BALCAR clicado:', point);
+              // Aqui você pode adicionar lógica para mostrar detalhes do reservatório
+            }}
+          />
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+            <button
+              onClick={() => setFiltersPanelOpen(true)}
+              style={{
+                background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
+                border: 'none',
+                borderRadius: 12,
+                padding: '1rem 2rem',
+                color: '#fff',
+                fontWeight: 600,
+                cursor: 'pointer'
+              }}
+            >
+              <Filter size={20} /> Configurar Filtros
+            </button>
+          </div>
         </Section>
 
         <Section id="dados">

@@ -29,8 +29,10 @@ import {
 } from "lucide-react";
 import { useSimaApi } from "../hooks/useSimaApi";
 import { useEstacoes } from "../hooks/useEstacoes";
+import { useMapData } from "../hooks/useMapData";
 import { ExportCsvButton } from "../components/ExportCsvButton";
 import { CsvExportModal } from "../components/CsvExportModal";
+import InteractiveMap from "../components/InteractiveMap";
 import estruturaSima1 from "../../img/sima/estrutura_sima1.png";
 import estruturaSima2 from "../../img/sima/estrutura_sima2.png";
 import funcionamentoSima from "../../img/sima/funcionamento_sima.png";
@@ -131,9 +133,6 @@ const InstitutionTag = styled.span`
   color: #374151;
 `;
 
-/* removidos estilos não usados de publicações antigas */
-// elementos antigos não utilizados removidos
-
 const SectionText = styled.p`
   font-size: 1.1rem;
   color: #64748b;
@@ -143,16 +142,6 @@ const SectionText = styled.p`
   &:last-child {
     margin-bottom: 0;
   }
-`;
-
-const MapPlaceholder = styled.div`
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
-  border-radius: 16px;
-  padding: 4rem 2rem;
-  margin: 2rem 0;
-  color: #64748b;
-  text-align: center;
 `;
 
 const FilterButton = styled.button`
@@ -573,590 +562,35 @@ const SmallLogo = styled.img`
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
 `;
 
-// Estilos para a seção de publicações
-// blocos de publicações removidos nesta página
-
 // Função auxiliar para formatar valores
 const formatValue = (value: number | null | undefined, decimals: number = 1) => {
   if (value === null || value === undefined) return "-";
   return value.toFixed(decimals);
 };
 
-// Dados das publicações (placeholder não utilizado nesta página)
-/* const publicationsData = [
-  // Artigos
-  {
-    id: 1,
-    category: "artigo",
-    title:
-      "Limnological characterization of floodplain lakes in Mamirauá Sustainable Development Reserve, Central Amazon (Amazonas State, Brazil)",
-    authors: "AFFONSO, A. G.; QUEIROZ, H. L.; and NOVO, E. M. L. M.",
-    journal: "Acta Limnologica Brasiliensia",
-    volume: "23(1)",
-    pages: "95-108",
-    year: "2011",
-    issn: "2179-975X",
-    link: null,
-  },
-  {
-    id: 2,
-    category: "artigo",
-    title: "A system for environmental monitoring of hydroelectric reservoirs in Brazil",
-    authors: "ALCÂNTARA, E.; CURTARELLI, M.; OGASHAWARA, I; STECH, J.; SOUZA, A.",
-    journal: "Revista Ambiente & Água - An Interdisciplinary Journal of Applied Science",
-    volume: "v. 8, n.1",
-    pages: "6-17",
-    year: "2013",
-    issn: null,
-    link: "http://www.ambi-agua.net/seer/index.php/ambi-agua/article/view/1088/pdf_770",
-  },
-  {
-    id: 3,
-    category: "artigo",
-    title:
-      "Environmental factors associated with long-term changes in chlorophyll-a concentration in the Amazon floodplain",
-    authors:
-      "ALCÂNTARA, E.; NOVO, E. M.; BARBOSA, C. F.; BONNET, M-P.; STECH, J. L.; and OMETTO, J. P.",
-    journal: "Biogeosciences Discussions",
-    volume: "8(2)",
-    pages: "3739-3770",
-    year: "2011",
-    issn: null,
-    link: "http://www.biogeosciences-discuss.net/8/3739/2011/bgd-8-3739-2011.html",
-  },
-  {
-    id: 4,
-    category: "artigo",
-    title:
-      "Desenvolvimento de modelo conceitual termodinâmico para o reservatório hidrelétrico de Itumbiara baseado em dados de satélite e telemétricos",
-    authors: "ALCÂNTARA, E. H.; and STECH, J. L.",
-    journal: "Revista Ambiente & Água",
-    volume: "6",
-    pages: "157-179",
-    year: "2011",
-    issn: null,
-    link: "http://www.ambi-agua.net/seer/index.php/ambi-agua/article/view/572/pdf_469",
-  },
-  {
-    id: 5,
-    category: "artigo",
-    title: "A contribution to understanding the turbidity behaviour in an Amazon floodplain",
-    authors:
-      "ALCÂNTARA, E.; NOVO, E.; STECH, J.; LORENZZETTI, J.; BARBOSA, C.; ASSIREU, A.; and SOUZA, A.",
-    journal: "Hydrolology and Earth System Sciences",
-    volume: "14(2)",
-    pages: "351-364",
-    year: "2010",
-    issn: null,
-    link: "http://www.hydrol-earth-syst-sci.net/14/351/2010/hess-14-351-2010.html",
-  },
-  {
-    id: 6,
-    category: "artigo",
-    title:
-      "On the water thermal response to the passage of cold fronts: initial results for Itumbiara reservoir (Brazil)",
-    authors:
-      "ALCÂNTARA, E. H.; BONNET, M. P.; ASSIREU, A. T.; STECH, J. L.; NOVO, E. M. L. M.; and LORENZZETTI, J. A.",
-    journal: "Hydrology and Earth System Sciences Discussions",
-    volume: "7",
-    pages: "9437-9465",
-    year: "2010",
-    issn: null,
-    link: "http://www.hydrol-earth-syst-sci-discuss.net/7/9437/2010/hessd-7-9437-2010.html",
-  },
-  {
-    id: 7,
-    category: "artigo",
-    title:
-      "Remote sensing of water surface temperature and heat flux over a tropical hydroelectric reservoir",
-    authors:
-      "ALCÂNTARA, E. H.; STECH, J. L.; LORENZZETTI, J. A.; BONNET, M. P.; CASAMITJANA, X.; ASSIREU, A. T.; and NOVO, E. M. L. M.",
-    journal: "Remote Sensing of Environment",
-    volume: "114(11)",
-    pages: "2651-2665",
-    year: "2010",
-    issn: null,
-    link: "http://www.sciencedirect.com/science/article/pii/S0034425710001926",
-  },
-  {
-    id: 8,
-    category: "artigo",
-    title:
-      "Use of ordinary kriging algorithm and wavelet analysis to understanding the turbidity behavior in an amazon floodplain",
-    authors: "ALCÂNTARA, E. H.",
-    journal: "Journal of Computational Interdisciplinary Sciences",
-    volume: "1(1)",
-    pages: "57-70",
-    year: "2008",
-    issn: null,
-    link: "http://epacis.org/files/JCIS11-art.06.PDF",
-  },
-  {
-    id: 9,
-    category: "artigo",
-    title:
-      "Hydro-physical processes at the plunge point: an analysis using satellite and in situ data",
-    authors:
-      "ASSIREU, A. T.; ALCÂNTARA, E.; NOVO, E. M. L. M.; ROLAND, F.; PACHECO, F. S.; STECH, J. L.; and LORENZZETTI, J. A.",
-    journal: "Hydrology and Earth System Sciences",
-    volume: "15",
-    pages: "3689-3700",
-    year: "2011",
-    issn: null,
-    link: "http://www.hydrol-earth-syst-sci.net/15/3689/2011/hess-15-3689-2011.html",
-  },
-  {
-    id: 10,
-    category: "artigo",
-    title:
-      "Carbon dioxide and methane fluxes in the littoral zone of a tropical savanna reservoir (Corumbá, Brazil)",
-    authors: "BERGIER, I.; NOVO, E. M. L. M.; RAMOS; F. M.; MAZZI, E. A.; and RASERA, M. F. F. L.",
-    journal: "Oecologia Australis",
-    volume: "15(3)",
-    pages: "666-681",
-    year: "2011",
-    issn: null,
-    link: "http://www.ambi-agua.net/seer/index.php/ambi-agua/article/view/1083/pdf_824",
-  },
-  {
-    id: 19,
-    category: "artigo",
-    title:
-      "Avaliação da dinâmica temporal da evaporação no reservatório de Itumbiara, GO, utilizando dados obtidos por sensoriamento remoto",
-    authors:
-      "CURTARELLI, M. P.; ALCÂNTARA, E. H.; ARAÚJO, C. A. S.; STECH, J. L.; LORENZZETTI, J. A.",
-    journal: "Ambi-Água, Taubaté",
-    volume: "v. 8, n.11",
-    pages: "272-289",
-    year: "2013",
-    issn: "1980-993X",
-    link: "http://www.ambi-agua.net/seer/index.php/ambi-agua/article/view/1083/pdf_824",
-  },
-  {
-    id: 20,
-    category: "artigo",
-    title:
-      "Effects of cold fronts on MODIS-derived sensible and latent heat fluxes in Itumbiara reservoir (Central Brazil)",
-    authors: "CURTARELLI, M.; ALCÂNTARA, E.; RENNÓ, C; STECH, J.",
-    journal: "Advances in Space Research",
-    volume: null,
-    pages: null,
-    year: "2013",
-    issn: "0273-1177",
-    link: "http://dx.doi.org/10.1016/j.asr.2013.07.037",
-  },
-  {
-    id: 21,
-    category: "artigo",
-    title:
-      "Modeling the effects of cold front passages on the heat ﬂuxes and thermal structure of a tropical hydroelectric reservoir",
-    authors: "CURTARELLI, M. P.; ALCÂNTARA, E. H.; RENNÓ, C. D.; STECH, J. L.",
-    journal: "Hydrol. Earth Syst. Sci. Discuss.",
-    volume: "10",
-    pages: "8467–8502",
-    year: "2013",
-    issn: null,
-    link: "http://www.hydrol-earth-syst-sci-discuss.net/10/8467/2013/hessd-10-8467-2013.pdf",
-  },
-  {
-    id: 22,
-    category: "artigo",
-    title: "Localização de áreas de monitoramento telemétrico em ambientes aquáticos da Amazônia",
-    authors: "LIMA, I. B. T.; BARBOSA, C. C.; NOVO, E. M. L. M.; CARVALHO, J. C.; and STECH, J. L.",
-    journal: "Acta Amazonica",
-    volume: "36(3)",
-    pages: "331-334",
-    year: "2006",
-    issn: null,
-    link: "http://www.scielo.br/pdf/%0D/aa/v36n3/v36n3a07.pdf",
-  },
-  {
-    id: 23,
-    category: "artigo",
-    title: "Caracterização limnológica do reservatório hidrelétrico de Itumbiara, Goiás, Brasil",
-    authors: "NASCIMENTO, R. F. F.; ALCÂNTARA, E. H.; KAMPEL, M.; and STECH, J. L.",
-    journal: "Revista Ambiente & Água",
-    volume: "6",
-    pages: "143-156",
-    year: "2011",
-    issn: null,
-    link: "http://www.ambi-agua.net/seer/index.php/ambi-agua/article/view/570/pdf_466",
-  },
-  {
-    id: 24,
-    category: "artigo",
-    title:
-      "Integração de Dados do Sistema de Monitoramento Automático de Variáveis Ambientais (SIMA) e de Imagens Orbitais na Avaliação do Estado Trófico do Reservatório da UHE Funil",
-    authors:
-      "NOVO, E. M. L. M.; STECH, J. L. ; ALCÂNTARA, E. H.; LONDE, L. R.; ASSIREU, A.; BARBOSA, C. C.; and SOUZA, A. F.",
-    journal: "Geografia (Rio Claro. Impresso)",
-    volume: "35",
-    pages: "641-660",
-    year: "2010",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 25,
-    category: "artigo",
-    title: "Variability of carbon dioxide flux from tropical (Cerrado) hydroelectric reservoirs",
-    authors:
-      "ROLAND, F.; VIDAL, L. O.; PACHECO, F. S.; BARROS, N. O.; ASSIREU, A.; OMETTO, J. P. H. B.; CIMBLERIS, A. C. P.; and COLE, J. J.",
-    journal: "Aquatic Sciences",
-    volume: "72(3)",
-    pages: "283-293",
-    year: "2010",
-    issn: null,
-    link: "http://www.springerlink.com/content/jh05152758w0082m/",
-  },
-  {
-    id: 26,
-    category: "artigo",
-    title:
-      "Seasonal and spatial variability of CO2 emission from a large floodplain lake in the lower Amazon",
-    authors:
-      "RUDORFF, C. M.; MELACK, J. M.; MACINTYRE, S.; BARBOSA, C. C. F.; and NOVO, E. M. L. M.",
-    journal: "Journal of Geophysical Research",
-    volume: "116",
-    pages: "G04007",
-    year: "2011",
-    issn: null,
-    link: "http://www.agu.org/pubs/crossref/2011/2011JG001699.shtml",
-  },
-  {
-    id: 27,
-    category: "artigo",
-    title: "Telemetric monitoring system for meteorological and limnological data acquisition",
-    authors:
-      "STECH, J. L.; LIMA, I. B. T.; NOVO, E. M. L. M.; ASSIREU, A. T.; LORENZZETTI, J. A.; CARVALHO, J. C.; and ROSA, R. R.",
-    journal: "Proceedings of the International Association of Theoretical and Applied Limnology",
-    volume: "29",
-    pages: "1747-1750",
-    year: "2006",
-    issn: null,
-    link: null,
-  },
-  // Livros
-  {
-    id: 11,
-    category: "livro",
-    title:
-      "Novas tecnologias para o monitoramento e estudo de reservatórios hidrelétricos e grandes lagos",
-    authors: "ALCÂNTARA, E. H.; NOVO, E. M. L. M.; and STECH, J. L. (Orgs.)",
-    journal: "São José dos Campos: Parêntese",
-    volume: null,
-    pages: null,
-    year: "2011",
-    issn: null,
-    link: "http://lojavirtual.parentese.com.br/reservatorios.html",
-  },
-  // Capítulos de livros
-  {
-    id: 12,
-    category: "capitulo",
-    title:
-      "Tecnologia Espacial para o monitoramento da Temperatura e Fluxos de Calor na Superfície da Água do Reservatório Hidrelétrico de Itumbiara (GO)",
-    authors: "ALCÂNTARA, E. H.; STECH, J. L.; LORENZZETTI, J. A.; and NOVO, E. M. L. M.",
-    journal:
-      "Novas tecnologias para o monitoramento e estudo de reservatórios hidrelétricos e grandes lagos",
-    volume: null,
-    pages: "15-80",
-    year: "2011",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 13,
-    category: "capitulo",
-    title:
-      "A Successful Combined Use of Telemetric Monitoring System and Spatial Data Modeling to Study the Turbidity Behavior in the Amazon Floodplain",
-    authors:
-      "ALCÂNTARA, E. H.; NOVO, E. M. L. M.; STECH, J. L.; BARBOSA, C.; LORENZZETTI, J. A.; ASSIREU, A.T.; BONNET, M-P; and SOUZA, A. F.",
-    journal: "Floodplains: Physical Geography, Ecology and Societal Interactions",
-    volume: null,
-    pages: "201-226",
-    year: "2011",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 28,
-    category: "capitulo",
-    title: "Linking telemetric climatic-limnologic data and online CH4 and CO2 flux dynamics",
-    authors:
-      "LIMA, I. B. T.; RAMOS, F. M.; NOVO, E. M. L. M; LORENZZETTI, J. A.; ROSA, R. R.; BARBOSA, C. C.; OMETTO, J. P. H. B.; and ASSIREU, A. T.",
-    journal: "Global warming and hydroeletric reservoirs. Rio de Janeiro: COPPE",
-    volume: null,
-    pages: "67-69",
-    year: "2005",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 29,
-    category: "capitulo",
-    title:
-      "SIMA: A near real time buoy data acquisition and telemetry system as support for limnological studies",
-    authors: "LORENZETTI, J. A.; STECH, J. L.; NOVO, E. M. L. M.; and LIMA, I. B. T.",
-    journal: "Global warming and hydroeletric reservoirs. Rio de Janeiro: COPPE",
-    volume: null,
-    pages: "71-80",
-    year: "2005",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 30,
-    category: "capitulo",
-    title: "Space technology contribution for sustainable development in the Amazon Floodplain",
-    authors: "NOVO, E. M. L. M.; STECH, J. L.; and BARBOSA, C. C. F.",
-    journal: "Ecosystems and sustainable development V. Southampton: WIT Press",
-    volume: null,
-    pages: "563-570",
-    year: "2005",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 31,
-    category: "capitulo",
-    title: "Uso de Derivadores Rastreados por Satélite em Ambientes Aquáticos Continentais",
-    authors: "PACHECO, F. S.; ASSIREU, A. T.; and ROLAND, F.",
-    journal:
-      "Novas tecnologias para o monitoramento e estudo de reservatórios hidrelétricos e grandes lagos. São José dos Campos: Parêntese",
-    volume: null,
-    pages: "193-218",
-    year: "2011",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 32,
-    category: "capitulo",
-    title:
-      "Uso de tecnologia espacial para coleta automática de dados limnológicos e meteorológicos: aplicações nos reservatórios hidrelétricos de Manso e Corumbá",
-    authors:
-      "STECH, J.; ALCÂNTARA, E. H.; LORENZZETTI, J. A.; NOVO, E. M. L. M.; and LIMA, I. B. T.",
-    journal:
-      "Novas tecnologias para o monitoramento e estudo de reservatórios hidrelétricos e grandes lagos. São José dos Campos: Parêntese",
-    volume: null,
-    pages: "163-191",
-    year: "2011",
-    issn: null,
-    link: null,
-  },
-  // Eventos
-  {
-    id: 14,
-    category: "evento",
-    title:
-      "Estimativa dos fluxos de calor sensível e latente na superfície da água do reservatório de Itumbiara (GO) por meio de dados MODIS/Terra",
-    authors:
-      "ALCÂNTARA, E. H; STECH, J. L.; LORENZZETTI, J. A.; NOVO, E. M. L. M.; and SOUZA, A. F.",
-    journal: "XV Simpósio Brasileiro de Sensoriamento Remoto - SBSR",
-    volume: null,
-    pages: "5185-5192",
-    year: "2011",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 15,
-    category: "evento",
-    title: "Spatially Water Heat Flux using MODIS/terra data",
-    authors: "ALCÂNTARA, E.; and STECH, J.",
-    journal: "31st EARSeL Symposium and 34th General Assembly",
-    volume: null,
-    pages: null,
-    year: "2011",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 33,
-    category: "evento",
-    title:
-      "On the spatially water temperature and heat flux variability over a tropical hydroelectric reservoir",
-    authors:
-      "ALCÂNTARA, E. H.; STECH, J. L.; CASAMITJANA, X.; BONNET, M-P; LORENZZETTI, J. A.; and NOVO, E. M. L. M.",
-    journal: "14th International Workshop on Physical Processes in Natural Waters",
-    volume: null,
-    pages: "8-15",
-    year: "2010",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 34,
-    category: "evento",
-    title:
-      "Cross wavelet, coherence and phase between water surface temperature and heat flux in a tropical hydroelectric reservoir",
-    authors: "ALCÂNTARA, E. H.; STECH, J. L.; LORENZZETTI, J. A.; and NOVO, E. M. L. M.",
-    journal: "14th International Workshop on Physical Processes in Natural Waters",
-    volume: null,
-    pages: "86-93",
-    year: "2011",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 35,
-    category: "evento",
-    title:
-      "Integração de dados de alta frequência temporal e imagens MODIS/Terra para o estudo da turbidez na planície de Curuai (PA, Brasil)",
-    authors: "ALCÂNTARA, E. H.; STECH, J. L. ; BARBOSA, C.; NOVO, E. ; and SHIMABUKURO, Y.",
-    journal: "XIII Simpósio Brasileiro de Sensoriamento Remoto - SBSR",
-    volume: null,
-    pages: "6549-6556",
-    year: "2007",
-    issn: null,
-    link: "http://marte.dpi.inpe.br/col/dpi.inpe.br/sbsr@80/2006/10.11.04.08/doc/6549-6556.pdf",
-  },
-  {
-    id: 36,
-    category: "evento",
-    title:
-      "O comportamento do rio ao longo do reservatório observado a partir de Sensoriamento Remoto, dados in situ e ensaios de laboratório",
-    authors:
-      "ASSIREU, A. T.; NOVO, E M. L. M.; ROLAND, F.; PACHECO, F. S.; ALCÂNTARA, E. H.; and STECH, J. L.",
-    journal: "XIV Simpósio Brasileiro de Sensoriamento Remoto - SBSR",
-    volume: null,
-    pages: "4647-4653",
-    year: "2009",
-    issn: null,
-    link: "http://marte.dpi.inpe.br/col/dpi.inpe.br/sbsr@80/2008/11.12.16.41/doc/4647-4653.pdf",
-  },
-  {
-    id: 37,
-    category: "evento",
-    title:
-      "Aplicação do Operador de Fragmentação Assimétrica (FA) na comparação de dados coletados in situ por diferentes sensores e transmitidos pelos satélites brasileiros SCD e CBERS: um exemplo de aplicação ao Sistema de Monitoramento Ambiental (SIMA)",
-    authors:
-      "ASSIREU, A. T.; STECH, J. L.; NOVO, E. M. L. M.; LORENZETTI, J. A.; LIMA, I. B. T.; and CARVALHO, J. C.",
-    journal: "XII Simpósio Brasileiro de Sensoriamento Remoto - SBSR",
-    volume: null,
-    pages: "2455-2462",
-    year: "2005",
-    issn: null,
-    link: "http://marte.dpi.inpe.br/col/ltid.inpe.br/sbsr/2004/11.26.18.43/doc/2455.pdf",
-  },
-  {
-    id: 38,
-    category: "evento",
-    title:
-      "Integração de dados do sistema automático de monitoramento de variáveis ambientais (SIMA) e de imagens orbitais na avaliação do estado trófico do Reservatório da UHE Funil",
-    authors:
-      "NOVO, E. M. L. M.; STECH, J. L.; LONDE, L. R.; ASSIREU, A.; BARBOSA, C. C.; ALCÂNTARA, E. H.; and SOUZA, A. F.",
-    journal: "XIV Simpósio Brasileiro de Sensoriamento Remoto - SBSR",
-    volume: null,
-    pages: "4797-4804",
-    year: "2009",
-    issn: null,
-    link: "http://marte.dpi.inpe.br/col/dpi.inpe.br/sbsr@80/2008/11.14.00.00/doc/4797-4804.pdf",
-  },
-  {
-    id: 39,
-    category: "evento",
-    title:
-      "Temporal variability Chlorophyll-a concentration in floodplain lakes in response to seasonality of Amazon River discharge",
-    authors:
-      "NOVO, E.; BARBOSA, C.; STECH, J.; ALCÂNTARA, E. H.; RUDORFF, C. M.; and ASSIREU, A. T.",
-    journal: "Amazônia em Perspectiva. Anais Amazônia em Perspectiva",
-    volume: null,
-    pages: null,
-    year: "2008",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 40,
-    category: "evento",
-    title:
-      "Arquitetura de um banco de dados para suporte à integração de dados de campo e de sensoriamento remoto em estudos limnológicos e meteorológicos",
-    authors: "SOUZA, A. F.; BARBOSA, C. C.; NOVO, E. M. L. M.; and STECH, J. L.",
-    journal: "XIV Simpósio Brasileiro de Sensoriamento Remoto - SBSR",
-    volume: null,
-    pages: "2349-2355",
-    year: "2009",
-    issn: null,
-    link: "http://marte.dpi.inpe.br/col/dpi.inpe.br/sbsr@80/2008/11.17.22.59.52/doc/2349-2355.pdf",
-  },
-  {
-    id: 41,
-    category: "evento",
-    title:
-      "The impacts of the cold fronts on thermal stratification and water quality in a tropical reservoir (Brazil)",
-    authors:
-      "STECH, J. L.; ALCÂNTARA, E. H.; LORENZZETTI, J. A.; NOVO, E. M. L. M.; and ASSIREU, A. T.",
-    journal: "14th International Workshop on Physical Processes in Natural Waters",
-    volume: null,
-    pages: "94-101",
-    year: "2010",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 42,
-    category: "evento",
-    title: "Variabilidade dos dados bóia SIMA analisados pelo Operador de Fragmentação Assimétrica",
-    authors: "VALÉRIO, A. M.; KAMPEL, M.; STECH, J. L.; and ASSIREU, A. T.",
-    journal: "XV Simpósio Brasileiro de Sensoriamento Remoto - SBSR",
-    volume: null,
-    pages: "5108-5115",
-    year: "2011",
-    issn: null,
-    link: null,
-  },
-  // Teses e dissertações
-  {
-    id: 16,
-    category: "tese",
-    title:
-      "Sensoriamento remoto da temperatura e dos fluxos de calor na superfície da água no reservatório de Itumbiara (GO)",
-    authors: "ALCÂNTARA, E. H.",
-    journal: "Tese (Doutorado em Sensoriamento Remoto) - Instituto Nacional de Pesquisas Espaciais",
-    volume: null,
-    pages: "136 p",
-    year: "2010",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 17,
-    category: "tese",
-    title:
-      "Análise da turbidez na planície de inundação de Curuaí (PA, Brasil) integrando dados telemétricos e Imagens MODIS/Terra",
-    authors: "ALCÂNTARA, E. H.",
-    journal:
-      "Dissertação (Mestrado em Sensoriamento Remoto) - Instituto Nacional de Pesquisas Espaciais",
-    volume: null,
-    pages: "217 p",
-    year: "2006",
-    issn: null,
-    link: null,
-  },
-  {
-    id: 18,
-    category: "tese",
-    title:
-      "Caracterização e avaliação da dinâmica sazonal as propriedades bio-ópticas do reservatório de Funil com apoio de sensoriamento remoto, dados in situ e modelos ópticos",
-    authors: "AUGUSTO-SILVA, P. B.",
-    journal:
-      "Dissertação (Mestrado em Sensoriamento Remoto) - Instituto Nacional de Pesquisas Espaciais",
-    volume: null,
-    pages: "155 p",
-    year: "2013",
-    issn: null,
-    link: "http://mtc-m16d.sid.inpe.br/col/sid.inpe.br/mtc-m19/2013/05.14.17.42/doc/publicacao.pdf",
-  },
-]; */
-
-// Função para obter nome da categoria
-// funções antigas de publicações removidas
-
 function SimaSPAPage() {
   const { data, loading, error, pagination, fetchData } = useSimaApi();
   const { estacoes } = useEstacoes();
+
+  // Hook para dados do mapa - apenas SIMA
+  const {
+    mapPoints,
+    loading: mapLoading,
+    error: mapError,
+  } = useMapData({
+    showSima: true,
+    showFurnas: false,
+    showBalcar: false,
+  });
+
+  const [mapFilters, setMapFilters] = useState({
+    showSima: true,
+    showFurnas: false,
+    showBalcar: false,
+  });
+
+  const [filtersPanelOpen, setFiltersPanelOpen] = useState(false);
+
   const [filters, setFilters] = useState({
     startDate: "2004-01-12", // Menor data disponível no banco SIMA
     endDate: "2016-12-03", // Maior data disponível no banco SIMA
@@ -1749,19 +1183,21 @@ function SimaSPAPage() {
             Visualize a localização das estações SIMA e dados coletados em tempo real
           </SectionSubtitle>
 
-          <MapPlaceholder>
-            <MapPin size={48} style={{ marginBottom: "1rem", opacity: 0.5 }} />
-            <h3>Mapa Interativo</h3>
-            <p>Esta seção será implementada com um mapa interativo mostrando:</p>
-            <ul style={{ textAlign: "left", maxWidth: "400px", margin: "1rem auto" }}>
-              <li>Localização das estações SIMA</li>
-              <li>Dados em tempo real</li>
-              <li>Filtros por período e parâmetros</li>
-              <li>Visualização de séries temporais</li>
-            </ul>
-          </MapPlaceholder>
+          <InteractiveMap
+            points={mapPoints}
+            loading={mapLoading}
+            error={mapError}
+            filters={mapFilters}
+            onFiltersChange={setMapFilters}
+            filtersOpen={filtersPanelOpen}
+            onFiltersOpenChange={setFiltersPanelOpen}
+            onMarkerClick={(point) => {
+              console.log("Marker clicked:", point);
+              // Aqui você pode adicionar lógica para mostrar detalhes da estação
+            }}
+          />
 
-          <FilterButton>
+          <FilterButton onClick={() => setFiltersPanelOpen(true)}>
             <Filter size={20} />
             Configurar Filtros
           </FilterButton>

@@ -29,7 +29,6 @@ const BarraBrasil = () => {
     document.body.appendChild(script);
 
     return () => {
-      // limpa script ao desmontar, evitando múltiplos carregamentos
       if (document.body.contains(script)) {
         document.body.removeChild(script);
       }

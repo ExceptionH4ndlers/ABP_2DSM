@@ -11,6 +11,20 @@ export default defineConfig({
     watch: {
       usePolling: true, // garante hot reload no bind mount
     },
+    proxy: {
+      '/sima': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/furnas': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+      '/balcar': {
+        target: 'http://localhost:3001',
+        changeOrigin: true,
+      },
+    },
   },
   preview: {
     host: true,
