@@ -3,11 +3,33 @@ import { furnasPool } from "../../configs/db";
 import { logger } from "../../configs/logger";
 
 const PAGE_SIZE = Number(process.env.PAGE_SIZE) || 10;
+const MAX_PAGE_SIZE = Number(process.env.MAX_PAGE_SIZE) || 100;
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   try {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || PAGE_SIZE;
+    const pageRaw = req.query.page as string | undefined;
+    const limitRaw = req.query.limit as string | undefined;
+
+    const page = pageRaw ? parseInt(pageRaw, 10) : 1;
+    const limitInput = limitRaw ? parseInt(limitRaw, 10) : PAGE_SIZE;
+
+    if (Number.isNaN(page) || page < 1) {
+      res.status(400).json({
+        success: false,
+        error: "Parâmetro 'page' inválido. Use inteiro >= 1.",
+      });
+      return;
+    }
+
+    if (Number.isNaN(limitInput) || limitInput < 1) {
+      res.status(400).json({
+        success: false,
+        error: "Parâmetro 'limit' inválido. Use inteiro >= 1.",
+      });
+      return;
+    }
+
+    const limit = Math.min(limitInput, MAX_PAGE_SIZE);
     const offset = (page - 1) * limit;
 
     // consulta com joins
