@@ -1,7 +1,6 @@
 import express from "express";
 import abioticocoluna from "./abioticocoluna.routes";
 import campanha from "./campanha.routes";
-import campanhaportabela from "./campanhaportabela.routes";
 import instituicao from "./instituicao.routes";
 import reservatorio from "./reservatorio.routes";
 import sitio from "./sitio.routes";
