@@ -18,7 +18,6 @@ export const getAll = async (req: Request, res: Response): Promise<Response> => 
       });
     }
 
-  
     const result = await furnasPool.query(
       `
       SELECT 
