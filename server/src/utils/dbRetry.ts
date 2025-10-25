@@ -15,7 +15,6 @@ export async function queryWithRetry<T = any>(
 
   let attempt = 0;
   /* tenta com backoff exponencial simples */
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     try {
       const res: QueryResult = await pool.query(sql, params);
