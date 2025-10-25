@@ -6,6 +6,7 @@ import campanha from "./campanha.routes";
 import fluxoinpe from "./fluxoinpe.routes";
 import meta from "./meta.routes";
 import query from "./query.routes";
+import sitio from "./sitio.routes";
 
 const router = express.Router();
 
@@ -16,5 +17,6 @@ router.use("/campanha", campanha);
 router.use("/fluxoinpe", fluxoinpe);
 router.use("/meta", meta);
 router.use("/query", query);
+router.use("/sitio", sitio);
 
 export default router;
