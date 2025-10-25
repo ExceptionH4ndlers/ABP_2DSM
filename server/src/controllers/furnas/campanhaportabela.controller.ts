@@ -18,7 +18,6 @@ export const getAll = async (req: Request, res: Response): Promise<Response> => 
       });
     }
 
-    // Consulta com joins na tbcampanhaportabela
     const result = await furnasPool.query(
       `
       SELECT 
