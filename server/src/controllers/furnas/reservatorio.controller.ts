@@ -16,13 +16,8 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
       SELECT 
         idreservatorio,
         nome,
-        localizacao,
-        capacidade,
-        area,
-        profundidademaxima,
-        profundidademedia,
-        latitude,
-        longitude
+        lat,
+        lng
       FROM tbreservatorio
       ORDER BY nome ASC
       LIMIT $1 OFFSET $2
@@ -38,13 +33,8 @@ export const getAll = async (req: Request, res: Response): Promise<void> => {
     const data = result.rows.map((row: any) => ({
       idreservatorio: row.idreservatorio,
       nome: row.nome,
-      localizacao: row.localizacao,
-      capacidade: row.capacidade,
-      area: row.area,
-      profundidademaxima: row.profundidademaxima,
-      profundidademedia: row.profundidademedia,
-      latitude: row.latitude,
-      longitude: row.longitude,
+      lat: row.lat,
+      lng: row.lng,
     }));
 
     res.status(200).json({

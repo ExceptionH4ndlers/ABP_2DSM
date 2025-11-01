@@ -20,6 +20,8 @@ import {
 } from "lucide-react";
 import { ExportCsvButton } from "../components/ExportCsvButton";
 import { CsvExportModalFurnas } from "../components/CsvExportModalFurnas";
+import { useMapData } from "../hooks/useMapData";
+import InteractiveMap from "../components/InteractiveMap";
 // CSV export via backend
 
 const FurnasSPAContainer = styled.div`
@@ -88,16 +90,6 @@ const SectionText = styled.p`
   &:last-child {
     margin-bottom: 0;
   }
-`;
-
-const MapPlaceholder = styled.div`
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
-  border-radius: 16px;
-  padding: 4rem 2rem;
-  margin: 2rem 0;
-  color: #64748b;
-  text-align: center;
 `;
 
 const ControlsSection = styled.div`
@@ -469,6 +461,25 @@ const PaginationInfo = styled.span`
 
 function FurnasSPAPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+
+  // Hook para dados do mapa - apenas Furnas
+  const {
+    mapPoints,
+    loading: mapLoading,
+    error: mapError,
+  } = useMapData({
+    showSima: false,
+    showFurnas: true,
+    showBalcar: false,
+  });
+
+  const [mapFilters, setMapFilters] = useState({
+    showSima: false,
+    showFurnas: true,
+    showBalcar: false,
+  });
+
+  const [filtersPanelOpen, setFiltersPanelOpen] = useState(false);
 
   const [filters, setFilters] = useState({
     startDate: "2006-01-01", // será ajustado pelo MIN/MAX do banco
@@ -869,15 +880,35 @@ function FurnasSPAPage() {
           </SectionTitle>
           <SectionSubtitle>Reservatórios estudados no projeto Balanço de Carbono</SectionSubtitle>
 
-          <MapPlaceholder>
-            <MapPin size={48} style={{ marginBottom: "1rem", opacity: 0.5 }} />
-            <h3>Mapa Interativo dos Reservatórios</h3>
-            <p>
-              Visualização geográfica dos reservatórios hidrelétricos estudados no projeto,
-              incluindo dados de localização, características ambientais e resultados das campanhas
-              científicas.
-            </p>
-          </MapPlaceholder>
+          <InteractiveMap
+            points={mapPoints}
+            loading={mapLoading}
+            error={mapError}
+            filters={mapFilters}
+            onFiltersChange={setMapFilters}
+            filtersOpen={filtersPanelOpen}
+            onFiltersOpenChange={setFiltersPanelOpen}
+            onMarkerClick={(point) => {
+              console.log("Reservatório clicado:", point);
+              // Aqui você pode adicionar lógica para mostrar detalhes do reservatório
+            }}
+          />
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
+            <button
+              onClick={() => setFiltersPanelOpen(true)}
+              style={{
+                background: "linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)",
+                border: "none",
+                borderRadius: 12,
+                padding: "1rem 2rem",
+                color: "#fff",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              <Filter size={20} /> Configurar Filtros
+            </button>
+          </div>
         </Section>
 
         {/* Seção Banco de Dados */}

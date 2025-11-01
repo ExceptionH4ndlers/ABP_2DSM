@@ -1,5 +1,8 @@
+import { useState } from "react";
 import styled from "styled-components";
-import { MapPin, Navigation, Layers, Globe } from "lucide-react";
+import { MapPin, Navigation, Layers } from "lucide-react";
+import { useMapData } from "../../hooks/useMapData";
+import InteractiveMap from "../InteractiveMap";
 
 const SectionContainer = styled.section`
   padding: 6rem 2rem;
@@ -73,60 +76,6 @@ const MapContainer = styled.div`
     padding: 2rem 1rem;
     border-radius: 20px;
   }
-`;
-
-const MapPlaceholder = styled.div`
-  height: 500px;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px dashed #22c55e;
-  margin-bottom: 2rem;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(34,197,94,0.2)"/><circle cx="80" cy="30" r="2" fill="rgba(34,197,94,0.2)"/><circle cx="50" cy="70" r="2" fill="rgba(34,197,94,0.2)"/><circle cx="30" cy="80" r="2" fill="rgba(34,197,94,0.2)"/></svg>');
-    opacity: 0.5;
-  }
-`;
-
-const MapContent = styled.div`
-  text-align: center;
-  z-index: 2;
-  position: relative;
-`;
-
-const MapIcon = styled.div`
-  width: 80px;
-  height: 80px;
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  margin: 0 auto 1.5rem;
-`;
-
-const MapTitle = styled.h3`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #166534;
-  margin-bottom: 0.5rem;
-`;
-
-const MapDescription = styled.p`
-  color: #64748b;
-  font-size: 1rem;
 `;
 
 const FeaturesGrid = styled.div`
@@ -235,6 +184,23 @@ const ReservoirLocation = styled.div`
 `;
 
 function MapasSection() {
+  // Hook para dados do mapa - todos os tipos
+  const {
+    mapPoints,
+    loading: mapLoading,
+    error: mapError,
+  } = useMapData({
+    showSima: true,
+    showFurnas: true,
+    showBalcar: true,
+  });
+
+  const [mapFilters, setMapFilters] = useState({
+    showSima: true,
+    showFurnas: true,
+    showBalcar: true,
+  });
+
   return (
     <SectionContainer id="mapas">
       <SectionContent>
@@ -246,17 +212,17 @@ function MapasSection() {
         </SectionHeader>
 
         <MapContainer>
-          <MapPlaceholder>
-            <MapContent>
-              <MapIcon>
-                <Globe size={40} />
-              </MapIcon>
-              <MapTitle>Mapa Interativo</MapTitle>
-              <MapDescription>
-                Visualização geográfica dos reservatórios e estações de monitoramento
-              </MapDescription>
-            </MapContent>
-          </MapPlaceholder>
+          <InteractiveMap
+            points={mapPoints}
+            loading={mapLoading}
+            error={mapError}
+            filters={mapFilters}
+            onFiltersChange={setMapFilters}
+            onMarkerClick={(point) => {
+              console.log("Ponto clicado:", point);
+              // Aqui você pode adicionar lógica para mostrar detalhes
+            }}
+          />
 
           <FeaturesGrid>
             <FeatureCard>

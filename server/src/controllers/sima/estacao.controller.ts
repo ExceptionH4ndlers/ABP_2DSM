@@ -37,6 +37,35 @@ export const getAllSimple = async (req: Request, res: Response): Promise<void> =
   }
 };
 
+export const getAllForMap = async (req: Request, res: Response): Promise<void> => {
+  try {
+    // Consulta para obter todas as estações com coordenadas para o mapa
+    const result = await queryWithRetry(
+      simaPool,
+      `SELECT idestacao, idhexadecimal, rotulo, lat, lng, inicio, fim FROM tbestacao 
+       WHERE lat IS NOT NULL AND lng IS NOT NULL
+       ORDER BY rotulo ASC`,
+      [],
+      { retries: 6, delayMs: 800 },
+    );
+
+    res.status(200).json({
+      success: true,
+      data: result.rows,
+    });
+  } catch (error: any) {
+    logger.error("Erro ao consultar tbestacao para mapa", {
+      message: error.message,
+      stack: error.stack,
+    });
+
+    res.status(500).json({
+      success: false,
+      error: "Erro interno ao consultar as estações para o mapa.",
+    });
+  }
+};
+
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   try {
     const page = parseInt(req.query.page as string, 10);
