@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 interface EstacaoSima {
   idestacao: string;
@@ -30,7 +30,7 @@ export interface MapPoint {
   name: string;
   lat: number;
   lng: number;
-  type: 'sima' | 'furnas' | 'balcar';
+  type: "sima" | "furnas" | "balcar";
   data?: EstacaoSima | Reservatorio;
   description?: string;
   period?: {
@@ -50,11 +50,13 @@ export interface MapFilters {
   region?: string;
 }
 
-export function useMapData(filters: MapFilters = {
-  showSima: true,
-  showFurnas: true,
-  showBalcar: true
-}) {
+export function useMapData(
+  filters: MapFilters = {
+    showSima: true,
+    showFurnas: true,
+    showBalcar: true,
+  },
+) {
   const [mapPoints, setMapPoints] = useState<MapPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -63,7 +65,7 @@ export function useMapData(filters: MapFilters = {
     const fetchMapData = async () => {
       setLoading(true);
       setError(null);
-      
+
       try {
         const points: MapPoint[] = [];
 
@@ -71,7 +73,7 @@ export function useMapData(filters: MapFilters = {
         if (filters.showSima) {
           try {
             // Usar sempre URL absoluta para funcionar no Docker
-            const simaResponse = await fetch('http://localhost:3001/sima/estacao/map');
+            const simaResponse = await fetch("http://localhost:3001/sima/estacao/map");
             if (simaResponse.ok) {
               const simaData: SimaApiResponse = await simaResponse.json();
               const simaPoints: MapPoint[] = simaData.data
@@ -81,25 +83,25 @@ export function useMapData(filters: MapFilters = {
                   name: estacao.rotulo || `Estação ${estacao.idhexadecimal}`,
                   lat: estacao.lat,
                   lng: estacao.lng,
-                  type: 'sima' as const,
+                  type: "sima" as const,
                   data: estacao,
                   description: `Estação SIMA ${estacao.idhexadecimal}`,
                   period: {
                     start: estacao.inicio,
-                    end: estacao.fim || undefined
-                  }
+                    end: estacao.fim || undefined,
+                  },
                 }));
               points.push(...simaPoints);
             }
           } catch (err) {
-            console.warn('Erro ao buscar dados SIMA:', err);
+            console.warn("Erro ao buscar dados SIMA:", err);
           }
         }
 
         // Buscar dados Furnas (reservatórios)
         if (filters.showFurnas) {
           try {
-            const furnasResponse = await fetch('http://localhost:3001/furnas/reservatorio/all');
+            const furnasResponse = await fetch("http://localhost:3001/furnas/reservatorio/all");
             if (furnasResponse.ok) {
               const furnasData: ReservatorioApiResponse = await furnasResponse.json();
               const furnasPoints: MapPoint[] = furnasData.data
@@ -109,21 +111,21 @@ export function useMapData(filters: MapFilters = {
                   name: reservatorio.nome,
                   lat: parseFloat(reservatorio.lat),
                   lng: parseFloat(reservatorio.lng),
-                  type: 'furnas' as const,
+                  type: "furnas" as const,
                   data: reservatorio,
-                  description: `Reservatório Furnas`
+                  description: `Reservatório Furnas`,
                 }));
               points.push(...furnasPoints);
             }
           } catch (err) {
-            console.warn('Erro ao buscar dados Furnas:', err);
+            console.warn("Erro ao buscar dados Furnas:", err);
           }
         }
 
         // Buscar dados BALCAR (reservatórios)
         if (filters.showBalcar) {
           try {
-            const balcarResponse = await fetch('http://localhost:3001/balcar/reservatorio/all');
+            const balcarResponse = await fetch("http://localhost:3001/balcar/reservatorio/all");
             if (balcarResponse.ok) {
               const balcarData: ReservatorioApiResponse = await balcarResponse.json();
               const balcarPoints: MapPoint[] = balcarData.data
@@ -133,14 +135,14 @@ export function useMapData(filters: MapFilters = {
                   name: reservatorio.nome,
                   lat: parseFloat(reservatorio.lat),
                   lng: parseFloat(reservatorio.lng),
-                  type: 'balcar' as const,
+                  type: "balcar" as const,
                   data: reservatorio,
-                  description: `Reservatório BALCAR`
+                  description: `Reservatório BALCAR`,
                 }));
               points.push(...balcarPoints);
             }
           } catch (err) {
-            console.warn('Erro ao buscar dados BALCAR:', err);
+            console.warn("Erro ao buscar dados BALCAR:", err);
           }
         }
 
@@ -148,12 +150,16 @@ export function useMapData(filters: MapFilters = {
         let filteredPoints = points;
 
         if (filters.dateRange?.start && filters.dateRange?.end) {
-          filteredPoints = filteredPoints.filter(point => {
-            if (point.type === 'sima' && point.period?.start) {
+          filteredPoints = filteredPoints.filter((point) => {
+            if (point.type === "sima" && point.period?.start) {
               const pointStart = new Date(point.period.start);
               const filterStart = new Date(filters.dateRange!.start);
               const filterEnd = new Date(filters.dateRange!.end);
-              if (isNaN(pointStart.getTime()) || isNaN(filterStart.getTime()) || isNaN(filterEnd.getTime())) {
+              if (
+                isNaN(pointStart.getTime()) ||
+                isNaN(filterStart.getTime()) ||
+                isNaN(filterEnd.getTime())
+              ) {
                 return true;
               }
               return pointStart >= filterStart && pointStart <= filterEnd;
@@ -172,8 +178,8 @@ export function useMapData(filters: MapFilters = {
 
         setMapPoints(filteredPoints);
       } catch (err) {
-        setError('Erro ao carregar dados do mapa');
-        console.error('Erro ao buscar dados do mapa:', err);
+        setError("Erro ao carregar dados do mapa");
+        console.error("Erro ao buscar dados do mapa:", err);
       } finally {
         setLoading(false);
       }
@@ -189,6 +195,6 @@ export function useMapData(filters: MapFilters = {
     refetch: () => {
       setLoading(true);
       // Trigger re-fetch by updating a dependency
-    }
+    },
   };
 }

@@ -1,15 +1,18 @@
-import { useState } from 'react';
-import styled from 'styled-components';
-import { Filter, X } from 'lucide-react';
-import type { MapFilters } from '../hooks/useMapData';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Filter, X } from "lucide-react";
+import type { MapFilters } from "../hooks/useMapData";
 
-const FilterContainer = styled.div`
+const FilterContainer = styled.div<{ $isSidebar?: boolean }>`
   background: white;
-  border-radius: 16px;
+  border-radius: ${(props) => (props.$isSidebar ? "0" : "16px")};
   padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e2e8f0;
-  margin-bottom: 1rem;
+  box-shadow: ${(props) => (props.$isSidebar ? "none" : "0 4px 20px rgba(0, 0, 0, 0.1)")};
+  border: ${(props) => (props.$isSidebar ? "none" : "1px solid #e2e8f0")};
+  margin-bottom: ${(props) => (props.$isSidebar ? "0" : "1rem")};
+  height: ${(props) => (props.$isSidebar ? "100%" : "auto")};
+  display: ${(props) => (props.$isSidebar ? "flex" : "block")};
+  flex-direction: ${(props) => (props.$isSidebar ? "column" : "row")};
 `;
 
 const FilterHeader = styled.div`
@@ -54,61 +57,6 @@ const FilterGrid = styled.div`
   }
 `;
 
-const FilterGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-const FilterLabel = styled.label`
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #374151;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const CheckboxGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
-const CheckboxItem = styled.label`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
-  color: #64748b;
-  cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-
-  &:hover {
-    background: #f8fafc;
-  }
-`;
-
-const Checkbox = styled.input`
-  margin: 0;
-`;
-
-const DateInput = styled.input`
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  transition: border-color 0.2s ease;
-
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-`;
-
 const FilterActions = styled.div`
   display: flex;
   gap: 0.5rem;
@@ -116,7 +64,7 @@ const FilterActions = styled.div`
 `;
 
 // Usar prop transitória para evitar forward ao DOM
-const ActionButton = styled.button<{ $variant?: 'primary' | 'secondary' }>`
+const ActionButton = styled.button<{ $variant?: "primary" | "secondary" }>`
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-size: 0.9rem;
@@ -125,8 +73,8 @@ const ActionButton = styled.button<{ $variant?: 'primary' | 'secondary' }>`
   transition: all 0.2s ease;
   border: 1px solid;
 
-  ${({ $variant = 'secondary' }) => {
-    if ($variant === 'primary') {
+  ${({ $variant = "secondary" }) => {
+    if ($variant === "primary") {
       return `
         background: #3b82f6;
         border-color: #3b82f6;
@@ -158,14 +106,17 @@ interface MapFiltersProps {
   isOpen: boolean;
   // Enquanto definimos os filtros definitivos, exibir apenas placeholder
   placeholderOnly?: boolean;
+  // Modo sidebar (aparece no fullscreen)
+  isSidebar?: boolean;
 }
 
-export default function MapFiltersComponent({ 
-  filters, 
-  onFiltersChange, 
+export default function MapFiltersComponent({
+  filters,
+  onFiltersChange,
   onClose,
   isOpen,
-  placeholderOnly = true
+  placeholderOnly = true,
+  isSidebar = false,
 }: MapFiltersProps) {
   const [localFilters, setLocalFilters] = useState<MapFilters>(filters);
 
@@ -173,20 +124,6 @@ export default function MapFiltersComponent({
   React.useEffect(() => {
     if (isOpen) setLocalFilters(filters);
   }, [filters, isOpen]);
-
-  const handleTypeChange = (type: keyof Pick<MapFilters, 'showSima' | 'showFurnas' | 'showBalcar'>) => {
-    const newFilters = { ...localFilters, [type]: !localFilters[type] };
-    setLocalFilters(newFilters);
-  };
-
-  const handleDateChange = (field: 'start' | 'end', value: string) => {
-    const newDateRange = { 
-      start: localFilters.dateRange?.start || '', 
-      end: localFilters.dateRange?.end || '',
-      ...{ [field]: value }
-    };
-    setLocalFilters({ ...localFilters, dateRange: newDateRange });
-  };
 
   const applyFilters = () => {
     onFiltersChange(localFilters);
@@ -199,10 +136,10 @@ export default function MapFiltersComponent({
       showFurnas: true,
       showBalcar: true,
       dateRange: {
-        start: '',
-        end: ''
+        start: "",
+        end: "",
       },
-      region: undefined
+      region: undefined,
     };
     setLocalFilters(defaultFilters);
     onFiltersChange(defaultFilters);
@@ -211,7 +148,7 @@ export default function MapFiltersComponent({
   if (!isOpen) return null;
 
   return (
-    <FilterContainer>
+    <FilterContainer $isSidebar={isSidebar}>
       <FilterHeader>
         <FilterTitle>
           <Filter size={18} />
@@ -225,10 +162,9 @@ export default function MapFiltersComponent({
       </FilterHeader>
 
       {placeholderOnly ? (
-        <div style={{ color: '#64748b', fontSize: '0.95rem' }}>
-          Em breve você poderá configurar filtros específicos para esta página.
-          Por enquanto o mapa já apresenta apenas os dados do contexto atual
-          (SIMA/FURNAS/BALCAR, conforme a página).
+        <div style={{ color: "#64748b", fontSize: "0.95rem" }}>
+          Em breve você poderá configurar filtros específicos para esta página. Por enquanto o mapa
+          já apresenta apenas os dados do contexto atual (SIMA/FURNAS/BALCAR, conforme a página).
         </div>
       ) : (
         <>
@@ -237,7 +173,9 @@ export default function MapFiltersComponent({
           </FilterGrid>
           <FilterActions>
             <ActionButton onClick={resetFilters}>Limpar Filtros</ActionButton>
-            <ActionButton $variant="primary" onClick={applyFilters}>Aplicar Filtros</ActionButton>
+            <ActionButton $variant="primary" onClick={applyFilters}>
+              Aplicar Filtros
+            </ActionButton>
           </FilterActions>
         </>
       )}

@@ -185,16 +185,20 @@ const ReservoirLocation = styled.div`
 
 function MapasSection() {
   // Hook para dados do mapa - todos os tipos
-  const { mapPoints, loading: mapLoading, error: mapError } = useMapData({
+  const {
+    mapPoints,
+    loading: mapLoading,
+    error: mapError,
+  } = useMapData({
     showSima: true,
     showFurnas: true,
-    showBalcar: true
+    showBalcar: true,
   });
 
   const [mapFilters, setMapFilters] = useState({
     showSima: true,
     showFurnas: true,
-    showBalcar: true
+    showBalcar: true,
   });
 
   return (
@@ -215,7 +219,7 @@ function MapasSection() {
             filters={mapFilters}
             onFiltersChange={setMapFilters}
             onMarkerClick={(point) => {
-              console.log('Ponto clicado:', point);
+              console.log("Ponto clicado:", point);
               // Aqui você pode adicionar lógica para mostrar detalhes
             }}
           />

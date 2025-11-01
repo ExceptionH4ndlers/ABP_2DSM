@@ -463,16 +463,20 @@ function FurnasSPAPage() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
   // Hook para dados do mapa - apenas Furnas
-  const { mapPoints, loading: mapLoading, error: mapError } = useMapData({
+  const {
+    mapPoints,
+    loading: mapLoading,
+    error: mapError,
+  } = useMapData({
     showSima: false,
     showFurnas: true,
-    showBalcar: false
+    showBalcar: false,
   });
 
   const [mapFilters, setMapFilters] = useState({
     showSima: false,
     showFurnas: true,
-    showBalcar: false
+    showBalcar: false,
   });
 
   const [filtersPanelOpen, setFiltersPanelOpen] = useState(false);
@@ -885,21 +889,21 @@ function FurnasSPAPage() {
             filtersOpen={filtersPanelOpen}
             onFiltersOpenChange={setFiltersPanelOpen}
             onMarkerClick={(point) => {
-              console.log('Reservatório clicado:', point);
+              console.log("Reservatório clicado:", point);
               // Aqui você pode adicionar lógica para mostrar detalhes do reservatório
             }}
           />
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem' }}>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
             <button
               onClick={() => setFiltersPanelOpen(true)}
               style={{
-                background: 'linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)',
-                border: 'none',
+                background: "linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)",
+                border: "none",
                 borderRadius: 12,
-                padding: '1rem 2rem',
-                color: '#fff',
+                padding: "1rem 2rem",
+                color: "#fff",
                 fontWeight: 600,
-                cursor: 'pointer'
+                cursor: "pointer",
               }}
             >
               <Filter size={20} /> Configurar Filtros
