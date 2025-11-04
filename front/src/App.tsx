@@ -29,6 +29,7 @@ function AppContent() {
   return (
     <>
       <BarraBrasil />
+
       {shouldShowNavigation && <Navigation />}
       <Routes>
         <Route path="/" element={<HomePage />} />
