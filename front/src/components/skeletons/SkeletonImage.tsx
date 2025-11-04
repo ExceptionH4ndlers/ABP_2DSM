@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import SkeletonBase from "./Skeleton";
 
-const ImageContainer = styled.div<{ width?: string; height?: string }>`
-  width: ${({ width }) => width || "100%"};
-  height: ${({ height }) => height || "auto"};
-  min-height: ${({ height }) => (height ? height : "200px")};
+const ImageContainer = styled.div<{ $width?: string; $height?: string }>`
+  width: ${({ $width }) => $width || "100%"};
+  height: ${({ $height }) => $height || "auto"};
+  min-height: ${({ $height }) => ($height ? $height : "200px")};
   border-radius: 12px;
   overflow: hidden;
   position: relative;
@@ -25,8 +25,8 @@ interface SkeletonImageProps {
 
 const SkeletonImage: React.FC<SkeletonImageProps> = ({ width, height, borderRadius = "12px" }) => {
   return (
-    <ImageContainer width={width} height={height}>
-      <ImageSkeleton borderRadius={borderRadius} />
+    <ImageContainer $width={width} $height={height}>
+      <ImageSkeleton $borderRadius={borderRadius} />
     </ImageContainer>
   );
 };

@@ -48,19 +48,19 @@ const SkeletonMap: React.FC<SkeletonMapProps> = ({ showControls = true }) => {
   return (
     <MapContainer>
       <MapHeader>
-        <SkeletonBase width="200px" height="20px" />
-        <SkeletonBase width="150px" height="20px" />
-        <SkeletonBase width="100px" height="20px" />
+        <SkeletonBase $width="200px" $height="20px" />
+        <SkeletonBase $width="150px" $height="20px" />
+        <SkeletonBase $width="100px" $height="20px" />
       </MapHeader>
       <MapContent>
         {showControls && (
           <ControlsSkeleton>
-            <SkeletonBase width="40px" height="40px" borderRadius="8px" />
-            <SkeletonBase width="40px" height="40px" borderRadius="8px" />
-            <SkeletonBase width="40px" height="40px" borderRadius="8px" />
+            <SkeletonBase $width="40px" $height="40px" $borderRadius="8px" />
+            <SkeletonBase $width="40px" $height="40px" $borderRadius="8px" />
+            <SkeletonBase $width="40px" $height="40px" $borderRadius="8px" />
           </ControlsSkeleton>
         )}
-        <SkeletonBase width="80%" height="60%" borderRadius="8px" />
+        <SkeletonBase $width="80%" $height="60%" $borderRadius="8px" />
       </MapContent>
     </MapContainer>
   );
