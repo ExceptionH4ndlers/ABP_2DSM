@@ -696,6 +696,24 @@ function SimaSPAPage() {
     });
   };
 
+        <ClearButton onClick={handleClearFilters}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    style={{ width: '20px', height: '20px', marginRight: '8px' }}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M10.5 6h9m-9 6h9m-9 6h9M4.5 6h.008v.008H4.5V6zm0 6h.008v.008H4.5V12zm0 6h.008v.008H4.5V18z"
+    />
+  </svg>
+  Limpar Filtros
+</ClearButton>
+
   const handleExportCsv = () => {
     setIsCsvModalOpen(true);
   };
