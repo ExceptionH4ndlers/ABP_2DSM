@@ -78,19 +78,25 @@ export function useMapData(
               const simaData: SimaApiResponse = await simaResponse.json();
               const simaPoints: MapPoint[] = simaData.data
                 .filter((estacao: EstacaoSima) => estacao.lat && estacao.lng)
-                .map((estacao: EstacaoSima) => ({
-                  id: `sima-${estacao.idestacao}`,
-                  name: estacao.rotulo || `Estação ${estacao.idhexadecimal}`,
-                  lat: estacao.lat,
-                  lng: estacao.lng,
-                  type: "sima" as const,
-                  data: estacao,
-                  description: `Estação SIMA ${estacao.idhexadecimal}`,
-                  period: {
-                    start: estacao.inicio,
-                    end: estacao.fim || undefined,
-                  },
-                }));
+                .map((estacao: EstacaoSima, index: number) => {
+                  // Criar chave única mesmo quando idestacao for undefined
+                  const uniqueId = estacao.idestacao
+                    ? `sima-${estacao.idestacao}`
+                    : `sima-${estacao.idhexadecimal || estacao.rotulo || "unknown"}-${estacao.lat}-${estacao.lng}-${index}`;
+                  return {
+                    id: uniqueId,
+                    name: estacao.rotulo || `Estação ${estacao.idhexadecimal}`,
+                    lat: estacao.lat,
+                    lng: estacao.lng,
+                    type: "sima" as const,
+                    data: estacao,
+                    description: `Estação SIMA ${estacao.idhexadecimal}`,
+                    period: {
+                      start: estacao.inicio,
+                      end: estacao.fim || undefined,
+                    },
+                  };
+                });
               points.push(...simaPoints);
             }
           } catch (err) {
@@ -106,15 +112,21 @@ export function useMapData(
               const furnasData: ReservatorioApiResponse = await furnasResponse.json();
               const furnasPoints: MapPoint[] = furnasData.data
                 .filter((reservatorio: Reservatorio) => reservatorio.lat && reservatorio.lng)
-                .map((reservatorio: Reservatorio) => ({
-                  id: `furnas-${reservatorio.idReservatorio}`,
-                  name: reservatorio.nome,
-                  lat: parseFloat(reservatorio.lat),
-                  lng: parseFloat(reservatorio.lng),
-                  type: "furnas" as const,
-                  data: reservatorio,
-                  description: `Reservatório Furnas`,
-                }));
+                .map((reservatorio: Reservatorio, index: number) => {
+                  // Criar chave única mesmo quando idReservatorio for undefined
+                  const uniqueId = reservatorio.idReservatorio
+                    ? `furnas-${reservatorio.idReservatorio}`
+                    : `furnas-${reservatorio.nome}-${reservatorio.lat}-${reservatorio.lng}-${index}`;
+                  return {
+                    id: uniqueId,
+                    name: reservatorio.nome,
+                    lat: parseFloat(reservatorio.lat),
+                    lng: parseFloat(reservatorio.lng),
+                    type: "furnas" as const,
+                    data: reservatorio,
+                    description: `Reservatório Furnas`,
+                  };
+                });
               points.push(...furnasPoints);
             }
           } catch (err) {
@@ -130,15 +142,21 @@ export function useMapData(
               const balcarData: ReservatorioApiResponse = await balcarResponse.json();
               const balcarPoints: MapPoint[] = balcarData.data
                 .filter((reservatorio: Reservatorio) => reservatorio.lat && reservatorio.lng)
-                .map((reservatorio: Reservatorio) => ({
-                  id: `balcar-${reservatorio.idReservatorio}`,
-                  name: reservatorio.nome,
-                  lat: parseFloat(reservatorio.lat),
-                  lng: parseFloat(reservatorio.lng),
-                  type: "balcar" as const,
-                  data: reservatorio,
-                  description: `Reservatório BALCAR`,
-                }));
+                .map((reservatorio: Reservatorio, index: number) => {
+                  // Criar chave única mesmo quando idReservatorio for undefined
+                  const uniqueId = reservatorio.idReservatorio
+                    ? `balcar-${reservatorio.idReservatorio}`
+                    : `balcar-${reservatorio.nome}-${reservatorio.lat}-${reservatorio.lng}-${index}`;
+                  return {
+                    id: uniqueId,
+                    name: reservatorio.nome,
+                    lat: parseFloat(reservatorio.lat),
+                    lng: parseFloat(reservatorio.lng),
+                    type: "balcar" as const,
+                    data: reservatorio,
+                    description: `Reservatório BALCAR`,
+                  };
+                });
               points.push(...balcarPoints);
             }
           } catch (err) {
