@@ -43,13 +43,13 @@ const SkeletonTable: React.FC<SkeletonTableProps> = ({ rows = 5, columns = 5 }) 
     <TableContainer>
       <TableHeader>
         {Array.from({ length: columns }).map((_, index) => (
-          <SkeletonBase key={`header-${index}`} height="20px" borderRadius="4px" />
+          <SkeletonBase key={`header-${index}`} $height="20px" $borderRadius="4px" />
         ))}
       </TableHeader>
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <TableRow key={`row-${rowIndex}`}>
           {Array.from({ length: columns }).map((_, colIndex) => (
-            <SkeletonBase key={`cell-${rowIndex}-${colIndex}`} height="35px" borderRadius="4px" />
+            <SkeletonBase key={`cell-${rowIndex}-${colIndex}`} $height="35px" $borderRadius="4px" />
           ))}
         </TableRow>
       ))}
