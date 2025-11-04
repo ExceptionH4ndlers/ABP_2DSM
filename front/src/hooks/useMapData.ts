@@ -80,9 +80,9 @@ export function useMapData(
                 .filter((estacao: EstacaoSima) => estacao.lat && estacao.lng)
                 .map((estacao: EstacaoSima, index: number) => {
                   // Criar chave única mesmo quando idestacao for undefined
-                  const uniqueId = estacao.idestacao 
-                    ? `sima-${estacao.idestacao}` 
-                    : `sima-${estacao.idhexadecimal || estacao.rotulo || 'unknown'}-${estacao.lat}-${estacao.lng}-${index}`;
+                  const uniqueId = estacao.idestacao
+                    ? `sima-${estacao.idestacao}`
+                    : `sima-${estacao.idhexadecimal || estacao.rotulo || "unknown"}-${estacao.lat}-${estacao.lng}-${index}`;
                   return {
                     id: uniqueId,
                     name: estacao.rotulo || `Estação ${estacao.idhexadecimal}`,
@@ -114,8 +114,8 @@ export function useMapData(
                 .filter((reservatorio: Reservatorio) => reservatorio.lat && reservatorio.lng)
                 .map((reservatorio: Reservatorio, index: number) => {
                   // Criar chave única mesmo quando idReservatorio for undefined
-                  const uniqueId = reservatorio.idReservatorio 
-                    ? `furnas-${reservatorio.idReservatorio}` 
+                  const uniqueId = reservatorio.idReservatorio
+                    ? `furnas-${reservatorio.idReservatorio}`
                     : `furnas-${reservatorio.nome}-${reservatorio.lat}-${reservatorio.lng}-${index}`;
                   return {
                     id: uniqueId,
@@ -144,8 +144,8 @@ export function useMapData(
                 .filter((reservatorio: Reservatorio) => reservatorio.lat && reservatorio.lng)
                 .map((reservatorio: Reservatorio, index: number) => {
                   // Criar chave única mesmo quando idReservatorio for undefined
-                  const uniqueId = reservatorio.idReservatorio 
-                    ? `balcar-${reservatorio.idReservatorio}` 
+                  const uniqueId = reservatorio.idReservatorio
+                    ? `balcar-${reservatorio.idReservatorio}`
                     : `balcar-${reservatorio.nome}-${reservatorio.lat}-${reservatorio.lng}-${index}`;
                   return {
                     id: uniqueId,
