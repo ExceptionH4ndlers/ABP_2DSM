@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import BarraBrasil from "./components/BarraBrasil";
-import { FeedbackProvider } from "./components/FeedbackProvider";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/HomePage";
 import SimaSPAPage from "./pages/SimaSPAPage";
@@ -30,7 +29,7 @@ function AppContent() {
   return (
     <>
       <BarraBrasil />
-      <FeedbackProvider />
+   
       {shouldShowNavigation && <Navigation />}
       <Routes>
         <Route path="/" element={<HomePage />} />
