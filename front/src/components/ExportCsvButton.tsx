@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Download } from "lucide-react";
+import toast from "react-hot-toast"; // ⬅️ IMPORTANTE
 
 interface ExportButtonProps {
   data?: unknown[];
@@ -111,18 +112,26 @@ const StyledButton = styled.button<{ $variant: string; $size: string }>`
 `;
 
 export const ExportCsvButton: React.FC<ExportButtonProps> = ({
-  // data e filename são aceitos para compatibilidade futura, mas não usados aqui
   variant = "primary",
   size = "medium",
   disabled = false,
   className,
   onClick,
 }) => {
+  const handleClick = () => {
+    try {
+      onClick(); // executa a função passada pelo componente pai
+      toast.success("Arquivo CSV exportado com sucesso! ✅"); // toast de sucesso
+    } catch (error) {
+      toast.error("Falha ao exportar o arquivo."); // em caso de erro
+    }
+  };
+
   return (
     <StyledButton
-      $variant={variant || "primary"}
-      $size={size || "medium"}
-      onClick={onClick}
+      $variant={variant}
+      $size={size}
+      onClick={handleClick}
       disabled={disabled}
       className={className}
       style={{
