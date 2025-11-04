@@ -1,16 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import { Download } from "lucide-react";
+import { FileDown } from "lucide-react";
+import { exportChartToPDF } from "../utils/exportToPdf";
 
-interface ExportButtonProps {
-  data?: unknown[];
-  filename?: string;
+interface ExportPdfButtonProps {
+  targetId: string; // id do container a exportar
+  fileName: string; // nome base do PDF
+  onClick?: () => void; // callback opcional
+  disabled?: boolean;
+  label?: string;
   variant?: "primary" | "secondary" | "outline";
   size?: "small" | "medium" | "large";
-  disabled?: boolean;
   className?: string;
-  onClick: () => void;
 }
+
 
 const StyledButton = styled.button<{ $variant: string; $size: string }>`
   background: ${({ $variant }) => {
@@ -110,28 +113,37 @@ const StyledButton = styled.button<{ $variant: string; $size: string }>`
   }
 `;
 
-export const ExportCsvButton: React.FC<ExportButtonProps> = ({
-  // data e filename são aceitos para compatibilidade futura, mas não usados aqui
+const ExportPdfButton: React.FC<ExportPdfButtonProps> = ({
+  targetId,
+  fileName,
+  onClick,
+  disabled = false,
+  label = "Exportar PDF",
   variant = "primary",
   size = "medium",
-  disabled = false,
   className,
-  onClick,
 }) => {
+  const handleClick = async () => {
+    if (onClick) onClick();
+    await exportChartToPDF(targetId, fileName);
+  };
+
   return (
     <StyledButton
-      $variant={variant || "primary"}
-      $size={size || "medium"}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled}
       className={className}
+      $variant={variant}
+      $size={size}
       style={{
         opacity: disabled ? 0.7 : 1,
         cursor: disabled ? "not-allowed" : "pointer",
       }}
     >
-      <Download size={size === "small" ? 14 : size === "large" ? 20 : 16} />
-      Exportar CSV
+      <FileDown size={size === "small" ? 14 : size === "large" ? 20 : 16} />
+      {label}
     </StyledButton>
   );
 };
+
+export default ExportPdfButton;

@@ -1,4 +1,6 @@
+import { AnimatePresence } from "framer-motion";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import PageTransition from "./components/PageTransition";
 import BarraBrasil from "./components/BarraBrasil";
 import Navigation from "./components/Navigation";
 import HomePage from "./pages/HomePage";
@@ -30,21 +32,26 @@ function AppContent() {
     <>
       <BarraBrasil />
       {shouldShowNavigation && <Navigation />}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/sima" element={<SimaSPAPage />} />
-        <Route path="/sima/publicacoes" element={<SimaPublicacoesPage />} />
-        <Route path="/furnas" element={<FurnasSPAPage />} />
-        <Route path="/furnas/panorama" element={<FurnasPanoramaPage />} />
-        <Route path="/furnas/metodologia" element={<FurnasMetodologiaPage />} />
-        <Route path="/furnas/resultados" element={<FurnasResultadosPage />} />
-        <Route path="/furnas/participantes" element={<FurnasParticipantesPage />} />
-        <Route path="/furnas/pesquisas" element={<FurnasPesquisasCorrelatasPage />} />
-        <Route path="/furnas/publicacoes" element={<FurnasPublicacoesPage />} />
-        <Route path="/balcar" element={<BalcarPage />} />
-        <Route path="/balcar/descricao" element={<BalcarDescricaoPage />} />
-        <Route path="/balcar/publicacoes" element={<BalcarPublicacoesPage />} />
-      </Routes>
+       
+      <AnimatePresence mode="wait">
+        <PageTransition key={location.pathname} direction="right" duration={0.5}>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/sima" element={<SimaSPAPage />} />
+            <Route path="/sima/publicacoes" element={<SimaPublicacoesPage />} />
+            <Route path="/furnas" element={<FurnasSPAPage />} />
+            <Route path="/furnas/panorama" element={<FurnasPanoramaPage />} />
+            <Route path="/furnas/metodologia" element={<FurnasMetodologiaPage />} />
+            <Route path="/furnas/resultados" element={<FurnasResultadosPage />} />
+            <Route path="/furnas/participantes" element={<FurnasParticipantesPage />} />
+            <Route path="/furnas/pesquisas" element={<FurnasPesquisasCorrelatasPage />} />
+            <Route path="/furnas/publicacoes" element={<FurnasPublicacoesPage />} />
+            <Route path="/balcar" element={<BalcarPage />} />
+            <Route path="/balcar/descricao" element={<BalcarDescricaoPage />} />
+            <Route path="/balcar/publicacoes" element={<BalcarPublicacoesPage />} />
+          </Routes>
+        </PageTransition>
+      </AnimatePresence>
     </>
   );
 }
