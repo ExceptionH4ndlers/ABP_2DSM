@@ -1,29 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import type { ReactNode } from "react";
-
-interface LoadingContextType {
-  isLoading: boolean;
-  loadingMessage: string | null;
-  showLoading: (message?: string) => void;
-  hideLoading: () => void;
-  // Para operações contextuais (não globais)
-  contextualLoading: {
-    isActive: boolean;
-    message: string | null;
-    show: (message?: string) => void;
-    hide: () => void;
-  };
-}
-
-const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
-
-export const useLoading = () => {
-  const context = useContext(LoadingContext);
-  if (!context) {
-    throw new Error("useLoading deve ser usado dentro de um LoadingProvider");
-  }
-  return context;
-};
+import { LoadingContext } from "./loadingContextTypes";
 
 interface LoadingProviderProps {
   children: ReactNode;

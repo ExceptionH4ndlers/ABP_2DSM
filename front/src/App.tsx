@@ -4,7 +4,7 @@ import BarraBrasil from "./components/BarraBrasil";
 import Navigation from "./components/Navigation";
 import LoadingModal from "./components/LoadingModal";
 import SuspenseWrapper from "./components/SuspenseWrapper";
-import { useLoading } from "./contexts/LoadingContext";
+import { useLoading } from "./hooks/useLoading";
 import { updateLoadingContext } from "./api/axiosConfig";
 
 // Lazy loading de todas as páginas
