@@ -1,22 +1,36 @@
+import { lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import BarraBrasil from "./components/BarraBrasil";
 import Navigation from "./components/Navigation";
-import HomePage from "./pages/HomePage";
-import SimaSPAPage from "./pages/SimaSPAPage";
-import SimaPublicacoesPage from "./pages/SimaPublicacoesPage";
-import FurnasSPAPage from "./pages/FurnasSPAPage";
-import FurnasPanoramaPage from "./pages/FurnasPanoramaPage";
-import FurnasMetodologiaPage from "./pages/FurnasMetodologiaPage";
-import FurnasResultadosPage from "./pages/FurnasResultadosPage";
-import FurnasParticipantesPage from "./pages/FurnasParticipantesPage";
-import FurnasPesquisasCorrelatasPage from "./pages/FurnasPesquisasCorrelatasPage";
-import FurnasPublicacoesPage from "./pages/FurnasPublicacoesPage";
-import BalcarPage from "./pages/BalcarSPAPage";
-import BalcarDescricaoPage from "./pages/BalcarDescricaoPage";
-import BalcarPublicacoesPage from "./pages/BalcarPublicacoesPage";
+import LoadingModal from "./components/LoadingModal";
+import SuspenseWrapper from "./components/SuspenseWrapper";
+import { useLoading } from "./contexts/LoadingContext";
+import { updateLoadingContext } from "./api/axiosConfig";
+
+// Lazy loading de todas as páginas
+const HomePage = lazy(() => import("./pages/HomePage"));
+const SimaSPAPage = lazy(() => import("./pages/SimaSPAPage"));
+const SimaPublicacoesPage = lazy(() => import("./pages/SimaPublicacoesPage"));
+const FurnasSPAPage = lazy(() => import("./pages/FurnasSPAPage"));
+const FurnasPanoramaPage = lazy(() => import("./pages/FurnasPanoramaPage"));
+const FurnasMetodologiaPage = lazy(() => import("./pages/FurnasMetodologiaPage"));
+const FurnasResultadosPage = lazy(() => import("./pages/FurnasResultadosPage"));
+const FurnasParticipantesPage = lazy(() => import("./pages/FurnasParticipantesPage"));
+const FurnasPesquisasCorrelatasPage = lazy(() => import("./pages/FurnasPesquisasCorrelatasPage"));
+const FurnasPublicacoesPage = lazy(() => import("./pages/FurnasPublicacoesPage"));
+const BalcarPage = lazy(() => import("./pages/BalcarSPAPage"));
+const BalcarDescricaoPage = lazy(() => import("./pages/BalcarDescricaoPage"));
+const BalcarPublicacoesPage = lazy(() => import("./pages/BalcarPublicacoesPage"));
 
 function AppContent() {
   const location = useLocation();
+  const { isLoading, loadingMessage, showLoading, hideLoading } = useLoading();
+
+  // Configurar axios com o contexto de loading
+  useEffect(() => {
+    updateLoadingContext({ showLoading, hideLoading });
+  }, [showLoading, hideLoading]);
+
   const shouldShowNavigation =
     location.pathname !== "/furnas" &&
     location.pathname !== "/furnas/panorama" &&
@@ -31,21 +45,24 @@ function AppContent() {
       <BarraBrasil />
 
       {shouldShowNavigation && <Navigation />}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/sima" element={<SimaSPAPage />} />
-        <Route path="/sima/publicacoes" element={<SimaPublicacoesPage />} />
-        <Route path="/furnas" element={<FurnasSPAPage />} />
-        <Route path="/furnas/panorama" element={<FurnasPanoramaPage />} />
-        <Route path="/furnas/metodologia" element={<FurnasMetodologiaPage />} />
-        <Route path="/furnas/resultados" element={<FurnasResultadosPage />} />
-        <Route path="/furnas/participantes" element={<FurnasParticipantesPage />} />
-        <Route path="/furnas/pesquisas" element={<FurnasPesquisasCorrelatasPage />} />
-        <Route path="/furnas/publicacoes" element={<FurnasPublicacoesPage />} />
-        <Route path="/balcar" element={<BalcarPage />} />
-        <Route path="/balcar/descricao" element={<BalcarDescricaoPage />} />
-        <Route path="/balcar/publicacoes" element={<BalcarPublicacoesPage />} />
-      </Routes>
+      <LoadingModal isOpen={isLoading} message={loadingMessage} />
+      <SuspenseWrapper>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/sima" element={<SimaSPAPage />} />
+          <Route path="/sima/publicacoes" element={<SimaPublicacoesPage />} />
+          <Route path="/furnas" element={<FurnasSPAPage />} />
+          <Route path="/furnas/panorama" element={<FurnasPanoramaPage />} />
+          <Route path="/furnas/metodologia" element={<FurnasMetodologiaPage />} />
+          <Route path="/furnas/resultados" element={<FurnasResultadosPage />} />
+          <Route path="/furnas/participantes" element={<FurnasParticipantesPage />} />
+          <Route path="/furnas/pesquisas" element={<FurnasPesquisasCorrelatasPage />} />
+          <Route path="/furnas/publicacoes" element={<FurnasPublicacoesPage />} />
+          <Route path="/balcar" element={<BalcarPage />} />
+          <Route path="/balcar/descricao" element={<BalcarDescricaoPage />} />
+          <Route path="/balcar/publicacoes" element={<BalcarPublicacoesPage />} />
+        </Routes>
+      </SuspenseWrapper>
     </>
   );
 }

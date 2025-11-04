@@ -22,6 +22,7 @@ import { ExportCsvButton } from "../components/ExportCsvButton";
 import { CsvExportModalFurnas } from "../components/CsvExportModalFurnas";
 import { useMapData } from "../hooks/useMapData";
 import InteractiveMap from "../components/InteractiveMap";
+import SkeletonTable from "../components/skeletons/SkeletonTable";
 // CSV export via backend
 
 const FurnasSPAContainer = styled.div`
@@ -225,14 +226,6 @@ const ClearButton = styled(ActionButton)`
     background: #f9fafb;
     border-color: #6b7280;
   }
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-  color: #64748b;
 `;
 
 const ErrorContainer = styled.div`
@@ -1002,10 +995,7 @@ function FurnasSPAPage() {
           )}
 
           {loading ? (
-            <LoadingContainer>
-              <Search size={24} style={{ marginRight: "0.5rem" }} />
-              Carregando dados das campanhas científicas...
-            </LoadingContainer>
+            <SkeletonTable rows={10} columns={8} />
           ) : (
             <TableContainer>
               <StyledTable>

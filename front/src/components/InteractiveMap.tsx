@@ -7,6 +7,7 @@ import type { MapPoint, MapFilters } from "../hooks/useMapData";
 import MapMarker from "./MapMarker";
 import MapFiltersComponent from "./MapFilters";
 import MarkerClusterGroup from "./MarkerClusterGroup";
+import SkeletonMap from "./skeletons/SkeletonMap";
 
 // Importar CSS do Leaflet
 import "leaflet/dist/leaflet.css";
@@ -73,26 +74,6 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
 `;
 
 // Removidos controles flutuantes antigos (Filtros e Centralizar Brasil)
-
-const LoadingOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.9);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  border-radius: 16px;
-`;
-
-const LoadingText = styled.div`
-  font-size: 16px;
-  color: #64748b;
-  font-weight: 500;
-`;
 
 const ErrorMessage = styled.div`
   position: absolute;
@@ -299,15 +280,17 @@ export default function InteractiveMap({
     );
   }
 
+  if (loading) {
+    return (
+      <MapWrapper className={className} $isFullscreen={isFullscreen}>
+        <SkeletonMap showControls={true} />
+      </MapWrapper>
+    );
+  }
+
   return (
     <>
       <MapWrapper className={className} $isFullscreen={isFullscreen}>
-        {loading && (
-          <LoadingOverlay>
-            <LoadingText>Carregando mapa...</LoadingText>
-          </LoadingOverlay>
-        )}
-
         {/* Botão de fullscreen - sempre visível */}
         <FullscreenButton
           onClick={toggleFullscreen}

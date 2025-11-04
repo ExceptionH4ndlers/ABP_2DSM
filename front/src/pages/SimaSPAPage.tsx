@@ -33,6 +33,7 @@ import { useMapData } from "../hooks/useMapData";
 import { ExportCsvButton } from "../components/ExportCsvButton";
 import { CsvExportModal } from "../components/CsvExportModal";
 import InteractiveMap from "../components/InteractiveMap";
+import SkeletonTable from "../components/skeletons/SkeletonTable";
 import estruturaSima1 from "../../img/sima/estrutura_sima1.png";
 import estruturaSima2 from "../../img/sima/estrutura_sima2.png";
 import funcionamentoSima from "../../img/sima/funcionamento_sima.png";
@@ -795,11 +796,19 @@ function SimaSPAPage() {
 
           <ImagesContainer>
             <ImageWrapper>
-              <StructureImage src={estruturaSima1} alt="Estrutura SIMA - Bóia Toroidal" />
+              <StructureImage
+                src={estruturaSima1}
+                alt="Estrutura SIMA - Bóia Toroidal"
+                loading="lazy"
+              />
               <ImageCaption>Bóia Toroidal</ImageCaption>
             </ImageWrapper>
             <ImageWrapper>
-              <StructureImage src={estruturaSima2} alt="Estrutura SIMA - Estrutura Maior" />
+              <StructureImage
+                src={estruturaSima2}
+                alt="Estrutura SIMA - Estrutura Maior"
+                loading="lazy"
+              />
               <ImageCaption>Estrutura Maior</ImageCaption>
             </ImageWrapper>
           </ImagesContainer>
@@ -850,7 +859,11 @@ function SimaSPAPage() {
           </SectionText>
 
           <ImageWrapper style={{ marginTop: "2rem" }}>
-            <FuncionamentoImage src={funcionamentoSima} alt="Modo de Funcionamento do SIMA" />
+            <FuncionamentoImage
+              src={funcionamentoSima}
+              alt="Modo de Funcionamento do SIMA"
+              loading="lazy"
+            />
             <ImageCaption>Diagrama do Modo de Funcionamento</ImageCaption>
           </ImageWrapper>
         </Section>
@@ -1311,10 +1324,7 @@ function SimaSPAPage() {
           )}
 
           {loading ? (
-            <LoadingContainer>
-              <Search size={24} style={{ marginRight: "0.5rem" }} />
-              Carregando dados...
-            </LoadingContainer>
+            <SkeletonTable rows={10} columns={30} />
           ) : (
             <>
               <TableContainer>

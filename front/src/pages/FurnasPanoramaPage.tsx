@@ -170,6 +170,7 @@ function FurnasPanoramaPage() {
             <SingleImage
               src="/img/furnas/panoram/f_l_C_cycle.jpg"
               alt="Vista esquemática mostrando os processos lentos e rápidos do ciclo de carbono"
+              loading="lazy"
             />
           </ImageContainer>
 
@@ -196,6 +197,7 @@ function FurnasPanoramaPage() {
             <SingleImage
               src="/img/furnas/panoram/Increasing.jpg"
               alt="Indicadores da influência humana na atmosfera desde a era industrial"
+              loading="lazy"
             />
           </ImageContainer>
 
@@ -391,6 +393,7 @@ function FurnasPanoramaPage() {
               <ContentImage
                 src="/img/furnas/panoram/schematic_c_b.jpg"
                 alt="Diagrama esquemático do balanço de carbono nos reservatórios"
+                loading="lazy"
               />
               <ImageCaption>
                 Diagrama esquemático do balanço de carbono nos reservatórios - ilustração de RICO
@@ -399,7 +402,7 @@ function FurnasPanoramaPage() {
             </ImageWrapper>
 
             <ImageWrapper>
-              <ContentImage src="/img/furnas/panoram/gh.jpg" alt="O Efeito Estufa" />
+              <ContentImage src="/img/furnas/panoram/gh.jpg" alt="O Efeito Estufa" loading="lazy" />
               <ImageCaption>O Efeito Estufa - Fonte: Econergy Brasil</ImageCaption>
             </ImageWrapper>
           </ImagesGrid>

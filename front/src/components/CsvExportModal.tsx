@@ -4,6 +4,7 @@ import type { DefaultTheme } from "styled-components";
 import { Download, Settings, AlertCircle, CheckCircle, Filter } from "lucide-react";
 import { useCsvExport } from "../hooks/useCsvExport";
 import type { CsvExportOptions } from "../utils/csvParser";
+import LoadingModal from "./LoadingModal";
 
 interface EstacaoItem {
   idestacao: string;
@@ -376,211 +377,214 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
   };
 
   return (
-    <ModalOverlay $isOpen={$isOpen} onClick={handleClose}>
-      <ModalContent onClick={(e) => e.stopPropagation()}>
-        <ModalHeader>
-          <ModalTitle>
-            <Download size={24} />
-            Exportar Dados CSV
-          </ModalTitle>
-          <CloseButton onClick={handleClose}>×</CloseButton>
-        </ModalHeader>
+    <>
+      <LoadingModal isOpen={isExporting} message="Exportando dados para CSV..." />
+      <ModalOverlay $isOpen={$isOpen} onClick={handleClose}>
+        <ModalContent onClick={(e) => e.stopPropagation()}>
+          <ModalHeader>
+            <ModalTitle>
+              <Download size={24} />
+              Exportar Dados CSV
+            </ModalTitle>
+            <CloseButton onClick={handleClose}>×</CloseButton>
+          </ModalHeader>
 
-        {exportError && (
-          <ErrorMessage>
-            <AlertCircle size={20} />
-            {exportError}
-          </ErrorMessage>
-        )}
+          {exportError && (
+            <ErrorMessage>
+              <AlertCircle size={20} />
+              {exportError}
+            </ErrorMessage>
+          )}
 
-        <DataPreview>
-          <SectionTitle>
-            <CheckCircle size={20} />
-            Prévia dos Dados
-          </SectionTitle>
-          <PreviewItem>
-            <PreviewLabel>Total de Registros:</PreviewLabel>
-            <PreviewValue>{dataStats.totalRegistros}</PreviewValue>
-          </PreviewItem>
-          <PreviewItem>
-            <PreviewLabel>Estações:</PreviewLabel>
-            <PreviewValue>{dataStats.estacoesUnicas}</PreviewValue>
-          </PreviewItem>
-          <PreviewItem>
-            <PreviewLabel>Período:</PreviewLabel>
-            <PreviewValue>
-              {dataStats.periodoInicio} - {dataStats.periodoFim}
-            </PreviewValue>
-          </PreviewItem>
-        </DataPreview>
+          <DataPreview>
+            <SectionTitle>
+              <CheckCircle size={20} />
+              Prévia dos Dados
+            </SectionTitle>
+            <PreviewItem>
+              <PreviewLabel>Total de Registros:</PreviewLabel>
+              <PreviewValue>{dataStats.totalRegistros}</PreviewValue>
+            </PreviewItem>
+            <PreviewItem>
+              <PreviewLabel>Estações:</PreviewLabel>
+              <PreviewValue>{dataStats.estacoesUnicas}</PreviewValue>
+            </PreviewItem>
+            <PreviewItem>
+              <PreviewLabel>Período:</PreviewLabel>
+              <PreviewValue>
+                {dataStats.periodoInicio} - {dataStats.periodoFim}
+              </PreviewValue>
+            </PreviewItem>
+          </DataPreview>
 
-        <FormSection>
-          <SectionTitle>
-            <Settings size={20} />
-            Configurações do Arquivo
-          </SectionTitle>
+          <FormSection>
+            <SectionTitle>
+              <Settings size={20} />
+              Configurações do Arquivo
+            </SectionTitle>
 
-          <FormGroup>
-            <Label>Nome do Arquivo</Label>
-            <Input
-              type="text"
-              value={filename}
-              onChange={(e) => setFilename(e.target.value)}
-              placeholder="dados_sima.csv"
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label>Formato de Data</Label>
-            <Select
-              value={options.formatoData}
-              onChange={(e) => updateOptions("formatoData", e.target.value)}
-            >
-              <option value="BR">Brasileiro (DD/MM/AAAA HH:MM)</option>
-              <option value="ISO">ISO 8601 (AAAA-MM-DDTHH:MM:SS)</option>
-              <option value="US">Americano (MM/DD/AAAA HH:MM)</option>
-            </Select>
-          </FormGroup>
-
-          <FormGroup>
-            <Label>Separador</Label>
-            <Select
-              value={options.separador}
-              onChange={(e) => updateOptions("separador", e.target.value)}
-            >
-              <option value=";">Ponto e vírgula (;)</option>
-              <option value=",">Vírgula (,)</option>
-              <option value="\t">Tabulação</option>
-            </Select>
-          </FormGroup>
-
-          <FormGroup>
-            <Label>Codificação</Label>
-            <Select
-              value={options.encoding}
-              onChange={(e) => updateOptions("encoding", e.target.value)}
-            >
-              <option value="UTF-8">UTF-8</option>
-              <option value="ISO-8859-1">ISO-8859-1</option>
-            </Select>
-          </FormGroup>
-
-          <CheckboxGroup>
-            <CheckboxLabel>
-              <Checkbox
-                type="checkbox"
-                checked={options.incluirMetadados}
-                onChange={(e) => updateOptions("incluirMetadados", e.target.checked)}
+            <FormGroup>
+              <Label>Nome do Arquivo</Label>
+              <Input
+                type="text"
+                value={filename}
+                onChange={(e) => setFilename(e.target.value)}
+                placeholder="dados_sima.csv"
               />
-              Incluir metadados no arquivo
-            </CheckboxLabel>
-            <CheckboxLabel>
-              <Checkbox
-                type="checkbox"
-                checked={options.incluirCabecalhos}
-                onChange={(e) => updateOptions("incluirCabecalhos", e.target.checked)}
-              />
-              Incluir cabeçalhos das colunas
-            </CheckboxLabel>
-          </CheckboxGroup>
-        </FormSection>
+            </FormGroup>
 
-        <FormSection>
-          <SectionTitle>
-            <Filter size={20} />
-            Filtros de Exportação
-          </SectionTitle>
+            <FormGroup>
+              <Label>Formato de Data</Label>
+              <Select
+                value={options.formatoData}
+                onChange={(e) => updateOptions("formatoData", e.target.value)}
+              >
+                <option value="BR">Brasileiro (DD/MM/AAAA HH:MM)</option>
+                <option value="ISO">ISO 8601 (AAAA-MM-DDTHH:MM:SS)</option>
+                <option value="US">Americano (MM/DD/AAAA HH:MM)</option>
+              </Select>
+            </FormGroup>
 
-          <FormGroup>
-            <Label>Estação Específica</Label>
-            <Select
-              value={options.filtros?.estacao || ""}
-              onChange={(e) => {
-                updateFilters("estacao", e.target.value);
-                updateDatesForStation(e.target.value);
-              }}
-            >
-              <option value="">Todas as estações</option>
-              {((estacoes as EstacaoItem[]) && (estacoes as EstacaoItem[]).length > 0
-                ? (estacoes as EstacaoItem[]).map((es: EstacaoItem) => ({
-                    value: es.idestacao,
-                    label: es.rotulo,
-                  }))
-                : Array.from(
-                    new Set(
-                      (data as Array<Record<string, unknown>>).map((d) =>
-                        String(((d as Record<string, unknown>).idestacao as string) || ""),
+            <FormGroup>
+              <Label>Separador</Label>
+              <Select
+                value={options.separador}
+                onChange={(e) => updateOptions("separador", e.target.value)}
+              >
+                <option value=";">Ponto e vírgula (;)</option>
+                <option value=",">Vírgula (,)</option>
+                <option value="\t">Tabulação</option>
+              </Select>
+            </FormGroup>
+
+            <FormGroup>
+              <Label>Codificação</Label>
+              <Select
+                value={options.encoding}
+                onChange={(e) => updateOptions("encoding", e.target.value)}
+              >
+                <option value="UTF-8">UTF-8</option>
+                <option value="ISO-8859-1">ISO-8859-1</option>
+              </Select>
+            </FormGroup>
+
+            <CheckboxGroup>
+              <CheckboxLabel>
+                <Checkbox
+                  type="checkbox"
+                  checked={options.incluirMetadados}
+                  onChange={(e) => updateOptions("incluirMetadados", e.target.checked)}
+                />
+                Incluir metadados no arquivo
+              </CheckboxLabel>
+              <CheckboxLabel>
+                <Checkbox
+                  type="checkbox"
+                  checked={options.incluirCabecalhos}
+                  onChange={(e) => updateOptions("incluirCabecalhos", e.target.checked)}
+                />
+                Incluir cabeçalhos das colunas
+              </CheckboxLabel>
+            </CheckboxGroup>
+          </FormSection>
+
+          <FormSection>
+            <SectionTitle>
+              <Filter size={20} />
+              Filtros de Exportação
+            </SectionTitle>
+
+            <FormGroup>
+              <Label>Estação Específica</Label>
+              <Select
+                value={options.filtros?.estacao || ""}
+                onChange={(e) => {
+                  updateFilters("estacao", e.target.value);
+                  updateDatesForStation(e.target.value);
+                }}
+              >
+                <option value="">Todas as estações</option>
+                {((estacoes as EstacaoItem[]) && (estacoes as EstacaoItem[]).length > 0
+                  ? (estacoes as EstacaoItem[]).map((es: EstacaoItem) => ({
+                      value: es.idestacao,
+                      label: es.rotulo,
+                    }))
+                  : Array.from(
+                      new Set(
+                        (data as Array<Record<string, unknown>>).map((d) =>
+                          String(((d as Record<string, unknown>).idestacao as string) || ""),
+                        ),
                       ),
-                    ),
-                  )
-                    .filter((s) => s)
-                    .sort()
-                    .map((id) => ({ value: id, label: id }))
-              ).map((opt: { value: string; label: string }) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </Select>
-          </FormGroup>
-        </FormSection>
+                    )
+                      .filter((s) => s)
+                      .sort()
+                      .map((id) => ({ value: id, label: id }))
+                ).map((opt: { value: string; label: string }) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </Select>
+            </FormGroup>
+          </FormSection>
 
-        <FormSection>
-          <SectionTitle>
-            <Filter size={20} />
-            Filtros (Opcional)
-          </SectionTitle>
+          <FormSection>
+            <SectionTitle>
+              <Filter size={20} />
+              Filtros (Opcional)
+            </SectionTitle>
 
-          <FormGroup>
-            <Label>Data de Início</Label>
-            <Input
-              type="date"
-              value={options.filtros?.dataInicio || ""}
-              onChange={(e) => updateFilters("dataInicio", e.target.value)}
-            />
-          </FormGroup>
+            <FormGroup>
+              <Label>Data de Início</Label>
+              <Input
+                type="date"
+                value={options.filtros?.dataInicio || ""}
+                onChange={(e) => updateFilters("dataInicio", e.target.value)}
+              />
+            </FormGroup>
 
-          <FormGroup>
-            <Label>Data de Fim</Label>
-            <Input
-              type="date"
-              value={options.filtros?.dataFim || ""}
-              onChange={(e) => updateFilters("dataFim", e.target.value)}
-            />
-          </FormGroup>
+            <FormGroup>
+              <Label>Data de Fim</Label>
+              <Input
+                type="date"
+                value={options.filtros?.dataFim || ""}
+                onChange={(e) => updateFilters("dataFim", e.target.value)}
+              />
+            </FormGroup>
 
-          <FormGroup>
-            <Label>ID da Estação</Label>
-            <Input
-              type="text"
-              value={options.filtros?.estacao || ""}
-              onChange={(e) => updateFilters("estacao", e.target.value)}
-              placeholder="Ex: 31966"
-            />
-          </FormGroup>
-        </FormSection>
+            <FormGroup>
+              <Label>ID da Estação</Label>
+              <Input
+                type="text"
+                value={options.filtros?.estacao || ""}
+                onChange={(e) => updateFilters("estacao", e.target.value)}
+                placeholder="Ex: 31966"
+              />
+            </FormGroup>
+          </FormSection>
 
-        {!validateRequiredFields().isValid && (
-          <ErrorMessage style={{ marginBottom: "1rem" }}>
-            <AlertCircle size={20} />
-            Campos obrigatórios não preenchidos: {validateRequiredFields().errors.join(", ")}
-          </ErrorMessage>
-        )}
+          {!validateRequiredFields().isValid && (
+            <ErrorMessage style={{ marginBottom: "1rem" }}>
+              <AlertCircle size={20} />
+              Campos obrigatórios não preenchidos: {validateRequiredFields().errors.join(", ")}
+            </ErrorMessage>
+          )}
 
-        <ButtonGroup>
-          <Button $variant="secondary" onClick={handleClose} disabled={isExporting}>
-            Cancelar
-          </Button>
-          <Button
-            $variant="primary"
-            onClick={handleExport}
-            disabled={isExporting || !validateRequiredFields().isValid}
-          >
-            <Download size={16} />
-            {isExporting ? "Exportando..." : "Exportar CSV"}
-          </Button>
-        </ButtonGroup>
-      </ModalContent>
-    </ModalOverlay>
+          <ButtonGroup>
+            <Button $variant="secondary" onClick={handleClose} disabled={isExporting}>
+              Cancelar
+            </Button>
+            <Button
+              $variant="primary"
+              onClick={handleExport}
+              disabled={isExporting || !validateRequiredFields().isValid}
+            >
+              <Download size={16} />
+              {isExporting ? "Exportando..." : "Exportar CSV"}
+            </Button>
+          </ButtonGroup>
+        </ModalContent>
+      </ModalOverlay>
+    </>
   );
 };

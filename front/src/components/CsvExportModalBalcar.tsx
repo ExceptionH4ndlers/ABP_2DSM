@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Download, Filter, Settings, AlertCircle } from "lucide-react";
 import { useCsvExport } from "../hooks/useCsvExport";
 import type { CsvExportOptions } from "../utils/csvParser";
+import LoadingModal from "./LoadingModal";
 
 interface CsvExportModalBalcarProps {
   $isOpen: boolean;
@@ -145,122 +146,125 @@ export const CsvExportModalBalcar: React.FC<CsvExportModalBalcarProps> = ({
   };
 
   return (
-    <Overlay $isOpen={$isOpen} onClick={onClose}>
-      <Content onClick={(e) => e.stopPropagation()}>
-        <Title>
-          <Download size={20} /> Exportar CSV (BALCAR)
-        </Title>
+    <>
+      <LoadingModal isOpen={isExporting} message="Exportando dados para CSV..." />
+      <Overlay $isOpen={$isOpen} onClick={onClose}>
+        <Content onClick={(e) => e.stopPropagation()}>
+          <Title>
+            <Download size={20} /> Exportar CSV (BALCAR)
+          </Title>
 
-        <FormGroup>
-          <Label>Nome do arquivo</Label>
-          <Input value={filename} onChange={(e) => setFilename(e.target.value)} />
-        </FormGroup>
+          <FormGroup>
+            <Label>Nome do arquivo</Label>
+            <Input value={filename} onChange={(e) => setFilename(e.target.value)} />
+          </FormGroup>
 
-        <FormGroup>
-          <Label>Formato de Data</Label>
-          <Select
-            value={options.formatoData}
-            onChange={(e) => updateOptions("formatoData", e.target.value)}
-          >
-            <option value="BR">Brasileiro (DD/MM/AAAA HH:MM)</option>
-            <option value="ISO">ISO 8601 (AAAA-MM-DDTHH:MM:SS)</option>
-            <option value="US">Americano (MM/DD/AAAA HH:MM)</option>
-          </Select>
-        </FormGroup>
+          <FormGroup>
+            <Label>Formato de Data</Label>
+            <Select
+              value={options.formatoData}
+              onChange={(e) => updateOptions("formatoData", e.target.value)}
+            >
+              <option value="BR">Brasileiro (DD/MM/AAAA HH:MM)</option>
+              <option value="ISO">ISO 8601 (AAAA-MM-DDTHH:MM:SS)</option>
+              <option value="US">Americano (MM/DD/AAAA HH:MM)</option>
+            </Select>
+          </FormGroup>
 
-        <FormGroup>
-          <Label>Separador</Label>
-          <Select
-            value={options.separador}
-            onChange={(e) => updateOptions("separador", e.target.value)}
-          >
-            <option value=";">Ponto e vírgula (;)</option>
-            <option value=",">Vírgula (,)</option>
-            <option value="\t">Tabulação</option>
-          </Select>
-        </FormGroup>
+          <FormGroup>
+            <Label>Separador</Label>
+            <Select
+              value={options.separador}
+              onChange={(e) => updateOptions("separador", e.target.value)}
+            >
+              <option value=";">Ponto e vírgula (;)</option>
+              <option value=",">Vírgula (,)</option>
+              <option value="\t">Tabulação</option>
+            </Select>
+          </FormGroup>
 
-        <FormGroup>
-          <Label>Codificação</Label>
-          <Select
-            value={options.encoding}
-            onChange={(e) => updateOptions("encoding", e.target.value)}
-          >
-            <option value="UTF-8">UTF-8</option>
-            <option value="ISO-8859-1">ISO-8859-1</option>
-          </Select>
-        </FormGroup>
+          <FormGroup>
+            <Label>Codificação</Label>
+            <Select
+              value={options.encoding}
+              onChange={(e) => updateOptions("encoding", e.target.value)}
+            >
+              <option value="UTF-8">UTF-8</option>
+              <option value="ISO-8859-1">ISO-8859-1</option>
+            </Select>
+          </FormGroup>
 
-        <FormGroup>
-          <Label>
-            <Settings size={16} style={{ marginRight: 6 }} /> Reservatório
-          </Label>
-          <Select
-            value={reservatorio}
-            onChange={(e) => {
-              setReservatorio(e.target.value);
-              updateFilters("estacao", e.target.value);
-            }}
-          >
-            <option key="__all__" value="">
-              Todos os reservatórios
-            </option>
-            {reservatorios.map((nome) => (
-              <option key={nome} value={nome}>
-                {nome}
+          <FormGroup>
+            <Label>
+              <Settings size={16} style={{ marginRight: 6 }} /> Reservatório
+            </Label>
+            <Select
+              value={reservatorio}
+              onChange={(e) => {
+                setReservatorio(e.target.value);
+                updateFilters("estacao", e.target.value);
+              }}
+            >
+              <option key="__all__" value="">
+                Todos os reservatórios
               </option>
-            ))}
-          </Select>
-        </FormGroup>
+              {reservatorios.map((nome) => (
+                <option key={nome} value={nome}>
+                  {nome}
+                </option>
+              ))}
+            </Select>
+          </FormGroup>
 
-        <FormGroup>
-          <Label>
-            <Filter size={16} style={{ marginRight: 6 }} /> Período
-          </Label>
-          <Row>
-            <Input
-              type="date"
-              value={dataInicio}
-              onChange={(e) => {
-                setDataInicio(e.target.value);
-                updateFilters("dataInicio", e.target.value);
-              }}
-            />
-            <Input
-              type="date"
-              value={dataFim}
-              onChange={(e) => {
-                setDataFim(e.target.value);
-                updateFilters("dataFim", e.target.value);
-              }}
-            />
-          </Row>
-        </FormGroup>
+          <FormGroup>
+            <Label>
+              <Filter size={16} style={{ marginRight: 6 }} /> Período
+            </Label>
+            <Row>
+              <Input
+                type="date"
+                value={dataInicio}
+                onChange={(e) => {
+                  setDataInicio(e.target.value);
+                  updateFilters("dataInicio", e.target.value);
+                }}
+              />
+              <Input
+                type="date"
+                value={dataFim}
+                onChange={(e) => {
+                  setDataFim(e.target.value);
+                  updateFilters("dataFim", e.target.value);
+                }}
+              />
+            </Row>
+          </FormGroup>
 
-        {exportError && (
-          <div
-            style={{
-              background: "#fef2f2",
-              border: "1px solid #fecaca",
-              color: "#dc2626",
-              padding: "0.75rem",
-              borderRadius: 8,
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-            }}
-          >
-            <AlertCircle size={18} /> {exportError}
-          </div>
-        )}
-        <ButtonRow>
-          <Button onClick={onClose}>Cancelar</Button>
-          <Button $primary onClick={handleExport} disabled={isExporting}>
-            <Download size={16} /> {isExporting ? "Exportando..." : "Exportar"}
-          </Button>
-        </ButtonRow>
-      </Content>
-    </Overlay>
+          {exportError && (
+            <div
+              style={{
+                background: "#fef2f2",
+                border: "1px solid #fecaca",
+                color: "#dc2626",
+                padding: "0.75rem",
+                borderRadius: 8,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              <AlertCircle size={18} /> {exportError}
+            </div>
+          )}
+          <ButtonRow>
+            <Button onClick={onClose}>Cancelar</Button>
+            <Button $primary onClick={handleExport} disabled={isExporting}>
+              <Download size={16} /> {isExporting ? "Exportando..." : "Exportar"}
+            </Button>
+          </ButtonRow>
+        </Content>
+      </Overlay>
+    </>
   );
 };
 

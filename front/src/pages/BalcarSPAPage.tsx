@@ -18,6 +18,7 @@ import {
 import { CsvExportModalBalcar } from "../components/CsvExportModalBalcar";
 import { useMapData } from "../hooks/useMapData";
 import InteractiveMap from "../components/InteractiveMap";
+import SkeletonTable from "../components/skeletons/SkeletonTable";
 import logoBalcar from "../../img/logoBalcar.png";
 import logoInpe from "../../img/balcar/logoInpe.png";
 import logoIie from "../../img/balcar/logoIie.png";
@@ -1128,80 +1129,92 @@ function BalcarSPAPage() {
             </ActionButtons>
           </ControlsSection>
           {error && <div style={{ color: "#dc2626", textAlign: "center" }}>{error}</div>}
-          <TableContainer>
-            <StyledTable>
-              <thead>
-                <tr>
-                  <th>
-                    <Hash size={16} /> ID
-                  </th>
-                  <th>
-                    <Database size={16} /> Campanha
-                  </th>
-                  <th>
-                    <Calendar size={16} /> Início
-                  </th>
-                  <th>
-                    <Calendar size={16} /> Fim
-                  </th>
-                  <th>
-                    <MapPin size={16} /> Reservatório
-                  </th>
-                  <th>
-                    <Building2 size={16} /> Instituição
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((r: Record<string, unknown>) => (
-                  <tr key={String(r.idcampanha)}>
-                    <td>{String(r.idcampanha ?? "-")}</td>
-                    <td>{String(r.nrocampanha ?? "-")}</td>
-                    <td>
-                      {r.datainicio
-                        ? new Date(String(r.datainicio)).toLocaleDateString("pt-BR")
-                        : "-"}
-                    </td>
-                    <td>
-                      {r.datafim ? new Date(String(r.datafim)).toLocaleDateString("pt-BR") : "-"}
-                    </td>
-                    <td>{String(r.reservatorio ?? "-")}</td>
-                    <td>{String(r.instituicao ?? "-")}</td>
-                  </tr>
-                ))}
-                {rows.length === 0 && !loading && (
-                  <tr>
-                    <td colSpan={6} style={{ textAlign: "center", padding: 16, color: "#64748b" }}>
-                      Nenhum dado carregado ainda.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </StyledTable>
-          </TableContainer>
+          {loading ? (
+            <SkeletonTable rows={10} columns={6} />
+          ) : (
+            <>
+              <TableContainer>
+                <StyledTable>
+                  <thead>
+                    <tr>
+                      <th>
+                        <Hash size={16} /> ID
+                      </th>
+                      <th>
+                        <Database size={16} /> Campanha
+                      </th>
+                      <th>
+                        <Calendar size={16} /> Início
+                      </th>
+                      <th>
+                        <Calendar size={16} /> Fim
+                      </th>
+                      <th>
+                        <MapPin size={16} /> Reservatório
+                      </th>
+                      <th>
+                        <Building2 size={16} /> Instituição
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((r: Record<string, unknown>) => (
+                      <tr key={String(r.idcampanha)}>
+                        <td>{String(r.idcampanha ?? "-")}</td>
+                        <td>{String(r.nrocampanha ?? "-")}</td>
+                        <td>
+                          {r.datainicio
+                            ? new Date(String(r.datainicio)).toLocaleDateString("pt-BR")
+                            : "-"}
+                        </td>
+                        <td>
+                          {r.datafim
+                            ? new Date(String(r.datafim)).toLocaleDateString("pt-BR")
+                            : "-"}
+                        </td>
+                        <td>{String(r.reservatorio ?? "-")}</td>
+                        <td>{String(r.instituicao ?? "-")}</td>
+                      </tr>
+                    ))}
+                    {rows.length === 0 && !loading && (
+                      <tr>
+                        <td
+                          colSpan={6}
+                          style={{ textAlign: "center", padding: 16, color: "#64748b" }}
+                        >
+                          Nenhum dado carregado ainda.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </StyledTable>
+              </TableContainer>
 
-          {rows.length > 0 && (
-            <PaginationContainer>
-              <PaginationButton
-                onClick={() => handlePageChange(pagination.page - 1)}
-                disabled={pagination.page <= 1}
-              >
-                <ChevronLeft size={16} />
-                Anterior
-              </PaginationButton>
+              {rows.length > 0 && (
+                <PaginationContainer>
+                  <PaginationButton
+                    onClick={() => handlePageChange(pagination.page - 1)}
+                    disabled={pagination.page <= 1}
+                  >
+                    <ChevronLeft size={16} />
+                    Anterior
+                  </PaginationButton>
 
-              <PaginationInfo>
-                Página {pagination.page} de {pagination.totalPages} ({pagination.total} registros)
-              </PaginationInfo>
+                  <PaginationInfo>
+                    Página {pagination.page} de {pagination.totalPages} ({pagination.total}{" "}
+                    registros)
+                  </PaginationInfo>
 
-              <PaginationButton
-                onClick={() => handlePageChange(pagination.page + 1)}
-                disabled={pagination.page >= pagination.totalPages}
-              >
-                Próxima
-                <ChevronRight size={16} />
-              </PaginationButton>
-            </PaginationContainer>
+                  <PaginationButton
+                    onClick={() => handlePageChange(pagination.page + 1)}
+                    disabled={pagination.page >= pagination.totalPages}
+                  >
+                    Próxima
+                    <ChevronRight size={16} />
+                  </PaginationButton>
+                </PaginationContainer>
+              )}
+            </>
           )}
 
           {rows.length === 0 && !loading && !error && (
