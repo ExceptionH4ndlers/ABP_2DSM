@@ -1,5 +1,7 @@
+import { AnimatePresence } from "framer-motion";
 import { lazy, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import PageTransition from "./components/PageTransition"
 import BarraBrasil from "./components/BarraBrasil";
 import Navigation from "./components/Navigation";
 import LoadingModal from "./components/LoadingModal";
@@ -46,6 +48,8 @@ function AppContent() {
 
       {shouldShowNavigation && <Navigation />}
       <LoadingModal isOpen={isLoading} message={loadingMessage} />
+        <AnimatePresence mode="wait">
+        <PageTransition key={location.pathname} direction="right" duration={0.5}>
       <SuspenseWrapper>
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -63,6 +67,8 @@ function AppContent() {
           <Route path="/balcar/publicacoes" element={<BalcarPublicacoesPage />} />
         </Routes>
       </SuspenseWrapper>
+       </PageTransition>
+      </AnimatePresence>
     </>
   );
 }
