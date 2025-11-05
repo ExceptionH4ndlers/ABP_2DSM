@@ -10,10 +10,11 @@ import meta from "./meta.routes";
 import query from "./query.routes";
 import bioticocoluna from "./bioticocoluna.routes";
 import dadosrepresa from "./dadosrepresa.routes";
-import carbono from "./carbono.routes";
+import carbono from "./carbono.routes"; 
 import bioticosuperficie from "./bioticosuperficie.routes";
 import abioticosuperficie from "./abioticosuperficie.routes";
 import dupladessorcaoagua from "./dupladessorcaoagua.routes";
+import dadostimeseries from "./dadostimeseries.routes";
 
 const router = express.Router();
 
@@ -32,5 +33,6 @@ router.use("/carbono", carbono);
 router.use("/bioticosuperficie", bioticosuperficie);
 router.use("/abioticosuperficie", abioticosuperficie);
 router.use("/dupladessorcaoagua", dupladessorcaoagua);
+router.use("/dadostimeseries", dadostimeseries);
 
 export default router;
