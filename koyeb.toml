@@ -1,0 +1,7 @@
+[build]
+type = "nixpacks"
+
+[run]
+command = "cd server && npm install && npm run build && npm start"
+working_dir = "server"
+
