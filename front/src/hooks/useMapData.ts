@@ -50,6 +50,9 @@ export interface MapFilters {
   region?: string;
 }
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_SERVER_PORT ?? "3001"}`;
+
 export function useMapData(
   filters: MapFilters = {
     showSima: true,
@@ -73,7 +76,7 @@ export function useMapData(
         if (filters.showSima) {
           try {
             // Usar sempre URL absoluta para funcionar no Docker
-            const simaResponse = await fetch("http://localhost:3001/sima/estacao/map");
+            const simaResponse = await fetch(`${API_BASE_URL}/sima/estacao/map`);
             if (simaResponse.ok) {
               const simaData: SimaApiResponse = await simaResponse.json();
               const simaPoints: MapPoint[] = simaData.data
@@ -107,7 +110,7 @@ export function useMapData(
         // Buscar dados Furnas (reservatórios)
         if (filters.showFurnas) {
           try {
-            const furnasResponse = await fetch("http://localhost:3001/furnas/reservatorio/all");
+            const furnasResponse = await fetch(`${API_BASE_URL}/furnas/reservatorio/all`);
             if (furnasResponse.ok) {
               const furnasData: ReservatorioApiResponse = await furnasResponse.json();
               const furnasPoints: MapPoint[] = furnasData.data
@@ -137,7 +140,7 @@ export function useMapData(
         // Buscar dados BALCAR (reservatórios)
         if (filters.showBalcar) {
           try {
-            const balcarResponse = await fetch("http://localhost:3001/balcar/reservatorio/all");
+            const balcarResponse = await fetch(`${API_BASE_URL}/balcar/reservatorio/all`);
             if (balcarResponse.ok) {
               const balcarData: ReservatorioApiResponse = await balcarResponse.json();
               const balcarPoints: MapPoint[] = balcarData.data

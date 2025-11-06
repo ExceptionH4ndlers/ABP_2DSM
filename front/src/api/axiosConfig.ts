@@ -15,8 +15,9 @@ export const createAxiosInstance = (context?: {
 }) => {
   loadingContext = context || null;
 
-  const SERVER_PORT = import.meta.env.VITE_SERVER_PORT ?? "3001";
-  const API_BASE = `http://localhost:${SERVER_PORT}`;
+  const API_BASE =
+    import.meta.env.VITE_API_URL ||
+    `http://localhost:${import.meta.env.VITE_SERVER_PORT ?? "3001"}`;
 
   axiosInstance = axios.create({
     baseURL: API_BASE,
@@ -62,8 +63,9 @@ export const createAxiosInstance = (context?: {
 // Obter a instância configurada
 export const getAxiosInstance = (): AxiosInstance => {
   if (!axiosInstance) {
-    const SERVER_PORT = import.meta.env.VITE_SERVER_PORT ?? "3001";
-    const API_BASE = `http://localhost:${SERVER_PORT}`;
+    const API_BASE =
+      import.meta.env.VITE_API_URL ||
+      `http://localhost:${import.meta.env.VITE_SERVER_PORT ?? "3001"}`;
     axiosInstance = axios.create({
       baseURL: API_BASE,
       timeout: 30000,

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_SERVER_PORT ?? "3001"}`;
 import {
   MapPin,
   Database,
@@ -509,7 +512,7 @@ function BalcarSPAPage() {
       const countSql = sql
         .replace(/\s+ORDER BY[\s\S]*$/i, "")
         .replace(/^SELECT[\s\S]*?FROM/i, "SELECT COUNT(*) as count FROM");
-      const countRes = await fetch("http://localhost:3001/balcar/query/select", {
+      const countRes = await fetch(`${API_BASE_URL}/balcar/query/select`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sql: countSql, params }),
@@ -525,7 +528,7 @@ function BalcarSPAPage() {
       params.push(filters.limit, offset);
       sql += ` LIMIT $${params.length - 1} OFFSET $${params.length}`;
 
-      const res = await fetch("http://localhost:3001/balcar/query/select", {
+      const res = await fetch(`${API_BASE_URL}/balcar/query/select`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sql, params }),
@@ -574,7 +577,7 @@ function BalcarSPAPage() {
       const sql =
         "SELECT c.datainicio, c.datafim FROM tbcampanha c INNER JOIN tbreservatorio r ON c.idreservatorio = r.idreservatorio WHERE r.nome = $1 ORDER BY c.datainicio";
 
-      const response = await fetch("http://localhost:3001/balcar/query/select", {
+      const response = await fetch(`${API_BASE_URL}/balcar/query/select`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sql, params }),
@@ -620,7 +623,7 @@ function BalcarSPAPage() {
     (async () => {
       try {
         // lista de reservatórios COM DADOS (JOIN)
-        const resReserv = await fetch("http://localhost:3001/balcar/query/select", {
+        const resReserv = await fetch(`${API_BASE_URL}/balcar/query/select`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -634,7 +637,7 @@ function BalcarSPAPage() {
         }
 
         // período min/max
-        const resPeriod = await fetch("http://localhost:3001/balcar/query/select", {
+        const resPeriod = await fetch(`${API_BASE_URL}/balcar/query/select`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
