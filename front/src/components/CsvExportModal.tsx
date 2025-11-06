@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_SERVER_PORT ?? "3001"}`;
 import type { DefaultTheme } from "styled-components";
 import { Download, Settings, AlertCircle, CheckCircle, Filter } from "lucide-react";
 import { useCsvExport } from "../hooks/useCsvExport";
@@ -314,7 +317,7 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
 
     try {
       const response = await fetch(
-        `http://localhost:3001/sima/all?page=1&limit=1000&startDate=2004-01-01&endDate=2017-12-31&estacao=${estacao}`,
+        `${API_BASE_URL}/sima/all?page=1&limit=1000&startDate=2004-01-01&endDate=2017-12-31&estacao=${estacao}`,
       );
 
       if (response.ok) {

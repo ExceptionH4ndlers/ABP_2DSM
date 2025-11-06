@@ -2,6 +2,9 @@ import { useState, useCallback } from "react";
 import { simaCsvParser } from "../utils/csvParser";
 import type { SimaData, CsvExportOptions } from "../utils/csvParser";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_SERVER_PORT ?? "3001"}`;
+
 type GenericRow = Record<string, unknown>;
 
 function hasSimaShape(rows: unknown[]): rows is SimaData[] {
@@ -62,7 +65,7 @@ export const useCsvExport = (): UseCsvExportReturn => {
           queryParams.append("limit", "10000");
 
           if (simaShape) {
-            const response = await fetch(`http://localhost:3001/sima/all?${queryParams}`);
+            const response = await fetch(`${API_BASE_URL}/sima/all?${queryParams}`);
 
             if (response.ok) {
               const result = await response.json();

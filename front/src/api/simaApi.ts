@@ -2,8 +2,8 @@ import axios from "axios";
 import type { PaginatedResponse, Sima } from "../types/sima";
 
 // Monta a URL com a porta do backend
-const SERVER_PORT = import.meta.env.VITE_SERVER_PORT ?? "3000";
-const API_BASE = `http://localhost:${SERVER_PORT}`;
+const API_BASE =
+  import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_SERVER_PORT ?? "3001"}`;
 
 // ✅ Novo tipo para os parâmetros da função
 interface GetSimaParams {

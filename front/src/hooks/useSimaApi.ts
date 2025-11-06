@@ -58,7 +58,8 @@ export interface SimaApiParams {
   sortOrder?: string;
 }
 
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_SERVER_PORT ?? "3001"}`;
 
 export const useSimaApi = () => {
   const [data, setData] = useState<SimaApiData[]>([]);

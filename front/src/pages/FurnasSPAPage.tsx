@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import FurnasSidebar from "../components/FurnasSidebar";
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL || `http://localhost:${import.meta.env.VITE_SERVER_PORT ?? "3001"}`;
 import {
   MapPin,
   Database,
@@ -513,7 +516,7 @@ function FurnasSPAPage() {
     const countSql = sql
       .replace(/\s+ORDER BY[\s\S]*$/i, "")
       .replace(/^SELECT[\s\S]*?FROM/i, "SELECT COUNT(*) as count FROM");
-    fetch("http://localhost:3001/furnas/query/select", {
+    fetch(`${API_BASE_URL}/furnas/query/select`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ sql: countSql, params }),
@@ -530,7 +533,7 @@ function FurnasSPAPage() {
         const paginatedSql =
           sql + ` LIMIT $${paginatedParams.length - 1} OFFSET $${paginatedParams.length}`;
 
-        const dataRes = await fetch("http://localhost:3001/furnas/query/select", {
+        const dataRes = await fetch(`${API_BASE_URL}/furnas/query/select`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sql: paginatedSql, params: paginatedParams }),
@@ -578,7 +581,7 @@ function FurnasSPAPage() {
       const sql =
         "SELECT d.dataMedida FROM tbdadosrepresa d INNER JOIN tbreservatorio r ON d.idReservatorio = r.idReservatorio WHERE r.nome = $1 ORDER BY d.dataMedida";
 
-      const response = await fetch("http://localhost:3001/furnas/query/select", {
+      const response = await fetch(`${API_BASE_URL}/furnas/query/select`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sql, params }),
@@ -626,7 +629,7 @@ function FurnasSPAPage() {
   useEffect(() => {
     (async () => {
       try {
-        const resPeriod = await fetch("http://localhost:3001/furnas/query/select", {
+        const resPeriod = await fetch(`${API_BASE_URL}/furnas/query/select`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -657,7 +660,7 @@ function FurnasSPAPage() {
       try {
         const sql =
           "SELECT DISTINCT r.nome FROM tbreservatorio r INNER JOIN tbdadosrepresa d ON d.idreservatorio = r.idreservatorio ORDER BY r.nome";
-        const resReserv = await fetch("http://localhost:3001/furnas/query/select", {
+        const resReserv = await fetch(`${API_BASE_URL}/furnas/query/select`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ sql, params: [] }),
