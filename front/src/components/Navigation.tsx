@@ -26,49 +26,56 @@ const NavigationContainer = styled.nav`
 const NavContent = styled.div`
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 70px;
+  height: 60px;
 
-  ${({ theme }) => theme.media.mobile} {
-    padding: 0 1rem;
-    height: 60px;
+  ${({ theme }) => theme.media.md} {
+    padding: 0 2rem;
+    height: 70px;
   }
 `;
 
 const Logo = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   color: white;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   text-decoration: none;
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 1.1rem;
-    gap: 0.5rem;
+  ${({ theme }) => theme.media.md} {
+    font-size: 1.25rem;
+    gap: 0.75rem;
   }
 `;
 
 const NavLinks = styled.div<{ $isOpen: boolean }>`
-  display: flex;
-  align-items: center;
-  gap: 2rem;
+  display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+  padding: 1rem 0;
+  box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
+  z-index: 900;
 
-  ${({ theme }) => theme.media.tablet} {
-    display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-    flex-direction: column;
-    padding: 1rem 0;
-    box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
-    gap: 0;
+  ${({ theme }) => theme.media.md} {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
   }
 `;
 
@@ -76,32 +83,31 @@ const NavLink = styled.a<{ $isActive?: boolean }>`
   color: white;
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  width: 100%;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 0;
   transition: all 0.2s ease;
-  position: relative;
   background: ${({ $isActive }) => ($isActive ? "rgba(255, 255, 255, 0.2)" : "transparent")};
 
   &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.1);
   }
 
-  ${({ theme }) => theme.media.tablet} {
-    width: 100%;
-    text-align: center;
-    padding: 1rem;
-    border-radius: 0;
+  ${({ theme }) => theme.media.md} {
+    width: auto;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
 
     &:hover {
-      transform: none;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
     }
   }
 `;
 
 const MobileMenuButton = styled.button`
-  display: none;
+  display: flex;
   background: none;
   border: none;
   color: white;
@@ -114,8 +120,8 @@ const MobileMenuButton = styled.button`
     background: rgba(255, 255, 255, 0.1);
   }
 
-  ${({ theme }) => theme.media.tablet} {
-    display: block;
+  ${({ theme }) => theme.media.md} {
+    display: none;
   }
 `;
 
@@ -138,64 +144,59 @@ const DropdownContainer = styled.div`
 `;
 
 const DropdownButton = styled.button<{ $isActive?: boolean }>`
-  background: none;
+  background: ${({ $isActive }) => ($isActive ? "rgba(255, 255, 255, 0.2)" : "transparent")};
   border: none;
   color: white;
   font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  padding: 1rem;
+  border-radius: 0;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  justify-content: center;
   transition: all 0.2s ease;
-  background: ${({ $isActive }) => ($isActive ? "rgba(255, 255, 255, 0.2)" : "transparent")};
+  width: 100%;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.1);
   }
 
-  ${({ theme }) => theme.media.tablet} {
-    width: 100%;
-    text-align: center;
-    padding: 1rem;
-    border-radius: 0;
-    justify-content: center;
+  ${({ theme }) => theme.media.md} {
+    width: auto;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    justify-content: flex-start;
 
     &:hover {
-      transform: none;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-1px);
     }
   }
 `;
 
 const DropdownMenu = styled.div<{ $isOpen: boolean }>`
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  min-width: 200px;
-  z-index: 1000;
-  opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
-  visibility: ${({ $isOpen }) => ($isOpen ? "visible" : "hidden")};
-  transform: ${({ $isOpen }) => ($isOpen ? "translateY(0)" : "translateY(-10px)")};
-  transition: all 0.2s ease;
-  border: 1px solid #e2e8f0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
+  margin-top: 0.5rem;
 
-  ${({ theme }) => theme.media.tablet} {
-    position: static;
-    opacity: 1;
-    visibility: visible;
-    transform: none;
-    box-shadow: none;
-    border: none;
-    border-radius: 0;
-    background: rgba(255, 255, 255, 0.1);
-    margin-top: 0.5rem;
-    display: ${({ $isOpen }) => ($isOpen ? "block" : "none")};
+  ${({ theme }) => theme.media.md} {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    min-width: 200px;
+    z-index: 1000;
+    opacity: ${({ $isOpen }) => ($isOpen ? 1 : 0)};
+    visibility: ${({ $isOpen }) => ($isOpen ? "visible" : "hidden")};
+    transform: ${({ $isOpen }) => ($isOpen ? "translateY(0)" : "translateY(-10px)")};
+    transition: all 0.2s ease;
+    border: 1px solid #e2e8f0;
+    display: block;
   }
 `;
 
@@ -203,41 +204,35 @@ const DropdownItem = styled.button`
   width: 100%;
   background: none;
   border: none;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 2rem;
   text-align: left;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #374151;
+  color: white;
   font-weight: 500;
   transition: background 0.2s ease;
-  border-radius: 0;
-
-  &:first-child {
-    border-radius: 12px 12px 0 0;
-  }
-
-  &:last-child {
-    border-radius: 0 0 12px 12px;
-  }
 
   &:hover {
-    background: #f3f4f6;
+    background: rgba(255, 255, 255, 0.1);
   }
 
-  ${({ theme }) => theme.media.tablet} {
-    color: white;
-    padding: 0.75rem 2rem;
+  ${({ theme }) => theme.media.md} {
+    color: #374151;
+    padding: 0.75rem 1rem;
     border-radius: 0;
 
-    &:hover {
-      background: rgba(255, 255, 255, 0.1);
+    &:first-child {
+      border-radius: 12px 12px 0 0;
     }
 
-    &:first-child,
     &:last-child {
-      border-radius: 0;
+      border-radius: 0 0 12px 12px;
+    }
+
+    &:hover {
+      background: #f3f4f6;
     }
   }
 `;

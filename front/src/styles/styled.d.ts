@@ -39,12 +39,25 @@ declare module "styled-components" {
       medium: string;
     };
     breakpoints: {
-      mobile: string;
-      tablet: string;
-      desktop: string;
-      wide: string;
+      base: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
     };
     media: {
+      baseOnly: string;
+      sm: string;
+      md: string;
+      lg: string;
+      xl: string;
+      smOnly: string;
+      mdOnly: string;
+      lgOnly: string;
+      smDown: string;
+      mdDown: string;
+      lgDown: string;
+      xlDown: string;
       mobile: string;
       tablet: string;
       desktop: string;

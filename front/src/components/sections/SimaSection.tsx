@@ -2,12 +2,16 @@ import styled from "styled-components";
 import { Waves, Settings, Database, Clock, Satellite, Activity } from "lucide-react";
 
 const SectionContainer = styled.section`
-  padding: 6rem 2rem;
+  padding: 4rem 1rem;
   background: white;
   position: relative;
 
-  ${({ theme }) => theme.media.mobile} {
-    padding: 4rem 1rem;
+  ${({ theme }) => theme.media.sm} {
+    padding: 5rem 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    padding: 6rem 2rem;
   }
 `;
 
@@ -18,15 +22,19 @@ const SectionContent = styled.div`
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    margin-bottom: 3rem;
+  ${({ theme }) => theme.media.sm} {
+    margin-bottom: 3.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    margin-bottom: 4rem;
   }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-weight: 700;
   color: #1e40af;
   margin-bottom: 1rem;
@@ -44,45 +52,49 @@ const SectionTitle = styled.h2`
     border-radius: 2px;
   }
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2.5rem;
+  ${({ theme }) => theme.media.sm} {
+    font-size: 2.6rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 3rem;
   }
 `;
 
 const SectionSubtitle = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #64748b;
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
 
-  ${({ theme }) => theme.media.mobile} {
+  ${({ theme }) => theme.media.sm} {
     font-size: 1.1rem;
   }
 `;
 
 const ContentGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  grid-template-columns: 1fr;
+  gap: 2rem;
   align-items: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.tablet} {
-    grid-template-columns: 1fr;
+  ${({ theme }) => theme.media.md} {
+    grid-template-columns: 1fr 1fr;
     gap: 3rem;
   }
 
-  ${({ theme }) => theme.media.mobile} {
-    gap: 2rem;
-    margin-bottom: 3rem;
+  ${({ theme }) => theme.media.lg} {
+    gap: 4rem;
+    margin-bottom: 4rem;
   }
 `;
 
 const TextContent = styled.div``;
 
 const Description = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #475569;
   line-height: 1.7;
   margin-bottom: 2rem;
@@ -133,13 +145,17 @@ const FeatureText = styled.span`
 const VisualContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+
+  ${({ theme }) => theme.media.lg} {
+    gap: 2rem;
+  }
 `;
 
 const SystemDiagram = styled.div`
   background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-radius: 20px;
-  padding: 2rem;
+  border-radius: 18px;
+  padding: 1.5rem;
   border: 2px solid #e2e8f0;
   position: relative;
   overflow: hidden;
@@ -167,7 +183,7 @@ const DiagramTitle = styled.h3`
 const DiagramSteps = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.75rem;
 `;
 
 const DiagramStep = styled.div`

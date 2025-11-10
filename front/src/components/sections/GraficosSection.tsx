@@ -2,12 +2,16 @@ import styled from "styled-components";
 import { TrendingUp, BarChart3, LineChart, Activity, Clock, Zap } from "lucide-react";
 
 const SectionContainer = styled.section`
-  padding: 6rem 2rem;
+  padding: 4rem 1rem;
   background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
   position: relative;
 
-  ${({ theme }) => theme.media.mobile} {
-    padding: 4rem 1rem;
+  ${({ theme }) => theme.media.sm} {
+    padding: 5rem 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    padding: 6rem 2rem;
   }
 `;
 
@@ -18,15 +22,19 @@ const SectionContent = styled.div`
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    margin-bottom: 3rem;
+  ${({ theme }) => theme.media.sm} {
+    margin-bottom: 3.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    margin-bottom: 4rem;
   }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-weight: 700;
   color: #dc2626;
   margin-bottom: 1rem;
@@ -44,39 +52,42 @@ const SectionTitle = styled.h2`
     border-radius: 2px;
   }
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2.5rem;
+  ${({ theme }) => theme.media.sm} {
+    font-size: 2.6rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 3rem;
   }
 `;
 
 const SectionSubtitle = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #64748b;
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
 
-  ${({ theme }) => theme.media.mobile} {
+  ${({ theme }) => theme.media.sm} {
     font-size: 1.1rem;
   }
 `;
 
 const ChartsContainer = styled.div`
   background: white;
-  border-radius: 24px;
-  padding: 3rem;
+  border-radius: 20px;
+  padding: 2rem 1.25rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   border: 1px solid #fee2e2;
   margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    padding: 2rem 1rem;
-    border-radius: 20px;
+  ${({ theme }) => theme.media.md} {
+    padding: 3rem;
   }
 `;
 
 const ChartPlaceholder = styled.div`
-  height: 400px;
+  height: 280px;
   background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
   border-radius: 16px;
   display: flex;
@@ -96,6 +107,13 @@ const ChartPlaceholder = styled.div`
     bottom: 0;
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M10,90 L20,70 L30,80 L40,50 L50,60 L60,30 L70,40 L80,20 L90,10" stroke="rgba(239,68,68,0.3)" stroke-width="2" fill="none"/></svg>');
     opacity: 0.5;
+  }
+  ${({ theme }) => theme.media.md} {
+    height: 340px;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    height: 400px;
   }
 `;
 
@@ -131,13 +149,13 @@ const ChartDescription = styled.p`
 
 const ChartTypesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
   }
 `;
 
@@ -190,13 +208,13 @@ const ChartTypeDescription = styled.p`
 
 const ParametersGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-top: 3rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 2.5rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
   }
 `;
 
@@ -241,12 +259,13 @@ const ParameterUnit = styled.div`
 
 const FeaturesList = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
   margin-top: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: 1fr;
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
   }
 `;
 

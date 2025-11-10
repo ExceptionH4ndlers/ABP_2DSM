@@ -6,13 +6,18 @@ import type { MapFilters } from "../hooks/useMapData";
 const FilterContainer = styled.div<{ $isSidebar?: boolean }>`
   background: white;
   border-radius: ${(props) => (props.$isSidebar ? "0" : "16px")};
-  padding: 1.5rem;
+  padding: 1.25rem;
   box-shadow: ${(props) => (props.$isSidebar ? "none" : "0 4px 20px rgba(0, 0, 0, 0.1)")};
   border: ${(props) => (props.$isSidebar ? "none" : "1px solid #e2e8f0")};
   margin-bottom: ${(props) => (props.$isSidebar ? "0" : "1rem")};
   height: ${(props) => (props.$isSidebar ? "100%" : "auto")};
   display: ${(props) => (props.$isSidebar ? "flex" : "block")};
-  flex-direction: ${(props) => (props.$isSidebar ? "column" : "row")};
+  flex-direction: column;
+  gap: 1rem;
+
+  ${({ theme }) => theme.media.md} {
+    padding: 1.5rem;
+  }
 `;
 
 const FilterHeader = styled.div`
@@ -48,19 +53,25 @@ const CloseButton = styled.button`
 
 const FilterGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
   margin-bottom: 1rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: 1fr;
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
   }
 `;
 
 const FilterActions = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
   justify-content: flex-end;
+
+  ${({ theme }) => theme.media.sm} {
+    flex-direction: row;
+  }
 `;
 
 // Usar prop transitória para evitar forward ao DOM

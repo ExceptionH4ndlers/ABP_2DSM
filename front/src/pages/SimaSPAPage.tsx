@@ -49,22 +49,39 @@ const SimaSPAContainer = styled.div`
 `;
 
 const MainContent = styled.main`
-  padding: 2rem;
+  padding: 1.5rem 1rem;
   max-width: 1200px;
   margin: 0 auto;
-  overflow-x: visible;
+  width: 100%;
+  overflow-x: hidden;
+
+  ${({ theme }) => theme.media.sm} {
+    padding: 2rem;
+  }
 `;
 
 const Section = styled.section`
   background: white;
-  border-radius: 20px;
-  padding: 3rem;
-  margin-bottom: 3rem;
+  border-radius: 16px;
+  padding: 1.75rem 1.25rem;
+  margin-bottom: 2rem;
   border: 2px solid #e2e8f0;
+
+  ${({ theme }) => theme.media.sm} {
+    border-radius: 18px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    border-radius: 20px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+  }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #1e293b;
   margin-bottom: 1rem;
@@ -72,16 +89,29 @@ const SectionTitle = styled.h2`
   align-items: center;
   gap: 1rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2rem;
+  ${({ theme }) => theme.media.sm} {
+    font-size: 2.25rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 2.5rem;
   }
 `;
 
 const SectionSubtitle = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #64748b;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.6;
+
+  ${({ theme }) => theme.media.sm} {
+    font-size: 1.1rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 // Shared team layout (matching BALCAR)
@@ -138,13 +168,18 @@ const InstitutionTag = styled.span`
 `;
 
 const SectionText = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #64748b;
   line-height: 1.7;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 
   &:last-child {
     margin-bottom: 0;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
@@ -170,21 +205,30 @@ const FilterButton = styled.button`
 const ControlsSection = styled.div`
   background: #f9fafb;
   border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  padding: 1.25rem 1rem;
+  margin-bottom: 1.5rem;
   border: 1px solid #e5e7eb;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+
+  ${({ theme }) => theme.media.md} {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const ControlsGrid = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
   width: 100%;
   max-width: 100%;
+
+  ${({ theme }) => theme.media.lg} {
+    gap: 1.5rem;
+  }
 `;
 
 const DateRangeGroup = styled.div`
@@ -196,7 +240,13 @@ const DateRangeGroup = styled.div`
 const DateRangeContainer = styled.div`
   display: flex;
   gap: 0.5rem;
-  align-items: center;
+  align-items: stretch;
+  flex-direction: column;
+
+  ${({ theme }) => theme.media.md} {
+    flex-direction: row;
+    align-items: center;
+  }
 `;
 
 const DateRangeInput = styled.input`
@@ -545,7 +595,7 @@ const PaginationInfo = styled.span`
 `;
 
 const SectionTitleWithLogo = styled.h2`
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #1e293b;
   margin-bottom: 1rem;
@@ -553,17 +603,30 @@ const SectionTitleWithLogo = styled.h2`
   align-items: center;
   gap: 1rem;
   justify-content: center;
+  flex-wrap: wrap;
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2rem;
+  ${({ theme }) => theme.media.sm} {
+    font-size: 2.25rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 2.5rem;
   }
 `;
 
 const SmallLogo = styled.img`
-  width: 200px;
+  width: 140px;
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+
+  ${({ theme }) => theme.media.sm} {
+    width: 180px;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    width: 200px;
+  }
 `;
 
 // Função auxiliar para formatar valores

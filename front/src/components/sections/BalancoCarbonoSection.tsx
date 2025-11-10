@@ -2,12 +2,16 @@ import styled from "styled-components";
 import { Leaf, Factory, Users, Target, BookOpen, MapPin, TrendingUp, Map } from "lucide-react";
 
 const SectionContainer = styled.section`
-  padding: 6rem 2rem;
+  padding: 4rem 1rem;
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   position: relative;
 
-  ${({ theme }) => theme.media.mobile} {
-    padding: 4rem 1rem;
+  ${({ theme }) => theme.media.sm} {
+    padding: 5rem 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    padding: 6rem 2rem;
   }
 `;
 
@@ -18,15 +22,19 @@ const SectionContent = styled.div`
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    margin-bottom: 3rem;
+  ${({ theme }) => theme.media.sm} {
+    margin-bottom: 3.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    margin-bottom: 4rem;
   }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-weight: 700;
   color: #0f766e;
   margin-bottom: 1rem;
@@ -44,47 +52,59 @@ const SectionTitle = styled.h2`
     border-radius: 2px;
   }
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2.5rem;
+  ${({ theme }) => theme.media.sm} {
+    font-size: 2.6rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 3rem;
   }
 `;
 
 const SectionSubtitle = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #64748b;
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
 
-  ${({ theme }) => theme.media.mobile} {
+  ${({ theme }) => theme.media.sm} {
     font-size: 1.1rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.2rem;
   }
 `;
 
 const ContentGrid = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  margin-bottom: 4rem;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.tablet} {
-    grid-template-columns: 1fr;
+  ${({ theme }) => theme.media.md} {
+    grid-template-columns: 1fr 1fr;
     gap: 3rem;
   }
 
-  ${({ theme }) => theme.media.mobile} {
-    gap: 2rem;
-    margin-bottom: 3rem;
+  ${({ theme }) => theme.media.lg} {
+    gap: 4rem;
+    margin-bottom: 4rem;
   }
 `;
 
 const TextContent = styled.div``;
 
 const Description = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #475569;
   line-height: 1.7;
   margin-bottom: 2rem;
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.1rem;
+  }
 `;
 
 const ObjectivesList = styled.ul`
@@ -97,8 +117,8 @@ const ObjectiveItem = styled.li`
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  padding: 1.25rem;
   background: white;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(15, 118, 110, 0.1);
@@ -143,15 +163,24 @@ const ObjectiveText = styled.p`
 const VisualContent = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+
+  ${({ theme }) => theme.media.lg} {
+    gap: 2rem;
+  }
 `;
 
 const ProjectInfo = styled.div`
   background: white;
-  border-radius: 20px;
-  padding: 2rem;
+  border-radius: 18px;
+  padding: 1.5rem;
   box-shadow: 0 8px 40px rgba(15, 118, 110, 0.1);
   border: 1px solid #e0f2fe;
+
+  ${({ theme }) => theme.media.lg} {
+    border-radius: 20px;
+    padding: 2rem;
+  }
 `;
 
 const InfoTitle = styled.h3`
@@ -195,8 +224,16 @@ const InfoText = styled.div`
 
 const GasesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 1fr;
   gap: 1rem;
+
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    grid-template-columns: repeat(3, 1fr);
+  }
 `;
 
 const GasCard = styled.div`

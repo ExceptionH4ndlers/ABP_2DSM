@@ -1,5 +1,15 @@
 import type { DefaultTheme } from "styled-components";
 
+const tailwindBreakpoints = {
+  base: "0px",
+  sm: "640px",
+  md: "768px",
+  lg: "1024px",
+  xl: "1280px",
+} as const;
+
+const minusOne = (value: string) => `${Number.parseInt(value, 10) - 1}px`;
+
 const theme: DefaultTheme = {
   colors: {
     primary: "#1e40af", // azul INPE oficial
@@ -38,19 +48,29 @@ const theme: DefaultTheme = {
     medium: "0 4px 6px rgba(0,0,0,0.1)",
   },
   breakpoints: {
-    mobile: "480px",
-    tablet: "768px",
-    desktop: "1024px",
-    wide: "1200px",
+    ...tailwindBreakpoints,
   },
   media: {
-    mobile: `@media (max-width: 479px)`,
-    tablet: `@media (min-width: 480px) and (max-width: 767px)`,
-    desktop: `@media (min-width: 768px) and (max-width: 1023px)`,
-    wide: `@media (min-width: 1024px)`,
-    mobileUp: `@media (min-width: 480px)`,
-    tabletUp: `@media (min-width: 768px)`,
-    desktopUp: `@media (min-width: 1024px)`,
+    baseOnly: `@media (max-width: ${minusOne(tailwindBreakpoints.sm)})`,
+    sm: `@media (min-width: ${tailwindBreakpoints.sm})`,
+    md: `@media (min-width: ${tailwindBreakpoints.md})`,
+    lg: `@media (min-width: ${tailwindBreakpoints.lg})`,
+    xl: `@media (min-width: ${tailwindBreakpoints.xl})`,
+    smOnly: `@media (min-width: ${tailwindBreakpoints.sm}) and (max-width: ${minusOne(tailwindBreakpoints.md)})`,
+    mdOnly: `@media (min-width: ${tailwindBreakpoints.md}) and (max-width: ${minusOne(tailwindBreakpoints.lg)})`,
+    lgOnly: `@media (min-width: ${tailwindBreakpoints.lg}) and (max-width: ${minusOne(tailwindBreakpoints.xl)})`,
+    smDown: `@media (max-width: ${minusOne(tailwindBreakpoints.sm)})`,
+    mdDown: `@media (max-width: ${minusOne(tailwindBreakpoints.md)})`,
+    lgDown: `@media (max-width: ${minusOne(tailwindBreakpoints.lg)})`,
+    xlDown: `@media (max-width: ${minusOne(tailwindBreakpoints.xl)})`,
+    // aliases mantidos para retrocompatibilidade
+    mobile: `@media (max-width: ${minusOne(tailwindBreakpoints.sm)})`,
+    tablet: `@media (min-width: ${tailwindBreakpoints.sm}) and (max-width: ${minusOne(tailwindBreakpoints.md)})`,
+    desktop: `@media (min-width: ${tailwindBreakpoints.md}) and (max-width: ${minusOne(tailwindBreakpoints.lg)})`,
+    wide: `@media (min-width: ${tailwindBreakpoints.lg})`,
+    mobileUp: `@media (min-width: ${tailwindBreakpoints.sm})`,
+    tabletUp: `@media (min-width: ${tailwindBreakpoints.md})`,
+    desktopUp: `@media (min-width: ${tailwindBreakpoints.lg})`,
   },
 };
 
