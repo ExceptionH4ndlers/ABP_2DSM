@@ -22,7 +22,7 @@ L.Icon.Default.mergeOptions({
 
 const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
   width: ${(props) => (props.$isFullscreen ? "100vw" : "100%")};
-  height: ${(props) => (props.$isFullscreen ? "100vh" : "500px")};
+  height: ${(props) => (props.$isFullscreen ? "100vh" : "400px")};
   border-radius: ${(props) => (props.$isFullscreen ? "0" : "16px")};
   overflow: hidden;
   box-shadow: ${(props) => (props.$isFullscreen ? "none" : "0 4px 20px rgba(0, 0, 0, 0.1)")};
@@ -34,8 +34,8 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
   bottom: ${(props) => (props.$isFullscreen ? "0" : "auto")};
   z-index: ${(props) => (props.$isFullscreen ? "9999" : "auto")};
 
-  ${({ theme }) => theme.media.mobile} {
-    height: ${(props) => (props.$isFullscreen ? "100vh" : "400px")};
+  ${({ theme }) => theme.media.md} {
+    height: ${(props) => (props.$isFullscreen ? "100vh" : "500px")};
   }
 
   .leaflet-container {

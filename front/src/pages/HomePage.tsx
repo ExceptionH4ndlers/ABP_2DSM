@@ -13,11 +13,21 @@ const HomeContainer = styled.div`
 `;
 
 const ProjectsSection = styled.section`
-  padding: 4rem 2rem;
+  padding: 2.5rem 1rem;
   background: white;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
+  min-height: auto;
+  display: block;
+
+  ${({ theme }) => theme.media.md} {
+    padding: 3.5rem 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    padding: 4rem 2rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
 `;
 
 const SectionContent = styled.div`
@@ -27,45 +37,66 @@ const SectionContent = styled.div`
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2.5rem;
+
+  ${({ theme }) => theme.media.md} {
+    margin-bottom: 3.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    margin-bottom: 4rem;
+  }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 2.25rem;
   font-weight: 700;
   color: #1e293b;
   margin-bottom: 1rem;
 
-  ${({ theme }) => theme.media.mobile} {
+  ${({ theme }) => theme.media.sm} {
     font-size: 2.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 3rem;
   }
 `;
 
 const SectionSubtitle = styled.p`
-  font-size: 1.25rem;
+  font-size: 1.05rem;
   color: #64748b;
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.7;
   text-align: center;
+
+  ${({ theme }) => theme.media.sm} {
+    font-size: 1.15rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.25rem;
+  }
 `;
 
 const ProjectsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 2rem;
-  margin-bottom: 4rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  ${({ theme }) => theme.media.md} {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
   }
 `;
 
 const ProjectCard = styled.div`
   background: white;
-  border-radius: 20px;
-  padding: 2.5rem;
+  border-radius: 18px;
+  padding: 2rem;
   border: 2px solid #e2e8f0;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -95,13 +126,23 @@ const ProjectCard = styled.div`
 `;
 
 const ProjectIcon = styled.div`
-  width: 100px;
-  height: 100px;
-  border-radius: 20px;
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1.5rem;
+
+  ${({ theme }) => theme.media.sm} {
+    width: 90px;
+    height: 90px;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const LogoImage = styled.img`
@@ -119,8 +160,12 @@ const LogoImage = styled.img`
 
 const InstitutionalSection = styled.section`
   background: white;
-  padding: 3rem 2rem;
+  padding: 2.25rem 1rem;
   border-top: 1px solid #e2e8f0;
+
+  ${({ theme }) => theme.media.md} {
+    padding: 3rem 2rem;
+  }
 `;
 
 const InstitutionalContent = styled.div`
@@ -130,21 +175,30 @@ const InstitutionalContent = styled.div`
 `;
 
 const InstitutionalTitle = styled.h3`
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   font-weight: 600;
   color: #1e293b;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+
+  ${({ theme }) => theme.media.sm} {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const InstitutionalLogos = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 3rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
 
-  ${({ theme }) => theme.media.mobile} {
+  ${({ theme }) => theme.media.sm} {
     gap: 2rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    gap: 3rem;
   }
 `;
 
@@ -169,7 +223,7 @@ const InstitutionalLogoLink = styled.a`
 `;
 
 const InstitutionalLogoImage = styled.img`
-  height: 80px;
+  height: 60px;
   width: auto;
   image-rendering: -webkit-optimize-contrast;
   image-rendering: crisp-edges;
@@ -177,8 +231,12 @@ const InstitutionalLogoImage = styled.img`
   filter: contrast(1.05) brightness(1.02) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
   transition: all 0.3s ease;
 
-  ${({ theme }) => theme.media.mobile} {
-    height: 60px;
+  ${({ theme }) => theme.media.sm} {
+    height: 70px;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    height: 80px;
   }
 `;
 

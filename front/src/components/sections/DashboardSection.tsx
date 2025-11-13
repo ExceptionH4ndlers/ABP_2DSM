@@ -3,12 +3,16 @@ import styled from "styled-components";
 import { BarChart3, Download, Filter, RefreshCw, Eye, Database } from "lucide-react";
 
 const SectionContainer = styled.section`
-  padding: 6rem 2rem;
+  padding: 4rem 1rem;
   background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
   position: relative;
 
-  ${({ theme }) => theme.media.mobile} {
-    padding: 4rem 1rem;
+  ${({ theme }) => theme.media.sm} {
+    padding: 5rem 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    padding: 6rem 2rem;
   }
 `;
 
@@ -19,15 +23,19 @@ const SectionContent = styled.div`
 
 const SectionHeader = styled.div`
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    margin-bottom: 3rem;
+  ${({ theme }) => theme.media.sm} {
+    margin-bottom: 3.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    margin-bottom: 4rem;
   }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 3rem;
+  font-size: 2.4rem;
   font-weight: 700;
   color: #1e40af;
   margin-bottom: 1rem;
@@ -45,51 +53,54 @@ const SectionTitle = styled.h2`
     border-radius: 2px;
   }
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2.5rem;
+  ${({ theme }) => theme.media.sm} {
+    font-size: 2.6rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 3rem;
   }
 `;
 
 const SectionSubtitle = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #64748b;
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
 
-  ${({ theme }) => theme.media.mobile} {
+  ${({ theme }) => theme.media.sm} {
     font-size: 1.1rem;
   }
 `;
 
 const DashboardContainer = styled.div`
   background: white;
-  border-radius: 24px;
-  padding: 3rem;
+  border-radius: 20px;
+  padding: 2rem 1.25rem;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
   border: 1px solid #e2e8f0;
   margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    padding: 2rem 1rem;
-    border-radius: 20px;
+  ${({ theme }) => theme.media.md} {
+    padding: 3rem;
   }
 `;
 
 const FiltersSection = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   margin-bottom: 3rem;
-  padding: 2rem;
+  padding: 1.5rem;
   background: #f8fafc;
   border-radius: 16px;
   border: 1px solid #e2e8f0;
 
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    padding: 1.5rem;
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
   }
 `;
 
@@ -143,13 +154,14 @@ const FilterInput = styled.input`
 
 const ActionButtons = styled.div`
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.75rem;
   justify-content: center;
   margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    flex-direction: column;
-    gap: 0.75rem;
+  ${({ theme }) => theme.media.sm} {
+    flex-direction: row;
+    gap: 1rem;
   }
 `;
 
@@ -189,7 +201,7 @@ const ActionButton = styled.button<{ $variant?: "primary" | "secondary" }>`
         }
       `}
 
-  ${({ theme }) => theme.media.mobile} {
+  ${({ theme }) => theme.media.sm} {
     justify-content: center;
     padding: 1rem 1.5rem;
   }
@@ -197,13 +209,13 @@ const ActionButton = styled.button<{ $variant?: "primary" | "secondary" }>`
 
 const DataGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   margin-bottom: 3rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
   }
 `;
 
@@ -255,13 +267,13 @@ const CardContent = styled.div`
 
 const StatsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
   margin-top: 2rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
   }
 `;
 

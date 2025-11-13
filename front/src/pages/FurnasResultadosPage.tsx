@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { BarChart3 } from "lucide-react";
 import FurnasSidebar from "../components/FurnasSidebar";
 
@@ -7,39 +7,61 @@ const FurnasResultadosContainer = styled.div`
   min-height: 100vh;
   background: #ffffff;
   display: flex;
+  flex-direction: column;
+
+  ${({ theme }) => theme.media.lg} {
+    flex-direction: row;
+  }
 `;
 
 const MainContent = styled.main<{ $collapsed: boolean }>`
   flex: 1;
-  margin-left: ${({ $collapsed }) => ($collapsed ? "80px" : "280px")};
-  padding: 2rem;
-  max-width: calc(100vw - ${({ $collapsed }) => ($collapsed ? "80px" : "280px")});
-  overflow-x: visible;
+  margin-left: 0;
+  padding: 1.5rem 1rem;
+  max-width: 100%;
+  overflow-x: hidden;
   transition:
     margin-left 0.3s ease,
     max-width 0.3s ease;
 
-  @media (max-width: 1024px) {
-    margin-left: ${({ $collapsed }) => ($collapsed ? "80px" : "240px")};
-    max-width: ${({ $collapsed }) => ($collapsed ? "calc(100vw - 80px)" : "calc(100vw - 240px)")};
+  ${({ theme }) => theme.media.sm} {
+    padding: 2rem;
   }
 
-  @media (max-width: 768px) {
-    margin-left: 0;
-    max-width: 100%;
-  }
+  ${({ theme, $collapsed }) => css`
+    ${theme.media.lg} {
+      margin-left: ${$collapsed ? "80px" : "240px"};
+      max-width: ${$collapsed ? "calc(100vw - 80px)" : "calc(100vw - 240px)"};
+    }
+
+    ${theme.media.xl} {
+      margin-left: ${$collapsed ? "80px" : "280px"};
+      max-width: ${$collapsed ? "calc(100vw - 80px)" : "calc(100vw - 280px)"};
+    }
+  `}
 `;
 
 const Section = styled.section`
   background: #ffffff;
-  border-radius: 20px;
-  padding: 3rem;
-  margin-bottom: 3rem;
+  border-radius: 16px;
+  padding: 1.75rem 1.25rem;
+  margin-bottom: 2rem;
   border: 2px solid rgba(0, 0, 0, 0.1);
+
+  ${({ theme }) => theme.media.sm} {
+    border-radius: 18px;
+    padding: 2.25rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    border-radius: 20px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+  }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #000000;
   margin-bottom: 1rem;
@@ -47,28 +69,46 @@ const SectionTitle = styled.h2`
   align-items: center;
   gap: 1rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2rem;
+  ${({ theme }) => theme.media.sm} {
+    font-size: 2.25rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 2.5rem;
   }
 `;
 
 const SectionSubtitle = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #7f8c8d;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.6;
+
+  ${({ theme }) => theme.media.sm} {
+    font-size: 1.1rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const ListItem = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
   gap: 0.75rem;
+
+  ${({ theme }) => theme.media.md} {
+    gap: 1rem;
+  }
 `;
 
 const BulletPoint = styled.div`
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background: #196d95;
   border-radius: 50%;
   margin-top: 0.5rem;
@@ -76,10 +116,14 @@ const BulletPoint = styled.div`
 `;
 
 const ListText = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #000000;
   line-height: 1.7;
   margin: 0;
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.1rem;
+  }
 `;
 
 function FurnasResultadosPage() {
