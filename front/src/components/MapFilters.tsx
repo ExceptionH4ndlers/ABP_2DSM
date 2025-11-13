@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Filter, X } from "lucide-react";
+import { Filter, X, Image as ImageIcon } from "lucide-react";
 import type { MapFilters } from "../hooks/useMapData";
+import { toPng, toJpeg } from "html-to-image";
 
 const FilterContainer = styled.div<{ $isSidebar?: boolean }>`
   background: white;
@@ -68,13 +69,14 @@ const FilterActions = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   justify-content: flex-end;
+  flex-wrap: wrap;
 
   ${({ theme }) => theme.media.sm} {
     flex-direction: row;
   }
 `;
 
-// Usar prop transitória para evitar forward ao DOM
+// Botão reutilizável com variação de estilo
 const ActionButton = styled.button<{ $variant?: "primary" | "secondary" }>`
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -115,9 +117,7 @@ interface MapFiltersProps {
   onFiltersChange: (filters: MapFilters) => void;
   onClose?: () => void;
   isOpen: boolean;
-  // Enquanto definimos os filtros definitivos, exibir apenas placeholder
   placeholderOnly?: boolean;
-  // Modo sidebar (aparece no fullscreen)
   isSidebar?: boolean;
 }
 
@@ -131,7 +131,6 @@ export default function MapFiltersComponent({
 }: MapFiltersProps) {
   const [localFilters, setLocalFilters] = useState<MapFilters>(filters);
 
-  // Sincroniza estado local quando abrir ou quando props mudarem
   React.useEffect(() => {
     if (isOpen) setLocalFilters(filters);
   }, [filters, isOpen]);
@@ -146,14 +145,35 @@ export default function MapFiltersComponent({
       showSima: true,
       showFurnas: true,
       showBalcar: true,
-      dateRange: {
-        start: "",
-        end: "",
-      },
+      dateRange: { start: "", end: "" },
       region: undefined,
     };
     setLocalFilters(defaultFilters);
     onFiltersChange(defaultFilters);
+  };
+
+  // 🔹 Função de exportação do gráfico
+  const exportGraph = async (format: "png" | "jpeg") => {
+    try {
+      // Alvo do mapa (ajuste o seletor conforme o seu componente)
+      const mapElement = document.querySelector("#map-container");
+      if (!mapElement) {
+        console.warn("Elemento do mapa não encontrado (#map-container).");
+        return;
+      }
+
+      const dataUrl =
+        format === "png"
+          ? await toPng(mapElement as HTMLElement)
+          : await toJpeg(mapElement as HTMLElement, { quality: 0.95 });
+
+      const link = document.createElement("a");
+      link.download = `grafico-${Date.now()}.${format}`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Erro ao exportar gráfico:", err);
+    }
   };
 
   if (!isOpen) return null;
@@ -179,13 +199,20 @@ export default function MapFiltersComponent({
         </div>
       ) : (
         <>
-          <FilterGrid>
-            {/* UI antiga de filtros ficará disponível quando placeholderOnly=false */}
-          </FilterGrid>
+          <FilterGrid>{/* futuros filtros aqui */}</FilterGrid>
           <FilterActions>
             <ActionButton onClick={resetFilters}>Limpar Filtros</ActionButton>
             <ActionButton $variant="primary" onClick={applyFilters}>
               Aplicar Filtros
+            </ActionButton>
+            {/* 🔽 Botões de exportação adicionados abaixo */}
+            <ActionButton onClick={() => exportGraph("png")}>
+              <ImageIcon size={16} style={{ marginRight: "4px" }} />
+              Exportar PNG
+            </ActionButton>
+            <ActionButton onClick={() => exportGraph("jpeg")}>
+              <ImageIcon size={16} style={{ marginRight: "4px" }} />
+              Exportar JPEG
             </ActionButton>
           </FilterActions>
         </>
