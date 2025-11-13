@@ -14,7 +14,6 @@ interface ExportPdfButtonProps {
   className?: string;
 }
 
-
 const StyledButton = styled.button<{ $variant: string; $size: string }>`
   background: ${({ $variant }) => {
     switch ($variant) {
