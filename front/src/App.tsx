@@ -8,6 +8,7 @@ import LoadingModal from "./components/LoadingModal";
 import SuspenseWrapper from "./components/SuspenseWrapper";
 import { useLoading } from "./hooks/useLoading";
 import { updateLoadingContext } from "./api/axiosConfig";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 // Lazy loading de todas as páginas
 const HomePage = lazy(() => import("./pages/HomePage"));
@@ -75,9 +76,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </ThemeProvider>
   );
 }
 

@@ -13,6 +13,8 @@ import {
   FileText,
   Users,
 } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
+import { useTheme } from "../hooks/useTheme";
 
 const NavigationContainer = styled.nav`
   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
@@ -241,6 +243,7 @@ function Navigation() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
   const [isSimaDropdownOpen, setIsSimaDropdownOpen] = useState(false);
   const [isBalcarDropdownOpen, setIsBalcarDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -478,6 +481,20 @@ function Navigation() {
         </NavLinks>
 
         <ButtonGroup>
+          <button
+            onClick={toggleTheme}
+            style={{
+              background: "none",
+              border: "none",
+              color: "white",
+              cursor: "pointer",
+              padding: "0.5rem",
+              borderRadius: "6px",
+            }}
+            title={theme === "light" ? "Modo Escuro" : "Modo Claro"}
+          >
+            {theme === "light" ? <Moon size={22} /> : <Sun size={22} />}
+          </button>
           <MobileMenuButton onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </MobileMenuButton>
