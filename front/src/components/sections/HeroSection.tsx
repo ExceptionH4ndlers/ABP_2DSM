@@ -2,14 +2,14 @@ import styled from "styled-components";
 import { ArrowDown } from "lucide-react";
 
 const HeroContainer = styled.section`
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
   position: relative;
   overflow: hidden;
-  padding: 2rem;
+  padding: 1.25rem;
 
   &::before {
     content: "";
@@ -22,9 +22,13 @@ const HeroContainer = styled.section`
     opacity: 0.3;
   }
 
-  ${({ theme }) => theme.media.mobile} {
-    padding: 1rem;
-    min-height: 80vh;
+  ${({ theme }) => theme.media.md} {
+    min-height: 90vh;
+    padding: 2rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    min-height: 100vh;
   }
 `;
 
@@ -37,35 +41,39 @@ const HeroContent = styled.div`
 `;
 
 const HeroTitle = styled.h1`
-  font-size: 4rem;
+  font-size: 2.5rem;
   font-weight: 800;
   color: white;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   line-height: 1.1;
 
-  ${({ theme }) => theme.media.tablet} {
+  ${({ theme }) => theme.media.sm} {
     font-size: 3rem;
   }
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+  ${({ theme }) => theme.media.lg} {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
 const HeroSubtitle = styled.p`
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
+  ${({ theme }) => theme.media.sm} {
+    font-size: 1.3rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.5rem;
+    margin-bottom: 3rem;
   }
 `;
 
@@ -98,8 +106,8 @@ const ScrollIndicator = styled.div`
     }
   }
 
-  ${({ theme }) => theme.media.mobile} {
-    bottom: 1rem;
+  ${({ theme }) => theme.media.sm} {
+    bottom: 1.5rem;
   }
 `;
 

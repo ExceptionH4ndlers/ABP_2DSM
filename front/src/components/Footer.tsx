@@ -4,11 +4,15 @@ import { MapPin, Mail, Phone, ExternalLink } from "lucide-react";
 const FooterContainer = styled.footer`
   background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
   color: white;
-  padding: 4rem 2rem 2rem;
+  padding: 3rem 1.25rem 2rem;
   position: relative;
 
-  ${({ theme }) => theme.media.mobile} {
-    padding: 3rem 1rem 2rem;
+  ${({ theme }) => theme.media.sm} {
+    padding: 3.5rem 1.75rem 2rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    padding: 4rem 2.5rem 2.5rem;
   }
 `;
 
@@ -19,23 +23,31 @@ const FooterContent = styled.div`
 
 const FooterGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
-  margin-bottom: 3rem;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    gap: 3rem;
+    margin-bottom: 3rem;
   }
 `;
 
 const FooterSection = styled.div``;
 
 const FooterTitle = styled.h3`
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   color: #f1f5f9;
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.25rem;
+  }
 `;
 
 const FooterText = styled.p`
@@ -84,15 +96,18 @@ const ContactIcon = styled.div`
 
 const FooterBottom = styled.div`
   border-top: 1px solid #334155;
-  padding-top: 2rem;
+  padding-top: 1.5rem;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 1rem;
   align-items: center;
+  text-align: center;
 
-  ${({ theme }) => theme.media.mobile} {
-    flex-direction: column;
-    gap: 1rem;
-    text-align: center;
+  ${({ theme }) => theme.media.md} {
+    padding-top: 2rem;
+    flex-direction: row;
+    justify-content: space-between;
+    text-align: left;
   }
 `;
 
@@ -103,10 +118,13 @@ const Copyright = styled.p`
 
 const FooterLinks = styled.div`
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
 
-  ${({ theme }) => theme.media.mobile} {
-    gap: 1rem;
+  ${({ theme }) => theme.media.md} {
+    gap: 1.5rem;
+    justify-content: flex-start;
   }
 `;
 

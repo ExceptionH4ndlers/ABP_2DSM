@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import FurnasSidebar from "../components/FurnasSidebar";
 
 const API_BASE_URL =
@@ -32,40 +32,62 @@ const FurnasSPAContainer = styled.div`
   min-height: 100vh;
   background: #ffffff;
   display: flex;
+  flex-direction: column;
+
+  ${({ theme }) => theme.media.lg} {
+    flex-direction: row;
+  }
 `;
 
 const MainContent = styled.main<{ $collapsed: boolean }>`
   flex: 1;
-  margin-left: ${({ $collapsed }) => ($collapsed ? "80px" : "280px")};
-  padding: 2rem;
-  max-width: calc(100vw - ${({ $collapsed }) => ($collapsed ? "80px" : "280px")});
-  overflow-x: visible;
+  margin-left: 0;
+  padding: 1.5rem 1rem;
+  max-width: 100%;
+  overflow-x: hidden;
   transition:
     margin-left 0.3s ease,
     max-width 0.3s ease;
 
-  @media (max-width: 1024px) {
-    margin-left: ${({ $collapsed }) => ($collapsed ? "80px" : "240px")};
-    max-width: ${({ $collapsed }) => ($collapsed ? "calc(100vw - 80px)" : "calc(100vw - 240px)")};
+  ${({ theme }) => theme.media.sm} {
+    padding: 2rem;
   }
 
-  @media (max-width: 768px) {
-    margin-left: 0;
-    max-width: 100%;
-  }
+  ${({ theme, $collapsed }) => css`
+    ${theme.media.lg} {
+      margin-left: ${$collapsed ? "80px" : "240px"};
+      max-width: ${$collapsed ? "calc(100vw - 80px)" : "calc(100vw - 240px)"};
+    }
+
+    ${theme.media.xl} {
+      margin-left: ${$collapsed ? "80px" : "280px"};
+      max-width: ${$collapsed ? "calc(100vw - 80px)" : "calc(100vw - 280px)"};
+    }
+  `}
 `;
 
 const Section = styled.section`
   background: #ffffff;
-  border-radius: 20px;
-  padding: 3rem;
-  margin-bottom: 3rem;
+  border-radius: 16px;
+  padding: 1.75rem 1.25rem;
+  margin-bottom: 2rem;
   border: 2px solid rgba(0, 0, 0, 0.1);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+
+  ${({ theme }) => theme.media.sm} {
+    border-radius: 18px;
+    padding: 2.5rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    border-radius: 20px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+  }
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #000000;
   margin-bottom: 1rem;
@@ -73,20 +95,33 @@ const SectionTitle = styled.h2`
   align-items: center;
   gap: 1rem;
 
-  ${({ theme }) => theme.media.mobile} {
-    font-size: 2rem;
+  ${({ theme }) => theme.media.sm} {
+    font-size: 2.25rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 2.5rem;
   }
 `;
 
 const SectionSubtitle = styled.p`
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #7f8c8d;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   line-height: 1.6;
+
+  ${({ theme }) => theme.media.sm} {
+    font-size: 1.1rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const SectionText = styled.p`
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #000000;
   line-height: 1.7;
   margin-bottom: 1.5rem;
@@ -94,26 +129,39 @@ const SectionText = styled.p`
   &:last-child {
     margin-bottom: 0;
   }
+
+  ${({ theme }) => theme.media.lg} {
+    font-size: 1.1rem;
+  }
 `;
 
 const ControlsSection = styled.div`
   background: #f9fafb;
   border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  padding: 1.25rem 1rem;
+  margin-bottom: 1.5rem;
   border: 1px solid #e5e7eb;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+
+  ${({ theme }) => theme.media.md} {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const ControlsGrid = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
   width: 100%;
   max-width: 100%;
+
+  ${({ theme }) => theme.media.lg} {
+    gap: 1.5rem;
+  }
 `;
 
 const DateRangeGroup = styled.div`
@@ -125,7 +173,13 @@ const DateRangeGroup = styled.div`
 const DateRangeContainer = styled.div`
   display: flex;
   gap: 0.5rem;
-  align-items: center;
+  align-items: stretch;
+  flex-direction: column;
+
+  ${({ theme }) => theme.media.md} {
+    flex-direction: row;
+    align-items: center;
+  }
 `;
 
 const DateRangeInput = styled.input`
@@ -177,9 +231,15 @@ const ControlSelect = styled.select`
 
 const ActionButtons = styled.div`
   display: flex;
-  gap: 1rem;
+  flex-direction: column;
+  gap: 0.75rem;
   justify-content: center;
-  flex-wrap: wrap;
+
+  ${({ theme }) => theme.media.md} {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 `;
 // usando ExportCsvButton compartilhado (importado)
 
@@ -198,6 +258,11 @@ const ActionButton = styled.button`
   font-size: 0.9rem;
   flex: 1;
   min-width: 150px;
+  width: 100%;
+
+  ${({ theme }) => theme.media.sm} {
+    width: auto;
+  }
 
   &:hover {
     background: #4b5563;
@@ -254,45 +319,24 @@ const TableContainer = styled.div`
 
 const ParticipantsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
   margin-top: 2rem;
-  justify-items: center;
-  align-items: start;
+  justify-items: stretch;
+  align-items: stretch;
+  width: 100%;
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 
-  /* INPE no topo centralizado */
-  & > :nth-child(1) {
-    grid-column: 2 / 4;
-    max-width: 300px;
-    margin: 0 auto;
-  }
+  ${({ theme }) => theme.media.lg} {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2rem;
 
-  /* Base - 4 cards distribuídos */
-  & > :nth-child(2) {
-    grid-column: 1;
-  }
-
-  & > :nth-child(3) {
-    grid-column: 2;
-  }
-
-  & > :nth-child(4) {
-    grid-column: 3;
-  }
-
-  & > :nth-child(5) {
-    grid-column: 4;
-  }
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    justify-items: center;
-
-    & > * {
-      grid-column: 1 !important;
+    & > :nth-child(1) {
+      grid-column: 2 / span 2;
+      max-width: 340px;
+      justify-self: center;
     }
   }
 `;

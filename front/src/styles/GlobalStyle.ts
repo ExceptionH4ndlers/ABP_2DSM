@@ -31,7 +31,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   /* Melhorias para dispositivos móveis */
-  @media (max-width: 479px) {
+  ${({ theme }) => theme.media.baseOnly} {
     body {
       font-size: 14px;
     }
@@ -47,8 +47,8 @@ const GlobalStyle = createGlobalStyle`
     }
   }
 
-  /* Melhorias de UX mobile */
-  @media (max-width: 768px) {
+  /* Melhorias de UX mobile-first */
+  ${({ theme }) => theme.media.mdDown} {
     /* Feedback visual para toques */
     button, a, [role="button"] {
       transition: all 0.2s ease;
