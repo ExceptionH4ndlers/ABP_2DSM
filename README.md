@@ -30,6 +30,11 @@ O INPE, UFRJ, UFJF e IIE, em cooperação com Furnas Centrais Elétricas S.A., c
 - **Parâmetros limnológicos**: Coletados manualmente em diversos locais dos reservatórios, em curtos períodos de tempo (campanhas)
 - **Dados do SIMA**: Coletados automaticamente durante longos períodos, em um único ponto do reservatório
 
+</details>
+
+<details>
+<summary><b>⚙️ Requisitos do Projeto</b></summary>
+
 ### ⚙️ Requisitos Funcionais
 
 - **RF01**: Visualizar todos os parâmetros armazenados, filtrando por instituição, reservatório e período de tempo
@@ -55,6 +60,10 @@ O INPE, UFRJ, UFJF e IIE, em cooperação com Furnas Centrais Elétricas S.A., c
 - **RP03**: Front-end desenvolvido em React com TypeScript
 - **RP04**: Aplicação utilizando containers independentes para banco de dados, back-end e front-end
 
+</details>
+
+<details>
+<summary><b>🚀 Tecnologias e Arquitetura</b></summary>
 
 ### 🚀 Tecnologias Utilizadas
 
@@ -72,7 +81,7 @@ O INPE, UFRJ, UFJF e IIE, em cooperação com Furnas Centrais Elétricas S.A., c
 A organização do projeto segue uma separação clara entre bancos de dados (scripts e dados), servidor (código da aplicação) e configurações gerais.
 
 ```bash
-app/
+ABP_2DSM/
 ├── balcar-campanha/            
 │   ├── csv/                       # Arquivos de dados (CSV) carregados nas tabelas
 │   ├── copy-table.sql             # Script SQL para importar os arquivos CSV para o banco
@@ -117,8 +126,28 @@ app/
 │   ├── vite.config.ts
 │   └── package.json
 │
-├── .github/workflows/             # (planejado) Pipelines de Integração Contínua
-└── docker-compose.dev.yml         # Definições dos serviços Docker para ambiente de desenvolvimento
+├── scripts/                       # Scripts auxiliares
+│   └── import-neon-data.py       # Script para importação de dados no Neon
+├── Documentação/                  # Documentação do projeto
+│   ├── Documentar fluxo de build e deploy responsivo .pdf
+│   ├── Teste de usabilidade básica.pdf
+│   └── Validação de Responsividade em diferentes Dispositivos – Sprint 1.pdf
+├── testes/                        # Documentos de testes
+│   └── Conduzir teste de usabilidade com usuários reais.pdf
+├── diagramas/                     # Diagramas do projeto (Astah)
+│   ├── balcar_campanha.asta
+│   ├── furnas_campanha.asta
+│   ├── sima.asta
+│   └── UseCase_ABP.asta
+├── figma/                         # Protótipos de interface
+│   ├── Desktop - 3.pdf
+│   ├── Desktop - 7.pdf
+│   ├── Desktop - 8.pdf
+│   └── Desktop - 9.pdf
+├── TP_Requisitos/                 # Modelos TypeScript dos requisitos
+├── koyeb.toml                     # Configuração de deploy no Koyeb
+├── docker-compose.dev.yml         # Definições dos serviços Docker para ambiente de desenvolvimento
+└── README.md                      # Documentação principal do projeto
 ```
 
 #### 🔑 Configurações Técnicas
@@ -150,16 +179,24 @@ app/
 - Volumes persistentes para dados
 - Cada banco acessível em uma porta distinta (5433, 5434, 5435)
 
+**Deploy**
+- Aplicação deployada e disponível em produção
+- Front-end: [https://abp-2-dsm.vercel.app/](https://abp-2-dsm.vercel.app/) (Vercel)
+- Script de importação de dados: `scripts/import-neon-data.py`
+
 **CI/CD (planejado)**
 - Este repositório ainda não possui pipeline ativo em `.github/workflows`.
 - Plano: adicionar lint, build e testes para `server/` e `front/` em PRs na `main`.
 
-### ▶️ Como Executar o Projeto
+</details>
+
+<details>
+<summary><b>▶️ Como Executar o Projeto</b></summary>
 
 #### Com Docker (Recomendado)
 ```bash
 # Subir todos os containers
-  docker compose -f docker-compose.dev.yml up --build -d
+docker compose -f docker-compose.dev.yml up --build -d
 
 # Parar os containers
 docker compose -f docker-compose.dev.yml down
@@ -182,7 +219,10 @@ npm run dev
 
 > Observação: as portas mapeadas via Docker são diferentes das portas padrão em desenvolvimento local (Vite 5173 e API 3000).
 
-### 🔐 Variáveis de Ambiente (.env)
+</details>
+
+<details>
+<summary><b>🔐 Variáveis de Ambiente</b></summary>
 
 Crie um arquivo `.env` em `server/` quando rodar localmente:
 
@@ -224,7 +264,18 @@ LOG_LEVEL=debug
 
 No Docker, as variáveis já estão definidas no `docker-compose.dev.yml`.
 
-### 🌐 Acessando a Aplicação
+</details>
+
+<details>
+<summary><b>🌐 Acessando a Aplicação</b></summary>
+
+#### 🚀 **Produção (Deploy)**
+
+A aplicação está disponível em produção:
+
+- **Front-end (React)**: [https://abp-2-dsm.vercel.app/](https://abp-2-dsm.vercel.app/)
+
+#### 💻 **Desenvolvimento Local**
 
 - **Front-end (React)**:
   - Local: http://localhost:5173
@@ -233,6 +284,8 @@ No Docker, as variáveis já estão definidas no `docker-compose.dev.yml`.
   - Local: http://localhost:3000
   - Docker: http://localhost:3001
   - Exemplo (Docker): http://localhost:3001/sima/sima/all?page=1&limit=20
+
+</details>
 
 ---
 
@@ -252,8 +305,6 @@ Exemplos (SIMA):
 ```http
 GET /sima/sima/all?page=1&limit=20
 ```
-
-</details>
 
 ```http
 POST /sima/query/select
@@ -311,137 +362,6 @@ GET /balcar/reservatorio/all
 ```
 
 Retornam dados com campos `lat` e `lng` para plotagem no mapa.
-
----
-
-### 🧭 Guia rápido do usuário
-
-- **Navegação**: utilize o menu para acessar `SIMA`, `Furnas` e `BALCAR`.
-- **Filtragem**: aplique filtros por estação/tabela antes de consultar.
-- **Exportar CSV**: clique em "Exportar CSV" nas listagens; o arquivo baixa com cabeçalhos e metadados.
-- **Séries temporais (SIMA)**: selecione a estação e o período para visualizar os gráficos.
-- **Mapa Interativo**: 
-  - Acesse via menu principal ou nas páginas SIMA/Furnas/BALCAR
-  - Use filtros para mostrar/ocultar camadas (SIMA, Furnas, BALCAR)
-  - Clique nos markers para ver informações detalhadas
-  - Use clustering para melhor visualização de áreas com muitos pontos
-  - Filtros por período disponíveis para estações SIMA
-  - Link direto para Google Maps em cada popup
-
----
-
-<details>
-<summary><b>✅ Qualidade e Processo</b></summary>
-
-### ✅ Definition of Done (DoD)
-
-- Código com lint e formatação OK (`npm run lint`, `npm run format`).
-- Build local sem erros no `front/` e `server/`.
-- Endpoint documentado em “Referência de API” (quando aplicável).
-- Testes manuais básicos executados (fluxos principais e exportação CSV).
-- Logs sem erros no `logs/error.log` durante o uso básico.
-- Critérios de aceite atendidos e revisados pelo time.
-
----
-
-### ♿ Acessibilidade e Usabilidade
-
-- Contraste e tipografia legível; responsividade nas principais páginas.
-- Elementos interativos com feedback visual (loading, desabilitado, erro).
-- Títulos e rótulos claros; termos consistentes ao longo da UI.
-- **Mapa Interativo**: 
-  - Suporte básico a navegação por teclado (Tab para focar controles)
-  - Popups com estrutura semântica adequada
-  - Cores de markers com contraste suficiente (WCAG AA)
-  - Textos alternativos nos ícones dos popups
-- Próximos passos: navegação por teclado, foco visível, descrição alternativa nas imagens do banner.
-- **Próximos passos para o mapa**: 
-  - Melhorar navegação por teclado nos markers
-  - Adicionar suporte a screen readers para anúncio de coordenadas
-  - Implementar atalhos de teclado para filtros
-
----
-
-### 🧪 Checklist de Qualidade e Critérios de Aceite
-
-- Requisitos funcionais cobertos (RF01–RF05).
-- Exportação CSV com cabeçalhos e metadados conforme guia.
-- Tempo de resposta aceitável nas listagens e gráficos SIMA.
-- Tratamento de erros de rede exibindo mensagem amigável.
-- Compatibilidade validada em Chrome/Edge recentes.
-- Critérios de aceite específicos por história confirmados no Sprint Review.
-
----
-
-### 🔎 Sprint 1 — Review (curto)
-
-- Objetivo: entregar MVP com visualização básica, consulta e exportação.
-- Demonstração: front navegável, API respondendo, bancos populados via scripts.
-- Feedback: priorizar filtros avançados, melhorar mensagens de erro e guias na UI.
-- Decisão: manter arquitetura atual; planejar automação de CI na Sprint 2.
-
----
-
-</details>
-
-<details>
-<summary><b>🧰 Troubleshooting</b></summary>
-
-### 🧰 Troubleshooting
-
-- **Porta ocupada (5173 ou 3000)**: finalize o processo ou altere a porta no Vite/`.env`.
-- **API local não responde em 3001**: em desenvolvimento local a API roda em 3000; 3001 é o mapeamento do Docker.
-- **Erro de CORS**: ajuste `CORS_ORIGIN` no `.env` do `server/` para o endereço do front.
-- **Reimportar CSVs**: pare os containers Postgres, remova os volumes `*_data` e suba novamente para reexecutar `create-table.sql` e `copy-table.sql`.
-- **Hot reload no Docker**: já habilitado via `CHOKIDAR_USEPOLLING=true` e bind mounts em `docker-compose.dev.yml`.
-
----
-
-### 🗃️ Guia SQL rápido (sem Docker)
-
-Pré-requisitos: PostgreSQL instalado e `psql` disponível no PATH.
-
-```bash
-# Criar bancos
-createdb bdfurnas-campanha
-createdb bdsima
-createdb bdbalcar-campanha
-
-# Executar scripts de criação
-psql -d bdfurnas-campanha -f furnas-campanha/create-table.sql
-psql -d bdfurnas-campanha -f furnas-campanha/copy-table.sql
-
-psql -d bdsima -f sima/create-table.sql
-psql -d bdsima -f sima/copy-table.sql
-
-psql -d bdbalcar-campanha -f balcar-campanha/create-table.sql
-psql -d bdbalcar-campanha -f balcar-campanha/copy-table.sql
-```
-
-Obs.: Ajuste usuário/senha via variáveis `PGUSER` e `PGPASSWORD` se necessário.
-
----
-
-### 🔑 Dicas de ambiente
-
-- Em Windows, use PowerShell/WSL para executar `psql`.
-- Se precisar resetar dados, remova volumes Docker e suba novamente.
-
-</details>
-<details>
-<summary><b>🎨 Design e Diagramas</b></summary>
-
-### 🎨 Design e Diagramas
-
-- Protótipos (PDFs): pasta `figma/` (várias telas).
-- Diagramas (Astah): pasta `diagramas/` (`*.asta`).
-- Modelos conceituais dos bancos: `balcar-campanha/*-modelo.xml`, `furnas-campanha/*-modelo.xml`, `sima/sima-modelo.xml`.
-
----
-
-### 🧾 Logs
-
-- Logs de aplicação ficam em `logs/` (`combined.log`, `error.log`), gerenciados por `winston`.
 
 </details>
 
@@ -673,8 +593,6 @@ dados['datahora'] = pd.to_datetime(dados['datahora'])
 
 </details>
 
-</details>
-
 <details>
 <summary><b>🗺️ Mapa Interativo com Leaflet.js</b></summary>
 
@@ -823,9 +741,12 @@ Este dropdown contém todos os artefatos e documentos relacionados à metodologi
 | **Artefato** | **Link Direto** | **Descrição** |
 |--------------|-----------------|---------------|
 | **📋 Product Backlog** | [`Product Backlog Completo.pdf`](Scrum/Product%20Backlog/Product%20Backlog%20Completo.pdf) | Documento completo com todas as histórias de usuário, requisitos funcionais e não funcionais do projeto |
-| **🏃‍♂️ Sprint Planning** | [`Sprint Backlog.pdf`](Scrum/Sprints/Sprint%201/Sprint%20Backlog/Sprint%20Backlog.pdf) | Tarefas e atividades planejadas para o Sprint 1, incluindo estimativas e responsáveis |
-| **📊 Burndown Chart** | [`BurndownSP1.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownSP1.png) | Gráfico de progresso ideal do Sprint 1 para acompanhamento da evolução das atividades |
+| **🏃‍♂️ Sprint Planning Sprint 1** | [`Sprint Backlog.pdf`](Scrum/Sprints/Sprint%201/Sprint%20Backlog/Sprint%20Backlog.pdf) | Tarefas e atividades planejadas para o Sprint 1, incluindo estimativas e responsáveis |
+| **🏃‍♂️ Sprint Planning Sprint 2** | [`SPRINT BACKLOG 2.pdf`](Scrum/Sprints/Sprint%202/Sprint%20Backlog/SPRINT%20BACKLOG%202.pdf) | Tarefas e atividades planejadas para o Sprint 2, incluindo estimativas e responsáveis |
+| **🏃‍♂️ Sprint Planning Sprint 3** | [`SPRINT BACKLOG 3.pdf`](Scrum/Sprints/Sprint%203/Sprint%20Backlog/SPRINT%20BACKLOG%203.pdf) | Tarefas e atividades planejadas para o Sprint 3, incluindo estimativas e responsáveis |
+| **📊 Burndown Chart Sprint 1** | [`BurndownSP1.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownSP1.png) | Gráfico de progresso do Sprint 1 para acompanhamento da evolução das atividades |
 | **📊 Burndown Chart Sprint 2** | [`BurndownSP2.png`](Scrum/Burndown%20Chart/Sprint%202/BurndownSP2.png) | Gráfico de progresso da Sprint 2 para acompanhamento da evolução das atividades |
+| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | Gráfico de progresso da Sprint 3 para acompanhamento da evolução das atividades (em desenvolvimento) |
 
 ### 📅 **Dailys (Reuniões Diárias)**
 
@@ -858,14 +779,19 @@ ABP_2DSM/
 │   │   ├── Sprint 1/                # Sprint 1
 │   │   │   └── Sprint Backlog/      # Backlog do Sprint
 │   │   │       └── Sprint Backlog.pdf
-│   │   └── Sprint 2/                # Sprint 2
+│   │   ├── Sprint 2/                # Sprint 2
+│   │   │   └── Sprint Backlog/      # Backlog do Sprint
+│   │   │       └── SPRINT BACKLOG 2.pdf
+│   │   └── Sprint 3/                # Sprint 3
 │   │       └── Sprint Backlog/      # Backlog do Sprint
-│   │           └── Sprint Backlog.pdf
+│   │           └── SPRINT BACKLOG 3.pdf
 │   └── Burndown Chart/              # Gráficos de progresso
 │       ├── Sprint 1/                # Burndown do Sprint 1
-│       │   └── BurndownIdeal.png
-│       └── Sprint 2/                # Burndown do Sprint 2
-│           └── BurndownSP2.png
+│       │   └── BurndownSP1.png
+│       ├── Sprint 2/                # Burndown do Sprint 2
+│       │   └── BurndownSP2.png
+│       └── Sprint 3/                # Burndown do Sprint 3
+│           └── BurndownSP3.png
 └── Dailys/                          # Registros das reuniões diárias
     ├── ATA_DAILY_12.09.2025.pdf     # Daily de 12/09/2025
     ├── ATA_DAILY_16.09.2025.pdf     # Daily de 16/09/2025
@@ -885,140 +811,10 @@ ABP_2DSM/
 ### 📝 **Próximos Artefatos**
 
 Conforme o projeto evolui, novos artefatos serão adicionados:
-- **Sprint 2**: Sprint Backlog, Burndown Chart e relatórios de revisão
-- **Sprint 3**: Novos Sprint Backlogs e Burndown Charts
+- **Sprint 3**: Sprint Backlog, Burndown Chart e relatórios de revisão (em desenvolvimento)
 - **Sprint Review**: Relatórios de revisão dos Sprints
 - **Retrospectivas**: Análises de melhoria da equipe
 - **Novas Dailys**: Registros das reuniões diárias futuras
-
-</details>
-
-<details>
-<summary><b>🔄 Sprint 1 - Retrospectiva</b></summary>
-
-### 📊 **Resumo da Sprint**
-
-A primeira sprint do projeto foi marcada por desafios significativos que impactaram nossa produtividade, mas mesmo assim conseguimos entregar um MVP funcional próximo ao planejado.
-
-## 🧩 Validação de Tasks
-
-As tasks foram validadas conforme os requisitos estabelecidos e a participação e contribuição de cada integrante no projeto, considerando as ideias definidas tanto pelo grupo quanto pelos professores.
-
-### 🔍 Processo de Validação
-
-O passo a passo seguido para a validação foi o seguinte:
-
-1. Verificar se a task estava devidamente **commitada no repositório GitHub** do grupo;  
-2. Ir até a **mesa do integrante** responsável para observar como ele(a) desenvolveu cada detalhe, entender suas dúvidas e analisar os resultados obtidos;  
-3. Adicionar um **novo comentário no card correspondente no Trello**, descrevendo a avaliação feita sobre o resultado do integrante e a qualidade da entrega.
-
-### 🚧 **Principais Desafios Enfrentados**
-
-#### 📢 **Comunicação e Coordenação**
-- **Falta de consenso entre professores**: Não houve um alinhamento inicial entre os professores sobre como seria a nova ABP, com orientações conflitantes
-- **Veredito tardio**: A definição final de como seria o projeto só chegou no final da sprint, causando confusão e retrabalho
-- **Dúvidas sobre tasks**: Muitos membros da equipe apresentaram incertezas sobre suas responsabilidades devido à falta de clareza geral
-- **Falta de clareza nos requisitos**: Os requisitos mudaram conforme os professores chegavam a um consenso, causando retrabalho significativo
-
-#### 🔄 **Gestão de Processos**
-- **Muitas refatorações no Kanban**: O quadro de tarefas precisou ser reorganizado várias vezes durante a sprint
-- **Mudanças frequentes de escopo**: Algumas tarefas foram modificadas ou canceladas durante o desenvolvimento
-
-#### ⏰ **Impacto no Tempo**
-- **Perda de tempo significativa**: A falta de consenso entre professores e o veredito tardio consumiram tempo valioso que poderia ser usado no desenvolvimento
-- **Retrabalho excessivo**: Muitas tarefas precisaram ser refeitas ou canceladas para atender às novas solicitações dos professores
-- **Atrasos nas entregas**: Algumas funcionalidades foram entregues com atraso devido aos impedimentos causados pela falta de clareza inicial
-
-### ✅ **Resultados Alcançados**
-
-#### 🎯 **MVP Funcional Entregue**
-- **Sistema básico funcionando**: Conseguimos entregar um produto mínimo viável com funcionalidades essenciais
-- **Interface web operacional**: O front-end está funcional com navegação básica
-- **API backend estabelecida**: O servidor está rodando e respondendo às requisições
-- **Banco de dados configurado**: Os três bancos (BALCAR, Furnas e SIMA) estão operacionais
-
-#### 🏗️ **Infraestrutura Sólida**
-- **Docker configurado**: Ambiente de desenvolvimento containerizado funcionando
-- **CI/CD (planejado)**: Pipeline em definição para automatizar lint/build/test
-- **Estrutura de projeto definida**: Organização clara entre front-end, back-end e bancos de dados
-
-### 📈 **Lições Aprendidas**
-
-#### 🔧 **Melhorias para Próximas Sprints**
-- **Alinhamento inicial com professores**: Buscar clareza total sobre requisitos e expectativas antes do início da sprint
-- **Documentação detalhada**: Criar documentação mais específica para cada tarefa baseada nos requisitos finais
-- **Padronização de processos**: Definir padrões claros para desenvolvimento e gestão de tarefas
-- **Revisões mais frequentes**: Implementar checkpoints regulares para validar o progresso e evitar retrabalho
-
-#### 🎯 **Pontos Positivos**
-- **Resiliência da equipe**: Mesmo com os desafios, a equipe manteve o foco na entrega
-- **Adaptabilidade**: Conseguimos nos adaptar aos problemas e encontrar soluções
-- **Qualidade técnica**: O código entregue mantém boa qualidade apesar dos desafios
-
-### 🚀 **Próximos Passos**
-
-Para a Sprint 2, focaremos em:
-- **Garantir alinhamento total** com os professores antes do início das atividades
-- **Refinar os processos** de gestão de tarefas baseados nos requisitos finais
-- **Expandir as funcionalidades** do MVP entregue
-- **Implementar melhorias** baseadas no feedback da Sprint 1
-
-### 🎉 **Conclusão**
-
-Apesar dos desafios significativos enfrentados na Sprint 1, conseguimos entregar um MVP funcional que atende aos requisitos básicos do projeto. Os problemas identificados serão abordados nas próximas sprints para melhorar nossa eficiência e qualidade de entrega.
-
-A experiência desta sprint nos ensinou muito sobre a importância do alinhamento inicial com os stakeholders (professores) e da clareza nos requisitos, lições valiosas que aplicaremos nas próximas iterações do projeto.
-
-</details>
-
-<details>
-<summary><b>🚀 Sprint 2 - Em Andamento</b></summary>
-
-### 📊 **Objetivos da Sprint 2**
-
-A Sprint 2 tem como foco principal expandir e aprimorar as funcionalidades entregues na Sprint 1, com ênfase em:
-
-- **Melhorias na Interface**: Refinamento da experiência do usuário baseado no feedback da Sprint 1
-- **Funcionalidades Avançadas**: Implementação de filtros mais sofisticados e melhorias na exportação CSV
-- **Performance**: Otimizações no carregamento de dados e responsividade da aplicação
-- **Documentação**: Aprimoramento da documentação técnica e guias de uso
-
-### 📈 **Acompanhamento do Progresso**
-
-O Burndown Chart da Sprint 2 está disponível para acompanhamento em tempo real:
-
-| **Artefato** | **Link Direto** | **Status** |
-|--------------|-----------------|------------|
-| **📊 Burndown Chart Sprint 2** | [`BurndownSP2.png`](Scrum/Burndown%20Chart/Sprint%202/BurndownSP2.png) | Ativo |
-
-### 🎯 **Principais Entregas Planejadas**
-
-- **Mapa Interativo com Leaflet.js**: Implementação completa de visualização geográfica
-  - ~30 estações SIMA mapeadas
-  - 41 reservatórios (Furnas + BALCAR) plotados
-  - Sistema de clustering e filtros funcionais
-  - Integração em 4 páginas (HomePage, SIMA, Furnas, BALCAR)
-  - Markers customizados e popups informativos
-- **Interface Aprimorada**: Melhorias na navegação e feedback visual
-- **Filtros Avançados**: Opções mais granulares de filtragem de dados
-- **Exportação CSV Melhorada**: Metadados mais ricos e opções de formatação
-- **Otimizações de Performance**: Carregamento mais rápido e melhor gestão de memória
-- **Testes e Validação**: Implementação de testes automatizados básicos
-
-### 📅 **Cronograma da Sprint 2**
-
-- **Início**: [Data de início da Sprint 2]
-- **Duração**: 2 semanas
-- **Sprint Review**: [Data planejada]
-- **Retrospectiva**: [Data planejada]
-
-### 🔄 **Metodologia Scrum**
-
-A Sprint 2 segue os mesmos princípios da Sprint 1:
-- Daily Scrums para sincronização da equipe
-- Sprint Planning para definição de tarefas
-- Sprint Review para demonstração das entregas
-- Retrospectiva para identificação de melhorias
 
 </details>
 
@@ -1101,6 +897,309 @@ Este projeto utiliza três bancos de dados distintos, cada um com seus próprios
 Cada pasta de banco contém scripts SQL para facilitar a importação:
 - `create-table.sql`: Cria a estrutura das tabelas
 - `copy-table.sql`: Importa os dados dos arquivos CSV
+
+</details>
+
+<details>
+<summary><b>🔄 Sprint 1 - Retrospectiva</b></summary>
+
+### 📊 **Resumo da Sprint**
+
+A primeira sprint do projeto foi marcada por desafios significativos que impactaram nossa produtividade, mas mesmo assim conseguimos entregar um MVP funcional próximo ao planejado.
+
+### 📈 **Acompanhamento do Progresso**
+
+O Burndown Chart da Sprint 1 está disponível para consulta:
+
+| **Artefato** | **Link Direto** | **Status** |
+|--------------|-----------------|------------|
+| **📊 Burndown Chart Sprint 1** | [`BurndownSP1.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownSP1.png) | Concluído |
+
+O gráfico reflete os desafios enfrentados durante a sprint, com ajustes no planejamento devido aos impedimentos iniciais.
+
+## 🧩 Validação de Tasks
+
+As tasks foram validadas conforme os requisitos estabelecidos e a participação e contribuição de cada integrante no projeto, considerando as ideias definidas tanto pelo grupo quanto pelos professores.
+
+### 🔍 Processo de Validação
+
+O passo a passo seguido para a validação foi o seguinte:
+
+1. Verificar se a task estava devidamente **commitada no repositório GitHub** do grupo;  
+2. Ir até a **mesa do integrante** responsável para observar como ele(a) desenvolveu cada detalhe, entender suas dúvidas e analisar os resultados obtidos;  
+3. Adicionar um **novo comentário no card correspondente no Trello**, descrevendo a avaliação feita sobre o resultado do integrante e a qualidade da entrega.
+
+### 🚧 **Principais Desafios Enfrentados**
+
+#### 📢 **Comunicação e Coordenação**
+- **Falta de consenso entre professores**: Não houve um alinhamento inicial entre os professores sobre como seria a nova ABP, com orientações conflitantes
+- **Veredito tardio**: A definição final de como seria o projeto só chegou no final da sprint, causando confusão e retrabalho
+- **Dúvidas sobre tasks**: Muitos membros da equipe apresentaram incertezas sobre suas responsabilidades devido à falta de clareza geral
+- **Falta de clareza nos requisitos**: Os requisitos mudaram conforme os professores chegavam a um consenso, causando retrabalho significativo
+
+#### 🔄 **Gestão de Processos**
+- **Muitas refatorações no Kanban**: O quadro de tarefas precisou ser reorganizado várias vezes durante a sprint
+- **Mudanças frequentes de escopo**: Algumas tarefas foram modificadas ou canceladas durante o desenvolvimento
+
+#### ⏰ **Impacto no Tempo**
+- **Perda de tempo significativa**: A falta de consenso entre professores e o veredito tardio consumiram tempo valioso que poderia ser usado no desenvolvimento
+- **Retrabalho excessivo**: Muitas tarefas precisaram ser refeitas ou canceladas para atender às novas solicitações dos professores
+- **Atrasos nas entregas**: Algumas funcionalidades foram entregues com atraso devido aos impedimentos causados pela falta de clareza inicial
+
+### ✅ **Resultados Alcançados**
+
+#### 🎯 **MVP Funcional Entregue**
+- **Sistema básico funcionando**: Conseguimos entregar um produto mínimo viável com funcionalidades essenciais
+- **Interface web operacional**: O front-end está funcional com navegação básica
+- **API backend estabelecida**: O servidor está rodando e respondendo às requisições
+- **Banco de dados configurado**: Os três bancos (BALCAR, Furnas e SIMA) estão operacionais
+
+#### 🏗️ **Infraestrutura Sólida**
+- **Docker configurado**: Ambiente de desenvolvimento containerizado funcionando
+- **CI/CD (planejado)**: Pipeline em definição para automatizar lint/build/test
+- **Estrutura de projeto definida**: Organização clara entre front-end, back-end e bancos de dados
+
+### 📈 **Lições Aprendidas**
+
+#### 🔧 **Melhorias para Próximas Sprints**
+- **Alinhamento inicial com professores**: Buscar clareza total sobre requisitos e expectativas antes do início da sprint
+- **Documentação detalhada**: Criar documentação mais específica para cada tarefa baseada nos requisitos finais
+- **Padronização de processos**: Definir padrões claros para desenvolvimento e gestão de tarefas
+- **Revisões mais frequentes**: Implementar checkpoints regulares para validar o progresso e evitar retrabalho
+
+#### 🎯 **Pontos Positivos**
+- **Resiliência da equipe**: Mesmo com os desafios, a equipe manteve o foco na entrega
+- **Adaptabilidade**: Conseguimos nos adaptar aos problemas e encontrar soluções
+- **Qualidade técnica**: O código entregue mantém boa qualidade apesar dos desafios
+
+### 🚀 **Próximos Passos**
+
+Para a Sprint 2, focaremos em:
+- **Garantir alinhamento total** com os professores antes do início das atividades
+- **Refinar os processos** de gestão de tarefas baseados nos requisitos finais
+- **Expandir as funcionalidades** do MVP entregue
+- **Implementar melhorias** baseadas no feedback da Sprint 1
+
+### 🎉 **Conclusão**
+
+Apesar dos desafios significativos enfrentados na Sprint 1, conseguimos entregar um MVP funcional que atende aos requisitos básicos do projeto. Os problemas identificados serão abordados nas próximas sprints para melhorar nossa eficiência e qualidade de entrega.
+
+A experiência desta sprint nos ensinou muito sobre a importância do alinhamento inicial com os stakeholders (professores) e da clareza nos requisitos, lições valiosas que aplicaremos nas próximas iterações do projeto.
+
+</details>
+
+<details>
+<summary><b>🔄 Sprint 2 - Retrospectiva</b></summary>
+
+### 📊 **Resumo da Sprint**
+
+A segunda sprint do projeto foi marcada por resultados significativamente mais positivos em relação à Sprint 1. A equipe conseguiu aplicar as lições aprendidas, melhorar a comunicação e coordenação, e entregar funcionalidades avançadas que elevaram a qualidade do produto. O feedback do cliente foi muito positivo, destacando a melhoria na apresentação e na qualidade das entregas.
+
+### 📈 **Acompanhamento do Progresso**
+
+O Burndown Chart da Sprint 2 está disponível para consulta:
+
+| **Artefato** | **Link Direto** | **Status** |
+|--------------|-----------------|------------|
+| **📊 Burndown Chart Sprint 2** | [`BurndownSP2.png`](Scrum/Burndown%20Chart/Sprint%202/BurndownSP2.png) | Concluído |
+
+O gráfico demonstra o progresso consistente da equipe ao longo da sprint, com entregas regulares e cumprimento do planejamento estabelecido.
+
+### 🧩 Validação de Tasks
+
+As tasks foram validadas seguindo o mesmo processo estabelecido na Sprint 1, mas com maior eficiência e clareza:
+
+1. Verificar se a task estava devidamente **commitada no repositório GitHub** do grupo;  
+2. Ir até a **mesa do integrante** responsável para observar como ele(a) desenvolveu cada detalhe, entender suas dúvidas e analisar os resultados obtidos;  
+3. Adicionar um **novo comentário no card correspondente no Trello**, descrevendo a avaliação feita sobre o resultado do integrante e a qualidade da entrega.
+
+**Melhorias no processo de validação:**
+- Maior clareza nos requisitos desde o início da sprint
+- Menos retrabalho e mais eficiência na validação
+- Feedback mais rápido e construtivo para os desenvolvedores
+
+### 🚧 **Principais Desafios Enfrentados**
+
+#### 🗺️ **Desafios Técnicos**
+
+- **Integração de bibliotecas de mapas**: A implementação do Leaflet.js exigiu aprendizado sobre renderização de mapas, clustering de markers e integração com React
+- **Performance com muitos pontos**: Otimização necessária para renderizar mais de 70 pontos simultaneamente no mapa sem comprometer a performance
+- **Exportação CSV avançada**: Desenvolvimento de parser personalizado com múltiplas opções de formatação e metadados ricos
+- **Lazy loading e code splitting**: Implementação de carregamento assíncrono de páginas para melhorar o tempo inicial de carregamento
+
+#### 🔄 **Gestão e Coordenação**
+
+- **Melhorias em relação à Sprint 1**: A comunicação com professores foi mais clara desde o início, reduzindo significativamente os problemas de alinhamento
+- **Coordenação de features complexas**: O mapa interativo exigiu coordenação entre múltiplos desenvolvedores trabalhando em componentes diferentes
+- **Balanceamento de prioridades**: Decisões sobre quais melhorias de UX implementar primeiro
+
+### ✅ **Resultados Alcançados**
+
+#### 🎯 **Funcionalidades Entregues**
+
+##### 🗺️ **Mapa Interativo Completo**
+- **Implementação com Leaflet.js**: Sistema completo de visualização geográfica
+  - ~30 estações SIMA mapeadas com coordenadas precisas
+  - 23 reservatórios Furnas plotados
+  - 18 reservatórios BALCAR plotados
+  - Total de 71 pontos geográficos visualizáveis
+- **Sistema de Clustering**: Agrupamento inteligente de markers próximos para melhor performance
+- **Filtros Avançados**: 
+  - Toggle por tipo de dados (SIMA/Furnas/BALCAR)
+  - Filtro por período para estações SIMA
+  - Sidebar de filtros em modo fullscreen
+- **Funcionalidades Interativas**:
+  - Modo fullscreen para visualização imersiva
+  - Popups informativos com coordenadas e links para Google Maps
+  - Markers customizados com cores diferenciadas por tipo
+  - Navegação intuitiva com zoom, pan e arraste
+- **Integração Multi-página**: Mapa disponível em 4 locais diferentes (HomePage, SIMA, Furnas, BALCAR)
+
+##### 📊 **Exportação CSV Aprimorada**
+- **Modal de Configuração**: Interface amigável para configurar opções de exportação
+- **Opções de Formatação**:
+  - Separadores: ponto e vírgula (padrão BR), vírgula ou tabulação
+  - Encoding: UTF-8 ou ISO-8859-1
+  - Formato de data: ISO, BR ou US
+- **Metadados Ricos**: 
+  - Informações sobre data de geração, período, estação/reservatório
+  - Total de registros e campos incluídos
+  - Descrição da estrutura dos dados
+- **Compatibilidade Multiplataforma**: Arquivos otimizados para Excel, LibreOffice, R, Python e outras ferramentas
+
+##### 🎨 **Melhorias de Interface e UX**
+- **Skeleton Loaders**: Componentes de loading placeholders para melhor feedback visual
+  - SkeletonMap para mapas
+  - SkeletonTable para tabelas
+  - SkeletonCard para cards
+- **Loading Modal Global**: Sistema centralizado de loading com mensagens customizáveis
+- **Lazy Loading de Páginas**: Carregamento assíncrono usando React.lazy e Suspense
+- **Melhorias Visuais**: 
+  - Animações suaves em transições
+  - Feedback visual em todas as interações
+  - Design mais polido e profissional
+
+##### 🔍 **Filtros e Busca**
+- **Sistema de Filtros no Mapa**: Filtros interativos com sidebar responsiva
+- **Filtros por Período**: Funcionalidade específica para estações SIMA
+- **Interface de Filtros Intuitiva**: Toggles e seletores fáceis de usar
+
+##### 🧪 **Testes e Qualidade**
+- **Estrutura de Testes**: Implementação de testes básicos no backend
+  - Testes de integração para rotas
+  - Testes unitários para serviços
+- **Validação Manual**: Testes de usabilidade do mapa interativo realizados
+- **Documentação Técnica**: Melhorias na documentação de componentes e hooks
+
+#### 🏗️ **Melhorias Técnicas**
+
+- **Performance Otimizada**: 
+  - Code splitting com React.lazy
+  - Clustering de markers para renderização eficiente
+  - Cache de dados no frontend
+- **Arquitetura Melhorada**:
+  - Componentes mais reutilizáveis e modulares
+  - Hooks customizados bem estruturados (useMapData, useCsvExport)
+  - Separação clara de responsabilidades
+- **Código Mais Limpo**:
+  - Padrões consistentes de código
+  - Melhor organização de arquivos e pastas
+  - TypeScript bem tipado
+
+### 📈 **Lições Aprendidas**
+
+#### ✅ **Melhorias Aplicadas da Sprint 1**
+
+- **Alinhamento com Stakeholders**: A comunicação com professores foi muito mais clara desde o início, evitando retrabalho
+- **Processos Mais Eficientes**: O processo de validação de tasks foi mais ágil e menos burocrático
+- **Comunicação Melhorada**: Daily Scrums mais focados e produtivos
+- **Planejamento Mais Realista**: Estimativas mais precisas baseadas na experiência da Sprint 1
+
+#### 🎯 **Novos Aprendizados**
+
+- **Integração de Bibliotecas Externas**: Experiência valiosa com Leaflet.js e suas particularidades no React
+- **Otimização de Performance**: Técnicas de clustering, lazy loading e code splitting
+- **UX/UI Avançada**: Importância de skeleton loaders e feedback visual para melhor experiência do usuário
+- **Parser CSV Personalizado**: Desenvolvimento de solução customizada para atender necessidades específicas do projeto
+- **Testes em TypeScript**: Estruturação de testes em ambiente Node.js com TypeScript
+
+#### 🎯 **Pontos Positivos**
+
+- **Feedback Positivo do Cliente**: O cliente demonstrou satisfação com a melhoria na apresentação e qualidade das entregas
+- **Crescimento da Equipe**: Desenvolvedores ganharam confiança e experiência com tecnologias mais avançadas
+- **Qualidade Técnica**: Código mais limpo, organizado e manutenível
+- **Produtividade Aumentada**: Menos impedimentos e mais foco no desenvolvimento
+
+### 🚀 **Próximos Passos**
+
+Para a Sprint 3, focaremos em:
+
+- **Funcionalidades Avançadas de Visualização**: Gráficos mais sofisticados e dashboards interativos
+- **Melhorias no Mapa**: Busca por nome de estação/reservatório, legenda permanente, zoom automático
+- **Acessibilidade**: Melhorias na navegação por teclado e suporte a screen readers
+- **Testes Automatizados**: Expansão da cobertura de testes no frontend e backend
+- **Performance**: Otimizações adicionais baseadas em métricas reais de uso
+- **Documentação de Usuário**: Guias mais detalhados para usuários finais
+
+### 🎉 **Conclusão**
+
+A Sprint 2 representou um salto significativo em qualidade e produtividade em relação à Sprint 1. A aplicação das lições aprendidas resultou em um processo mais eficiente, entregas de maior qualidade e feedback extremamente positivo do cliente. 
+
+As funcionalidades implementadas, especialmente o mapa interativo e a exportação CSV aprimorada, elevaram o produto a um novo patamar, tornando-o mais útil e profissional. A equipe demonstrou grande capacidade de aprendizado e adaptação, consolidando uma base sólida para as próximas sprints.
+
+A experiência desta sprint reforçou a importância de um bom planejamento inicial, comunicação clara com stakeholders e foco na qualidade técnica. Esses princípios serão mantidos e aprimorados nas próximas iterações do projeto.
+
+</details>
+
+<details>
+<summary><b>🚀 Sprint 3 - Em Andamento</b></summary>
+
+### 📊 **Objetivos da Sprint 3**
+
+A Sprint 3 tem como foco principal expandir e aprimorar ainda mais as funcionalidades entregues nas sprints anteriores, com ênfase em:
+
+- **Funcionalidades Avançadas de Visualização**: Gráficos mais sofisticados e dashboards interativos
+- **Melhorias no Mapa**: Busca por nome de estação/reservatório, legenda permanente, zoom automático
+- **Acessibilidade**: Melhorias na navegação por teclado e suporte a screen readers
+- **Testes Automatizados**: Expansão da cobertura de testes no frontend e backend
+- **Performance**: Otimizações adicionais baseadas em métricas reais de uso
+- **Documentação de Usuário**: Guias mais detalhados para usuários finais
+
+### 📈 **Acompanhamento do Progresso**
+
+O Burndown Chart da Sprint 3 estará disponível para acompanhamento em tempo real:
+
+| **Artefato** | **Link Direto** | **Status** |
+|--------------|-----------------|------------|
+| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | Em desenvolvimento |
+
+### 🎯 **Principais Entregas Planejadas**
+
+- **Gráficos Avançados**: Visualizações mais sofisticadas de séries temporais e análises estatísticas
+- **Dashboard Interativo**: Painel consolidado com métricas e visualizações em tempo real
+- **Melhorias no Mapa Interativo**:
+  - Busca por nome de estação/reservatório
+  - Legenda permanente de cores e tipos
+  - Zoom automático ao selecionar filtros
+  - Melhorias de acessibilidade
+- **Testes Expandidos**: Maior cobertura de testes automatizados no frontend e backend
+- **Otimizações de Performance**: Melhorias baseadas em métricas reais de uso
+- **Documentação Aprimorada**: Guias detalhados para usuários finais
+
+### 📅 **Cronograma da Sprint 3**
+
+- **Início**: [Data de início da Sprint 3]
+- **Duração**: 2 semanas
+- **Sprint Review**: [Data planejada]
+- **Retrospectiva**: [Data planejada]
+
+### 🔄 **Metodologia Scrum**
+
+A Sprint 3 segue os mesmos princípios das sprints anteriores:
+- Daily Scrums para sincronização da equipe
+- Sprint Planning para definição de tarefas
+- Sprint Review para demonstração das entregas
+- Retrospectiva para identificação de melhorias
 
 </details>
 
