@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, useMap, GeoJSON } from "react-leaflet";
 import L from "leaflet";
 import styled from "styled-components";
 import { Maximize2, Minimize2, Filter } from "lucide-react";
@@ -8,11 +8,16 @@ import MapMarker from "./MapMarker";
 import MapFiltersComponent from "./MapFilters";
 import MarkerClusterGroup from "./MarkerClusterGroup";
 import SkeletonMap from "./skeletons/SkeletonMap";
+import { buffer as turfBuffer, point as turfPoint } from "@turf/turf";
+import type { Feature, Polygon, MultiPolygon } from "geojson";
+import { calculateBufferCoverage } from "../utils/bufferIntersections";
+import type { BufferCoverageMetrics } from "../utils/bufferIntersections";
+import { fetchBufferCoverage } from "../api/bufferApi";
 
 // Importar CSS do Leaflet
 import "leaflet/dist/leaflet.css";
 
-// Fix para ícones do Leaflet no React
+// Fix para +-cones do Leaflet no React
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
@@ -59,7 +64,7 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
     font-family: inherit;
   }
 
-  /* Garantir que o botão de fechar não provoque deslocamento visual */
+  /* Garantir que o bot+-o de fechar n+-o provoque deslocamento visual */
   .leaflet-popup-close-button {
     top: 6px !important;
     right: 6px !important;
@@ -159,6 +164,120 @@ const Sidebar = styled.div<{ $isOpen: boolean }>`
   flex-direction: column;
 `;
 
+const CoveragePanel = styled.div`
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  width: 340px;
+  max-width: calc(100vw - 2rem);
+  z-index: 1100;
+`;
+
+const CoverageTitle = styled.div`
+  font-weight: 600;
+  color: #111827;
+  font-size: 15px;
+  margin-bottom: 8px;
+`;
+
+const CoverageSubtitle = styled.div`
+  color: #6b7280;
+  font-size: 12px;
+  margin-bottom: 12px;
+`;
+
+const SelectedList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+`;
+
+const SelectedItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  color: #374151;
+`;
+
+const MetricGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+`;
+
+const MetricCard = styled.div`
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 10px;
+`;
+
+const MetricLabel = styled.div`
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+`;
+
+const MetricValue = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+`;
+
+const RadiusInput = styled.input`
+  width: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 13px;
+  margin-bottom: 10px;
+  outline: none;
+
+  &:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+`;
+
+const CoverageStatus = styled.div<{ $status: "idle" | "loading" | "ok" | "error" }>`
+  font-size: 13px;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+`;
+
+const StatusDot = styled.span<{ $status: "idle" | "loading" | "ok" | "error" }>`
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  background: ${(props) => {
+    switch (props.$status) {
+      case "loading":
+        return "#f59e0b";
+      case "ok":
+        return "#10b981";
+      case "error":
+        return "#ef4444";
+      default:
+        return "#d1d5db";
+    }
+  }};
+`;
+
 interface MapCenterProps {
   points: MapPoint[];
 }
@@ -179,18 +298,26 @@ function MapCenter({ points }: MapCenterProps) {
   return null;
 }
 
-// Componente para forçar atualização de tiles e prevenir áreas cinzas
+// Componente para for+-ar atualiza+-+-o de tiles e prevenir +-reas cinzas
 function TileLayerFix() {
   const map = useMap();
 
   React.useEffect(() => {
     // Forçar redesenho dos tiles quando o mapa for movido ou zoom mudar
     const forceUpdate = () => {
-      map.invalidateSize();
-      // Pequeno delay para garantir que os tiles sejam recarregados
-      setTimeout(() => {
+      try {
         map.invalidateSize();
-      }, 100);
+        // Pequeno delay para garantir que os tiles sejam recarregados
+        setTimeout(() => {
+          try {
+            map.invalidateSize();
+          } catch {
+            /* noop */
+          }
+        }, 100);
+      } catch {
+        /* noop */
+      }
     };
 
     map.on("moveend", forceUpdate);
@@ -237,6 +364,22 @@ export default function InteractiveMap({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [internalShowFilters, setInternalShowFilters] = useState(false);
+  const [selectedPoints, setSelectedPoints] = useState<MapPoint[]>([]);
+  const [radiusKm, setRadiusKm] = useState<number>(10);
+  const [buffers, setBuffers] = useState<
+    Array<{ point: MapPoint; buffer: Feature<Polygon | MultiPolygon> }>
+  >([]);
+  const [coverageList, setCoverageList] = useState<
+    Array<{ label: string; metrics: BufferCoverageMetrics }>
+  >([]);
+  const [coverageStatus, setCoverageStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
+  const [coverageError, setCoverageError] = useState<string | null>(null);
+
+  const parseRadiusInput = (value: string) => {
+    const normalized = value.replace(",", ".");
+    const numeric = Number.parseFloat(normalized);
+    return numeric;
+  };
   const showFilters = filtersOpen ?? internalShowFilters;
   const setShowFilters = (open: boolean) => {
     if (onFiltersOpenChange) onFiltersOpenChange(open);
@@ -272,6 +415,109 @@ export default function InteractiveMap({
     }
   }, [isFullscreen]);
 
+  const handleMarkerSelect = (point: MapPoint) => {
+    setSelectedPoints((prev) => {
+      const exists = prev.find((p) => p.id === point.id);
+      if (exists) {
+        return prev.filter((p) => p.id !== point.id);
+      }
+      return [...prev, point];
+    });
+
+    if (onMarkerClick) {
+      onMarkerClick(point);
+    }
+  };
+
+  useEffect(() => {
+    const calculateCoverage = async () => {
+      if (selectedPoints.length < 2) {
+        setCoverageList([]);
+        setCoverageStatus("idle");
+        setCoverageError(null);
+        setBuffers([]);
+        return;
+      }
+
+      if (!radiusKm || Number.isNaN(radiusKm) || radiusKm <= 0) {
+        setCoverageStatus("error");
+        setCoverageError("Informe um raio valido em km.");
+        setCoverageList([]);
+        setBuffers([]);
+        return;
+      }
+
+      setCoverageStatus("loading");
+      setCoverageError(null);
+
+      try {
+        const generated = selectedPoints.map((point) => {
+          const turfPointFeature = turfPoint([point.lng, point.lat]);
+          const buffer = turfBuffer(turfPointFeature, radiusKm, { units: "kilometers" });
+          return { point, buffer: buffer as Feature<Polygon | MultiPolygon> };
+        });
+
+        setBuffers(generated);
+
+        const pairPromises: Array<Promise<{ label: string; metrics: BufferCoverageMetrics } | null>> =
+          [];
+        for (let i = 0; i < generated.length; i += 1) {
+          for (let j = i + 1; j < generated.length; j += 1) {
+            const pairLabel = `${generated[i].point.name} - ${generated[j].point.name}`;
+            pairPromises.push(
+              (async () => {
+                try {
+                  const metrics = await fetchBufferCoverage(generated[i].buffer, generated[j].buffer);
+                  return { label: pairLabel, metrics };
+                } catch (apiError) {
+                  try {
+                    const metrics = calculateBufferCoverage(
+                      generated[i].buffer,
+                      generated[j].buffer,
+                    );
+                    return { label: pairLabel, metrics };
+                  } catch (calcError) {
+                    console.error("Erro ao calcular cobertura localmente:", calcError);
+                    return null;
+                  }
+                }
+              })(),
+            );
+          }
+        }
+
+        const results = await Promise.all(pairPromises);
+        const filtered = results.filter(
+          (item): item is { label: string; metrics: BufferCoverageMetrics } => Boolean(item),
+        );
+
+        if (filtered.length === 0) {
+          setCoverageStatus("error");
+          setCoverageError("Nao foi possivel calcular a cobertura dos buffers.");
+          setCoverageList([]);
+          return;
+        }
+
+        setCoverageList(filtered);
+        setCoverageStatus("ok");
+      } catch (err) {
+        setCoverageStatus("error");
+        setCoverageError("Nao foi possivel calcular a cobertura dos buffers.");
+        console.error("Erro ao calcular cobertura de buffers:", err);
+      }
+    };
+
+    calculateCoverage();
+  }, [selectedPoints, radiusKm]);
+
+  const formatPercent = (value: number) => `${value.toFixed(1)}%`;
+  const formatArea = (value: number) => {
+    if (value >= 1_000_000) {
+      return `${(value / 1_000_000).toFixed(2)} km^2`;
+    }
+    return `${value.toFixed(0)} m^2`;
+  };
+
   if (error) {
     return (
       <MapWrapper className={className}>
@@ -291,7 +537,7 @@ export default function InteractiveMap({
   return (
     <>
       <MapWrapper className={className} $isFullscreen={isFullscreen}>
-        {/* Botão de fullscreen - sempre visível */}
+        {/* Bot+-o de fullscreen - sempre vis+-vel */}
         <FullscreenButton
           onClick={toggleFullscreen}
           aria-label={isFullscreen ? "Sair do modo tela cheia" : "Modo tela cheia"}
@@ -299,14 +545,14 @@ export default function InteractiveMap({
           {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
         </FullscreenButton>
 
-        {/* Botão de filtros - apenas no fullscreen */}
+        {/* Bot+-o de filtros - apenas no fullscreen */}
         {isFullscreen && filters && onFiltersChange && (
           <FilterToggleButton onClick={toggleSidebar} aria-label="Abrir filtros">
             <Filter size={20} />
           </FilterToggleButton>
         )}
 
-        {/* Filtros normais - apenas quando não está em fullscreen */}
+        {/* Filtros normais - apenas quando n+-o est+- em fullscreen */}
         {!isFullscreen && showFilters && filters && onFiltersChange && (
           <MapFiltersComponent
             filters={filters}
@@ -351,12 +597,84 @@ export default function InteractiveMap({
           <TileLayerFix />
           <MapCenter points={points} />
 
+          {buffers.map(({ buffer }, index) => {
+            const colors = ["#2563eb", "#dc2626", "#16a34a", "#f59e0b", "#9333ea", "#0891b2"];
+            const color = colors[index % colors.length];
+            return (
+              <GeoJSON
+                key={index}
+                data={buffer}
+                style={{
+                  color,
+                  weight: 2,
+                  fillColor: color,
+                  fillOpacity: 0.15,
+                }}
+              />
+            );
+          })}
+
           <MarkerClusterGroup>
             {points.map((point) => (
-              <MapMarker key={point.id} point={point} onClick={onMarkerClick} />
+              <MapMarker key={point.id} point={point} onClick={handleMarkerSelect} />
             ))}
           </MarkerClusterGroup>
         </MapContainer>
+
+        <CoveragePanel>
+          <CoverageTitle>Analise de cobertura de buffers</CoverageTitle>
+          <CoverageSubtitle>Selecione dois ou mais pontos no mapa para comparar sobreposicao.</CoverageSubtitle>
+
+          <RadiusInput
+            type="number"
+            min="0.1"
+            step="0.1"
+            value={radiusKm}
+            onChange={(event) => setRadiusKm(parseRadiusInput(event.target.value))}
+            placeholder="Raio do buffer (km)"
+          />
+
+          <SelectedList>
+            {selectedPoints.length === 0 && (
+              <SelectedItem>
+                <span>Nenhum ponto selecionado.</span>
+                <span style={{ color: "#6b7280", fontSize: "12px" }}>Clique em marcadores para adicionar.</span>
+              </SelectedItem>
+            )}
+            {selectedPoints.map((point, index) => (
+              <SelectedItem key={point.id}>
+                <span>
+                  Buffer {index + 1}: {point.name}
+                </span>
+                <span style={{ color: "#6b7280", fontSize: "12px" }}>
+                  {point.type.toUpperCase()} - {point.lat.toFixed(2)}, {point.lng.toFixed(2)}
+                </span>
+              </SelectedItem>
+            ))}
+          </SelectedList>
+
+          <CoverageStatus $status={coverageStatus}>
+            <StatusDot $status={coverageStatus} />
+            {coverageStatus === "loading" && "Calculando cobertura..."}
+            {coverageStatus === "ok" && "Cobertura calculada com sucesso."}
+            {coverageStatus === "idle" && "Selecione ao menos dois pontos para comparar."}
+            {coverageStatus === "error" && (coverageError || "Erro ao calcular cobertura.")}
+          </CoverageStatus>
+
+          {coverageList.length > 0 && (
+            <MetricGrid>
+              {coverageList.map((item) => (
+                <MetricCard key={item.label}>
+                  <MetricLabel>{item.label}</MetricLabel>
+                  <MetricValue>{formatPercent(item.metrics.overlapOnUnionPercentage)}</MetricValue>
+                  <div style={{ fontSize: "12px", color: "#6b7280" }}>
+                    Intersecao: {formatArea(item.metrics.intersectionArea)}
+                  </div>
+                </MetricCard>
+              ))}
+            </MetricGrid>
+          )}
+        </CoveragePanel>
       </MapWrapper>
 
       {/* Sidebar de filtros no fullscreen */}
@@ -378,3 +696,8 @@ export default function InteractiveMap({
     </>
   );
 }
+
+
+
+
+
