@@ -169,42 +169,69 @@ const StyledTable = styled.table`
 const ControlsSection = styled.div`
   background: #f9fafb;
   border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  padding: 1.25rem 1rem;
+  margin-bottom: 1.5rem;
   border: 1px solid #e5e7eb;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+
+  ${({ theme }) => theme.media.md} {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
 `;
 
 const ControlsGrid = styled.div`
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
   width: 100%;
   max-width: 100%;
+
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
 `;
 
 const DateRangeGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-width: 0;
+  width: 100%;
 `;
 
 const DateRangeContainer = styled.div`
   display: flex;
   gap: 0.5rem;
   align-items: center;
+  flex-direction: row;
+  width: 100%;
 `;
 
 const DateRangeInput = styled.input`
-  padding: 0.75rem;
+  padding: 0.5rem;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   transition: border-color 0.2s ease;
   flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  max-width: 140px;
 
   &:focus {
     outline: none;
@@ -215,7 +242,10 @@ const DateRangeInput = styled.input`
 const DateRangeSeparator = styled.span`
   color: #6b7280;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 0 0.25rem;
 `;
 
 const ControlGroup = styled.div`
@@ -1114,15 +1144,15 @@ function BalcarSPAPage() {
                 <Search size={20} /> {loading ? "Buscando..." : "Buscar Dados"}
               </SearchButton>
               <ClearButton
-                onClick={() =>
+                onClick={() => {
                   setFilters({
                     startDate: "2003-11-01",
                     endDate: "2011-12-31",
                     limit: 10,
                     reservatorio: "",
                     sortOrder: "desc",
-                  })
-                }
+                  });
+                }}
               >
                 <Filter size={20} /> Limpar Filtros
               </ClearButton>
