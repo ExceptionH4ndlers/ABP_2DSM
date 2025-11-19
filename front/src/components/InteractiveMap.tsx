@@ -432,6 +432,7 @@ export default function InteractiveMap({
   useEffect(() => {
     const calculateCoverage = async () => {
       if (selectedPoints.length < 2) {
+        console.info("[buffers] menos de 2 pontos selecionados, resetando cobertura");
         setCoverageList([]);
         setCoverageStatus("idle");
         setCoverageError(null);
@@ -440,6 +441,7 @@ export default function InteractiveMap({
       }
 
       if (!radiusKm || Number.isNaN(radiusKm) || radiusKm <= 0) {
+        console.warn("[buffers] raio inválido", { radiusKm });
         setCoverageStatus("error");
         setCoverageError("Informe um raio valido em km.");
         setCoverageList([]);
@@ -458,6 +460,11 @@ export default function InteractiveMap({
         });
 
         setBuffers(generated);
+        console.info("[buffers] buffers gerados", {
+          radiusKm,
+          count: generated.length,
+          points: generated.map((g) => ({ name: g.point.name, lat: g.point.lat, lng: g.point.lng })),
+        });
 
         const pairPromises: Array<Promise<{ label: string; metrics: BufferCoverageMetrics } | null>> =
           [];
@@ -468,6 +475,7 @@ export default function InteractiveMap({
               (async () => {
                 try {
                   const metrics = await fetchBufferCoverage(generated[i].buffer, generated[j].buffer);
+                  console.info("[buffers] métricas via API", { pairLabel, metrics });
                   return { label: pairLabel, metrics };
                 } catch (apiError) {
                   try {
@@ -475,6 +483,7 @@ export default function InteractiveMap({
                       generated[i].buffer,
                       generated[j].buffer,
                     );
+                    console.info("[buffers] métricas via cálculo local", { pairLabel, metrics, apiError });
                     return { label: pairLabel, metrics };
                   } catch (calcError) {
                     console.error("Erro ao calcular cobertura localmente:", calcError);
@@ -498,6 +507,7 @@ export default function InteractiveMap({
           return;
         }
 
+        console.info("[buffers] resultados finais", filtered);
         setCoverageList(filtered);
         setCoverageStatus("ok");
       } catch (err) {
@@ -512,11 +522,10 @@ export default function InteractiveMap({
 
   const formatPercent = (value: number) => `${value.toFixed(1)}%`;
   const formatArea = (value: number) => {
-    if (value >= 1_000_000) {
-      return `${(value / 1_000_000).toFixed(2)} km^2`;
-    }
-    return `${value.toFixed(0)} m^2`;
+    const km2 = value / 1_000_000;
+    return `${km2.toFixed(2)} km²`;
   };
+
 
   if (error) {
     return (

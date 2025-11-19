@@ -1,6 +1,32 @@
-import { Feature, MultiPolygon, Polygon } from "geojson";
-import { area, cleanCoords, intersect, truncate } from "@turf/turf";
+import { Feature, Polygon, MultiPolygon, Position } from "geojson";
+import {
+  area,
+  booleanIntersects,
+  cleanCoords,
+  rewind,
+  simplify,
+  truncate,
+  union,
+} from "@turf/turf";
 
+// polygon-clipping NÃO usa GeoJSON tipado, então importamos como ANY
+const polygonClipping: any = require("polygon-clipping");
+
+import proj4 from "proj4";
+
+// -----------------------------------------------------------------------------
+// UTM 22S (SP) - projeção métrica
+// -----------------------------------------------------------------------------
+proj4.defs(
+  "EPSG:31982",
+  "+proj=utm +zone=22 +south +ellps=GRS80 +units=m +no_defs"
+);
+
+const toUTM = proj4("EPSG:4326", "EPSG:31982");
+
+// -----------------------------------------------------------------------------
+// Tipos
+// -----------------------------------------------------------------------------
 export type BufferGeometry = Feature<Polygon | MultiPolygon>;
 
 export type BufferCoverageMetrics = {
@@ -17,37 +43,120 @@ export type BufferCoverageMetrics = {
   overlapOnUnionPercentage: number;
 };
 
-const toPercentage = (part: number, total: number) => (total > 0 ? (part / total) * 100 : 0);
+// -----------------------------------------------------------------------------
+// Percentual
+// -----------------------------------------------------------------------------
+const toPercentage = (part: number, total: number) =>
+  total > 0 ? (part / total) * 100 : 0;
 
-const prepareGeometry = (geom: BufferGeometry): BufferGeometry => {
-  const truncated = truncate(geom, { precision: 6, mutate: true });
-  return cleanCoords(truncated, { mutate: true }) as BufferGeometry;
-};
+// -----------------------------------------------------------------------------
+// Projeção
+// -----------------------------------------------------------------------------
+function projectCoords(coords: any[]): any[] {
+  return coords.map((c) =>
+    Array.isArray(c[0]) ? projectCoords(c) : toUTM.forward(c)
+  );
+}
 
-/**
- * Given two buffer polygons, calculates how much of each one is overlapped by the other
- * and how much area remains exclusive to each buffer.
- */
+function projectFeature(
+  feature: BufferGeometry
+): Feature<Polygon | MultiPolygon> {
+  const cloned = structuredClone(feature);
+  cloned.geometry.coordinates = projectCoords(
+    cloned.geometry.coordinates as any[]
+  );
+  return cloned;
+}
+
+// -----------------------------------------------------------------------------
+// Normalização
+// -----------------------------------------------------------------------------
+function prepareGeometry(
+  geom: Feature<Polygon | MultiPolygon>
+): Feature<Polygon | MultiPolygon> {
+  const truncated = truncate(geom as any, { precision: 6, mutate: false });
+  const rewound = rewind(truncated as any, { mutate: false });
+  const cleaned = cleanCoords(rewound as any, { mutate: false });
+  return cleaned as Feature<Polygon | MultiPolygon>;
+}
+
+// -----------------------------------------------------------------------------
+// Converter tudo para MultiPolygon (necessário para polygon-clipping)
+// -----------------------------------------------------------------------------
+function asMultiPolygon(
+  feature: Feature<Polygon | MultiPolygon>
+): Position[][][] {
+  if (feature.geometry.type === "Polygon") {
+    return [feature.geometry.coordinates]; // MultiPolygon compatível
+  }
+
+  return feature.geometry.coordinates;
+}
+
+// -----------------------------------------------------------------------------
+// Interseção REAL com polygon-clipping (SEM TypeScript interferindo)
+// -----------------------------------------------------------------------------
+function intersectAccurate(
+  a: Feature<Polygon | MultiPolygon>,
+  b: Feature<Polygon | MultiPolygon>
+): Feature<MultiPolygon> | null {
+  try {
+    const polyA = asMultiPolygon(a);
+    const polyB = asMultiPolygon(b);
+
+    const result = polygonClipping.intersection(polyA, polyB);
+
+    if (!result || result.length === 0) return null;
+
+    return {
+      type: "Feature",
+      properties: {},
+      geometry: {
+        type: "MultiPolygon",
+        coordinates: result as Position[][][],
+      },
+    };
+  } catch (err) {
+    console.error("polygon-clipping intersection error", err);
+    return null;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 🚀 Função principal
+// -----------------------------------------------------------------------------
 export function calculateBufferCoverage(
   bufferA: BufferGeometry,
   bufferB: BufferGeometry
 ): BufferCoverageMetrics {
-  const preparedA = prepareGeometry(bufferA);
-  const preparedB = prepareGeometry(bufferB);
+  // 1 - Projeção
+  const projectedA = projectFeature(bufferA);
+  const projectedB = projectFeature(bufferB);
 
-  const areaA = Math.max(area(preparedA as any), 0);
-  const areaB = Math.max(area(preparedB as any), 0);
+  // 2 - Preparar
+  const preparedA = prepareGeometry(projectedA);
+  const preparedB = prepareGeometry(projectedB);
 
-  let intersectionArea = 0;
-  try {
-    const intersectionFeature = intersect(preparedA as any, preparedB as any) as
-      | Feature<Polygon | MultiPolygon>
-      | null;
-    intersectionArea = intersectionFeature ? Math.max(area(intersectionFeature as any), 0) : 0;
-  } catch {
-    intersectionArea = 0;
+  // 3 - Áreas individuais
+  const areaA = area(preparedA as any);
+  const areaB = area(preparedB as any);
+
+  // 4 - Interseção real
+  const intersection = intersectAccurate(preparedA, preparedB);
+  let intersectionArea = intersection ? area(intersection as any) : 0;
+
+  // 5 - Fallback A + B − Union (caso encostem mas não intersectem)
+  if (intersectionArea === 0 && booleanIntersects(preparedA as any, preparedB as any)) {
+    try {
+      const merged = union(preparedA as any, preparedB as any);
+      if (merged) {
+        const unionArea = area(merged as any);
+        intersectionArea = Math.max(areaA + areaB - unionArea, 0);
+      }
+    } catch {}
   }
 
+  // 6 - Exclusões
   const aExclusiveArea = Math.max(areaA - intersectionArea, 0);
   const bExclusiveArea = Math.max(areaB - intersectionArea, 0);
   const unionArea = Math.max(areaA + areaB - intersectionArea, 0);
