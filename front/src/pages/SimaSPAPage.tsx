@@ -184,25 +184,6 @@ const SectionText = styled.p`
   }
 `;
 
-const FilterButton = styled.button`
-  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-  border: none;
-  border-radius: 12px;
-  padding: 1rem 2rem;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 auto;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
-`;
-
 const ControlsSection = styled.div`
   background: #f9fafb;
   border-radius: 12px;
@@ -221,14 +202,25 @@ const ControlsSection = styled.div`
 
 const ControlsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
   margin-bottom: 1.25rem;
   width: 100%;
   max-width: 100%;
 
-  ${({ theme }) => theme.media.lg} {
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  ${({ theme }) => theme.media.lg} {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
   }
 `;
 
@@ -236,27 +228,28 @@ const DateRangeGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-width: 0;
+  width: 100%;
 `;
 
 const DateRangeContainer = styled.div`
   display: flex;
   gap: 0.5rem;
-  align-items: stretch;
-  flex-direction: column;
-
-  ${({ theme }) => theme.media.md} {
-    flex-direction: row;
-    align-items: center;
-  }
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
 `;
 
 const DateRangeInput = styled.input`
-  padding: 0.75rem;
+  padding: 0.5rem;
   border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 0.9rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
   transition: border-color 0.2s ease;
   flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  max-width: 140px;
 
   &:focus {
     outline: none;
@@ -267,13 +260,18 @@ const DateRangeInput = styled.input`
 const DateRangeSeparator = styled.span`
   color: #6b7280;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 0 0.25rem;
 `;
 
 const ControlGroup = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  min-width: 0; /* Evita overflow */
+  width: 100%;
 `;
 
 const ControlLabel = styled.label`
@@ -290,6 +288,8 @@ const ControlSelect = styled.select`
   background: white;
   transition: border-color 0.2s ease;
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
@@ -358,7 +358,7 @@ const TableContainer = styled.div`
   overflow-x: auto;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
-  margin-top: 1rem;
+  margin-top: 2rem;
   position: relative;
   width: 100%;
   max-width: 100%;
@@ -428,24 +428,42 @@ const StyledTable = styled.table`
   td:nth-child(1) {
     position: sticky;
     background: white;
-    z-index: 5;
+    left: 0;
+    z-index: 6;
     border-right: 1px solid #e5e7eb;
+  }
+
+  th:nth-child(1) {
+    z-index: 11;
+    background: #f9fafb;
   }
 
   th:nth-child(2),
   td:nth-child(2) {
     position: sticky;
     background: white;
-    z-index: 5;
+    left: calc(200px);
+    z-index: 7;
     border-right: 1px solid #e5e7eb;
+  }
+
+  th:nth-child(2) {
+    z-index: 12;
+    background: #f9fafb;
   }
 
   th:nth-child(3),
   td:nth-child(3) {
     position: sticky;
     background: white;
-    z-index: 5;
+    left: calc(400px);
+    z-index: 8;
     border-right: 1px solid #e5e7eb;
+  }
+
+  th:nth-child(3) {
+    z-index: 13;
+    background: #f9fafb;
   }
 
   th:nth-child(1),
@@ -1294,11 +1312,6 @@ function SimaSPAPage() {
               // Aqui você pode adicionar lógica para mostrar detalhes da estação
             }}
           />
-
-          <FilterButton onClick={() => setFiltersPanelOpen(true)}>
-            <Filter size={20} />
-            Configurar Filtros
-          </FilterButton>
         </Section>
 
         {/* Seção Banco de Dados - Mesmo modelo do mapa */}
