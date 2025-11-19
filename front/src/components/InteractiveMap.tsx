@@ -13,6 +13,7 @@ import type { Feature, Polygon, MultiPolygon } from "geojson";
 import { calculateBufferCoverage } from "../utils/bufferIntersections";
 import type { BufferCoverageMetrics } from "../utils/bufferIntersections";
 import { fetchBufferCoverage } from "../api/bufferApi";
+import TicketCard from "./ticketCardMap";
 
 // Importar CSS do Leaflet
 import "leaflet/dist/leaflet.css";
@@ -277,6 +278,54 @@ const StatusDot = styled.span<{ $status: "idle" | "loading" | "ok" | "error" }>`
     }
   }};
 `;
+// === TICKETS (NÃO coloque dentro de outro styled!) ===
+
+const TicketList = styled.div`
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 8px 0;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 6px;
+  }
+`;
+
+const TicketMainValue = styled.div`
+  font-size: 24px;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 10px;
+`;
+
+const TicketDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  padding-top: 10px;
+  border-top: 1px solid #e5e7eb;
+`;
+
+const TicketRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  color: #374151;
+`;
+
+const TicketHeader = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #111827;
+`;
+
 
 interface MapCenterProps {
   points: MapPoint[];
@@ -350,6 +399,67 @@ interface InteractiveMapProps {
   onFiltersOpenChange?: (open: boolean) => void;
 }
 
+function CoverageTicket({
+  item,
+  formatPercent,
+  formatArea,
+}: {
+  item: { label: string; metrics: BufferCoverageMetrics };
+  formatPercent: (v: number) => string;
+  formatArea: (v: number) => string;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <TicketCard
+      open={open}
+      onClick={() => setOpen(!open)}
+      title={item.label}
+    >
+      <TicketMainValue>
+        {formatPercent(item.metrics.overlapOnUnionPercentage)}
+      </TicketMainValue>
+
+      <TicketDetails>
+        <TicketRow>
+          <span>Área A:</span> <span>{formatArea(item.metrics.areaA)}</span>
+        </TicketRow>
+
+        <TicketRow>
+          <span>Área B:</span> <span>{formatArea(item.metrics.areaB)}</span>
+        </TicketRow>
+
+        <TicketRow>
+          <span>Interseção:</span>{" "}
+          <span>{formatArea(item.metrics.intersectionArea)}</span>
+        </TicketRow>
+
+        <TicketRow>
+          <span>A % sobreposta:</span>{" "}
+          <span>{formatPercent(item.metrics.aOverlapPercentage)}</span>
+        </TicketRow>
+
+        <TicketRow>
+          <span>B % sobreposta:</span>{" "}
+          <span>{formatPercent(item.metrics.bOverlapPercentage)}</span>
+        </TicketRow>
+
+        <TicketRow>
+          <span>Exclusivo A:</span>{" "}
+          <span>{formatArea(item.metrics.aExclusiveArea)}</span>
+        </TicketRow>
+
+        <TicketRow>
+          <span>Exclusivo B:</span>{" "}
+          <span>{formatArea(item.metrics.bExclusiveArea)}</span>
+        </TicketRow>
+      </TicketDetails>
+    </TicketCard>
+  );
+}
+
+
+
 export default function InteractiveMap({
   points,
   loading = false,
@@ -374,6 +484,7 @@ export default function InteractiveMap({
   >([]);
   const [coverageStatus, setCoverageStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [coverageError, setCoverageError] = useState<string | null>(null);
+  
 
   const parseRadiusInput = (value: string) => {
     const normalized = value.replace(",", ".");
@@ -455,7 +566,7 @@ export default function InteractiveMap({
       try {
         const generated = selectedPoints.map((point) => {
           const turfPointFeature = turfPoint([point.lng, point.lat]);
-          const buffer = turfBuffer(turfPointFeature, radiusKm, { units: "kilometers" });
+          const buffer = turfBuffer(turfPointFeature, radiusKm, { units: "kilometers", steps: 256 });
           return { point, buffer: buffer as Feature<Polygon | MultiPolygon> };
         });
 
@@ -671,18 +782,19 @@ export default function InteractiveMap({
           </CoverageStatus>
 
           {coverageList.length > 0 && (
-            <MetricGrid>
+            <TicketList>
               {coverageList.map((item) => (
-                <MetricCard key={item.label}>
-                  <MetricLabel>{item.label}</MetricLabel>
-                  <MetricValue>{formatPercent(item.metrics.overlapOnUnionPercentage)}</MetricValue>
-                  <div style={{ fontSize: "12px", color: "#6b7280" }}>
-                    Intersecao: {formatArea(item.metrics.intersectionArea)}
-                  </div>
-                </MetricCard>
+                <CoverageTicket
+                  key={item.label}
+                  item={item}
+                  formatPercent={formatPercent}
+                  formatArea={formatArea}
+                />
               ))}
-            </MetricGrid>
+            </TicketList>
           )}
+
+
         </CoveragePanel>
       </MapWrapper>
 
