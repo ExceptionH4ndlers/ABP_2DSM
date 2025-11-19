@@ -184,25 +184,6 @@ const SectionText = styled.p`
   }
 `;
 
-const FilterButton = styled.button`
-  background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
-  border: none;
-  border-radius: 12px;
-  padding: 1rem 2rem;
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0 auto;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
-`;
-
 const ControlsSection = styled.div`
   background: #f9fafb;
   border-radius: 12px;
@@ -1331,11 +1312,6 @@ function SimaSPAPage() {
               // Aqui você pode adicionar lógica para mostrar detalhes da estação
             }}
           />
-
-          <FilterButton onClick={() => setFiltersPanelOpen(true)}>
-            <Filter size={20} />
-            Configurar Filtros
-          </FilterButton>
         </Section>
 
         {/* Seção Banco de Dados - Mesmo modelo do mapa */}

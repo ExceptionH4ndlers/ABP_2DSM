@@ -1057,22 +1057,6 @@ function BalcarSPAPage() {
               // Aqui você pode adicionar lógica para mostrar detalhes do reservatório
             }}
           />
-          <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
-            <button
-              onClick={() => setFiltersPanelOpen(true)}
-              style={{
-                background: "linear-gradient(135deg, #3b82f6 0%, #1e40af 100%)",
-                border: "none",
-                borderRadius: 12,
-                padding: "1rem 2rem",
-                color: "#fff",
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              <Filter size={20} /> Configurar Filtros
-            </button>
-          </div>
         </Section>
 
         <Section id="dados">
