@@ -1,3 +1,4 @@
+// src/components/InteractiveMap.tsx
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, useMap, GeoJSON } from "react-leaflet";
 import L from "leaflet";
@@ -8,17 +9,29 @@ import MapMarker from "./MapMarker";
 import MapFiltersComponent from "./MapFilters";
 import MarkerClusterGroup from "./MarkerClusterGroup";
 import SkeletonMap from "./skeletons/SkeletonMap";
-import { buffer as turfBuffer, point as turfPoint } from "@turf/turf";
+import {
+  buffer as turfBuffer,
+  point as turfPoint,
+  polygon as turfPolygon,
+  intersect as turfIntersect,
+} from "@turf/turf";
+
 import type { Feature, Polygon, MultiPolygon } from "geojson";
 import { calculateBufferCoverage } from "../utils/bufferIntersections";
 import type { BufferCoverageMetrics } from "../utils/bufferIntersections";
 import { fetchBufferCoverage } from "../api/bufferApi";
 import TicketCard from "./ticketCardMap";
+import { MapClickHandler } from "./MapClickHandler";
+import type { LatLngTuple, PolygonSelection } from "../utils/polygonUtils";
+import { getStationsByPolygon } from "../utils/polygonUtils";
 
 // Importar CSS do Leaflet
 import "leaflet/dist/leaflet.css";
+import { PolygonControls } from "./polygonControls";
+import { PolygonList } from "./polygonList";
+import PolygonPanel from "./polygonPanel";
 
-// Fix para +-cones do Leaflet no React
+// Fix para ícones do Leaflet no React
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
@@ -57,7 +70,6 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
   }
 
   .leaflet-popup-content {
-    /* Remover margens/padding e ocupar toda a largura do wrapper */
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
@@ -65,7 +77,6 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
     font-family: inherit;
   }
 
-  /* Garantir que o bot+-o de fechar n+-o provoque deslocamento visual */
   .leaflet-popup-close-button {
     top: 6px !important;
     right: 6px !important;
@@ -78,8 +89,6 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
     background: white;
   }
 `;
-
-// Removidos controles flutuantes antigos (Filtros e Centralizar Brasil)
 
 const ErrorMessage = styled.div`
   position: absolute;
@@ -174,7 +183,7 @@ const CoveragePanel = styled.div`
   border-radius: 12px;
   padding: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  width: 340px;
+  width: 380px;
   max-width: calc(100vw - 2rem);
   z-index: 1100;
 `;
@@ -209,31 +218,6 @@ const SelectedItem = styled.div`
   padding: 8px 10px;
   font-size: 13px;
   color: #374151;
-`;
-
-const MetricGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-`;
-
-const MetricCard = styled.div`
-  background: #f8fafc;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 10px;
-`;
-
-const MetricLabel = styled.div`
-  font-size: 12px;
-  color: #6b7280;
-  margin-bottom: 4px;
-`;
-
-const MetricValue = styled.div`
-  font-size: 15px;
-  font-weight: 600;
-  color: #111827;
 `;
 
 const RadiusInput = styled.input`
@@ -278,7 +262,6 @@ const StatusDot = styled.span<{ $status: "idle" | "loading" | "ok" | "error" }>`
     }
   }};
 `;
-// === TICKETS (NÃO coloque dentro de outro styled!) ===
 
 const TicketList = styled.div`
   display: flex;
@@ -319,13 +302,7 @@ const TicketRow = styled.div`
   color: #374151;
 `;
 
-const TicketHeader = styled.div`
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: #111827;
-`;
-
+// ===== MAP CENTER / TILE FIX =====
 
 interface MapCenterProps {
   points: MapPoint[];
@@ -339,7 +316,6 @@ function MapCenter({ points }: MapCenterProps) {
       const bounds = L.latLngBounds(points.map((point) => [point.lat, point.lng]));
       map.fitBounds(bounds, { padding: [20, 20] });
     } else {
-      // Centro do Brasil
       map.setView([-15, -50], 5);
     }
   }, [map, points]);
@@ -347,16 +323,13 @@ function MapCenter({ points }: MapCenterProps) {
   return null;
 }
 
-// Componente para for+-ar atualiza+-+-o de tiles e prevenir +-reas cinzas
 function TileLayerFix() {
   const map = useMap();
 
   React.useEffect(() => {
-    // Forçar redesenho dos tiles quando o mapa for movido ou zoom mudar
     const forceUpdate = () => {
       try {
         map.invalidateSize();
-        // Pequeno delay para garantir que os tiles sejam recarregados
         setTimeout(() => {
           try {
             map.invalidateSize();
@@ -373,7 +346,6 @@ function TileLayerFix() {
     map.on("zoomend", forceUpdate);
     map.on("resize", forceUpdate);
 
-    // Forçar atualização inicial
     forceUpdate();
 
     return () => {
@@ -386,6 +358,8 @@ function TileLayerFix() {
   return null;
 }
 
+// ===== PROPS =====
+
 interface InteractiveMapProps {
   points: MapPoint[];
   loading?: boolean;
@@ -394,10 +368,11 @@ interface InteractiveMapProps {
   className?: string;
   filters?: MapFilters;
   onFiltersChange?: (filters: MapFilters) => void;
-  // Controle externo opcional de abertura do painel de filtros
   filtersOpen?: boolean;
   onFiltersOpenChange?: (open: boolean) => void;
 }
+
+// ===== TICKET COMPONENT =====
 
 function CoverageTicket({
   item,
@@ -411,54 +386,49 @@ function CoverageTicket({
   const [open, setOpen] = useState(false);
 
   return (
-    <TicketCard
-      open={open}
-      onClick={() => setOpen(!open)}
-      title={item.label}
-    >
-      <TicketMainValue>
-        {formatPercent(item.metrics.overlapOnUnionPercentage)}
-      </TicketMainValue>
+    <TicketCard open={open} onClick={() => setOpen(!open)} title={item.label}>
+      <TicketMainValue>{formatPercent(item.metrics.overlapOnUnionPercentage)}</TicketMainValue>
 
-      <TicketDetails>
-        <TicketRow>
-          <span>Área A:</span> <span>{formatArea(item.metrics.areaA)}</span>
-        </TicketRow>
+      {open && (
+        <TicketDetails>
+          <TicketRow>
+            <span>Área A:</span> <span>{formatArea(item.metrics.areaA)}</span>
+          </TicketRow>
 
-        <TicketRow>
-          <span>Área B:</span> <span>{formatArea(item.metrics.areaB)}</span>
-        </TicketRow>
+          <TicketRow>
+            <span>Área B:</span> <span>{formatArea(item.metrics.areaB)}</span>
+          </TicketRow>
 
-        <TicketRow>
-          <span>Interseção:</span>{" "}
-          <span>{formatArea(item.metrics.intersectionArea)}</span>
-        </TicketRow>
+          <TicketRow>
+            <span>Interseção:</span> <span>{formatArea(item.metrics.intersectionArea)}</span>
+          </TicketRow>
 
-        <TicketRow>
-          <span>A % sobreposta:</span>{" "}
-          <span>{formatPercent(item.metrics.aOverlapPercentage)}</span>
-        </TicketRow>
+          <TicketRow>
+            <span>A % sobreposta:</span>{" "}
+            <span>{formatPercent(item.metrics.aOverlapPercentage)}</span>
+          </TicketRow>
 
-        <TicketRow>
-          <span>B % sobreposta:</span>{" "}
-          <span>{formatPercent(item.metrics.bOverlapPercentage)}</span>
-        </TicketRow>
+          <TicketRow>
+            <span>B % sobreposta:</span>{" "}
+            <span>{formatPercent(item.metrics.bOverlapPercentage)}</span>
+          </TicketRow>
 
-        <TicketRow>
-          <span>Exclusivo A:</span>{" "}
-          <span>{formatArea(item.metrics.aExclusiveArea)}</span>
-        </TicketRow>
+          <TicketRow>
+            <span>Exclusivo A:</span>{" "}
+            <span>{formatArea(item.metrics.aExclusiveArea)}</span>
+          </TicketRow>
 
-        <TicketRow>
-          <span>Exclusivo B:</span>{" "}
-          <span>{formatArea(item.metrics.bExclusiveArea)}</span>
-        </TicketRow>
-      </TicketDetails>
+          <TicketRow>
+            <span>Exclusivo B:</span>{" "}
+            <span>{formatArea(item.metrics.bExclusiveArea)}</span>
+          </TicketRow>
+        </TicketDetails>
+      )}
     </TicketCard>
   );
 }
 
-
+// ===== MAIN COMPONENT =====
 
 export default function InteractiveMap({
   points,
@@ -474,23 +444,34 @@ export default function InteractiveMap({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [internalShowFilters, setInternalShowFilters] = useState(false);
+
   const [selectedPoints, setSelectedPoints] = useState<MapPoint[]>([]);
   const [radiusKm, setRadiusKm] = useState<number>(10);
-  const [buffers, setBuffers] = useState<
-    Array<{ point: MapPoint; buffer: Feature<Polygon | MultiPolygon> }>
-  >([]);
-  const [coverageList, setCoverageList] = useState<
-    Array<{ label: string; metrics: BufferCoverageMetrics }>
-  >([]);
+  const [buffers, setBuffers] = useState<Array<{ point: MapPoint; buffer: Feature<Polygon | MultiPolygon> }>>([]);
+  const [coverageList, setCoverageList] = useState<Array<{ label: string; metrics: BufferCoverageMetrics }>>([]);
   const [coverageStatus, setCoverageStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [coverageError, setCoverageError] = useState<string | null>(null);
+
+  // Polígonos desenhados
+  const [drawing, setDrawing] = useState(false);
+  const [currentPolygonPoints, setCurrentPolygonPoints] = useState<LatLngTuple[]>([]);
+  const [polygons, setPolygons] = useState<LatLngTuple[][]>([]);
+  const [polygonSelections, setPolygonSelections] = useState<PolygonSelection[]>([]);
+  const [showOnlyPolygonIntersections, setShowOnlyPolygonIntersections] = useState(false);
+  const [polygonIntersections, setPolygonIntersections] = useState<
+  Feature<Polygon | MultiPolygon>[]
+>([]);
+
   
+  
+
 
   const parseRadiusInput = (value: string) => {
     const normalized = value.replace(",", ".");
     const numeric = Number.parseFloat(normalized);
     return numeric;
   };
+
   const showFilters = filtersOpen ?? internalShowFilters;
   const setShowFilters = (open: boolean) => {
     if (onFiltersOpenChange) onFiltersOpenChange(open);
@@ -508,22 +489,16 @@ export default function InteractiveMap({
     }
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
-  // Limpar fullscreen quando componente desmontar
   useEffect(() => {
     return () => {
       document.body.style.overflow = "";
     };
   }, []);
 
-  // Fechar sidebar quando sair do fullscreen
   useEffect(() => {
-    if (!isFullscreen) {
-      setSidebarOpen(false);
-    }
+    if (!isFullscreen) setSidebarOpen(false);
   }, [isFullscreen]);
 
   const handleMarkerSelect = (point: MapPoint) => {
@@ -535,11 +510,10 @@ export default function InteractiveMap({
       return [...prev, point];
     });
 
-    if (onMarkerClick) {
-      onMarkerClick(point);
-    }
+    if (onMarkerClick) onMarkerClick(point);
   };
 
+  // Buffer coverage
   useEffect(() => {
     const calculateCoverage = async () => {
       if (selectedPoints.length < 2) {
@@ -554,7 +528,7 @@ export default function InteractiveMap({
       if (!radiusKm || Number.isNaN(radiusKm) || radiusKm <= 0) {
         console.warn("[buffers] raio inválido", { radiusKm });
         setCoverageStatus("error");
-        setCoverageError("Informe um raio valido em km.");
+        setCoverageError("Informe um raio válido em km.");
         setCoverageList([]);
         setBuffers([]);
         return;
@@ -566,35 +540,28 @@ export default function InteractiveMap({
       try {
         const generated = selectedPoints.map((point) => {
           const turfPointFeature = turfPoint([point.lng, point.lat]);
-          const buffer = turfBuffer(turfPointFeature, radiusKm, { units: "kilometers", steps: 256 });
+          const buffer = turfBuffer(turfPointFeature, radiusKm, {
+            units: "kilometers",
+            steps: 256,
+          });
           return { point, buffer: buffer as Feature<Polygon | MultiPolygon> };
         });
 
         setBuffers(generated);
-        console.info("[buffers] buffers gerados", {
-          radiusKm,
-          count: generated.length,
-          points: generated.map((g) => ({ name: g.point.name, lat: g.point.lat, lng: g.point.lng })),
-        });
 
-        const pairPromises: Array<Promise<{ label: string; metrics: BufferCoverageMetrics } | null>> =
-          [];
+        const pairPromises: Array<Promise<{ label: string; metrics: BufferCoverageMetrics } | null>> = [];
         for (let i = 0; i < generated.length; i += 1) {
           for (let j = i + 1; j < generated.length; j += 1) {
             const pairLabel = `${generated[i].point.name} - ${generated[j].point.name}`;
+
             pairPromises.push(
               (async () => {
                 try {
                   const metrics = await fetchBufferCoverage(generated[i].buffer, generated[j].buffer);
-                  console.info("[buffers] métricas via API", { pairLabel, metrics });
                   return { label: pairLabel, metrics };
                 } catch (apiError) {
                   try {
-                    const metrics = calculateBufferCoverage(
-                      generated[i].buffer,
-                      generated[j].buffer,
-                    );
-                    console.info("[buffers] métricas via cálculo local", { pairLabel, metrics, apiError });
+                    const metrics = calculateBufferCoverage(generated[i].buffer, generated[j].buffer);
                     return { label: pairLabel, metrics };
                   } catch (calcError) {
                     console.error("Erro ao calcular cobertura localmente:", calcError);
@@ -613,17 +580,16 @@ export default function InteractiveMap({
 
         if (filtered.length === 0) {
           setCoverageStatus("error");
-          setCoverageError("Nao foi possivel calcular a cobertura dos buffers.");
+          setCoverageError("Não foi possível calcular a cobertura dos buffers.");
           setCoverageList([]);
           return;
         }
 
-        console.info("[buffers] resultados finais", filtered);
         setCoverageList(filtered);
         setCoverageStatus("ok");
       } catch (err) {
         setCoverageStatus("error");
-        setCoverageError("Nao foi possivel calcular a cobertura dos buffers.");
+        setCoverageError("Não foi possível calcular a cobertura dos buffers.");
         console.error("Erro ao calcular cobertura de buffers:", err);
       }
     };
@@ -631,12 +597,22 @@ export default function InteractiveMap({
     calculateCoverage();
   }, [selectedPoints, radiusKm]);
 
+  // Polígonos → estações dentro
+  useEffect(() => {
+    if (polygons.length === 0) {
+      setPolygonSelections([]);
+      return;
+    }
+
+    const selections = getStationsByPolygon(polygons, points);
+    setPolygonSelections(selections);
+  }, [polygons, points]);
+
   const formatPercent = (value: number) => `${value.toFixed(1)}%`;
   const formatArea = (value: number) => {
     const km2 = value / 1_000_000;
     return `${km2.toFixed(2)} km²`;
   };
-
 
   if (error) {
     return (
@@ -649,15 +625,18 @@ export default function InteractiveMap({
   if (loading) {
     return (
       <MapWrapper className={className} $isFullscreen={isFullscreen}>
-        <SkeletonMap showControls={true} />
+        <SkeletonMap showControls />
       </MapWrapper>
     );
   }
+  const handleDeletePolygon = (index: number) => {
+    setPolygons(prev => prev.filter((_, i) => i !== index));
+  };
+
 
   return (
     <>
       <MapWrapper className={className} $isFullscreen={isFullscreen}>
-        {/* Bot+-o de fullscreen - sempre vis+-vel */}
         <FullscreenButton
           onClick={toggleFullscreen}
           aria-label={isFullscreen ? "Sair do modo tela cheia" : "Modo tela cheia"}
@@ -665,14 +644,12 @@ export default function InteractiveMap({
           {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}
         </FullscreenButton>
 
-        {/* Bot+-o de filtros - apenas no fullscreen */}
         {isFullscreen && filters && onFiltersChange && (
           <FilterToggleButton onClick={toggleSidebar} aria-label="Abrir filtros">
             <Filter size={20} />
           </FilterToggleButton>
         )}
 
-        {/* Filtros normais - apenas quando n+-o est+- em fullscreen */}
         {!isFullscreen && showFilters && filters && onFiltersChange && (
           <MapFiltersComponent
             filters={filters}
@@ -687,25 +664,87 @@ export default function InteractiveMap({
           center={[-15, -50]}
           zoom={5}
           style={{ height: "100%", width: "100%" }}
-          zoomControl={true}
-          scrollWheelZoom={true}
-          doubleClickZoom={true}
-          dragging={true}
+          zoomControl
+          scrollWheelZoom
+          doubleClickZoom
+          dragging
           maxBounds={[
             [-85.05, -180],
             [85.05, 180],
           ]}
           maxBoundsViscosity={1.0}
           preferCanvas={false}
-          fadeAnimation={true}
-          zoomAnimation={true}
+          fadeAnimation
+          zoomAnimation
         >
+          {/* Handler de clique para desenhar polígonos */}
+          <MapClickHandler
+            drawing={drawing}
+            onAddPoint={(latlng) => {
+              setCurrentPolygonPoints((prev) => [...prev, [latlng.lat, latlng.lng]]);
+            }}
+          />
+
+          {/* Polígono em desenho */}
+          {/* Desenho atual */}
+          {currentPolygonPoints.length > 1 && (
+            <GeoJSON
+              data={{
+                type: "Feature",
+                properties: {},
+                geometry: {
+                  type: "Polygon",
+                  coordinates: [
+                    [
+                      ...currentPolygonPoints.map(([lat, lng]) => [lng, lat]),
+                      [currentPolygonPoints[0][1], currentPolygonPoints[0][0]]
+                    ]
+                  ]
+                }
+              } as GeoJSON.Feature<GeoJSON.Polygon>}
+              style={{
+                color: "#000",
+                weight: 2,
+                fillOpacity: 0.1,
+                dashArray: "4 4",
+              }}
+            />
+          )}
+
+
+          {/* Polígonos finalizados */}
+          {polygons.map((poly, idx) => (
+            <GeoJSON
+              key={idx}
+              data={{
+                type: "Feature",
+                properties: {},
+                geometry: {
+                  type: "Polygon",
+                  coordinates: [
+                    [
+                      ...poly.map(([lat, lng]) => [lng, lat]),
+                      [poly[0][1], poly[0][0]]
+                    ]
+                  ]
+                }
+              } as GeoJSON.Feature<GeoJSON.Polygon>}
+              style={{
+                color: "#f59e0b",
+                weight: 2,
+                fillColor: "#fbbf24",
+                fillOpacity: 0.15,
+              }}
+            />
+          ))}
+
+
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             maxZoom={19}
             noWrap={false}
-            updateWhenZooming={true}
+            updateWhenZooming
             updateWhenIdle={false}
             updateInterval={200}
             keepBuffer={4}
@@ -741,9 +780,10 @@ export default function InteractiveMap({
           </MarkerClusterGroup>
         </MapContainer>
 
+        {/* Painel de cobertura + polígonos (tickets + lista de estações) */}
         <CoveragePanel>
-          <CoverageTitle>Analise de cobertura de buffers</CoverageTitle>
-          <CoverageSubtitle>Selecione dois ou mais pontos no mapa para comparar sobreposicao.</CoverageSubtitle>
+          <CoverageTitle>Análise de cobertura de buffers</CoverageTitle>
+          <CoverageSubtitle>Selecione dois ou mais pontos no mapa para comparar sobreposição.</CoverageSubtitle>
 
           <RadiusInput
             type="number"
@@ -758,7 +798,9 @@ export default function InteractiveMap({
             {selectedPoints.length === 0 && (
               <SelectedItem>
                 <span>Nenhum ponto selecionado.</span>
-                <span style={{ color: "#6b7280", fontSize: "12px" }}>Clique em marcadores para adicionar.</span>
+                <span style={{ color: "#6b7280", fontSize: "12px" }}>
+                  Clique em marcadores para adicionar.
+                </span>
               </SelectedItem>
             )}
             {selectedPoints.map((point, index) => (
@@ -781,24 +823,68 @@ export default function InteractiveMap({
             {coverageStatus === "error" && (coverageError || "Erro ao calcular cobertura.")}
           </CoverageStatus>
 
-          {coverageList.length > 0 && (
-            <TicketList>
-              {coverageList.map((item) => (
-                <CoverageTicket
-                  key={item.label}
-                  item={item}
-                  formatPercent={formatPercent}
-                  formatArea={formatArea}
-                />
-              ))}
-            </TicketList>
+          {/* Toggle de interseção de polígonos */}
+          {polygons.length > 0 && (
+            <div
+              style={{
+                marginTop: 8,
+                marginBottom: 4,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: 12,
+                color: "#374151",
+              }}
+            >
+              <input
+                id="only-poly-intersections"
+                type="checkbox"
+                checked={showOnlyPolygonIntersections}
+                onChange={(e) => setShowOnlyPolygonIntersections(e.target.checked)}
+                style={{ margin: 0 }}
+              />
+              <label htmlFor="only-poly-intersections">
+                Mostrar somente estações na interseção dos polígonos
+              </label>
+            </div>
           )}
 
-
+          {/* Controles de polígonos + lista de estações dentro */}
+          <PolygonControls
+            drawing={drawing}
+            currentPolygonPointsCount={currentPolygonPoints.length}
+            hasPolygons={polygons.length > 0}
+            onStart={() => {
+              setDrawing(true);
+              setCurrentPolygonPoints([]);
+            }}
+            onStop={() => setDrawing(false)}
+            onClosePolygon={() => {
+              if (currentPolygonPoints.length >= 3) {
+                setPolygons((prev) => [...prev, currentPolygonPoints]);
+                setCurrentPolygonPoints([]);
+                setDrawing(false);
+              }
+            }}
+            onClearAll={() => {
+              setCurrentPolygonPoints([]);
+              setPolygons([]);
+              setPolygonSelections([]);
+            }}
+          />
+          {polygons.length > 0 && (
+            <PolygonPanel
+              polygons={polygons}
+              points={points}
+              onDeletePolygon={handleDeletePolygon}
+              showOnlyIntersections={showOnlyPolygonIntersections}
+            />
+          )}
         </CoveragePanel>
+
+
       </MapWrapper>
 
-      {/* Sidebar de filtros no fullscreen */}
       {isFullscreen && filters && onFiltersChange && (
         <>
           <SidebarOverlay $isOpen={sidebarOpen} onClick={toggleSidebar} />
@@ -817,8 +903,3 @@ export default function InteractiveMap({
     </>
   );
 }
-
-
-
-
-
