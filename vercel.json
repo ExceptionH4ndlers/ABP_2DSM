@@ -1,7 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "cd front && npm install && npm run build",
-  "outputDirectory": "front/dist",
+  "buildCommand": "npm install && npm run build",
+  "outputDirectory": "dist",
+  "rootDirectory": "front",
   "rewrites": [
     {
       "source": "/(.*)",
