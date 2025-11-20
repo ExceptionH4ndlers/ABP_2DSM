@@ -56,7 +56,6 @@ export interface SimaApiParams {
   endDate: string;
   estacao?: string;
   sortOrder?: string;
-  
 }
 
 const API_BASE_URL =
@@ -88,7 +87,7 @@ export const useSimaApi = () => {
       if (params.estacao) {
         queryParams.append("estacao", params.estacao);
       }
-    
+
       if (params.sortOrder) {
         queryParams.append("sortOrder", params.sortOrder);
       }

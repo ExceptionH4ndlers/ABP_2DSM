@@ -683,7 +683,6 @@ function SimaSPAPage() {
     limit: 10,
     estacao: "", // Filtro por estação
     sortOrder: "desc", // Ordenação: "asc" (mais antigo → mais recente) ou "desc" (mais recente → mais antigo)
-    
   });
 
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -759,7 +758,6 @@ function SimaSPAPage() {
       endDate: filters.endDate,
       estacao: filters.estacao || undefined,
       sortOrder: filters.sortOrder,
-      
     });
   };
 
@@ -771,7 +769,6 @@ function SimaSPAPage() {
       endDate: filters.endDate,
       estacao: filters.estacao || undefined,
       sortOrder: filters.sortOrder,
-     
     });
   };
 
@@ -782,7 +779,6 @@ function SimaSPAPage() {
       limit: 10,
       estacao: "",
       sortOrder: "desc",
-      
     });
   };
 
@@ -1382,7 +1378,6 @@ function SimaSPAPage() {
                 </ControlSelect>
               </ControlGroup>
             </ControlsGrid>
-           
 
             <ActionButtons>
               <SearchButton onClick={handleSearch} disabled={loading}>
