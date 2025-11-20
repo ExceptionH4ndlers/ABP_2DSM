@@ -25,3 +25,41 @@ BEGIN
     RETURN r * c;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+-- =====================================================
+-- Função: retornar pontos dentro de um raio
+-- =====================================================
+
+CREATE OR REPLACE FUNCTION fn_pontos_dentro_raio(
+    lat_centro DOUBLE PRECISION,
+    lng_centro DOUBLE PRECISION,
+    raio_km DOUBLE PRECISION
+)
+RETURNS TABLE (
+    id_sitio INTEGER,
+    nome_sitio TEXT,
+    lat DOUBLE PRECISION,
+    lng DOUBLE PRECISION,
+    distancia_km DOUBLE PRECISION
+) AS $$
+BEGIN
+    RETURN QUERY
+    WITH sitios_com_distancia AS (
+        SELECT 
+            s.idsitio,
+            s.nome,
+            s.lat,
+            s.lng,
+            fn_calcular_distancia_haversine(lat_centro, lng_centro, s.lat, s.lng) AS distancia
+        FROM tbsitio s
+    )
+    SELECT 
+        idsitio,
+        nome,
+        lat,
+        lng,
+        distancia
+    FROM sitios_com_distancia
+    WHERE distancia <= raio_km;
+END;
+$$ LANGUAGE plpgsql STABLE;
