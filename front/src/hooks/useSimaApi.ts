@@ -56,14 +56,6 @@ export interface SimaApiParams {
   endDate: string;
   estacao?: string;
   sortOrder?: string;
-  // NOVOS FILTROS AVANÇADOS (US15)
-  estacoes?: string[]; // Múltiplas estações
-  temperaturaMin?: number; // Range de Temperatura Mínima
-  temperaturaMax?: number; // Range de Temperatura Máxima
-  phMin?: number; // Range de pH Mínimo
-  phMax?: number; // Range de pH Máximo
-  tipoParametro?: string; // Tipo de Parâmetro
-  search?: string; // Busca textual
 }
 
 const API_BASE_URL =
@@ -95,41 +87,7 @@ export const useSimaApi = () => {
       if (params.estacao) {
         queryParams.append("estacao", params.estacao);
       }
-      // 🆕 FILTROS AVANÇADOS (US15)
 
-      // Múltiplas estações: precisa ser um array de strings
-      if (params.estacoes && params.estacoes.length > 0) {
-        // O backend precisará ser capaz de processar múltiplos valores para "estacoes"
-        params.estacoes.forEach((estacao) => {
-          queryParams.append("estacoes", estacao);
-        });
-      }
-
-      // Range de Temperatura
-      if (params.temperaturaMin !== undefined) {
-        queryParams.append("temperaturaMin", params.temperaturaMin.toString());
-      }
-      if (params.temperaturaMax !== undefined) {
-        queryParams.append("temperaturaMax", params.temperaturaMax.toString());
-      }
-
-      // Range de pH
-      if (params.phMin !== undefined) {
-        queryParams.append("phMin", params.phMin.toString());
-      }
-      if (params.phMax !== undefined) {
-        queryParams.append("phMax", params.phMax.toString());
-      }
-
-      // Tipo de Parâmetro
-      if (params.tipoParametro) {
-        queryParams.append("tipoParametro", params.tipoParametro);
-      }
-
-      // Busca Textual
-      if (params.search) {
-        queryParams.append("search", params.search);
-      }
       if (params.sortOrder) {
         queryParams.append("sortOrder", params.sortOrder);
       }
