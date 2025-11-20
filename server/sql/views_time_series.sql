@@ -119,7 +119,7 @@ CROSS JOIN (
     SELECT 'sonda_chl'
 ) p
 WHERE (
-    -- Filtra apenas registros onde o valor do parâmetro não é nulo
+    
     CASE p.nome_parametro
         WHEN 'tempar' THEN dsc.tempar
         WHEN 'ur' THEN dsc.ur
