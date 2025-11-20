@@ -35,7 +35,6 @@ import { useEstacoes } from "../hooks/useEstacoes";
 import { useMapData } from "../hooks/useMapData";
 import { ExportCsvButton } from "../components/ExportCsvButton";
 import { CsvExportModal } from "../components/CsvExportModal";
-import { DataTableFilters } from "../components/DataTableFilters";
 import InteractiveMap from "../components/InteractiveMap";
 import SkeletonTable from "../components/skeletons/SkeletonTable";
 import estruturaSima1 from "../../img/sima/estrutura_sima1.png";
@@ -684,13 +683,7 @@ function SimaSPAPage() {
     limit: 10,
     estacao: "", // Filtro por estação
     sortOrder: "desc", // Ordenação: "asc" (mais antigo → mais recente) ou "desc" (mais recente → mais antigo)
-    // Novos filtros
-    temperaturaMin: undefined,
-    temperaturaMax: undefined,
-    phMin: undefined,
-    phMax: undefined,
-    tipoParametro: undefined,
-    search: undefined,
+    
   });
 
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
@@ -766,24 +759,9 @@ function SimaSPAPage() {
       endDate: filters.endDate,
       estacao: filters.estacao || undefined,
       sortOrder: filters.sortOrder,
-      // Novos filtros avançados
-      temperaturaMin: filters.temperaturaMin ? Number(filters.temperaturaMin) : undefined,
-      temperaturaMax: filters.temperaturaMax ? Number(filters.temperaturaMax) : undefined,
-      phMin: filters.phMin ? Number(filters.phMin) : undefined,
-      phMax: filters.phMax ? Number(filters.phMax) : undefined,
-      tipoParametro: filters.tipoParametro || undefined,
-      search: filters.search || undefined,
+      
     });
   };
-
-  const parametrosOptions = [
-    { value: "temperatura", label: "Temperatura" },
-    { value: "ph", label: "pH" },
-    { value: "condutividade", label: "Condutividade" },
-    { value: "oxigenio", label: "Oxigênio Dissolvido" },
-    { value: "clorofila", label: "Clorofila" },
-    // Adicione outros valores que você mapeia no backend para o filtro de tipo
-  ];
 
   const handlePageChange = (newPage: number) => {
     fetchData({
@@ -793,12 +771,7 @@ function SimaSPAPage() {
       endDate: filters.endDate,
       estacao: filters.estacao || undefined,
       sortOrder: filters.sortOrder,
-      temperaturaMin: filters.temperaturaMin ? Number(filters.temperaturaMin) : undefined,
-      temperaturaMax: filters.temperaturaMax ? Number(filters.temperaturaMax) : undefined,
-      phMin: filters.phMin ? Number(filters.phMin) : undefined,
-      phMax: filters.phMax ? Number(filters.phMax) : undefined,
-      tipoParametro: filters.tipoParametro || undefined,
-      search: filters.search || undefined,
+     
     });
   };
 
@@ -809,12 +782,7 @@ function SimaSPAPage() {
       limit: 10,
       estacao: "",
       sortOrder: "desc",
-      temperaturaMin: undefined,
-      temperaturaMax: undefined,
-      phMin: undefined,
-      phMax: undefined,
-      tipoParametro: undefined,
-      search: undefined,
+      
     });
   };
 
@@ -1414,19 +1382,7 @@ function SimaSPAPage() {
                 </ControlSelect>
               </ControlGroup>
             </ControlsGrid>
-            {/* LINHA 2: FILTROS AVANÇADOS (Dentro do ControlsGrid para alinhar) */}
-            <ControlsGrid>
-              <DataTableFilters
-                filters={filters}
-                setFilters={setFilters}
-                parametrosOptions={parametrosOptions}
-                // 💡 Passando os Styled Components para o DataTableFilters usar
-                ControlGroup={ControlGroup}
-                ControlLabel={ControlLabel}
-                ControlSelect={ControlSelect}
-                DateRangeInput={DateRangeInput} // DateRangeInput tem o estilo de input padrão
-              />
-            </ControlsGrid>
+           
 
             <ActionButtons>
               <SearchButton onClick={handleSearch} disabled={loading}>
