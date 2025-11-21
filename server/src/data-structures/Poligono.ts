@@ -12,9 +12,7 @@ export default class Poligono {
 
     for (let i = 0; i < n; i++) {
       const j = (i + 1) % n;
-      area +=
-        this.pontos[i].x * this.pontos[j].y -
-        this.pontos[j].x * this.pontos[i].y;
+      area += this.pontos[i].x * this.pontos[j].y - this.pontos[j].x * this.pontos[i].y;
     }
 
     return Math.abs(area / 2);
