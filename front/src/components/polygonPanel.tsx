@@ -15,7 +15,7 @@ const PolygonCard = styled.div`
   border-radius: 10px;
   padding: 8px 10px;
   margin-bottom: 8px;
-  font-size: 12px;           /* 👈 fonte menor */
+  font-size: 12px; /* 👈 fonte menor */
   line-height: 1.3;
 `;
 
@@ -80,9 +80,7 @@ export default function PolygonPanel({
       const [xi, yi] = polygon[i];
       const [xj, yj] = polygon[j];
 
-      const intersect =
-        yi > y !== yj > y &&
-        x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+      const intersect = yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
 
       if (intersect) inside = !inside;
     }
@@ -91,9 +89,7 @@ export default function PolygonPanel({
   };
 
   // todas as estações dentro de cada polígono
-  const pointsInsideByPolygon = polygons.map((poly) =>
-    points.filter((p) => isInside(p, poly)),
-  );
+  const pointsInsideByPolygon = polygons.map((poly) => points.filter((p) => isInside(p, poly)));
 
   // se não for modo "interseção", renderiza direto
   if (!showOnlyIntersections) {
@@ -156,8 +152,7 @@ export default function PolygonPanel({
           <PolygonCard key={index}>
             <CardHeader>
               <h4>
-                Polígono {index + 1} • {intersectionPoints.length} estação(ões) em
-                interseção
+                Polígono {index + 1} • {intersectionPoints.length} estação(ões) em interseção
               </h4>
               <DeleteButton onClick={() => onDeletePolygon(index)}>
                 <X size={13} />

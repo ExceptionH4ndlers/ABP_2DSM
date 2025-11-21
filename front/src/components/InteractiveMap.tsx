@@ -1,11 +1,10 @@
 // src/components/InteractiveMap.tsx
 import React, { useState, useEffect } from "react";
-import { MapContainer, TileLayer, useMap, GeoJSON } from "react-leaflet";
+import { MapContainer, TileLayer, useMap, GeoJSON, CircleMarker } from "react-leaflet";
 import L from "leaflet";
 import styled from "styled-components";
 import { Maximize2, Minimize2, Filter } from "lucide-react";
 import type { MapPoint, MapFilters } from "../hooks/useMapData";
-import MapMarker from "./MapMarker";
 import MapFiltersComponent from "./MapFilters";
 import MarkerClusterGroup from "./MarkerClusterGroup";
 import SkeletonMap from "./skeletons/SkeletonMap";
@@ -28,8 +27,8 @@ import { getStationsByPolygon } from "../utils/polygonUtils";
 // Importar CSS do Leaflet
 import "leaflet/dist/leaflet.css";
 import { PolygonControls } from "./polygonControls";
-import { PolygonList } from "./polygonList";
 import PolygonPanel from "./polygonPanel";
+import MapMarker from "./MapMarker";
 
 // Fix para ícones do Leaflet no React
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
@@ -364,7 +363,7 @@ interface InteractiveMapProps {
   points: MapPoint[];
   loading?: boolean;
   error?: string | null;
-  onMarkerClick?: (point: MapPoint) => void;
+  onMarkerClick?: (point: MapPoint) => void; // mantido, mas não usamos mais
   className?: string;
   filters?: MapFilters;
   onFiltersChange?: (filters: MapFilters) => void;
@@ -414,13 +413,11 @@ function CoverageTicket({
           </TicketRow>
 
           <TicketRow>
-            <span>Exclusivo A:</span>{" "}
-            <span>{formatArea(item.metrics.aExclusiveArea)}</span>
+            <span>Exclusivo A:</span> <span>{formatArea(item.metrics.aExclusiveArea)}</span>
           </TicketRow>
 
           <TicketRow>
-            <span>Exclusivo B:</span>{" "}
-            <span>{formatArea(item.metrics.bExclusiveArea)}</span>
+            <span>Exclusivo B:</span> <span>{formatArea(item.metrics.bExclusiveArea)}</span>
           </TicketRow>
         </TicketDetails>
       )}
@@ -447,8 +444,12 @@ export default function InteractiveMap({
 
   const [selectedPoints, setSelectedPoints] = useState<MapPoint[]>([]);
   const [radiusKm, setRadiusKm] = useState<number>(10);
-  const [buffers, setBuffers] = useState<Array<{ point: MapPoint; buffer: Feature<Polygon | MultiPolygon> }>>([]);
-  const [coverageList, setCoverageList] = useState<Array<{ label: string; metrics: BufferCoverageMetrics }>>([]);
+  const [buffers, setBuffers] = useState<
+    Array<{ point: MapPoint; buffer: Feature<Polygon | MultiPolygon> }>
+  >([]);
+  const [coverageList, setCoverageList] = useState<
+    Array<{ label: string; metrics: BufferCoverageMetrics }>
+  >([]);
   const [coverageStatus, setCoverageStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
   const [coverageError, setCoverageError] = useState<string | null>(null);
 
@@ -459,12 +460,9 @@ export default function InteractiveMap({
   const [polygonSelections, setPolygonSelections] = useState<PolygonSelection[]>([]);
   const [showOnlyPolygonIntersections, setShowOnlyPolygonIntersections] = useState(false);
   const [polygonIntersections, setPolygonIntersections] = useState<
-  Feature<Polygon | MultiPolygon>[]
->([]);
-
-  
-  
-
+    Feature<Polygon | MultiPolygon>[]
+  >([]);
+  const [clickPoints, setClickPoints] = useState<LatLngTuple[]>([]); // pontos de clique visuais
 
   const parseRadiusInput = (value: string) => {
     const normalized = value.replace(",", ".");
@@ -501,6 +499,9 @@ export default function InteractiveMap({
     if (!isFullscreen) setSidebarOpen(false);
   }, [isFullscreen]);
 
+  // 🔴 NÃO usamos mais clique em estação — a seleção de pontos ficava aqui.
+  // Deixei a função comentada caso queira resgatar depois.
+  /*
   const handleMarkerSelect = (point: MapPoint) => {
     setSelectedPoints((prev) => {
       const exists = prev.find((p) => p.id === point.id);
@@ -512,12 +513,12 @@ export default function InteractiveMap({
 
     if (onMarkerClick) onMarkerClick(point);
   };
+  */
 
-  // Buffer coverage
+  // Buffer coverage (fica aqui, mas como não há seleção de estações, não é utilizado agora)
   useEffect(() => {
     const calculateCoverage = async () => {
       if (selectedPoints.length < 2) {
-        console.info("[buffers] menos de 2 pontos selecionados, resetando cobertura");
         setCoverageList([]);
         setCoverageStatus("idle");
         setCoverageError(null);
@@ -526,7 +527,6 @@ export default function InteractiveMap({
       }
 
       if (!radiusKm || Number.isNaN(radiusKm) || radiusKm <= 0) {
-        console.warn("[buffers] raio inválido", { radiusKm });
         setCoverageStatus("error");
         setCoverageError("Informe um raio válido em km.");
         setCoverageList([]);
@@ -549,7 +549,9 @@ export default function InteractiveMap({
 
         setBuffers(generated);
 
-        const pairPromises: Array<Promise<{ label: string; metrics: BufferCoverageMetrics } | null>> = [];
+        const pairPromises: Array<
+          Promise<{ label: string; metrics: BufferCoverageMetrics } | null>
+        > = [];
         for (let i = 0; i < generated.length; i += 1) {
           for (let j = i + 1; j < generated.length; j += 1) {
             const pairLabel = `${generated[i].point.name} - ${generated[j].point.name}`;
@@ -557,11 +559,17 @@ export default function InteractiveMap({
             pairPromises.push(
               (async () => {
                 try {
-                  const metrics = await fetchBufferCoverage(generated[i].buffer, generated[j].buffer);
+                  const metrics = await fetchBufferCoverage(
+                    generated[i].buffer,
+                    generated[j].buffer,
+                  );
                   return { label: pairLabel, metrics };
                 } catch (apiError) {
                   try {
-                    const metrics = calculateBufferCoverage(generated[i].buffer, generated[j].buffer);
+                    const metrics = calculateBufferCoverage(
+                      generated[i].buffer,
+                      generated[j].buffer,
+                    );
                     return { label: pairLabel, metrics };
                   } catch (calcError) {
                     console.error("Erro ao calcular cobertura localmente:", calcError);
@@ -629,10 +637,21 @@ export default function InteractiveMap({
       </MapWrapper>
     );
   }
-  const handleDeletePolygon = (index: number) => {
-    setPolygons(prev => prev.filter((_, i) => i !== index));
-  };
 
+  const handleDeletePolygon = (index: number) => {
+    setPolygons((prev) => {
+      const polyToDelete = prev[index];
+
+      // remove pontos visuais associados
+      setClickPoints((prevClicks) =>
+        prevClicks.filter(
+          (pt) => !polyToDelete.some((polyPt) => polyPt[0] === pt[0] && polyPt[1] === pt[1]),
+        ),
+      );
+
+      return prev.filter((_, i) => i !== index);
+    });
+  };
 
   return (
     <>
@@ -681,63 +700,79 @@ export default function InteractiveMap({
           <MapClickHandler
             drawing={drawing}
             onAddPoint={(latlng) => {
-              setCurrentPolygonPoints((prev) => [...prev, [latlng.lat, latlng.lng]]);
+              const newPoint: LatLngTuple = [latlng.lat, latlng.lng];
+              setCurrentPolygonPoints((prev) => [...prev, newPoint]);
+              setClickPoints((prev) => [...prev, newPoint]); // ponto visual
             }}
           />
 
-          {/* Polígono em desenho */}
-          {/* Desenho atual */}
-          {currentPolygonPoints.length > 1 && (
+          {/* Polígono em desenho (não-interativo, para permitir clique por cima) */}
+          {currentPolygonPoints.length > 900 && (
             <GeoJSON
-              data={{
-                type: "Feature",
-                properties: {},
-                geometry: {
-                  type: "Polygon",
-                  coordinates: [
-                    [
-                      ...currentPolygonPoints.map(([lat, lng]) => [lng, lat]),
-                      [currentPolygonPoints[0][1], currentPolygonPoints[0][0]]
-                    ]
-                  ]
-                }
-              } as GeoJSON.Feature<GeoJSON.Polygon>}
+              data={
+                {
+                  type: "Feature",
+                  properties: {},
+                  geometry: {
+                    type: "Polygon",
+                    coordinates: [
+                      [
+                        ...currentPolygonPoints.map(([lat, lng]) => [lng, lat]),
+                        [currentPolygonPoints[0][1], currentPolygonPoints[0][0]],
+                      ],
+                    ],
+                  },
+                } as GeoJSON.Feature<GeoJSON.Polygon>
+              }
               style={{
                 color: "#000",
                 weight: 2,
                 fillOpacity: 0.1,
                 dashArray: "4 4",
               }}
+              interactive={false}
             />
           )}
 
-
-          {/* Polígonos finalizados */}
+          {/* Polígonos finalizados (não-interativos para permitir novo clique por cima) */}
           {polygons.map((poly, idx) => (
             <GeoJSON
               key={idx}
-              data={{
-                type: "Feature",
-                properties: {},
-                geometry: {
-                  type: "Polygon",
-                  coordinates: [
-                    [
-                      ...poly.map(([lat, lng]) => [lng, lat]),
-                      [poly[0][1], poly[0][0]]
-                    ]
-                  ]
-                }
-              } as GeoJSON.Feature<GeoJSON.Polygon>}
+              data={
+                {
+                  type: "Feature",
+                  properties: {},
+                  geometry: {
+                    type: "Polygon",
+                    coordinates: [
+                      [...poly.map(([lat, lng]) => [lng, lat]), [poly[0][1], poly[0][0]]],
+                    ],
+                  },
+                } as GeoJSON.Feature<GeoJSON.Polygon>
+              }
               style={{
                 color: "#f59e0b",
                 weight: 2,
                 fillColor: "#fbbf24",
                 fillOpacity: 0.15,
               }}
+              interactive={false}
             />
           ))}
 
+          {/* Pontos de clique para indicar onde foi clicado */}
+          {clickPoints.map(([lat, lng], idx) => (
+            <CircleMarker
+              key={`click-${idx}`}
+              center={[lat, lng]}
+              radius={4}
+              pathOptions={{
+                color: "#f59e0b",
+                fillColor: "#fbbf24",
+                fillOpacity: 1,
+              }}
+            />
+          ))}
 
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -756,6 +791,7 @@ export default function InteractiveMap({
           <TileLayerFix />
           <MapCenter points={points} />
 
+          {/* Buffers (continuam desenhando, se em algum momento selectedPoints for usado) */}
           {buffers.map(({ buffer }, index) => {
             const colors = ["#2563eb", "#dc2626", "#16a34a", "#f59e0b", "#9333ea", "#0891b2"];
             const color = colors[index % colors.length];
@@ -769,84 +805,49 @@ export default function InteractiveMap({
                   fillColor: color,
                   fillOpacity: 0.15,
                 }}
+                interactive={false}
               />
             );
           })}
 
+          {/* Marcadores de estações ainda aparecem, mas sem clique ligado a lógica alguma */}
           <MarkerClusterGroup>
             {points.map((point) => (
-              <MapMarker key={point.id} point={point} onClick={handleMarkerSelect} />
+              // MapMarker não recebe onClick aqui — clique em estação está "morto"
+              <MapMarker key={point.id} point={point} />
             ))}
           </MarkerClusterGroup>
         </MapContainer>
 
         {/* Painel de cobertura + polígonos (tickets + lista de estações) */}
         <CoveragePanel>
-          <CoverageTitle>Análise de cobertura de buffers</CoverageTitle>
-          <CoverageSubtitle>Selecione dois ou mais pontos no mapa para comparar sobreposição.</CoverageSubtitle>
+          <div style={{ marginBottom: 10 }}>
+            <h3 style={{ fontSize: 15, fontWeight: 600, marginBottom: 6 }}>
+              🟧 Ferramenta de Polígonos
+            </h3>
 
-          <RadiusInput
-            type="number"
-            min="0.1"
-            step="0.1"
-            value={radiusKm}
-            onChange={(event) => setRadiusKm(parseRadiusInput(event.target.value))}
-            placeholder="Raio do buffer (km)"
-          />
+            <p style={{ fontSize: 12, color: "#4b5563", marginBottom: 6 }}>
+              Desenhe polígonos diretamente no mapa para analisar áreas de cobertura e descobrir
+              quais estações estão dentro da área selecionada.
+            </p>
 
-          <SelectedList>
-            {selectedPoints.length === 0 && (
-              <SelectedItem>
-                <span>Nenhum ponto selecionado.</span>
-                <span style={{ color: "#6b7280", fontSize: "12px" }}>
-                  Clique em marcadores para adicionar.
-                </span>
-              </SelectedItem>
-            )}
-            {selectedPoints.map((point, index) => (
-              <SelectedItem key={point.id}>
-                <span>
-                  Buffer {index + 1}: {point.name}
-                </span>
-                <span style={{ color: "#6b7280", fontSize: "12px" }}>
-                  {point.type.toUpperCase()} - {point.lat.toFixed(2)}, {point.lng.toFixed(2)}
-                </span>
-              </SelectedItem>
-            ))}
-          </SelectedList>
+            <p style={{ fontSize: 12, color: "#ef4444" }}>
+              ⚠ Ao excluir um polígono, todos os pontos que pertenciam a ele também serão apagados
+              automaticamente. As linhas do poligono são interligadas na ordem dos cliques.
+            </p>
+          </div>
 
-          <CoverageStatus $status={coverageStatus}>
-            <StatusDot $status={coverageStatus} />
-            {coverageStatus === "loading" && "Calculando cobertura..."}
-            {coverageStatus === "ok" && "Cobertura calculada com sucesso."}
-            {coverageStatus === "idle" && "Selecione ao menos dois pontos para comparar."}
-            {coverageStatus === "error" && (coverageError || "Erro ao calcular cobertura.")}
-          </CoverageStatus>
-
-          {/* Toggle de interseção de polígonos */}
+          {/* Toggle de interseção de polígonos (a lógica de interseção não está aqui ainda) */}
           {polygons.length > 0 && (
             <div
               style={{
-                marginTop: 8,
-                marginBottom: 4,
                 display: "flex",
                 alignItems: "center",
                 gap: 6,
                 fontSize: 12,
                 color: "#374151",
               }}
-            >
-              <input
-                id="only-poly-intersections"
-                type="checkbox"
-                checked={showOnlyPolygonIntersections}
-                onChange={(e) => setShowOnlyPolygonIntersections(e.target.checked)}
-                style={{ margin: 0 }}
-              />
-              <label htmlFor="only-poly-intersections">
-                Mostrar somente estações na interseção dos polígonos
-              </label>
-            </div>
+            ></div>
           )}
 
           {/* Controles de polígonos + lista de estações dentro */}
@@ -870,6 +871,7 @@ export default function InteractiveMap({
               setCurrentPolygonPoints([]);
               setPolygons([]);
               setPolygonSelections([]);
+              setClickPoints([]); // limpa marcações visuais também
             }}
           />
           {polygons.length > 0 && (
@@ -881,8 +883,6 @@ export default function InteractiveMap({
             />
           )}
         </CoveragePanel>
-
-
       </MapWrapper>
 
       {isFullscreen && filters && onFiltersChange && (

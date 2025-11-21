@@ -5,7 +5,6 @@ const ControlsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 12px;
 `;
 
 const ButtonSmall = styled.button`
@@ -65,10 +64,7 @@ export function PolygonControls({
         ✔ Fechar polígono
       </ButtonSmall>
 
-      <ButtonSmall
-        onClick={onClearAll}
-        disabled={!hasPolygons && currentPolygonPointsCount === 0}
-      >
+      <ButtonSmall onClick={onClearAll} disabled={!hasPolygons && currentPolygonPointsCount === 0}>
         🗑 Limpar tudo
       </ButtonSmall>
     </ControlsWrapper>

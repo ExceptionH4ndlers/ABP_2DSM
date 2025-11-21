@@ -11,10 +11,14 @@ export const postBufferCoverage = (req: Request, res: Response): void => {
   const { bufferA, bufferB } = req.body as BufferCoverageRequest;
 
   if (!bufferA || !bufferB) {
-    logger.warn("Payload inválido em /analysis/buffer/coverage", { hasBufferA: !!bufferA, hasBufferB: !!bufferB });
+    logger.warn("Payload inválido em /analysis/buffer/coverage", {
+      hasBufferA: !!bufferA,
+      hasBufferB: !!bufferB,
+    });
     res.status(400).json({
       success: false,
-      error: "Requisição inválida: envie bufferA e bufferB no corpo (GeoJSON Polygon ou MultiPolygon).",
+      error:
+        "Requisição inválida: envie bufferA e bufferB no corpo (GeoJSON Polygon ou MultiPolygon).",
     });
     return;
   }

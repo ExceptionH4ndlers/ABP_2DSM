@@ -1,11 +1,5 @@
 import { Feature, Polygon, MultiPolygon } from "geojson";
-import {
-  area,
-  cleanCoords,
-  rewind,
-  truncate,
-  simplify,
-} from "@turf/turf";
+import { area, cleanCoords, rewind, truncate, simplify } from "@turf/turf";
 
 // polygon-clipping não tem typings em formato GeoJSON
 // -> importamos como any para evitar conflito de tipos
@@ -31,8 +25,7 @@ export type BufferCoverageMetrics = {
 // Helpers básicos
 // ------------------------------------------------------------
 
-const toPercentage = (part: number, total: number) =>
-  total > 0 ? (part / total) * 100 : 0;
+const toPercentage = (part: number, total: number) => (total > 0 ? (part / total) * 100 : 0);
 
 /**
  * Normaliza a geometria em WGS84:
@@ -100,9 +93,7 @@ function closeRing(ring: number[][]): number[][] {
  * Garante que todos os rings do multipolygon estão fechados
  */
 function normalizeMultiPolygonCoords(mp: number[][][][]): number[][][][] {
-  return mp.map((poly) =>
-    poly.map((ring) => closeRing([...ring]))
-  );
+  return mp.map((poly) => poly.map((ring) => closeRing([...ring])));
 }
 
 /**
@@ -110,10 +101,7 @@ function normalizeMultiPolygonCoords(mp: number[][][][]): number[][][][] {
  * Recebe coordenadas de MultiPolygon (não Feature).
  * Retorna Feature<MultiPolygon> ou null.
  */
-function intersectAccurate(
-  mpA: number[][][][],
-  mpB: number[][][][],
-): Feature<MultiPolygon> | null {
+function intersectAccurate(mpA: number[][][][], mpB: number[][][][]): Feature<MultiPolygon> | null {
   try {
     const result = polygonClipping.intersection(mpA, mpB);
 
@@ -138,10 +126,7 @@ function intersectAccurate(
 /**
  * União usando polygon-clipping (para fallback do cálculo de interseção)
  */
-function unionAccurate(
-  mpA: number[][][][],
-  mpB: number[][][][],
-): Feature<MultiPolygon> | null {
+function unionAccurate(mpA: number[][][][], mpB: number[][][][]): Feature<MultiPolygon> | null {
   try {
     const result = polygonClipping.union(mpA, mpB);
 

@@ -53,7 +53,7 @@ const tryIntersect = (a: BufferGeometry, b: BufferGeometry) => {
  */
 export function calculateBufferCoverage(
   bufferA: BufferGeometry,
-  bufferB: BufferGeometry
+  bufferB: BufferGeometry,
 ): BufferCoverageMetrics {
   const preparedA = prepareGeometry(bufferA);
   const preparedB = prepareGeometry(bufferB);
