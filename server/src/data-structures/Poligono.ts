@@ -1,8 +1,32 @@
 export type Ponto = { x: number; y: number };
 
 export default class Poligono {
-  constructor(public pontos: Ponto[]) {}
+  private area: number;
+  private perimetro: number;
+  private isValid: boolean;
 
+  constructor(public pontos: Ponto[]) {
+    // Validação simples (min 3)
+    if (!this.validarPoligono(pontos)) {
+      this.isValid = false;
+      throw new Error("Polígono inválido: é necessário ter pelo menos 3 vértices.");
+    }
+
+    this.isValid = true;
+    this.area = this.calcularArea();
+    this.perimetro = this.calcularPerimetro();
+  }
+
+  // ----------------------
+  // Validação simples
+  // ----------------------
+  private validarPoligono(pontos: Ponto[]): boolean {
+    return Array.isArray(pontos) && pontos.length >= 3;
+  }
+
+  // ----------------------
+  // Área (Shoelace Formula)
+  // ----------------------
   /**
    * Cálculo de área usando Shoelace Formula
    */
@@ -18,6 +42,48 @@ export default class Poligono {
     return Math.abs(area / 2);
   }
 
+  // ----------------------
+  // Perímetro
+  // ----------------------
+  private calcularPerimetro(): number {
+    let soma = 0;
+    const n = this.pontos.length;
+
+    for (let i = 0; i < n; i++) {
+      const atual = this.pontos[i];
+      const prox = this.pontos[(i + 1) % n];
+
+      const dx = prox.x - atual.x;
+      const dy = prox.y - atual.y;
+
+      soma += Math.sqrt(dx * dx + dy * dy);
+    }
+
+    return soma;
+  }
+
+  // ----------------------
+  // Getters
+  // ----------------------
+  getVertices(): Ponto[] {
+    return this.pontos;
+  }
+
+  getArea(): number {
+    return this.area;
+  }
+
+  getPerimetro(): number {
+    return this.perimetro;
+  }
+
+  getIsValid(): boolean {
+    return this.isValid;
+  }
+
+  // ----------------------
+  // Interseção entre polígonos
+  // ----------------------
   /**
    * Verifica se dois polígonos possuem interseção
    */
