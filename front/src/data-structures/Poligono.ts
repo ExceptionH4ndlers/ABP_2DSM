@@ -3,25 +3,32 @@ export type Ponto = { x: number; y: number };
 export default class Poligono {
   constructor(public pontos: Ponto[]) {}
 
+  /**
+   * Cálculo de área usando Shoelace Formula
+   */
   calcularArea(): number {
     let area = 0;
     const n = this.pontos.length;
 
     for (let i = 0; i < n; i++) {
       const j = (i + 1) % n;
-      area +=
-        this.pontos[i].x * this.pontos[j].y -
-        this.pontos[j].x * this.pontos[i].y;
+      area += this.pontos[i].x * this.pontos[j].y - this.pontos[j].x * this.pontos[i].y;
     }
 
     return Math.abs(area / 2);
   }
 
-
+  /**
+   * Verifica se dois polígonos possuem interseção
+   */
   verificarIntersecao(outro: Poligono): boolean {
     return this.calcularIntersecao(outro) !== null;
   }
 
+  /**
+   * Cálculo da interseção entre polígonos
+   * — Algoritmo Sutherland–Hodgman
+   */
   calcularIntersecao(outro: Poligono): Poligono | null {
     let resultado = [...this.pontos];
 
@@ -78,6 +85,9 @@ export default class Poligono {
     return new Poligono(resultado);
   }
 
+  /**
+   * Área de interseção entre dois polígonos
+   */
   calcularAreaSobreposta(outro: Poligono): number {
     const inter = this.calcularIntersecao(outro);
     if (!inter) return 0;
