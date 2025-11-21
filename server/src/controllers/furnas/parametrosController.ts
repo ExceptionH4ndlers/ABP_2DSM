@@ -37,9 +37,8 @@ export const consultarParametros = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       total: result.rows.length,
-      dados: result.rows
+      dados: result.rows,
     });
-
   } catch (error: any) {
     console.error("Erro ao consultar parâmetros:", error);
     return res.status(500).json({ error: "Erro ao consultar parâmetros", detalhes: error.message });

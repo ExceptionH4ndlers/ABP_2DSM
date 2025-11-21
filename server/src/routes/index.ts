@@ -4,7 +4,7 @@ import balcar from "./balcar";
 import furnas from "./furnas";
 import filters from "./filters";
 import { furnasPool, simaPool, balcarPool } from "../configs/db";
-import parametrosRoutes from "./parametros.routes";
+import parametrosRoutes from "./furnas/parametros.routes";
 
 const router = express.Router();
 

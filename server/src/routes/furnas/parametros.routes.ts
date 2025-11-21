@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { consultarParametros } from "../../controllers/furnas/parametros.controller";
+import { consultarParametros } from "../../controllers/furnas/parametrosController";
 
 const router = Router();
 
