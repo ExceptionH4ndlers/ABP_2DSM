@@ -4,6 +4,7 @@ import balcar from "./balcar";
 import furnas from "./furnas";
 import filters from "./filters";
 import { furnasPool, simaPool, balcarPool } from "../configs/db";
+import parametrosRoutes from "./furnas/parametros.routes";
 
 const router = express.Router();
 
@@ -11,6 +12,7 @@ router.use("/sima", sima);
 router.use("/balcar", balcar);
 router.use("/furnas", furnas);
 router.use("/filters", filters);
+router.use("/parametros", parametrosRoutes);
 
 // util simples para aplicar timeout em uma Promise
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
