@@ -41,7 +41,7 @@ export class Poligono {
       const atual = this.vertices[i];
       const prox = this.vertices[(i + 1) % n];
 
-      soma += (atual.x * prox.y) - (prox.x * atual.y);
+      soma += atual.x * prox.y - prox.x * atual.y;
     }
 
     return Math.abs(soma) / 2;
