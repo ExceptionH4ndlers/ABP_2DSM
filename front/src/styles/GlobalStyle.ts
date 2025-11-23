@@ -99,6 +99,17 @@ const GlobalStyle = createGlobalStyle`
   button, a {
     -webkit-tap-highlight-color: transparent;
   }
+
+  .marker-selected div {
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
 `;
 
 export default GlobalStyle;

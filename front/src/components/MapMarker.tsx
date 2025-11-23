@@ -14,7 +14,6 @@ const PopupContent = styled.div`
   overflow: hidden;
   position: relative;
 
-  /* Garantir que não há elementos vazando */
   &::after {
     content: "";
     position: absolute;
@@ -143,14 +142,15 @@ const ActionButton = styled.button`
 interface MapMarkerProps {
   point: MapPoint;
   onClick?: (point: MapPoint) => void;
+  isSelected?: boolean;
 }
 
-export default function MapMarker({ point, onClick }: MapMarkerProps) {
-  const getMarkerIcon = (type: "sima" | "furnas" | "balcar") => {
+export default function MapMarker({ point, onClick, isSelected = false }: MapMarkerProps) {
+  const getMarkerIcon = (type: "sima" | "furnas" | "balcar", selected: boolean) => {
     const colors = {
-      sima: "#2563eb", // Azul mais vibrante
-      furnas: "#16a34a", // Verde mais vibrante
-      balcar: "#ea580c", // Laranja/vermelho mais vibrante
+      sima: "#2563eb",
+      furnas: "#16a34a",
+      balcar: "#ea580c",
     };
 
     const letters = {
@@ -159,26 +159,35 @@ export default function MapMarker({ point, onClick }: MapMarkerProps) {
       balcar: "B",
     };
 
+    const baseColor = colors[type];
+    const bgColor = selected ? "#f97316" : baseColor;
+    const size = selected ? 40 : 32;
+    const borderWidth = selected ? 3 : 2;
+    const shadow = selected
+      ? "0 0 0 4px rgba(249, 115, 22, 0.35), 0 4px 12px rgba(0,0,0,0.45)"
+      : "0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.1)";
+
     return L.divIcon({
       html: `<div style="
-        background-color: ${colors[type]} !important;
+        background-color: ${bgColor} !important;
         color: white !important;
         border-radius: 50%;
-        width: 32px;
-        height: 32px;
+        width: ${size}px;
+        height: ${size}px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-weight: bold;
         font-size: 14px;
-        border: 2px solid white;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(0, 0, 0, 0.1);
+        border: ${borderWidth}px solid white;
+        box-shadow: ${shadow};
         position: relative;
         z-index: 1000;
+        transition: all 0.2s ease;
       ">${letters[type]}</div>`,
       className: "custom-marker-icon",
-      iconSize: L.point(32, 32, true),
-      iconAnchor: L.point(16, 16, true),
+      iconSize: L.point(size, size, true),
+      iconAnchor: L.point(size / 2, size / 2, true),
     });
   };
 
@@ -218,7 +227,7 @@ export default function MapMarker({ point, onClick }: MapMarkerProps) {
   return (
     <Marker
       position={[point.lat, point.lng]}
-      icon={getMarkerIcon(point.type)}
+      icon={getMarkerIcon(point.type, isSelected)}
       eventHandlers={{
         click: handleMarkerClick,
       }}
