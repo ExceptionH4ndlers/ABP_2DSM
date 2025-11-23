@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
@@ -32,6 +32,43 @@ export function useFurnasApi(params: FurnasQueryParams) {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Criar uma chave de dependência estável
+  const paramsKey = useMemo(
+    () =>
+      JSON.stringify({
+        page: params.page,
+        limit: params.limit,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        reservatorios: params.reservatorios,
+        instituicao: params.instituicao,
+        nivelMin: params.nivelMin,
+        nivelMax: params.nivelMax,
+        volumeUtilMin: params.volumeUtilMin,
+        volumeUtilMax: params.volumeUtilMax,
+        geracaoMin: params.geracaoMin,
+        geracaoMax: params.geracaoMax,
+        sortBy: params.sortBy,
+        sortOrder: params.sortOrder,
+      }),
+    [
+      params.page,
+      params.limit,
+      params.startDate,
+      params.endDate,
+      params.reservatorios,
+      params.instituicao,
+      params.nivelMin,
+      params.nivelMax,
+      params.volumeUtilMin,
+      params.volumeUtilMax,
+      params.geracaoMin,
+      params.geracaoMax,
+      params.sortBy,
+      params.sortOrder,
+    ],
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -112,7 +149,8 @@ export function useFurnasApi(params: FurnasQueryParams) {
     }
 
     fetchData();
-  }, [JSON.stringify(params)]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paramsKey]);
 
   return {
     data,

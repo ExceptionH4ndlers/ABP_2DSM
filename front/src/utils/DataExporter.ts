@@ -4,47 +4,48 @@ import JSZip from "jszip";
 export interface ExportOptions {
   filename: string;
   format: "csv" | "json" | "xlsx";
-  filters?: Record<string, any>;
-  formatter?: (item: any) => any;
+  filters?: Record<string, unknown>;
+  formatter?: (item: Record<string, unknown>) => Record<string, unknown>;
   trackProgress?: (progress: number) => void;
 }
 
 export default class DataExporter {
-  static applyFilters(data: any[], filters?: Record<string, any>) {
+  static applyFilters(data: Array<Record<string, unknown>>, filters?: Record<string, unknown>) {
     if (!filters) return data;
 
     return data.filter((item) =>
       Object.entries(filters).every(([key, value]) => {
         if (value === undefined || value === null) return true;
         return item[key] === value;
-      })
+      }),
     );
   }
 
-  static formatData(data: any[], formatter?: (item: any) => any) {
+  static formatData(
+    data: Array<Record<string, unknown>>,
+    formatter?: (item: Record<string, unknown>) => Record<string, unknown>,
+  ) {
     return formatter ? data.map(formatter) : data;
   }
 
   // Converts to CSV
-  static toCSV(data: any[]) {
+  static toCSV(data: Array<Record<string, unknown>>) {
     const headers = Object.keys(data[0] || {});
     const csvRows = [
       headers.join(","),
-      ...data.map((row) =>
-        headers.map((h) => JSON.stringify(row[h] ?? "")).join(",")
-      ),
+      ...data.map((row) => headers.map((h) => JSON.stringify(row[h] ?? "")).join(",")),
     ];
 
     return csvRows.join("\n");
   }
 
   // Converts to JSON
-  static toJSON(data: any[]) {
+  static toJSON(data: Array<Record<string, unknown>>) {
     return JSON.stringify(data, null, 2);
   }
 
   // Converts to Excel
-  static toExcel(data: any[]) {
+  static toExcel(data: Array<Record<string, unknown>>) {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Data");
@@ -64,8 +65,8 @@ export default class DataExporter {
    * MAIN EXPORT FUNCTION
    */
   static async export(
-    data: any[],
-    options: ExportOptions | ExportOptions[]
+    data: Array<Record<string, unknown>>,
+    options: ExportOptions | ExportOptions[],
   ) {
     const isMultiple = Array.isArray(options);
 
@@ -79,7 +80,9 @@ export default class DataExporter {
     for (let i = 0; i < options.length; i++) {
       const opt = options[i];
       const file = await this.exportSingle(data, opt, true);
-      zip.file(opt.filename, file);
+      if (file instanceof Blob) {
+        zip.file(opt.filename, file);
+      }
 
       opt.trackProgress?.(((i + 1) / options.length) * 100);
     }
@@ -92,10 +95,10 @@ export default class DataExporter {
    * Export a single file
    */
   static async exportSingle(
-    data: any[],
+    data: Array<Record<string, unknown>>,
     opt: ExportOptions,
-    returnBlob = false
-  ) {
+    returnBlob = false,
+  ): Promise<Blob | void> {
     let processed = this.applyFilters(data, opt.filters);
     processed = this.formatData(processed, opt.formatter);
 

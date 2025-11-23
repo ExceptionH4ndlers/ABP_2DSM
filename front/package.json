@@ -17,6 +17,7 @@
     "framer-motion": "^12.23.24",
     "html-to-image": "^1.11.13",
     "html2canvas": "^1.4.1",
+    "jszip": "^3.10.1",
     "jspdf": "^3.0.3",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
@@ -28,7 +29,9 @@
     "react-leaflet": "^5.0.0",
     "react-router-dom": "^7.9.1",
     "react-spinners": "^0.17.0",
-    "styled-components": "^6.1.19"
+    "recharts": "^2.12.7",
+    "styled-components": "^6.1.19",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",

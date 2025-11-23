@@ -17,7 +17,7 @@ export default class DataExporter {
       Object.entries(filters).every(([key, value]) => {
         if (value === undefined || value === null) return true;
         return item[key] === value;
-      })
+      }),
     );
   }
 
@@ -29,9 +29,7 @@ export default class DataExporter {
     const headers = Object.keys(data[0] || {});
     const csvRows = [
       headers.join(","),
-      ...data.map((row) =>
-        headers.map((h) => JSON.stringify(row[h] ?? "")).join(",")
-      ),
+      ...data.map((row) => headers.map((h) => JSON.stringify(row[h] ?? "")).join(",")),
     ];
     return csvRows.join("\n");
   }
@@ -52,7 +50,7 @@ export default class DataExporter {
    */
   static async export(
     data: any[],
-    options: ExportOptions | ExportOptions[]
+    options: ExportOptions | ExportOptions[],
   ): Promise<Buffer | JSZip> {
     const isMultiple = Array.isArray(options);
 
