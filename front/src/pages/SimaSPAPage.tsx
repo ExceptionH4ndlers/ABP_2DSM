@@ -42,7 +42,6 @@ import estruturaSima2 from "../../img/sima/estrutura_sima2.png";
 import funcionamentoSima from "../../img/sima/funcionamento_sima.png";
 import sondaSima from "../../img/sima/sonda_sima.png";
 import simaLogo from "../../img/sima/sima_spa_logo-removebg-preview.png";
-import ExportPdfButton from "../components/ExportPdfButton";
 
 const SimaSPAContainer = styled.div`
   min-height: 100vh;
@@ -1395,14 +1394,6 @@ function SimaSPAPage() {
                 filename="dados_sima.csv"
                 onClick={handleExportCsv}
                 disabled={loading}
-              />
-              <ExportPdfButton
-                targetId="simaChart"
-                fileName="dados_sima"
-                disabled={loading || data.length === 0}
-                label="Exportar PDF"
-                variant="primary"
-                size="medium"
               />
             </ActionButtons>
           </ControlsSection>

@@ -55,6 +55,7 @@ export interface SimaApiParams {
   startDate: string;
   endDate: string;
   estacao?: string;
+  estacoes?: string[]; // Suporte para múltiplas estações
   sortOrder?: string;
 }
 
@@ -72,44 +73,108 @@ export const useSimaApi = () => {
     totalPages: 0,
   });
 
-  const fetchData = async (params: SimaApiParams) => {
+  const fetchData = async (params: SimaApiParams, fetchAllPages: boolean = false) => {
     setLoading(true);
     setError(null);
 
     try {
-      const queryParams = new URLSearchParams({
-        page: params.page.toString(),
-        limit: params.limit.toString(),
-        startDate: params.startDate,
-        endDate: params.endDate,
-      });
+      // Se fetchAllPages for true, buscar todas as páginas automaticamente
+      if (fetchAllPages) {
+        const allData: SimaApiData[] = [];
+        let currentPage = 1;
+        let totalPages = 1;
+        const pageLimit = params.limit || 5000; // Usar limite maior por página
 
-      if (params.estacao) {
-        queryParams.append("estacao", params.estacao);
-      }
+        do {
+          const queryParams = new URLSearchParams({
+            page: currentPage.toString(),
+            limit: pageLimit.toString(),
+            startDate: params.startDate,
+            endDate: params.endDate,
+          });
 
-      if (params.sortOrder) {
-        queryParams.append("sortOrder", params.sortOrder);
-      }
+          // Suporte para múltiplas estações
+          if (params.estacoes && params.estacoes.length > 0) {
+            params.estacoes.forEach((estacao) => {
+              queryParams.append("estacoes", estacao);
+            });
+          } else if (params.estacao) {
+            queryParams.append("estacao", params.estacao);
+          }
 
-      const response = await fetch(`${API_BASE_URL}/sima/all?${queryParams}`);
+          if (params.sortOrder) {
+            queryParams.append("sortOrder", params.sortOrder);
+          }
 
-      if (!response.ok) {
-        throw new Error(`Erro na API: ${response.status}`);
-      }
+          const url = `${API_BASE_URL}/sima/all?${queryParams}`;
+          const response = await fetch(url);
 
-      const result: SimaApiResponse = await response.json();
+          if (!response.ok) {
+            throw new Error(`Erro na API: ${response.status}`);
+          }
 
-      if (result.success) {
-        setData(result.data);
-        setPagination({
-          page: result.page,
-          limit: result.limit,
-          total: result.total,
-          totalPages: result.totalPages,
-        });
+          const result: SimaApiResponse = await response.json();
+
+          if (result.success) {
+            allData.push(...result.data);
+            totalPages = result.totalPages;
+            currentPage++;
+
+            // Atualizar paginação com os dados da última página
+            setPagination({
+              page: result.page,
+              limit: result.limit,
+              total: result.total,
+              totalPages: result.totalPages,
+            });
+          } else {
+            throw new Error("Erro na resposta da API");
+          }
+        } while (currentPage <= totalPages);
+
+        setData(allData);
       } else {
-        throw new Error("Erro na resposta da API");
+        // Buscar apenas uma página (comportamento original)
+        const queryParams = new URLSearchParams({
+          page: params.page.toString(),
+          limit: params.limit.toString(),
+          startDate: params.startDate,
+          endDate: params.endDate,
+        });
+
+        // Suporte para múltiplas estações
+        if (params.estacoes && params.estacoes.length > 0) {
+          params.estacoes.forEach((estacao) => {
+            queryParams.append("estacoes", estacao);
+          });
+        } else if (params.estacao) {
+          queryParams.append("estacao", params.estacao);
+        }
+
+        if (params.sortOrder) {
+          queryParams.append("sortOrder", params.sortOrder);
+        }
+
+        const url = `${API_BASE_URL}/sima/all?${queryParams}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+          throw new Error(`Erro na API: ${response.status}`);
+        }
+
+        const result: SimaApiResponse = await response.json();
+
+        if (result.success) {
+          setData(result.data);
+          setPagination({
+            page: result.page,
+            limit: result.limit,
+            total: result.total,
+            totalPages: result.totalPages,
+          });
+        } else {
+          throw new Error("Erro na resposta da API");
+        }
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro desconhecido");

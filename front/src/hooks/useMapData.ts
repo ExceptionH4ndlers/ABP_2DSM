@@ -108,34 +108,80 @@ export function useMapData(
         if (filters.showSima) {
           try {
             // Usar sempre URL absoluta para funcionar no Docker
-            const simaResponse = await fetch(`${API_BASE_URL}/sima/estacao/map`);
-            if (simaResponse.ok) {
-              const simaData: SimaApiResponse = await simaResponse.json();
-              const simaPoints: MapPoint[] = simaData.data
-                .filter((estacao: EstacaoSima) => estacao.lat && estacao.lng)
-                .map((estacao: EstacaoSima, index: number) => {
-                  // Criar chave única mesmo quando idestacao for undefined
-                  const uniqueId = estacao.idestacao
-                    ? `sima-${estacao.idestacao}`
-                    : `sima-${estacao.idhexadecimal || estacao.rotulo || "unknown"}-${estacao.lat}-${estacao.lng}-${index}`;
-                  return {
-                    id: uniqueId,
-                    name: estacao.rotulo || `Estação ${estacao.idhexadecimal}`,
-                    lat: estacao.lat,
-                    lng: estacao.lng,
-                    type: "sima" as const,
-                    data: estacao,
-                    description: `Estação SIMA ${estacao.idhexadecimal}`,
-                    period: {
-                      start: estacao.inicio,
-                      end: estacao.fim || undefined,
-                    },
-                  };
-                });
-              points.push(...simaPoints);
+            // Adicionar timeout de 10 segundos
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+            const simaResponse = await fetch(`${API_BASE_URL}/sima/estacao/map`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              signal: controller.signal,
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!simaResponse.ok) {
+              throw new Error(
+                `Erro ao buscar dados SIMA: ${simaResponse.status} ${simaResponse.statusText}`,
+              );
             }
+
+            const simaDataRaw = await simaResponse.json();
+
+            // O servidor retorna { success: true, data: [...] }
+            // Mas o tipo SimaApiResponse espera { data: [...] }
+            const simaData: SimaApiResponse = {
+              data: simaDataRaw.success ? simaDataRaw.data : simaDataRaw.data || [],
+            };
+
+            // Verificar se a resposta tem o formato esperado
+            if (!simaData || !Array.isArray(simaData.data)) {
+              console.warn("Resposta SIMA em formato inesperado:", simaData);
+              throw new Error("Formato de resposta inválido do servidor SIMA");
+            }
+
+            const simaPoints: MapPoint[] = simaData.data
+              .filter((estacao: EstacaoSima) => estacao.lat && estacao.lng)
+              .map((estacao: EstacaoSima, index: number) => {
+                // Criar chave única mesmo quando idestacao for undefined
+                const uniqueId = estacao.idestacao
+                  ? `sima-${estacao.idestacao}`
+                  : `sima-${estacao.idhexadecimal || estacao.rotulo || "unknown"}-${estacao.lat}-${estacao.lng}-${index}`;
+                return {
+                  id: uniqueId,
+                  name: estacao.rotulo || `Estação ${estacao.idhexadecimal}`,
+                  lat: estacao.lat,
+                  lng: estacao.lng,
+                  type: "sima" as const,
+                  data: estacao,
+                  description: `Estação SIMA ${estacao.idhexadecimal}`,
+                  period: {
+                    start: estacao.inicio,
+                    end: estacao.fim || undefined,
+                  },
+                };
+              });
+            points.push(...simaPoints);
           } catch (err) {
+            const errorMessage =
+              err instanceof Error ? err.message : "Erro desconhecido ao buscar dados SIMA";
             console.warn("Erro ao buscar dados SIMA:", err);
+
+            // Se for erro de conexão ou timeout, definir mensagem mais clara
+            if (
+              errorMessage.includes("Failed to fetch") ||
+              errorMessage.includes("ERR_EMPTY_RESPONSE") ||
+              errorMessage.includes("aborted") ||
+              (err instanceof Error && err.name === "AbortError")
+            ) {
+              setError(
+                "Servidor não está respondendo. Verifique se o servidor backend está rodando na porta 3001.",
+              );
+            } else {
+              setError(`Erro ao carregar dados SIMA: ${errorMessage}`);
+            }
           }
         }
 

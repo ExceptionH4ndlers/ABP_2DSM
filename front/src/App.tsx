@@ -13,6 +13,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 // Lazy loading de todas as páginas
 const HomePage = lazy(() => import("./pages/HomePage"));
 const SimaSPAPage = lazy(() => import("./pages/SimaSPAPage"));
+const SimaGraficosPage = lazy(() => import("./pages/SimaGraficosPage"));
 const SimaPublicacoesPage = lazy(() => import("./pages/SimaPublicacoesPage"));
 const FurnasSPAPage = lazy(() => import("./pages/FurnasSPAPage"));
 const FurnasPanoramaPage = lazy(() => import("./pages/FurnasPanoramaPage"));
@@ -55,6 +56,7 @@ function AppContent() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/sima" element={<SimaSPAPage />} />
+              <Route path="/sima/graficos" element={<SimaGraficosPage />} />
               <Route path="/sima/publicacoes" element={<SimaPublicacoesPage />} />
               <Route path="/furnas" element={<FurnasSPAPage />} />
               <Route path="/furnas/panorama" element={<FurnasPanoramaPage />} />
