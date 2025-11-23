@@ -26,7 +26,6 @@ import { CsvExportModalFurnas } from "../components/CsvExportModalFurnas";
 import { useMapData } from "../hooks/useMapData";
 import InteractiveMap from "../components/InteractiveMap";
 import { useFurnasApi } from "../hooks/useFurnasApi";
-import { DataTableFiltersFurnas } from "../components/DataTableFiltersFurnas";
 import SkeletonTable from "../components/skeletons/SkeletonTable";
 // CSV export via backend
 
@@ -605,13 +604,6 @@ function FurnasSPAPage() {
     fetchData(queryParams);
   };
 
-  const reservatoriosOptions = reservatorios.map((nome) => ({ label: nome, value: nome }));
-
-  const instituicoesOptions = [
-    { label: "IIE", value: "iie" },
-    { label: "INPE", value: "inpe" },
-  ];
-
   // handleSearch removido - usando useFurnasApi hook agora
   // Os dados vêm de furnasData do hook useFurnasApi
 
@@ -975,7 +967,6 @@ function FurnasSPAPage() {
                 </ControlSelect>
               </ControlGroup>
             </ControlsGrid>
-
 
             <ActionButtons>
               <SearchButton onClick={handleApplyFilters} disabled={furnasLoading}>

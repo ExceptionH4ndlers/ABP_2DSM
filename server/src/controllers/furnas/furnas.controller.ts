@@ -14,9 +14,11 @@ export const getFurnasData = async (req: Request, res: Response): Promise<void> 
     const startDate = req.query.startDate as string;
     const endDate = req.query.endDate as string;
     const reservatorios = req.query.reservatorios
-      ? (Array.isArray(req.query.reservatorios) ? req.query.reservatorios : [req.query.reservatorios])
+      ? Array.isArray(req.query.reservatorios)
+        ? req.query.reservatorios
+        : [req.query.reservatorios]
       : [];
-    const instituicao = req.query.instituicao as string | undefined;
+    const _instituicao = req.query.instituicao as string | undefined; // TODO: implementar filtro de instituição
     const nivelMin = req.query.nivelMin ? Number(req.query.nivelMin) : undefined;
     const nivelMax = req.query.nivelMax ? Number(req.query.nivelMax) : undefined;
     const volumeUtilMin = req.query.volumeUtilMin ? Number(req.query.volumeUtilMin) : undefined;
@@ -184,4 +186,3 @@ export const getFurnasData = async (req: Request, res: Response): Promise<void> 
     });
   }
 };
-

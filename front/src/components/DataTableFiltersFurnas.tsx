@@ -1,11 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-interface Option {
-  label: string;
-  value: string;
-}
-
 export interface Filters {
   page: number;
   limit: number;
@@ -26,9 +21,6 @@ export interface Filters {
 interface Props {
   filters: Filters;
   setFilters: React.Dispatch<React.SetStateAction<Filters>>;
-  reservatoriosOptions: Option[];
-  instituicoesOptions: Option[];
-  onApply: () => void;
 }
 
 const FiltersContainer = styled.div`
@@ -78,90 +70,7 @@ const FilterInput = styled.input`
   }
 `;
 
-const FilterSelect = styled.select`
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  color: #1f2937;
-  background-color: #ffffff;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%234B5563' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 1.25em;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &:focus {
-    outline: none;
-    border-color: #3b82f6;
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-
-  &[multiple] {
-    background-image: none;
-    min-height: 120px;
-    padding: 0.5rem;
-  }
-`;
-
-const RangeContainer = styled.div`
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-
-  ${FilterInput} {
-    flex: 1;
-  }
-`;
-
-const RangeSeparator = styled.span`
-  color: #6b7280;
-  font-size: 0.875rem;
-  font-weight: 500;
-  flex-shrink: 0;
-`;
-
-const DateRangeContainer = styled.div`
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-
-  ${FilterInput} {
-    flex: 1;
-  }
-`;
-
-const DateRangeSeparator = styled.span`
-  color: #6b7280;
-  font-size: 0.875rem;
-  font-weight: 500;
-  flex-shrink: 0;
-`;
-
-const SortContainer = styled.div`
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-
-  ${FilterInput} {
-    flex: 1;
-  }
-
-  ${FilterSelect} {
-    flex-shrink: 0;
-    min-width: 100px;
-  }
-`;
-
-export function DataTableFiltersFurnas({
-  filters,
-  setFilters,
-  reservatoriosOptions,
-  instituicoesOptions,
-  onApply,
-}: Props) {
+export function DataTableFiltersFurnas({ filters, setFilters }: Props) {
   return (
     <FiltersContainer>
       {/* Data inicial e final */}
@@ -182,7 +91,6 @@ export function DataTableFiltersFurnas({
           onChange={(e) => setFilters({ ...filters, endDate: e.target.value })}
         />
       </FilterGroup>
-
     </FiltersContainer>
   );
 }

@@ -650,7 +650,7 @@ const SmallLogo = styled.img`
 
 // Função auxiliar para formatar valores
 const formatValue = (value: number | null | undefined, decimals: number = 1) => {
-  if (value === null || value === undefined || value === "" || isNaN(Number(value))) return "-";
+  if (value === null || value === undefined) return "-";
   const numValue = Number(value);
   if (isNaN(numValue)) return "-";
   return numValue.toFixed(decimals);
@@ -1542,9 +1542,7 @@ function SimaSPAPage() {
                         </td>
                         <td>
                           <strong>
-                            {item.datahora
-                              ? new Date(item.datahora).toLocaleString("pt-BR")
-                              : "-"}
+                            {item.datahora ? new Date(item.datahora).toLocaleString("pt-BR") : "-"}
                           </strong>
                         </td>
                         <td>{item.regno || "-"}</td>

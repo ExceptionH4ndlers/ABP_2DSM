@@ -216,11 +216,7 @@ function RevealedStationMarkerInner({
   };
 
   return (
-    <Marker
-      position={[point.lat, point.lng]}
-      icon={getMarkerIcon(isHighlighted)}
-      ref={markerRef}
-    >
+    <Marker position={[point.lat, point.lng]} icon={getMarkerIcon(isHighlighted)} ref={markerRef}>
       <Popup>
         <PopupContent>
           <PopupHeader>
@@ -285,4 +281,3 @@ function RevealedStationMarkerInner({
 export default function RevealedStationMarker(props: RevealedStationMarkerProps) {
   return <RevealedStationMarkerInner {...props} />;
 }
-

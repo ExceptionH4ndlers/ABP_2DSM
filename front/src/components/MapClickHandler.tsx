@@ -14,10 +14,7 @@ export function MapClickHandler({ drawing, onAddPoint }: MapClickHandlerProps) {
       const target = e.originalEvent.target as HTMLElement | null;
 
       // Evita capturar cliques em marcadores revelados / shapes interativos
-      if (
-        target?.closest(".revealed-station-marker") ||
-        target?.closest(".leaflet-interactive")
-      ) {
+      if (target?.closest(".revealed-station-marker") || target?.closest(".leaflet-interactive")) {
         return;
       }
 
