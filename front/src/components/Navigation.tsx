@@ -12,6 +12,7 @@ import {
   BookOpen,
   FileText,
   Users,
+  TrendingUp,
 } from "lucide-react";
 import { Sun, Moon } from "lucide-react";
 import { useTheme } from "../hooks/useTheme";
@@ -411,6 +412,16 @@ function Navigation() {
               <DropdownItem onClick={() => navigateToSection("/sima")}>
                 <Home size={16} />
                 Home
+              </DropdownItem>
+              <DropdownItem
+                onClick={() => {
+                  navigate("/sima/graficos");
+                  setIsSimaDropdownOpen(false);
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                <TrendingUp size={16} />
+                Gráficos
               </DropdownItem>
               <DropdownItem onClick={() => navigateToSection("/sima-equipe")}>
                 <Users size={16} />
