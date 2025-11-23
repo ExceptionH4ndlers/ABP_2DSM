@@ -1,7 +1,7 @@
 // src/components/PolygonPanel.tsx
 import styled from "styled-components";
 import type { MapPoint } from "../hooks/useMapData";
-import { X } from "lucide-react";
+import { X, Sparkles } from "lucide-react";
 
 const Panel = styled.div`
   margin-top: 8px;
@@ -62,13 +62,33 @@ interface PolygonPanelProps {
    * false -> mostrar todas as estações dentro de cada polígono
    */
   showOnlyIntersections?: boolean;
+  /**
+   * Callback quando uma estação é clicada na lista
+   */
+  onStationClick?: (station: MapPoint) => void;
 }
+
+const StationItem = styled.li<{ $clickable?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  cursor: ${(props) => (props.$clickable ? "pointer" : "default")};
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: ${(props) => (props.$clickable ? "#f3f4f6" : "transparent")};
+  }
+`;
 
 export default function PolygonPanel({
   polygons,
   points,
   onDeletePolygon,
   showOnlyIntersections = false,
+  onStationClick,
 }: PolygonPanelProps) {
   // mesmo teste de ponto dentro do polígono usado antes
   const isInside = (point: MapPoint, polygon: [number, number][]) => {
@@ -91,6 +111,15 @@ export default function PolygonPanel({
   // todas as estações dentro de cada polígono
   const pointsInsideByPolygon = polygons.map((poly) => points.filter((p) => isInside(p, poly)));
 
+  // Contar em quantos polígonos cada estação aparece (para indicador visual)
+  const stationPolygonCount = new Map<string, number>();
+  pointsInsideByPolygon.forEach((list) => {
+    list.forEach((p) => {
+      const key = String(p.id);
+      stationPolygonCount.set(key, (stationPolygonCount.get(key) ?? 0) + 1);
+    });
+  });
+
   // se não for modo "interseção", renderiza direto
   if (!showOnlyIntersections) {
     return (
@@ -109,12 +138,43 @@ export default function PolygonPanel({
                 </DeleteButton>
               </CardHeader>
 
-              <ul style={{ margin: 0, paddingLeft: 16 }}>
-                {insidePoints.map((p) => (
-                  <li key={p.id}>
-                    {p.name} ({p.lat.toFixed(3)}, {p.lng.toFixed(3)})
-                  </li>
-                ))}
+              <ul style={{ margin: 0, paddingLeft: 16, listStyle: "none" }}>
+                {insidePoints.map((p) => {
+                  const count = stationPolygonCount.get(String(p.id)) ?? 1;
+                  const isInMultiple = count > 1;
+                  return (
+                    <StationItem
+                      key={p.id}
+                      $clickable={!!onStationClick}
+                      onClick={() => onStationClick?.(p)}
+                      title={
+                        onStationClick
+                          ? isInMultiple
+                            ? `Clique para destacar no mapa. Esta estação está em ${count} polígonos.`
+                            : "Clique para destacar no mapa"
+                          : undefined
+                      }
+                    >
+                      <Sparkles size={12} color="#f59e0b" style={{ flexShrink: 0 }} />
+                      <span>
+                        {p.name} ({p.lat.toFixed(3)}, {p.lng.toFixed(3)})
+                        {isInMultiple && (
+                          <span
+                            style={{
+                              marginLeft: 6,
+                              fontSize: 10,
+                              color: "#f59e0b",
+                              fontWeight: 600,
+                            }}
+                            title={`Esta estação está em ${count} polígonos`}
+                          >
+                            ({count}×)
+                          </span>
+                        )}
+                      </span>
+                    </StationItem>
+                  );
+                })}
               </ul>
             </PolygonCard>
           );
@@ -124,14 +184,7 @@ export default function PolygonPanel({
   }
 
   // === MODO "SOMENTE INTERSEÇÃO ENTRE POLÍGONOS" ===
-  // conta em quantos polígonos cada estação aparece
-  const pointCounts = new Map<string, number>();
-  pointsInsideByPolygon.forEach((list) => {
-    list.forEach((p) => {
-      const key = String(p.id);
-      pointCounts.set(key, (pointCounts.get(key) ?? 0) + 1);
-    });
-  });
+  // Usa o stationPolygonCount já calculado acima
 
   return (
     <Panel>
@@ -139,7 +192,7 @@ export default function PolygonPanel({
         // para este polígono, mantenha apenas as estações que
         // aparecem em 2 ou mais polígonos -> interseção
         const intersectionPoints = pointsInsideByPolygon[index].filter((p) => {
-          const count = pointCounts.get(String(p.id)) ?? 0;
+          const count = stationPolygonCount.get(String(p.id)) ?? 0;
           return count >= 2;
         });
 
@@ -159,12 +212,38 @@ export default function PolygonPanel({
               </DeleteButton>
             </CardHeader>
 
-            <ul style={{ margin: 0, paddingLeft: 16 }}>
-              {intersectionPoints.map((p) => (
-                <li key={p.id}>
-                  {p.name} ({p.lat.toFixed(3)}, {p.lng.toFixed(3)})
-                </li>
-              ))}
+            <ul style={{ margin: 0, paddingLeft: 16, listStyle: "none" }}>
+              {intersectionPoints.map((p) => {
+                const count = stationPolygonCount.get(String(p.id)) ?? 2;
+                return (
+                  <StationItem
+                    key={p.id}
+                    $clickable={!!onStationClick}
+                    onClick={() => onStationClick?.(p)}
+                    title={
+                      onStationClick
+                        ? `Clique para destacar no mapa. Esta estação está em ${count} polígonos.`
+                        : undefined
+                    }
+                  >
+                    <Sparkles size={12} color="#f59e0b" style={{ flexShrink: 0 }} />
+                    <span>
+                      {p.name} ({p.lat.toFixed(3)}, {p.lng.toFixed(3)})
+                      <span
+                        style={{
+                          marginLeft: 6,
+                          fontSize: 10,
+                          color: "#f59e0b",
+                          fontWeight: 600,
+                        }}
+                        title={`Esta estação está em ${count} polígonos`}
+                      >
+                        ({count}×)
+                      </span>
+                    </span>
+                  </StationItem>
+                );
+              })}
             </ul>
           </PolygonCard>
         );

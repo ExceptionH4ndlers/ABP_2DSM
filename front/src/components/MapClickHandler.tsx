@@ -13,11 +13,10 @@ export function MapClickHandler({ drawing, onAddPoint }: MapClickHandlerProps) {
 
       const target = e.originalEvent.target as HTMLElement | null;
 
-      // Evita capturar cliques em marcadores / shapes
+      // Evita capturar cliques em marcadores revelados / shapes interativos
       if (
-        target?.closest(".custom-marker-icon") ||
-        target?.closest(".leaflet-interactive") ||
-        target?.closest(".leaflet-marker-icon")
+        target?.closest(".revealed-station-marker") ||
+        target?.closest(".leaflet-interactive")
       ) {
         return;
       }

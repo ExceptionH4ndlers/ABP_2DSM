@@ -8,12 +8,6 @@ import type { MapPoint, MapFilters } from "../hooks/useMapData";
 import MapFiltersComponent from "./MapFilters";
 import MarkerClusterGroup from "./MarkerClusterGroup";
 import SkeletonMap from "./skeletons/SkeletonMap";
-import { buffer as turfBuffer, point as turfPoint } from "@turf/turf";
-
-import type { Feature, Polygon, MultiPolygon } from "geojson";
-import { calculateBufferCoverage } from "../utils/bufferIntersections";
-import type { BufferCoverageMetrics } from "../utils/bufferIntersections";
-import { fetchBufferCoverage } from "../api/bufferApi";
 import { MapClickHandler } from "./MapClickHandler";
 import type { LatLngTuple, PolygonSelection } from "../utils/polygonUtils";
 import { getStationsByPolygon } from "../utils/polygonUtils";
@@ -22,7 +16,7 @@ import { getStationsByPolygon } from "../utils/polygonUtils";
 import "leaflet/dist/leaflet.css";
 import { PolygonControls } from "./polygonControls";
 import PolygonPanel from "./polygonPanel";
-import MapMarker from "./MapMarker";
+import RevealedStationMarker from "./RevealedStationMarker";
 
 // Fix para ícones do Leaflet no React
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)._getIconUrl;
@@ -271,18 +265,6 @@ export default function InteractiveMap({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [internalShowFilters, setInternalShowFilters] = useState(false);
 
-  const [selectedPoints] = useState<MapPoint[]>([]);
-  const [radiusKm] = useState<number>(10);
-  const [buffers, setBuffers] = useState<
-    Array<{ point: MapPoint; buffer: Feature<Polygon | MultiPolygon> }>
-  >([]);
-  // Variáveis de estado para buffer coverage (não utilizadas no momento, mas mantidas para funcionalidade futura)
-  const [, setCoverageList] = useState<Array<{ label: string; metrics: BufferCoverageMetrics }>>(
-    [],
-  );
-  const [, setCoverageStatus] = useState<"idle" | "loading" | "ok" | "error">("idle");
-  const [, setCoverageError] = useState<string | null>(null);
-
   // Polígonos desenhados
   const [drawing, setDrawing] = useState(false);
   const [currentPolygonPoints, setCurrentPolygonPoints] = useState<LatLngTuple[]>([]);
@@ -290,6 +272,11 @@ export default function InteractiveMap({
   const [, setPolygonSelections] = useState<PolygonSelection[]>([]);
   const [showOnlyPolygonIntersections] = useState(false);
   const [clickPoints, setClickPoints] = useState<LatLngTuple[]>([]); // pontos de clique visuais
+
+  // Sistema de revelação de estações
+  const [revealedStations, setRevealedStations] = useState<MapPoint[]>([]);
+  const [highlightedStationId, setHighlightedStationId] = useState<string | null>(null);
+  const [stationToOpenPopup, setStationToOpenPopup] = useState<string | null>(null);
 
   const showFilters = filtersOpen ?? internalShowFilters;
   const setShowFilters = (open: boolean) => {
@@ -320,121 +307,26 @@ export default function InteractiveMap({
     if (!isFullscreen) setSidebarOpen(false);
   }, [isFullscreen]);
 
-  // 🔴 NÃO usamos mais clique em estação — a seleção de pontos ficava aqui.
-  // Deixei a função comentada caso queira resgatar depois.
-  /*
-  const handleMarkerSelect = (point: MapPoint) => {
-    setSelectedPoints((prev) => {
-      const exists = prev.find((p) => p.id === point.id);
-      if (exists) {
-        return prev.filter((p) => p.id !== point.id);
-      }
-      return [...prev, point];
-    });
-
-    if (onMarkerClick) onMarkerClick(point);
-  };
-  */
-
-  // Buffer coverage (fica aqui, mas como não há seleção de estações, não é utilizado agora)
-  useEffect(() => {
-    const calculateCoverage = async () => {
-      if (selectedPoints.length < 2) {
-        setCoverageList([]);
-        setCoverageStatus("idle");
-        setCoverageError(null);
-        setBuffers([]);
-        return;
-      }
-
-      if (!radiusKm || Number.isNaN(radiusKm) || radiusKm <= 0) {
-        setCoverageStatus("error");
-        setCoverageError("Informe um raio válido em km.");
-        setCoverageList([]);
-        setBuffers([]);
-        return;
-      }
-
-      setCoverageStatus("loading");
-      setCoverageError(null);
-
-      try {
-        const generated = selectedPoints.map((point) => {
-          const turfPointFeature = turfPoint([point.lng, point.lat]);
-          const buffer = turfBuffer(turfPointFeature, radiusKm, {
-            units: "kilometers",
-            steps: 256,
-          });
-          return { point, buffer: buffer as Feature<Polygon | MultiPolygon> };
-        });
-
-        setBuffers(generated);
-
-        const pairPromises: Array<
-          Promise<{ label: string; metrics: BufferCoverageMetrics } | null>
-        > = [];
-        for (let i = 0; i < generated.length; i += 1) {
-          for (let j = i + 1; j < generated.length; j += 1) {
-            const pairLabel = `${generated[i].point.name} - ${generated[j].point.name}`;
-
-            pairPromises.push(
-              (async () => {
-                try {
-                  const metrics = await fetchBufferCoverage(
-                    generated[i].buffer,
-                    generated[j].buffer,
-                  );
-                  return { label: pairLabel, metrics };
-                } catch {
-                  try {
-                    const metrics = calculateBufferCoverage(
-                      generated[i].buffer,
-                      generated[j].buffer,
-                    );
-                    return { label: pairLabel, metrics };
-                  } catch (calcError) {
-                    console.error("Erro ao calcular cobertura localmente:", calcError);
-                    return null;
-                  }
-                }
-              })(),
-            );
-          }
-        }
-
-        const results = await Promise.all(pairPromises);
-        const filtered = results.filter(
-          (item): item is { label: string; metrics: BufferCoverageMetrics } => Boolean(item),
-        );
-
-        if (filtered.length === 0) {
-          setCoverageStatus("error");
-          setCoverageError("Não foi possível calcular a cobertura dos buffers.");
-          setCoverageList([]);
-          return;
-        }
-
-        setCoverageList(filtered);
-        setCoverageStatus("ok");
-      } catch (err) {
-        setCoverageStatus("error");
-        setCoverageError("Não foi possível calcular a cobertura dos buffers.");
-        console.error("Erro ao calcular cobertura de buffers:", err);
-      }
-    };
-
-    calculateCoverage();
-  }, [selectedPoints, radiusKm]);
-
-  // Polígonos → estações dentro
+  // Polígonos → estações dentro e sistema de revelação
   useEffect(() => {
     if (polygons.length === 0) {
       setPolygonSelections([]);
+      setRevealedStations([]);
       return;
     }
 
     const selections = getStationsByPolygon(polygons, points);
     setPolygonSelections(selections);
+
+    // Coletar todas as estações únicas dentro de todos os polígonos
+    const allRevealedPoints = new Map<string, MapPoint>();
+    selections.forEach((selection) => {
+      selection.points.forEach((point) => {
+        allRevealedPoints.set(point.id, point);
+      });
+    });
+
+    setRevealedStations(Array.from(allRevealedPoints.values()));
   }, [polygons, points]);
 
   // formatPercent e formatArea removidos - não utilizados
@@ -466,6 +358,7 @@ export default function InteractiveMap({
         ),
       );
 
+      // A remoção do polígono vai disparar o useEffect que recalcula revealedStations
       return prev.filter((_, i) => i !== index);
     });
   };
@@ -524,7 +417,7 @@ export default function InteractiveMap({
           />
 
           {/* Polígono em desenho (não-interativo, para permitir clique por cima) */}
-          {currentPolygonPoints.length > 900 && (
+          {currentPolygonPoints.length > 0 && (
             <GeoJSON
               data={
                 {
@@ -608,32 +501,19 @@ export default function InteractiveMap({
           <TileLayerFix />
           <MapCenter points={points} />
 
-          {/* Buffers (continuam desenhando, se em algum momento selectedPoints for usado) */}
-          {buffers.map(({ buffer }, index) => {
-            const colors = ["#2563eb", "#dc2626", "#16a34a", "#f59e0b", "#9333ea", "#0891b2"];
-            const color = colors[index % colors.length];
-            return (
-              <GeoJSON
-                key={index}
-                data={buffer}
-                style={{
-                  color,
-                  weight: 2,
-                  fillColor: color,
-                  fillOpacity: 0.15,
-                }}
-                interactive={false}
-              />
-            );
-          })}
-
-          {/* Marcadores de estações ainda aparecem, mas sem clique ligado a lógica alguma */}
-          <MarkerClusterGroup>
-            {points.map((point) => (
-              // MapMarker não recebe onClick aqui — clique em estação está "morto"
-              <MapMarker key={point.id} point={point} />
-            ))}
-          </MarkerClusterGroup>
+          {/* Marcadores de estações reveladas (apenas quando polígonos são desenhados) */}
+          {revealedStations.length > 0 && (
+            <MarkerClusterGroup>
+              {revealedStations.map((point) => (
+                <RevealedStationMarker
+                  key={point.id}
+                  point={point}
+                  isHighlighted={highlightedStationId === point.id}
+                  shouldOpenPopup={stationToOpenPopup === point.id}
+                />
+              ))}
+            </MarkerClusterGroup>
+          )}
         </MapContainer>
 
         {/* Painel de cobertura + polígonos (tickets + lista de estações) */}
@@ -644,13 +524,20 @@ export default function InteractiveMap({
             </h3>
 
             <p style={{ fontSize: 12, color: "#4b5563", marginBottom: 6 }}>
-              Desenhe polígonos diretamente no mapa para analisar áreas de cobertura e descobrir
-              quais estações estão dentro da área selecionada.
+              Desenhe polígonos diretamente no mapa para revelar as estações dentro da área
+              selecionada. As estações aparecerão como marcadores destacados no mapa e na lista
+              abaixo.
             </p>
 
+            {revealedStations.length > 0 && (
+              <p style={{ fontSize: 12, color: "#16a34a", fontWeight: 600, marginBottom: 6 }}>
+                ✨ {revealedStations.length} estação(ões) revelada(s)
+              </p>
+            )}
+
             <p style={{ fontSize: 12, color: "#ef4444" }}>
-              ⚠ Ao excluir um polígono, todos os pontos que pertenciam a ele também serão apagados
-              automaticamente. As linhas do poligono são interligadas na ordem dos cliques.
+              ⚠ Ao excluir um polígono, as estações reveladas por ele desaparecerão. As linhas do
+              polígono são interligadas na ordem dos cliques.
             </p>
           </div>
 
@@ -689,6 +576,7 @@ export default function InteractiveMap({
               setPolygons([]);
               setPolygonSelections([]);
               setClickPoints([]); // limpa marcações visuais também
+              setRevealedStations([]); // limpa estações reveladas
             }}
           />
           {polygons.length > 0 && (
@@ -697,6 +585,15 @@ export default function InteractiveMap({
               points={points}
               onDeletePolygon={handleDeletePolygon}
               showOnlyIntersections={showOnlyPolygonIntersections}
+              onStationClick={(station) => {
+                setHighlightedStationId(station.id);
+                setStationToOpenPopup(station.id);
+                // Remover destaque e popup após 3 segundos
+                setTimeout(() => {
+                  setHighlightedStationId(null);
+                  setStationToOpenPopup(null);
+                }, 3000);
+              }}
             />
           )}
         </CoveragePanel>
