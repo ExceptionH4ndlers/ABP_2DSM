@@ -363,6 +363,27 @@ GET /balcar/reservatorio/all
 
 Retornam dados com campos `lat` e `lng` para plotagem no mapa.
 
+### 📚 Documentação Swagger/OpenAPI
+
+A API possui documentação completa e interativa usando Swagger UI, disponível em:
+
+- **Interface Swagger UI**: `http://localhost:3000/api-docs`
+- **Especificação OpenAPI (JSON)**: `http://localhost:3000/api-docs.json`
+
+A documentação inclui:
+- Todos os endpoints da API (SIMA, Furnas, BALCAR)
+- Parâmetros de requisição e respostas
+- Schemas de dados e exemplos
+- Possibilidade de testar endpoints diretamente na interface
+- Documentação de erros e códigos de status
+
+#### Como usar a documentação Swagger
+
+1. Inicie o servidor: `cd server && npm run dev`
+2. Acesse `http://localhost:3000/api-docs` no navegador
+3. Explore os endpoints organizados por tags (SIMA, Furnas, BALCAR)
+4. Use o botão "Try it out" para testar os endpoints diretamente
+
 </details>
 
 <details>
