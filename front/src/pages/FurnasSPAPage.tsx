@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import styled, { css } from "styled-components";
 import FurnasSidebar from "../components/FurnasSidebar";
 
@@ -25,6 +25,8 @@ import { ExportCsvButton } from "../components/ExportCsvButton";
 import { CsvExportModalFurnas } from "../components/CsvExportModalFurnas";
 import { useMapData } from "../hooks/useMapData";
 import InteractiveMap from "../components/InteractiveMap";
+import { useFurnasApi } from "../hooks/useFurnasApi";
+import { DataTableFiltersFurnas } from "../components/DataTableFiltersFurnas";
 import SkeletonTable from "../components/skeletons/SkeletonTable";
 // CSV export via backend
 
@@ -537,155 +539,83 @@ function FurnasSPAPage() {
   const [filtersPanelOpen, setFiltersPanelOpen] = useState(false);
 
   const [filters, setFilters] = useState({
-    startDate: "2006-01-01", // será ajustado pelo MIN/MAX do banco
-    endDate: "2013-12-31",
-    limit: 10,
-    reservatorio: "",
-    sortOrder: "desc",
-  });
-  const [reservatorios, setReservatorios] = useState<string[]>([]);
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [rows, setRows] = useState<Array<Record<string, unknown>>>([]);
-  const [pagination, setPagination] = useState({
     page: 1,
-    limit: 10,
-    total: 0,
-    totalPages: 0,
+    limit: 20,
+    startDate: "2006-01-01", // Será ajustado pelo MIN/MAX do banco
+    endDate: "2013-12-31", // Será ajustado pelo MIN/MAX do banco
+    reservatorios: [] as string[],
+    instituicao: "",
+    nivelMin: "",
+    nivelMax: "",
+    volumeUtilMin: "",
+    volumeUtilMax: "",
+    geracaoMin: "",
+    geracaoMax: "",
+    sortBy: "",
+    sortOrder: "asc",
   });
+
+  const [reservatorios, setReservatorios] = useState<string[]>([]);
+  const [rows] = useState<Array<Record<string, unknown>>>([]); // Mantido para compatibilidade
+  // pagination removido - usando dados do hook useFurnasApi que já tem paginação
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 
-  const handleSearch = (page: number = 1) => {
-    setLoading(true);
-    setError(null);
-    // Monta SQL com filtros
-    const params: Array<string | number> = [filters.startDate, filters.endDate];
-    let sql =
-      "SELECT idDadosRepresa, dataMedida, nivelReservatorio, volUtilReservatorio, porVolUtilReservatorio, geracao, vazaoAfluente, vazaoDefluente FROM tbdadosrepresa WHERE dataMedida BETWEEN $1 AND $2";
-    // filtro por reservatório via join, se selecionado
-    if (filters.reservatorio) {
-      params.push(filters.reservatorio);
-      sql =
-        "SELECT d.idDadosRepresa, d.dataMedida, d.nivelReservatorio, d.volUtilReservatorio, d.porVolUtilReservatorio, d.geracao, d.vazaoAfluente, d.vazaoDefluente FROM tbdadosrepresa d INNER JOIN tbreservatorio r ON d.idReservatorio = r.idReservatorio WHERE d.dataMedida BETWEEN $1 AND $2 AND r.nome = $3";
-    }
-    sql += ` ORDER BY ${filters.reservatorio ? "d.dataMedida" : "dataMedida"} ${filters.sortOrder === "asc" ? "ASC" : "DESC"}`;
+  const queryParams = useMemo(() => {
+    return {
+      ...filters,
+      nivelMin: filters.nivelMin ? Number(filters.nivelMin) : undefined,
+      nivelMax: filters.nivelMax ? Number(filters.nivelMax) : undefined,
+      volumeUtilMin: filters.volumeUtilMin ? Number(filters.volumeUtilMin) : undefined,
+      volumeUtilMax: filters.volumeUtilMax ? Number(filters.volumeUtilMax) : undefined,
+      geracaoMin: filters.geracaoMin ? Number(filters.geracaoMin) : undefined,
+      geracaoMax: filters.geracaoMax ? Number(filters.geracaoMax) : undefined,
+    };
+  }, [filters]);
 
-    // Primeiro, contar o total de registros (remover ORDER BY e substituir o SELECT)
-    const countSql = sql
-      .replace(/\s+ORDER BY[\s\S]*$/i, "")
-      .replace(/^SELECT[\s\S]*?FROM/i, "SELECT COUNT(*) as count FROM");
-    fetch(`${API_BASE_URL}/furnas/query/select`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sql: countSql, params }),
-    })
-      .then(async (r) => {
-        if (!r.ok) throw new Error("Falha ao contar registros");
-        const countJson = await r.json();
-        const total =
-          Array.isArray(countJson) && countJson.length > 0 ? parseInt(countJson[0].count) : 0;
+  const {
+    data: furnasData,
+    total,
+    totalPages,
+    loading: furnasLoading,
+    error: furnasError,
+  } = useFurnasApi(queryParams);
 
-        // Agora buscar os dados paginados
-        const offset = (page - 1) * filters.limit;
-        const paginatedParams = [...params, filters.limit, offset];
-        const paginatedSql =
-          sql + ` LIMIT $${paginatedParams.length - 1} OFFSET $${paginatedParams.length}`;
+  const handlePageChange = (page: number) => setFilters((f) => ({ ...f, page }));
 
-        const dataRes = await fetch(`${API_BASE_URL}/furnas/query/select`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ sql: paginatedSql, params: paginatedParams }),
-        });
+  const handleApplyFilters = () => setFilters((f) => ({ ...f, page: 1 }));
 
-        if (!dataRes.ok) throw new Error("Falha ao buscar dados");
-        const json = await dataRes.json();
-        setRows(Array.isArray(json) ? json : []);
+  const reservatoriosOptions = reservatorios.map((nome) => ({ label: nome, value: nome }));
 
-        // Atualizar paginação
-        const totalPages = Math.ceil(total / filters.limit);
-        setPagination({
-          page,
-          limit: filters.limit,
-          total,
-          totalPages,
-        });
-      })
-      .catch((e) => setError(e instanceof Error ? e.message : "Erro desconhecido"))
-      .finally(() => setLoading(false));
-  };
+  const instituicoesOptions = [
+    { label: "IIE", value: "iie" },
+    { label: "INPE", value: "inpe" },
+  ];
 
-  // Função para buscar datas específicas de um reservatório
-  const updateDatesForReservatorio = async (reservatorio: string) => {
-    // Atualizar o reservatório primeiro
-    setFilters((prev) => ({
-      ...prev,
-      reservatorio: reservatorio,
-    }));
+  // handleSearch removido - usando useFurnasApi hook agora
+  // Os dados vêm de furnasData do hook useFurnasApi
 
-    // Se for "todos os reservatórios", usar as datas gerais
-    if (!reservatorio) {
-      setFilters((prev) => ({
-        ...prev,
-        startDate: "2003-01-01", // Data mais antiga geral
-        endDate: "2011-12-31", // Data mais recente geral
-        reservatorio: reservatorio,
-      }));
-      return;
-    }
+  // Função removida - datas são gerenciadas pelo useEffect que busca MIN/MAX do banco
 
-    try {
-      // Buscar dados do reservatório específico para obter as datas
-      const params: Array<string | number> = [reservatorio];
-      const sql =
-        "SELECT d.dataMedida FROM tbdadosrepresa d INNER JOIN tbreservatorio r ON d.idReservatorio = r.idReservatorio WHERE r.nome = $1 ORDER BY d.dataMedida";
-
-      const response = await fetch(`${API_BASE_URL}/furnas/query/select`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ sql, params }),
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-
-        if (Array.isArray(result) && result.length > 0) {
-          // Encontrar a data mais antiga e mais recente
-          const dates = result
-            .map((item: { datamedida: string }) => new Date(item.datamedida))
-            .filter((date: Date) => !isNaN(date.getTime())); // Filtrar apenas datas válidas
-
-          if (dates.length > 0) {
-            const minDate = new Date(Math.min(...dates.map((d: Date) => d.getTime())));
-            const maxDate = new Date(Math.max(...dates.map((d: Date) => d.getTime())));
-
-            // Atualizar os filtros com as novas datas
-            setFilters((prev) => ({
-              ...prev,
-              startDate: minDate.toISOString().split("T")[0],
-              endDate: maxDate.toISOString().split("T")[0],
-            }));
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Erro ao buscar datas do reservatório:", error);
-    }
-  };
-
-  const handlePageChange = (newPage: number) => {
-    handleSearch(newPage);
-  };
+  // handlePageChange já está definido acima usando setFilters
 
   const handleClearFilters = () => {
     setFilters({
-      startDate: "2006-01-01",
-      endDate: "2013-12-31",
-      limit: 10,
-      reservatorio: "",
-      sortOrder: "desc",
+      page: 1,
+      limit: 20,
+      startDate: "2006-01-01", // Será ajustado pelo MIN/MAX do banco
+      endDate: "2013-12-31", // Será ajustado pelo MIN/MAX do banco
+      reservatorios: [],
+      instituicao: "",
+      nivelMin: "",
+      nivelMax: "",
+      volumeUtilMin: "",
+      volumeUtilMax: "",
+      geracaoMin: "",
+      geracaoMax: "",
+      sortBy: "",
+      sortOrder: "asc",
     });
-    setRows([]);
+    // rows removido - usando furnasData do hook
   };
 
   // export via modal; função direta removida
@@ -984,20 +914,7 @@ function FurnasSPAPage() {
                   />
                 </DateRangeContainer>
               </DateRangeGroup>
-              <ControlGroup>
-                <ControlLabel>Reservatório</ControlLabel>
-                <ControlSelect
-                  value={filters.reservatorio}
-                  onChange={(e) => updateDatesForReservatorio(e.target.value)}
-                >
-                  <option value="">Todos os reservatórios</option>
-                  {reservatorios.map((nome) => (
-                    <option key={nome} value={nome}>
-                      {nome}
-                    </option>
-                  ))}
-                </ControlSelect>
-              </ControlGroup>
+              {/* Reservatórios agora são múltiplos e gerenciados pelo DataTableFiltersFurnas */}
               <ControlGroup>
                 <ControlLabel>Registros por página</ControlLabel>
                 <ControlSelect
@@ -1022,31 +939,41 @@ function FurnasSPAPage() {
               </ControlGroup>
             </ControlsGrid>
 
+            <ControlsGrid>
+              <DataTableFiltersFurnas
+                filters={filters}
+                setFilters={setFilters}
+                reservatoriosOptions={reservatoriosOptions}
+                instituicoesOptions={instituicoesOptions}
+                onApply={handleApplyFilters}
+              />
+            </ControlsGrid>
+
             <ActionButtons>
-              <SearchButton onClick={() => handleSearch(1)} disabled={loading}>
+              <SearchButton onClick={handleApplyFilters} disabled={furnasLoading}>
                 <Search size={20} />
-                {loading ? "Buscando..." : "Buscar Dados"}
+                {furnasLoading ? "Buscando..." : "Buscar Dados"}
               </SearchButton>
               <ClearButton onClick={handleClearFilters}>
                 <Filter size={20} />
                 Limpar Filtros
               </ClearButton>
               <ExportCsvButton
-                data={rows as unknown[]}
+                data={(furnasData || rows) as unknown[]}
                 filename="dados_furnas.csv"
                 onClick={() => setIsCsvModalOpen(true)}
-                disabled={loading}
+                disabled={furnasLoading}
               />
             </ActionButtons>
           </ControlsSection>
 
-          {error && (
+          {furnasError && (
             <ErrorContainer>
-              <strong>Erro ao carregar dados:</strong> {error}
+              <strong>Erro ao carregar dados:</strong> {furnasError}
             </ErrorContainer>
           )}
 
-          {loading ? (
+          {furnasLoading ? (
             <SkeletonTable rows={10} columns={8} />
           ) : (
             <TableContainer>
@@ -1080,7 +1007,7 @@ function FurnasSPAPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.length === 0 ? (
+                  {furnasData?.length === 0 || !furnasData ? (
                     <tr>
                       <td
                         colSpan={8}
@@ -1091,7 +1018,7 @@ function FurnasSPAPage() {
                       </td>
                     </tr>
                   ) : (
-                    rows.map((r: Record<string, unknown>) => (
+                    (furnasData || []).map((r: Record<string, unknown>) => (
                       <tr key={String(r.iddadosrepresa)}>
                         <td>{String(r.iddadosrepresa ?? "-")}</td>
                         <td>
@@ -1113,23 +1040,23 @@ function FurnasSPAPage() {
             </TableContainer>
           )}
 
-          {rows.length > 0 && (
+          {furnasData && furnasData.length > 0 && (
             <PaginationContainer>
               <PaginationButton
-                onClick={() => handlePageChange(pagination.page - 1)}
-                disabled={pagination.page <= 1}
+                onClick={() => handlePageChange(filters.page - 1)}
+                disabled={filters.page <= 1}
               >
                 <ChevronLeft size={16} />
                 Anterior
               </PaginationButton>
 
               <PaginationInfo>
-                Página {pagination.page} de {pagination.totalPages} ({pagination.total} registros)
+                Página {filters.page} de {totalPages} ({total} registros)
               </PaginationInfo>
 
               <PaginationButton
-                onClick={() => handlePageChange(pagination.page + 1)}
-                disabled={pagination.page >= pagination.totalPages}
+                onClick={() => handlePageChange(filters.page + 1)}
+                disabled={filters.page >= totalPages}
               >
                 Próxima
                 <ChevronRight size={16} />
@@ -1137,7 +1064,7 @@ function FurnasSPAPage() {
             </PaginationContainer>
           )}
 
-          {rows.length === 0 && !loading && !error && (
+          {(!furnasData || furnasData.length === 0) && !furnasLoading && !furnasError && (
             <div style={{ textAlign: "center", padding: "2rem", color: "#64748b" }}>
               Nenhum dado encontrado para o período selecionado.
             </div>
@@ -1151,8 +1078,8 @@ function FurnasSPAPage() {
         startDate={filters.startDate}
         endDate={filters.endDate}
         reservatorios={reservatorios}
-        reservatorioSelecionado={filters.reservatorio}
-        data={rows}
+        reservatorioSelecionado={filters.reservatorios[0] || ""}
+        data={furnasData || rows}
       />
     </FurnasSPAContainer>
   );

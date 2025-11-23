@@ -65,22 +65,26 @@ jobs:
             ./server/package-lock.json
             ./front/package-lock.json
 
-      # 3. Instalar dependências
+      # 3. Instalar dependências (resolve bug npm com dependências opcionais)
       - name: Install dependencies
-        run: npm install
+        run: |
+          # Limpar cache para evitar problemas com dependências opcionais
+          npm cache clean --force || true
+          # Instalar dependências (npm install instala opcionais automaticamente no Linux)
+          npm install
         working-directory: ./front
 
-      # 4. Checar formatação (Prettier)
+      # 5. Checar formatação (Prettier)
       - name: Run Prettier check
         run: npm run format:check
         working-directory: ./front
 
-      # 5. Lint (ESLint)
+      # 6. Lint (ESLint)
       - name: Run ESLint
         run: npm run lint
         working-directory: ./front
 
-      # 6. Build (Vite + TypeScript)
+      # 7. Build (Vite + TypeScript)
       - name: Run Build
         run: npm run build
         working-directory: ./front

@@ -1,0 +1,162 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState, useMemo } from "react";
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+
+export interface FurnasQueryParams {
+  page?: number;
+  limit?: number;
+
+  // FILTROS BÁSICOS
+  startDate: string;
+  endDate: string;
+
+  // FILTROS AVANÇADOS US15
+  reservatorios?: string[]; // múltiplos reservatórios
+  instituicao?: string;
+  nivelMin?: number;
+  nivelMax?: number;
+  volumeUtilMin?: number;
+  volumeUtilMax?: number;
+  geracaoMin?: number;
+  geracaoMax?: number;
+
+  // Ordenação multi-coluna
+  sortBy?: string; // Ex: "data,nivel,volume_util"
+  sortOrder?: string; // asc | desc
+}
+
+export function useFurnasApi(params: FurnasQueryParams) {
+  const [data, setData] = useState<any[]>([]);
+  const [total, setTotal] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Criar uma chave de dependência estável
+  const paramsKey = useMemo(
+    () =>
+      JSON.stringify({
+        page: params.page,
+        limit: params.limit,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        reservatorios: params.reservatorios,
+        instituicao: params.instituicao,
+        nivelMin: params.nivelMin,
+        nivelMax: params.nivelMax,
+        volumeUtilMin: params.volumeUtilMin,
+        volumeUtilMax: params.volumeUtilMax,
+        geracaoMin: params.geracaoMin,
+        geracaoMax: params.geracaoMax,
+        sortBy: params.sortBy,
+        sortOrder: params.sortOrder,
+      }),
+    [
+      params.page,
+      params.limit,
+      params.startDate,
+      params.endDate,
+      params.reservatorios,
+      params.instituicao,
+      params.nivelMin,
+      params.nivelMax,
+      params.volumeUtilMin,
+      params.volumeUtilMax,
+      params.geracaoMin,
+      params.geracaoMax,
+      params.sortBy,
+      params.sortOrder,
+    ],
+  );
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const queryParams = new URLSearchParams();
+
+        // PAGINAÇÃO
+        if (params.page) queryParams.append("page", params.page.toString());
+        if (params.limit) queryParams.append("limit", params.limit.toString());
+
+        // INTERVALO DE DATAS
+        queryParams.append("startDate", params.startDate);
+        queryParams.append("endDate", params.endDate);
+
+        // MÚLTIPLOS RESERVATÓRIOS
+        if (params.reservatorios?.length) {
+          params.reservatorios.forEach((r) => {
+            queryParams.append("reservatorios", r);
+          });
+        }
+
+        // INSTITUIÇÃO
+        if (params.instituicao) {
+          queryParams.append("instituicao", params.instituicao);
+        }
+
+        // RANGE — NÍVEL
+        if (params.nivelMin !== undefined) {
+          queryParams.append("nivelMin", params.nivelMin.toString());
+        }
+        if (params.nivelMax !== undefined) {
+          queryParams.append("nivelMax", params.nivelMax.toString());
+        }
+
+        // RANGE — VOLUME ÚTIL
+        if (params.volumeUtilMin !== undefined) {
+          queryParams.append("volumeUtilMin", params.volumeUtilMin.toString());
+        }
+        if (params.volumeUtilMax !== undefined) {
+          queryParams.append("volumeUtilMax", params.volumeUtilMax.toString());
+        }
+
+        // RANGE — GERAÇÃO
+        if (params.geracaoMin !== undefined) {
+          queryParams.append("geracaoMin", params.geracaoMin.toString());
+        }
+        if (params.geracaoMax !== undefined) {
+          queryParams.append("geracaoMax", params.geracaoMax.toString());
+        }
+
+        // ORDENAÇÃO MULTI-COLUNA
+        if (params.sortBy) {
+          queryParams.append("sortBy", params.sortBy);
+        }
+        if (params.sortOrder) {
+          queryParams.append("sortOrder", params.sortOrder);
+        }
+
+        const res = await fetch(`${API_BASE_URL}/furnas?${queryParams.toString()}`);
+
+        if (!res.ok) {
+          throw new Error("Erro ao carregar dados de Furnas.");
+        }
+
+        const json = await res.json();
+
+        setData(json.data || []);
+        setTotal(json.total || 0);
+        setTotalPages(json.totalPages || 1);
+      } catch (err: any) {
+        setError(err.message || "Erro inesperado ao obter dados.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [paramsKey]);
+
+  return {
+    data,
+    total,
+    totalPages,
+    loading,
+    error,
+  };
+}
