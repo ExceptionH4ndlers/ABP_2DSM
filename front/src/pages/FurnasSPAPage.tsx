@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import FurnasSidebar from "../components/FurnasSidebar";
 
@@ -26,7 +26,6 @@ import { CsvExportModalFurnas } from "../components/CsvExportModalFurnas";
 import { useMapData } from "../hooks/useMapData";
 import InteractiveMap from "../components/InteractiveMap";
 import { useFurnasApi } from "../hooks/useFurnasApi";
-import { DataTableFiltersFurnas } from "../components/DataTableFiltersFurnas";
 import SkeletonTable from "../components/skeletons/SkeletonTable";
 // CSV export via backend
 
@@ -336,25 +335,24 @@ const TableContainer = styled.div`
 
 const ParticipantsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
-  justify-items: stretch;
-  align-items: stretch;
   width: 100%;
-  max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+
+  ${({ theme }) => theme.media.sm} {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  ${({ theme }) => theme.media.md} {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
 
   ${({ theme }) => theme.media.lg} {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 2rem;
-
-    & > :nth-child(1) {
-      grid-column: 2 / span 2;
-      max-width: 340px;
-      justify-self: center;
-    }
   }
 `;
 
@@ -369,7 +367,8 @@ const ParticipantCard = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
+  min-height: 220px;
+  width: 100%;
 
   &:hover {
     transform: translateY(-4px);
@@ -379,8 +378,10 @@ const ParticipantCard = styled.div`
 `;
 
 const ParticipantLogo = styled.img`
-  max-width: 160px;
+  max-width: 100%;
   max-height: 100px;
+  width: auto;
+  height: auto;
   object-fit: contain;
   margin-bottom: 1rem;
   filter: grayscale(0.1) contrast(1.1) brightness(1.05);
@@ -560,9 +561,22 @@ function FurnasSPAPage() {
   // pagination removido - usando dados do hook useFurnasApi que já tem paginação
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
 
-  const queryParams = useMemo(() => {
-    return {
+  const {
+    data: furnasData,
+    total,
+    totalPages,
+    loading: furnasLoading,
+    error: furnasError,
+    fetchData,
+  } = useFurnasApi();
+
+  const handlePageChange = (page: number) => {
+    setFilters((f) => ({ ...f, page }));
+    // Buscar dados quando mudar de página
+    const queryParams = {
       ...filters,
+      page,
+      reservatorios: filters.reservatorios.length > 0 ? filters.reservatorios : undefined,
       nivelMin: filters.nivelMin ? Number(filters.nivelMin) : undefined,
       nivelMax: filters.nivelMax ? Number(filters.nivelMax) : undefined,
       volumeUtilMin: filters.volumeUtilMin ? Number(filters.volumeUtilMin) : undefined,
@@ -570,26 +584,25 @@ function FurnasSPAPage() {
       geracaoMin: filters.geracaoMin ? Number(filters.geracaoMin) : undefined,
       geracaoMax: filters.geracaoMax ? Number(filters.geracaoMax) : undefined,
     };
-  }, [filters]);
+    fetchData(queryParams);
+  };
 
-  const {
-    data: furnasData,
-    total,
-    totalPages,
-    loading: furnasLoading,
-    error: furnasError,
-  } = useFurnasApi(queryParams);
-
-  const handlePageChange = (page: number) => setFilters((f) => ({ ...f, page }));
-
-  const handleApplyFilters = () => setFilters((f) => ({ ...f, page: 1 }));
-
-  const reservatoriosOptions = reservatorios.map((nome) => ({ label: nome, value: nome }));
-
-  const instituicoesOptions = [
-    { label: "IIE", value: "iie" },
-    { label: "INPE", value: "inpe" },
-  ];
+  const handleApplyFilters = () => {
+    setFilters((f) => ({ ...f, page: 1 }));
+    // Buscar dados quando aplicar filtros
+    const queryParams = {
+      ...filters,
+      page: 1,
+      reservatorios: filters.reservatorios.length > 0 ? filters.reservatorios : undefined,
+      nivelMin: filters.nivelMin ? Number(filters.nivelMin) : undefined,
+      nivelMax: filters.nivelMax ? Number(filters.nivelMax) : undefined,
+      volumeUtilMin: filters.volumeUtilMin ? Number(filters.volumeUtilMin) : undefined,
+      volumeUtilMax: filters.volumeUtilMax ? Number(filters.volumeUtilMax) : undefined,
+      geracaoMin: filters.geracaoMin ? Number(filters.geracaoMin) : undefined,
+      geracaoMax: filters.geracaoMax ? Number(filters.geracaoMax) : undefined,
+    };
+    fetchData(queryParams);
+  };
 
   // handleSearch removido - usando useFurnasApi hook agora
   // Os dados vêm de furnasData do hook useFurnasApi
@@ -793,7 +806,6 @@ function FurnasSPAPage() {
           <SectionSubtitle>Instituições parceiras no projeto Balanço de Carbono</SectionSubtitle>
 
           <ParticipantsGrid>
-            {/* INPE no topo centralizado */}
             <ParticipantCard>
               <ParticipantLink
                 href="https://www.gov.br/inpe/pt-br"
@@ -808,7 +820,6 @@ function FurnasSPAPage() {
               <ParticipantName>Instituto Nacional de Pesquisas Espaciais</ParticipantName>
             </ParticipantCard>
 
-            {/* Base - 4 participantes */}
             <ParticipantCard>
               <ParticipantLink
                 href="https://www.furnas.com.br/"
@@ -914,7 +925,25 @@ function FurnasSPAPage() {
                   />
                 </DateRangeContainer>
               </DateRangeGroup>
-              {/* Reservatórios agora são múltiplos e gerenciados pelo DataTableFiltersFurnas */}
+              <ControlGroup>
+                <ControlLabel>Reservatório</ControlLabel>
+                <ControlSelect
+                  value={filters.reservatorios[0] || ""}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      reservatorios: e.target.value ? [e.target.value] : [],
+                    }))
+                  }
+                >
+                  <option value="">Todos os reservatórios</option>
+                  {reservatorios.map((nome) => (
+                    <option key={nome} value={nome}>
+                      {nome}
+                    </option>
+                  ))}
+                </ControlSelect>
+              </ControlGroup>
               <ControlGroup>
                 <ControlLabel>Registros por página</ControlLabel>
                 <ControlSelect
@@ -937,16 +966,6 @@ function FurnasSPAPage() {
                   <option value="asc">Mais antigo → Mais recente</option>
                 </ControlSelect>
               </ControlGroup>
-            </ControlsGrid>
-
-            <ControlsGrid>
-              <DataTableFiltersFurnas
-                filters={filters}
-                setFilters={setFilters}
-                reservatoriosOptions={reservatoriosOptions}
-                instituicoesOptions={instituicoesOptions}
-                onApply={handleApplyFilters}
-              />
             </ControlsGrid>
 
             <ActionButtons>
@@ -1018,22 +1037,39 @@ function FurnasSPAPage() {
                       </td>
                     </tr>
                   ) : (
-                    (furnasData || []).map((r: Record<string, unknown>) => (
-                      <tr key={String(r.iddadosrepresa)}>
-                        <td>{String(r.iddadosrepresa ?? "-")}</td>
-                        <td>
-                          {r.datamedida
-                            ? new Date(String(r.datamedida)).toLocaleDateString("pt-BR")
-                            : "-"}
-                        </td>
-                        <td>{String(r.nivelreservatorio ?? "-")}</td>
-                        <td>{String(r.volutilreservatorio ?? "-")}</td>
-                        <td>{String(r.porvolutilreservatorio ?? "-")}</td>
-                        <td>{String(r.geracao ?? "-")}</td>
-                        <td>{String(r.vazaoafluente ?? "-")}</td>
-                        <td>{String(r.vazaodefluente ?? "-")}</td>
-                      </tr>
-                    ))
+                    (furnasData || []).map((r: Record<string, unknown>) => {
+                      const formatValue = (value: unknown): string => {
+                        if (value === null || value === undefined || value === "") return "-";
+                        if (typeof value === "number") {
+                          return value.toLocaleString("pt-BR", { maximumFractionDigits: 2 });
+                        }
+                        return String(value);
+                      };
+
+                      const formatDate = (value: unknown): string => {
+                        if (!value) return "-";
+                        try {
+                          const date = new Date(String(value));
+                          if (isNaN(date.getTime())) return "-";
+                          return date.toLocaleDateString("pt-BR");
+                        } catch {
+                          return "-";
+                        }
+                      };
+
+                      return (
+                        <tr key={String(r.iddadosrepresa ?? Math.random())}>
+                          <td>{formatValue(r.iddadosrepresa)}</td>
+                          <td>{formatDate(r.datamedida)}</td>
+                          <td>{formatValue(r.nivelreservatorio)}</td>
+                          <td>{formatValue(r.volutilreservatorio)}</td>
+                          <td>{formatValue(r.porvolutilreservatorio)}</td>
+                          <td>{formatValue(r.geracao)}</td>
+                          <td>{formatValue(r.vazaoafluente)}</td>
+                          <td>{formatValue(r.vazaodefluente)}</td>
+                        </tr>
+                      );
+                    })
                   )}
                 </tbody>
               </StyledTable>

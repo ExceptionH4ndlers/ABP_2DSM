@@ -15,8 +15,12 @@ import bioticosuperficie from "./bioticosuperficie.routes";
 import abioticosuperficie from "./abioticosuperficie.routes";
 import dupladessorcaoagua from "./dupladessorcaoagua.routes";
 import dadostimeseries from "./dadostimeseries.routes";
+import { getFurnasData } from "../../controllers/furnas/furnas.controller";
 
 const router = express.Router();
+
+// Rota principal GET /furnas com filtros avançados
+router.get("/", getFurnasData);
 
 router.use("/abioticocoluna", abioticocoluna);
 router.use("/campanha", campanha);
