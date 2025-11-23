@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { buffer as turfBuffer, point as turfPoint } from "@turf/turf";
+import type { BufferCoverageMetrics } from "../utils/bufferIntersections";
+import { fetchBufferCoverage } from "../api/bufferApi";
 
 interface EstacaoSima {
   idestacao: string;
@@ -63,6 +66,35 @@ export function useMapData(
   const [mapPoints, setMapPoints] = useState<MapPoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const calculateBufferCoverage = useCallback(
+    async ({
+      pointA,
+      pointB,
+      radiusKm,
+    }: {
+      pointA: MapPoint;
+      pointB: MapPoint;
+      radiusKm: number;
+    }): Promise<BufferCoverageMetrics> => {
+      const turfPointA = turfPoint([pointA.lng, pointA.lat]);
+      const turfPointB = turfPoint([pointB.lng, pointB.lat]);
+
+      const buildBuffer = (feature: ReturnType<typeof turfPoint>) => {
+        const result = turfBuffer(feature, radiusKm, { units: "kilometers" });
+        if (result && "features" in result && Array.isArray(result.features)) {
+          return result.features[0];
+        }
+        return result;
+      };
+
+      const bufferA = buildBuffer(turfPointA);
+      const bufferB = buildBuffer(turfPointB);
+
+      return fetchBufferCoverage(bufferA, bufferB);
+    },
+    [],
+  );
 
   useEffect(() => {
     const fetchMapData = async () => {
@@ -213,6 +245,7 @@ export function useMapData(
     mapPoints,
     loading,
     error,
+    calculateBufferCoverage,
     refetch: () => {
       setLoading(true);
       // Trigger re-fetch by updating a dependency
