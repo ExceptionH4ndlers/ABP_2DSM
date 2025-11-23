@@ -25,6 +25,8 @@ import { ExportCsvButton } from "../components/ExportCsvButton";
 import { CsvExportModalFurnas } from "../components/CsvExportModalFurnas";
 import { useMapData } from "../hooks/useMapData";
 import InteractiveMap from "../components/InteractiveMap";
+import { useFurnasApi } from "../hooks/useFurnasApi";
+import { DataTableFiltersFurnas } from "../components/DataTableFiltersFurnas";
 import SkeletonTable from "../components/skeletons/SkeletonTable";
 // CSV export via backend
 
@@ -543,6 +545,7 @@ function FurnasSPAPage() {
     reservatorio: "",
     sortOrder: "desc",
   });
+
   const [reservatorios, setReservatorios] = useState<string[]>([]);
 
   const [loading, setLoading] = useState(false);
@@ -554,7 +557,57 @@ function FurnasSPAPage() {
     total: 0,
     totalPages: 0,
   });
+
   const [isCsvModalOpen, setIsCsvModalOpen] = useState(false);
+
+   const [filters, setFilters] = useState({
+    page: 1,
+    limit: 20,
+
+    startDate: "2024-01-01",
+    endDate: "2024-12-31",
+
+    reservatorios: [],
+    instituicao: "",
+    nivelMin: "",
+    nivelMax: "",
+    volumeUtilMin: "",
+    volumeUtilMax: "",
+    geracaoMin: "",
+    geracaoMax: "",
+    sortBy: "",
+    sortOrder: "asc",
+  });
+
+   const queryParams = useMemo(() => {
+    return {
+      ...filters,
+      nivelMin: filters.nivelMin ? Number(filters.nivelMin) : undefined,
+      nivelMax: filters.nivelMax ? Number(filters.nivelMax) : undefined,
+      volumeUtilMin: filters.volumeUtilMin ? Number(filters.volumeUtilMin) : undefined,
+      volumeUtilMax: filters.volumeUtilMax ? Number(filters.volumeUtilMax) : undefined,
+      geracaoMin: filters.geracaoMin ? Number(filters.geracaoMin) : undefined,
+      geracaoMax: filters.geracaoMax ? Number(filters.geracaoMax) : undefined,
+    };
+  }, [filters]);
+
+  const { data, total, totalPages, loading, error } = useFurnasApi(queryParams);
+
+  const handlePageChange = (page: number) =>
+    setFilters((f) => ({ ...f, page }));
+
+  const handleApplyFilters = () =>
+    setFilters((f) => ({ ...f, page: 1 }));
+
+   const reservatoriosOptions = [
+    { label: "Jirau", value: "jirau" },
+    { label: "Mascarenhas de Moraes", value: "masc" },
+  ];
+
+  const instituicoesOptions = [
+    { label: "IIE", value: "iie" },
+    { label: "INPE", value: "inpe" },
+  ];
 
   const handleSearch = (page: number = 1) => {
     setLoading(true);
@@ -1020,6 +1073,19 @@ function FurnasSPAPage() {
                   <option value="asc">Mais antigo → Mais recente</option>
                 </ControlSelect>
               </ControlGroup>
+            </ControlsGrid>
+
+            <ControlsGrid>
+               <DataTableFilters
+                filters={filters}
+                setFilters={setFilters}
+                parametrosOptions={parametrosOptions}
+                // 💡 Passando os Styled Components para o DataTableFilters usar
+                ControlGroup={ControlGroup}
+                ControlLabel={ControlLabel}
+                ControlSelect={ControlSelect}
+                DateRangeInput={DateRangeInput} // DateRangeInput tem o estilo de input padrão
+              />
             </ControlsGrid>
 
             <ActionButtons>
