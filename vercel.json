@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd front && npm cache clean --force && npm install && npm install @rollup/rollup-linux-x64-gnu --save-optional --no-save && npm run build",
+  "outputDirectory": "front/dist",
+  "installCommand": "cd front && npm cache clean --force && npm install && npm install @rollup/rollup-linux-x64-gnu --save-optional --no-save"
+}
+
