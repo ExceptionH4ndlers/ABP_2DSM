@@ -631,7 +631,11 @@ Sistema de visualização geográfica que permite consultar a localização das 
 - **Filtros Avançados**:
   - Toggle por tipo (SIMA/Furnas/BALCAR)
   - Filtro por período (estações SIMA)
-  - Filtro por região (planejado)
+- **Desenho de Polígonos**: 
+  - Desenhe polígonos no mapa clicando em pontos
+  - Identifique estações dentro da área delimitada
+  - Múltiplos polígonos simultâneos
+  - Visualização destacada das estações selecionadas
 
 ### 🛠️ Tecnologias
 
@@ -660,12 +664,20 @@ Sistema de visualização geográfica que permite consultar a localização das 
    - Defina período para estações SIMA
    - Clique "Aplicar Filtros"
 
-3. **Markers e Clusters**:
+3. **Desenho de Polígonos**:
+   - Clique no botão "Desenhar Polígono" para iniciar o modo de desenho
+   - Clique em pontos no mapa para adicionar vértices do polígono
+   - Clique em "Fechar Polígono" para finalizar a área
+   - As estações dentro do polígono serão destacadas automaticamente
+   - Use "Limpar Tudo" para remover todos os polígonos desenhados
+
+4. **Markers e Clusters**:
    - Círculos com números = clusters (agrupamento)
    - Clique no cluster para expandir
    - Clique no marker individual para ver detalhes
+   - Estações dentro de polígonos são destacadas visualmente
 
-4. **Popups**:
+5. **Popups**:
    - Nome da estação/reservatório
    - Coordenadas geográficas
    - Período de monitoramento (SIMA)
@@ -753,6 +765,117 @@ O mapa interativo foi submetido a testes de usabilidade para validar funcionalid
 </details>
 
 <details>
+<summary><b>📊 Gráficos de Séries Temporais com Recharts</b></summary>
+
+Sistema de visualização de dados que permite consultar e analisar séries temporais dos parâmetros limnológicos coletados pelo SIMA através de gráficos interativos.
+
+### 🎯 Funcionalidades
+
+- **Gráficos de Linha (Séries Temporais)**: Visualização da evolução temporal de múltiplos parâmetros simultaneamente
+- **Gráficos de Dispersão (Scatter)**: Análise de correlação entre dois parâmetros diferentes
+- **Filtros Avançados**: 
+  - Seleção de estação específica
+  - Seleção de múltiplos parâmetros simultaneamente
+  - Filtro por período (data inicial e final)
+  - Agrupamento por categoria de parâmetros
+- **Seleção de Período Interativa**: 
+  - Seletores de data inicial e final
+  - Informações sobre o range de dados disponível
+  - Filtragem dinâmica dos dados exibidos
+- **Exportação de Dados**: Exportação dos dados do gráfico em formato CSV
+
+### 🛠️ Tecnologias
+
+- **Recharts**: Biblioteca de gráficos para React
+- **React Hooks**: `useSimaChartData` para processamento de dados
+- **TypeScript**: Tipagem completa dos dados e componentes
+
+### 📍 Onde Encontrar
+
+1. **Página Inicial**: Seção "Gráficos Temporais"
+2. **SIMA SPA**: Aba "Gráficos" com acesso completo aos gráficos interativos
+
+### 🎮 Como Usar
+
+1. **Seleção de Filtros**:
+   - Escolha uma estação do SIMA
+   - Selecione os parâmetros que deseja visualizar
+   - Defina o período de análise (opcional)
+   - Escolha o tipo de gráfico (linha ou dispersão)
+
+2. **Gráficos de Linha**:
+   - Visualize múltiplos parâmetros em um único gráfico
+   - Cada parâmetro é representado por uma linha colorida
+   - Use os seletores de data para filtrar o período exibido
+   - Passe o mouse sobre os pontos para ver valores detalhados
+
+3. **Gráficos de Dispersão**:
+   - Selecione um parâmetro para o eixo X
+   - Selecione um parâmetro para o eixo Y
+   - Analise correlações e padrões entre os parâmetros
+   - Cada ponto representa uma medição no tempo
+
+4. **Exportação**:
+   - Clique em "Exportar Dados (CSV)" para baixar os dados do gráfico
+   - O arquivo inclui todos os dados filtrados e exibidos
+
+### ⚙️ Dados Processados
+
+**Gráficos de Linha**:
+- Dados agrupados por data/hora
+- Múltiplos parâmetros exibidos simultaneamente
+- Valores médios quando há múltiplas medições no mesmo período
+- Suporte a até 200.000 registros por estação
+
+**Gráficos de Dispersão**:
+- Cada ponto representa uma medição individual
+- Coordenadas X e Y baseadas nos parâmetros selecionados
+- Informações de data/hora e estação no tooltip
+
+### 🎨 Personalização
+
+**Cores dos Parâmetros**:
+- Cada parâmetro recebe uma cor única automaticamente
+- Paleta de 10 cores pré-definidas
+- Cores consistentes entre diferentes visualizações
+
+**Tipos de Gráfico**:
+- **Linha**: Ideal para análise temporal e tendências
+- **Dispersão**: Ideal para análise de correlações e padrões
+
+### 🚀 Performance
+
+- Processamento otimizado de grandes volumes de dados
+- Limite de 200.000 registros por estação para garantir performance
+- Renderização eficiente com Recharts
+- Cache de dados processados
+
+### ⚠️ Observações
+
+- **Estação Obrigatória**: É necessário selecionar uma estação para visualizar gráficos
+- **Parâmetros Obrigatórios**: É necessário selecionar pelo menos um parâmetro
+- **Dados Vazios**: Se não houver dados para os filtros selecionados, o gráfico não será exibido
+- **Período Longo**: Para períodos muito longos, o processamento pode levar alguns segundos
+
+### 📊 Parâmetros Disponíveis
+
+Os gráficos suportam todos os parâmetros coletados pelo SIMA, incluindo:
+- Temperatura da água
+- Oxigênio dissolvido
+- pH
+- Condutividade
+- Clorofila
+- Turbidez
+- E muitos outros parâmetros limnológicos
+
+Cada parâmetro possui:
+- Nome descritivo
+- Unidade de medida
+- Categoria (físico, químico, biológico)
+
+</details>
+
+<details>
 <summary><b>🏃‍♂️ Artefatos Scrum - Acesso Rápido</b></summary>
 
 Este dropdown contém todos os artefatos e documentos relacionados à metodologia Scrum utilizada no desenvolvimento do projeto. Aqui você encontrará acesso direto aos documentos de planejamento, acompanhamento e reuniões da equipe.
@@ -767,7 +890,7 @@ Este dropdown contém todos os artefatos e documentos relacionados à metodologi
 | **🏃‍♂️ Sprint Planning Sprint 3** | [`SPRINT BACKLOG 3.pdf`](Scrum/Sprints/Sprint%203/Sprint%20Backlog/SPRINT%20BACKLOG%203.pdf) | Tarefas e atividades planejadas para o Sprint 3, incluindo estimativas e responsáveis |
 | **📊 Burndown Chart Sprint 1** | [`BurndownSP1.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownSP1.png) | Gráfico de progresso do Sprint 1 para acompanhamento da evolução das atividades |
 | **📊 Burndown Chart Sprint 2** | [`BurndownSP2.png`](Scrum/Burndown%20Chart/Sprint%202/BurndownSP2.png) | Gráfico de progresso da Sprint 2 para acompanhamento da evolução das atividades |
-| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | Gráfico de progresso da Sprint 3 para acompanhamento da evolução das atividades (em desenvolvimento) |
+| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | Gráfico de progresso da Sprint 3 para acompanhamento da evolução das atividades (a ser adicionado) |
 
 ### 📅 **Dailys (Reuniões Diárias)**
 
@@ -829,13 +952,13 @@ ABP_2DSM/
 3. **Para consultar reuniões**: Acesse as ATAs das Dailys por data para ver o histórico de atividades
 4. **Para navegação rápida**: Use os links diretos nas tabelas acima
 
-### 📝 **Próximos Artefatos**
+### 📝 **Artefatos do Projeto**
 
-Conforme o projeto evolui, novos artefatos serão adicionados:
-- **Sprint 3**: Sprint Backlog, Burndown Chart e relatórios de revisão (em desenvolvimento)
+Todos os artefatos principais do projeto foram concluídos:
+- **Sprint 3**: Sprint Backlog, Burndown Chart (a ser adicionado) e retrospectiva completa
 - **Sprint Review**: Relatórios de revisão dos Sprints
-- **Retrospectivas**: Análises de melhoria da equipe
-- **Novas Dailys**: Registros das reuniões diárias futuras
+- **Retrospectivas**: Análises de melhoria da equipe para todas as sprints
+- **Dailys**: Registros das reuniões diárias realizadas durante o projeto
 
 </details>
 
@@ -1173,54 +1296,153 @@ A experiência desta sprint reforçou a importância de um bom planejamento inic
 </details>
 
 <details>
-<summary><b>🚀 Sprint 3 - Em Andamento</b></summary>
+<summary><b>🔄 Sprint 3 - Retrospectiva</b></summary>
 
-### 📊 **Objetivos da Sprint 3**
+### 📊 **Resumo da Sprint**
 
-A Sprint 3 tem como foco principal expandir e aprimorar ainda mais as funcionalidades entregues nas sprints anteriores, com ênfase em:
-
-- **Funcionalidades Avançadas de Visualização**: Gráficos mais sofisticados e dashboards interativos
-- **Melhorias no Mapa**: Busca por nome de estação/reservatório, legenda permanente, zoom automático
-- **Acessibilidade**: Melhorias na navegação por teclado e suporte a screen readers
-- **Testes Automatizados**: Expansão da cobertura de testes no frontend e backend
-- **Performance**: Otimizações adicionais baseadas em métricas reais de uso
-- **Documentação de Usuário**: Guias mais detalhados para usuários finais
+A terceira e última sprint do projeto foi marcada por resultados ainda mais positivos em relação à Sprint 2. A equipe conseguiu se ater ao cronograma estabelecido, finalizar todas as funcionalidades planejadas e entregar um projeto completo e satisfatório. O projeto foi finalizado com sucesso, superando as expectativas e demonstrando a evolução contínua da equipe ao longo das três sprints.
 
 ### 📈 **Acompanhamento do Progresso**
 
-O Burndown Chart da Sprint 3 estará disponível para acompanhamento em tempo real:
+O Burndown Chart da Sprint 3 está disponível para consulta:
 
 | **Artefato** | **Link Direto** | **Status** |
 |--------------|-----------------|------------|
-| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | Em desenvolvimento |
+| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | A ser adicionado |
 
-### 🎯 **Principais Entregas Planejadas**
+O gráfico refletirá o progresso consistente da equipe ao longo da sprint, com cumprimento do cronograma e entrega de todas as funcionalidades planejadas.
 
-- **Gráficos Avançados**: Visualizações mais sofisticadas de séries temporais e análises estatísticas
-- **Dashboard Interativo**: Painel consolidado com métricas e visualizações em tempo real
-- **Melhorias no Mapa Interativo**:
-  - Busca por nome de estação/reservatório
-  - Legenda permanente de cores e tipos
-  - Zoom automático ao selecionar filtros
+### 🧩 Validação de Tasks
+
+As tasks foram validadas seguindo o mesmo processo estabelecido nas sprints anteriores, com ainda maior eficiência e maturidade:
+
+1. Verificar se a task estava devidamente **commitada no repositório GitHub** do grupo;  
+2. Ir até a **mesa do integrante** responsável para observar como ele(a) desenvolveu cada detalhe, entender suas dúvidas e analisar os resultados obtidos;  
+3. Adicionar um **novo comentário no card correspondente no Trello**, descrevendo a avaliação feita sobre o resultado do integrante e a qualidade da entrega.
+
+**Evolução no processo de validação:**
+- Processo totalmente consolidado e eficiente
+- Validações mais rápidas e objetivas
+- Feedback construtivo e imediato
+- Maior autonomia dos desenvolvedores
+
+### 🚧 **Principais Desafios Enfrentados**
+
+#### 🎯 **Desafios Técnicos**
+
+- **Finalização de funcionalidades complexas**: Consolidação e refinamento de todas as features desenvolvidas nas sprints anteriores
+- **Integração de componentes**: Garantir que todas as partes do sistema funcionem harmoniosamente
+- **Documentação completa**: Elaboração de documentação técnica e de usuário abrangente
+- **Preparação para deploy final**: Otimizações e ajustes finais para ambiente de produção
+
+#### 🔄 **Gestão e Coordenação**
+
+- **Manter o foco no cronograma**: Disciplina para seguir o planejamento e não se desviar do escopo
+- **Coordenação de finalização**: Garantir que todos os membros da equipe finalizassem suas tarefas no prazo
+- **Priorização de entregas**: Decisões sobre quais melhorias finais implementar para maximizar o valor do produto
+
+### ✅ **Resultados Alcançados**
+
+#### 🎯 **Funcionalidades Entregues**
+
+##### 📊 **Documentação e Diagramas**
+
+- **Documentação Swagger/OpenAPI Completa**: 
+  - Interface interativa disponível em `http://localhost:3000/api-docs`
+  - Documentação completa de todos os endpoints (SIMA, Furnas, BALCAR)
+  - Possibilidade de testar endpoints diretamente na interface
+  - Schemas de dados e exemplos detalhados
+  - Documentação de erros e códigos de status
+- **Diagrama de Sequência**: 
+  - Diagrama completo do fluxo de interação do sistema (`Sequence_ABP.asta`)
+  - Documentação visual das interações entre componentes
+  - Disponível na pasta `diagramas/` do projeto
+- **Diagramas de Modelo de Dados**: 
+  - Modelos conceituais dos bancos de dados (BALCAR, Furnas, SIMA)
+  - Diagramas de casos de uso (`UseCase_ABP.asta`)
+  - Documentação visual completa da arquitetura
+
+##### 🚀 **Deploy e Produção**
+
+- **Aplicação em Produção**: 
+  - Front-end deployado e disponível em produção
+  - Sistema totalmente funcional e acessível
+  - Ambiente estável e otimizado
+- **Infraestrutura Consolidada**: 
+  - Configuração de deploy finalizada
+  - Ambiente de produção configurado e testado
+  - Monitoramento e logs implementados
+
+##### 🎨 **Melhorias Finais de Interface**
+
+- **Refinamentos de UX**: 
+  - Ajustes finos na interface baseados em feedback
   - Melhorias de acessibilidade
-- **Testes Expandidos**: Maior cobertura de testes automatizados no frontend e backend
-- **Otimizações de Performance**: Melhorias baseadas em métricas reais de uso
-- **Documentação Aprimorada**: Guias detalhados para usuários finais
+  - Otimizações de performance visual
+- **Consistência Visual**: 
+  - Padronização completa de componentes
+  - Design system consolidado
+  - Experiência do usuário uniforme em todas as páginas
 
-### 📅 **Cronograma da Sprint 3**
+##### 🧪 **Testes e Qualidade**
 
-- **Início**: [Data de início da Sprint 3]
-- **Duração**: 2 semanas
-- **Sprint Review**: [Data planejada]
-- **Retrospectiva**: [Data planejada]
+- **Estrutura de Testes Expandida**: 
+  - Cobertura de testes aumentada no backend
+  - Testes de integração aprimorados
+  - Validação completa das funcionalidades principais
+- **Qualidade de Código**: 
+  - Código revisado e otimizado
+  - Padrões de código consistentes
+  - Documentação inline completa
 
-### 🔄 **Metodologia Scrum**
+#### 🏗️ **Melhorias Técnicas Finais**
 
-A Sprint 3 segue os mesmos princípios das sprints anteriores:
-- Daily Scrums para sincronização da equipe
-- Sprint Planning para definição de tarefas
-- Sprint Review para demonstração das entregas
-- Retrospectiva para identificação de melhorias
+- **Performance Otimizada**: 
+  - Otimizações finais baseadas em testes reais
+  - Cache e lazy loading refinados
+  - Tempo de carregamento otimizado
+- **Arquitetura Consolidada**: 
+  - Estrutura de projeto finalizada e documentada
+  - Padrões arquiteturais bem definidos
+  - Código modular e manutenível
+- **Documentação Técnica Completa**: 
+  - README atualizado e completo
+  - Documentação de API detalhada
+  - Guias de desenvolvimento e deploy
+
+### 📈 **Lições Aprendidas**
+
+#### ✅ **Melhorias Aplicadas das Sprints Anteriores**
+
+- **Cronograma Respeitado**: A disciplina em seguir o planejamento foi fundamental para o sucesso
+- **Processos Consolidados**: Todos os processos de desenvolvimento e validação estavam bem estabelecidos
+- **Comunicação Eficiente**: Daily Scrums focados e produtivos, sem desperdício de tempo
+- **Foco na Qualidade**: Priorização da qualidade sobre quantidade de features
+
+#### 🎯 **Novos Aprendizados**
+
+- **Importância da Documentação**: Documentação completa é essencial para manutenção e evolução do projeto
+- **Valor dos Diagramas**: Diagramas de sequência e arquitetura facilitam compreensão e comunicação
+- **Deploy e Produção**: Experiência valiosa com deploy e configuração de ambiente de produção
+- **Finalização de Projeto**: Habilidades de finalização e consolidação de projetos complexos
+
+#### 🎯 **Pontos Positivos**
+
+- **Projeto Finalizado com Sucesso**: Todas as funcionalidades entregues e funcionando
+- **Cronograma Respeitado**: Conseguiram se ater ao cronograma estabelecido
+- **Evolução Contínua**: Melhoria constante em relação às sprints anteriores
+- **Resultado Satisfatório**: Projeto finalizado com qualidade e dentro do prazo
+- **Crescimento da Equipe**: Desenvolvedores demonstraram maturidade técnica e de processos
+
+### 🎉 **Conclusão**
+
+A Sprint 3 representou a consolidação de todo o trabalho desenvolvido nas sprints anteriores. A equipe conseguiu finalizar o projeto com sucesso, respeitando o cronograma e entregando um resultado que superou as expectativas.
+
+O projeto foi finalizado de forma satisfatória, com todas as funcionalidades implementadas, documentação completa e sistema em produção. A evolução da equipe ao longo das três sprints foi notável, passando de desafios iniciais na Sprint 1 para um processo maduro e eficiente na Sprint 3.
+
+A experiência das três sprints ensinou muito sobre desenvolvimento ágil, trabalho em equipe, gestão de projetos e qualidade técnica. O resultado final demonstra que a aplicação das lições aprendidas em cada sprint foi fundamental para o sucesso do projeto.
+
+O projeto está completo, funcional e pronto para uso, representando um marco importante na jornada de aprendizado da equipe e um produto de valor para o parceiro INPE e para a comunidade científica que utilizará os dados limnológicos disponibilizados.
 
 </details>
 
@@ -1230,7 +1452,7 @@ A Sprint 3 segue os mesmos princípios das sprints anteriores:
 
 | **Função** | **Nome** | **Links** |
 |------------|----------|-----------|
-| **Product Owner** | **Alicia Silva Dias** | [![GitHub](https://img.shields.io/badge/GitHub-000000?style=flat&logo=github&logoColor=white)](https://github.com/TIALICIA) |
+| **Product Owner** | **Alicia Silva Dias** | [![GitHub](https://img.shields.io/badge/GitHub-000000?style=flat&logo=github&logoColor=white)](https://github.com/TIALICIA) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/alicia-silva-dias-656b2817a/) |
 | **Scrum Master** | **João Victor Lopes Rosa** | [![GitHub](https://img.shields.io/badge/GitHub-000000?style=flat&logo=github&logoColor=white)](https://github.com/JV-L0pes) [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://br.linkedin.com/in/jv-l0pes) |
 
 
