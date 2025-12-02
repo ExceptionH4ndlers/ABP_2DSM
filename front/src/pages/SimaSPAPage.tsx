@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const API_BASE_URL =
@@ -29,6 +30,7 @@ import {
   CloudRain,
   AlertCircle,
   Users,
+  BarChart3,
 } from "lucide-react";
 import { useSimaApi } from "../hooks/useSimaApi";
 import { useEstacoes } from "../hooks/useEstacoes";
@@ -656,6 +658,7 @@ const formatValue = (value: number | null | undefined, decimals: number = 1) => 
 };
 
 function SimaSPAPage() {
+  const navigate = useNavigate();
   const { data, loading, error, pagination, fetchData } = useSimaApi();
   const { estacoes } = useEstacoes();
 
@@ -670,13 +673,6 @@ function SimaSPAPage() {
     showBalcar: false,
   });
 
-  const [mapFilters, setMapFilters] = useState({
-    showSima: true,
-    showFurnas: false,
-    showBalcar: false,
-  });
-
-  const [filtersPanelOpen, setFiltersPanelOpen] = useState(false);
 
   const [filters, setFilters] = useState({
     startDate: "2004-01-12", // Menor data disponível no banco SIMA
@@ -752,6 +748,12 @@ function SimaSPAPage() {
   // Carregamento manual apenas quando clicar em "Buscar Dados"
 
   const handleSearch = () => {
+    // Validar se há estação selecionada
+    if (!filters.estacao || filters.estacao.trim() === "") {
+      alert("Por favor, selecione uma estação para visualizar os dados.");
+      return;
+    }
+
     fetchData({
       page: 1,
       limit: filters.limit,
@@ -805,14 +807,20 @@ function SimaSPAPage() {
     setIsCsvModalOpen(true);
   };
 
+  const handleGoToGraficos = () => {
+    if (!filters.estacao || filters.estacao.trim() === "") {
+      alert("Por favor, selecione uma estação para visualizar os gráficos.");
+      return;
+    }
+    // Navegar para a página de gráficos com a estação pré-selecionada
+    navigate(`/sima/graficos?estacao=${encodeURIComponent(filters.estacao)}`);
+  };
+
   // Lista de estações disponíveis no banco SIMA (agora dinâmica)
-  const estacoesOptions = [
-    { value: "", label: "Todas as estações" },
-    ...estacoes.map((estacao) => ({
-      value: estacao.idestacao,
-      label: estacao.rotulo,
-    })),
-  ];
+  const estacoesOptions = estacoes.map((estacao) => ({
+    value: estacao.idestacao,
+    label: estacao.rotulo,
+  }));
   return (
     <SimaSPAContainer>
       <MainContent>
@@ -1304,14 +1312,6 @@ function SimaSPAPage() {
             points={mapPoints}
             loading={mapLoading}
             error={mapError}
-            filters={mapFilters}
-            onFiltersChange={setMapFilters}
-            filtersOpen={filtersPanelOpen}
-            onFiltersOpenChange={setFiltersPanelOpen}
-            onMarkerClick={(point) => {
-              console.log("Marker clicked:", point);
-              // Aqui você pode adicionar lógica para mostrar detalhes da estação
-            }}
           />
         </Section>
 
@@ -1344,11 +1344,13 @@ function SimaSPAPage() {
                 </DateRangeContainer>
               </DateRangeGroup>
               <ControlGroup>
-                <ControlLabel>Estação</ControlLabel>
+                <ControlLabel>Estação *</ControlLabel>
                 <ControlSelect
                   value={filters.estacao}
                   onChange={(e) => updateDatesForStation(e.target.value)}
+                  required
                 >
+                  <option value="">Selecione uma estação</option>
                   {estacoesOptions.map((estacao) => (
                     <option key={estacao.value} value={estacao.value}>
                       {estacao.label}
@@ -1389,6 +1391,17 @@ function SimaSPAPage() {
                 <Filter size={20} />
                 Limpar Filtros
               </ClearButton>
+              <ActionButton
+                onClick={handleGoToGraficos}
+                style={{
+                  background: "linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)",
+                  border: "none",
+                  color: "#ffffff",
+                }}
+              >
+                <BarChart3 size={20} />
+                Ver Gráficos
+              </ActionButton>
               <ExportCsvButton
                 data={data}
                 filename="dados_sima.csv"

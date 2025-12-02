@@ -110,6 +110,7 @@ const GlobalStyle = createGlobalStyle`
   100% { transform: scale(1); }
 }
 
+
 `;
 
 export default GlobalStyle;

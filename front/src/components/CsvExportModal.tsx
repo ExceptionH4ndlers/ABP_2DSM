@@ -505,8 +505,9 @@ export const CsvExportModal: React.FC<CsvExportModalProps> = ({
                   updateFilters("estacao", e.target.value);
                   updateDatesForStation(e.target.value);
                 }}
+                required
               >
-                <option value="">Todas as estações</option>
+                <option value="">Selecione uma estação</option>
                 {((estacoes as EstacaoItem[]) && (estacoes as EstacaoItem[]).length > 0
                   ? (estacoes as EstacaoItem[]).map((es: EstacaoItem) => ({
                       value: es.idestacao,

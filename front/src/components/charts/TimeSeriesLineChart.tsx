@@ -191,15 +191,13 @@ export default function TimeSeriesLineChart({
 
   // Função toggleSeries removida - não há mais legenda clicável superior
 
-  // Formatar data para exibição
+  // Formatar data para exibição (apenas data, sem horário)
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleString("pt-BR", {
+    return date.toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
     });
   };
 
@@ -356,8 +354,7 @@ export default function TimeSeriesLineChart({
               return date.toLocaleDateString("pt-BR", {
                 day: "2-digit",
                 month: "2-digit",
-                hour: "2-digit",
-                minute: "2-digit",
+                year: "numeric",
               });
             }}
             angle={-45}

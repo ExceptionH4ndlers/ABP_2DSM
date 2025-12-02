@@ -531,13 +531,6 @@ function FurnasSPAPage() {
     showBalcar: false,
   });
 
-  const [mapFilters, setMapFilters] = useState({
-    showSima: false,
-    showFurnas: true,
-    showBalcar: false,
-  });
-
-  const [filtersPanelOpen, setFiltersPanelOpen] = useState(false);
 
   const [filters, setFilters] = useState({
     page: 1,
@@ -588,6 +581,12 @@ function FurnasSPAPage() {
   };
 
   const handleApplyFilters = () => {
+    // Validar se há reservatório selecionado
+    if (!filters.reservatorios || filters.reservatorios.length === 0 || filters.reservatorios[0].trim() === "") {
+      alert("Por favor, selecione um reservatório para visualizar os dados.");
+      return;
+    }
+
     setFilters((f) => ({ ...f, page: 1 }));
     // Buscar dados quando aplicar filtros
     const queryParams = {
@@ -886,14 +885,6 @@ function FurnasSPAPage() {
             points={mapPoints}
             loading={mapLoading}
             error={mapError}
-            filters={mapFilters}
-            onFiltersChange={setMapFilters}
-            filtersOpen={filtersPanelOpen}
-            onFiltersOpenChange={setFiltersPanelOpen}
-            onMarkerClick={(point) => {
-              console.log("Reservatório clicado:", point);
-              // Aqui você pode adicionar lógica para mostrar detalhes do reservatório
-            }}
           />
         </Section>
 
@@ -926,7 +917,7 @@ function FurnasSPAPage() {
                 </DateRangeContainer>
               </DateRangeGroup>
               <ControlGroup>
-                <ControlLabel>Reservatório</ControlLabel>
+                <ControlLabel>Reservatório *</ControlLabel>
                 <ControlSelect
                   value={filters.reservatorios[0] || ""}
                   onChange={(e) =>
@@ -935,8 +926,9 @@ function FurnasSPAPage() {
                       reservatorios: e.target.value ? [e.target.value] : [],
                     }))
                   }
+                  required
                 >
-                  <option value="">Todos os reservatórios</option>
+                  <option value="">Selecione um reservatório</option>
                   {reservatorios.map((nome) => (
                     <option key={nome} value={nome}>
                       {nome}

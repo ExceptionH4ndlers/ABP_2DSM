@@ -499,83 +499,30 @@ export default function SimaChartFilters({
       <FiltersSection>
         <SectionTitle>Filtros de Contexto</SectionTitle>
         <FiltersGrid>
-          <FilterGroup style={{ gridColumn: "1 / -1" }}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "0.75rem",
+          <FilterGroup>
+            <FilterLabel>
+              Estação de Monitoramento *
+            </FilterLabel>
+            <FilterSelect
+              value={filters.estacao || ""}
+              onChange={(e) => {
+                const normalizedId = e.target.value ? String(e.target.value).trim() : undefined;
+                onFiltersChange({
+                  ...filters,
+                  estacao: normalizedId,
+                });
               }}
+              required
             >
-              <FilterLabel>
-                Estação de Monitoramento
-                <span
-                  style={{
-                    fontSize: "0.75rem",
-                    color: "#64748b",
-                    marginLeft: "0.5rem",
-                    fontWeight: "normal",
-                  }}
-                >
-                  (selecione uma estação)
-                </span>
-              </FilterLabel>
-            </div>
-            <ParametersGrid>
-              {estacoes.map((estacao) => {
-                // Normalizar IDs para comparação (remover espaços)
-                const normalizedEstacaoId = String(estacao.idestacao).trim();
-                const normalizedSelectedEstacao = filters.estacao
-                  ? String(filters.estacao).trim()
-                  : "";
-                const isSelected = normalizedSelectedEstacao === normalizedEstacaoId;
-
-                return (
-                  <ParameterCheckbox
-                    key={estacao.idestacao}
-                    $selected={isSelected}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      // Normalizar ID da estação (remover espaços)
-                      const normalizedId = String(estacao.idestacao).trim();
-
-                      if (isSelected) {
-                        // Desmarcar se já está selecionada
-                        onFiltersChange({
-                          ...filters,
-                          estacao: undefined,
-                        });
-                      } else {
-                        // Selecionar esta estação (única)
-                        onFiltersChange({
-                          ...filters,
-                          estacao: normalizedId,
-                        });
-                      }
-                    }}
-                  >
-                    <input
-                      type="radio"
-                      name="estacao"
-                      checked={isSelected}
-                      onChange={() => {}} // Handled by onClick
-                    />
-                    {isSelected ? (
-                      <CheckCircle2 size={20} color="#3b82f6" fill="#3b82f6" />
-                    ) : (
-                      <Circle size={20} color="#cbd5e1" />
-                    )}
-                    <ParameterLabel>
-                      <ParameterName>{estacao.rotulo}</ParameterName>
-                      {estacao.idestacao && <ParameterUnit>ID: {estacao.idestacao}</ParameterUnit>}
-                    </ParameterLabel>
-                  </ParameterCheckbox>
-                );
-              })}
-            </ParametersGrid>
+              <option value="">Selecione uma estação</option>
+              {estacoes.map((estacao) => (
+                <option key={estacao.idestacao} value={estacao.idestacao}>
+                  {estacao.rotulo} {estacao.idestacao && `(ID: ${estacao.idestacao})`}
+                </option>
+              ))}
+            </FilterSelect>
             {!filters.estacao && (
-              <EstacoesLimitWarning style={{ marginTop: "1rem" }}>
+              <EstacoesLimitWarning style={{ marginTop: "0.5rem" }}>
                 ⚠️ Selecione uma estação para visualizar os gráficos
               </EstacoesLimitWarning>
             )}

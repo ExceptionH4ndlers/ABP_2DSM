@@ -94,7 +94,7 @@ export default function ScatterChart({
             <strong>{point.y.toLocaleString("pt-BR", { maximumFractionDigits: 2 })}</strong>
           </p>
           <p style={{ marginTop: "8px", fontSize: "0.75rem", color: "#64748b" }}>
-            {new Date(point.date).toLocaleString("pt-BR")}
+            {new Date(point.date).toLocaleDateString("pt-BR")}
           </p>
         </div>
       );

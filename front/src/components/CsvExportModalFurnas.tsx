@@ -206,7 +206,7 @@ export const CsvExportModalFurnas: React.FC<CsvExportModalFurnasProps> = ({
               }}
             >
               <option key="__all__" value="">
-                Todos os reservatórios
+                Selecione um reservatório
               </option>
               {reservatorios.map((nome) => (
                 <option key={nome} value={nome}>

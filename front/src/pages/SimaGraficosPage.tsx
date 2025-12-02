@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import styled from "styled-components";
 import { BarChart3, TrendingUp, FileDown } from "lucide-react";
 import { useSimaApi } from "../hooks/useSimaApi";
@@ -166,12 +167,16 @@ const ExportButtonsContainer = styled.div`
 `;
 
 function SimaGraficosPage() {
+  const [searchParams] = useSearchParams();
   const { data, loading, error, fetchData } = useSimaApi();
+
+  // Ler estação da URL se disponível
+  const estacaoFromUrl = searchParams.get("estacao");
 
   const [chartFilters, setChartFilters] = useState<ChartFilters>({
     category: "todos",
     parameters: [],
-    estacao: undefined,
+    estacao: estacaoFromUrl ? estacaoFromUrl.trim() : undefined,
     startDate: "", // Sem período padrão
     endDate: "", // Sem período padrão
     chartType: "line",
@@ -179,6 +184,17 @@ function SimaGraficosPage() {
     xAxisParam: undefined,
     yAxisParam: undefined,
   });
+
+  // Atualizar estação quando URL mudar
+  useEffect(() => {
+    const estacaoFromUrl = searchParams.get("estacao");
+    if (estacaoFromUrl) {
+      setChartFilters((prev) => ({
+        ...prev,
+        estacao: estacaoFromUrl.trim(),
+      }));
+    }
+  }, [searchParams]);
 
   const [chartDataLoaded, setChartDataLoaded] = useState(false);
   const [showPeriodModal, setShowPeriodModal] = useState(false);
@@ -202,7 +218,7 @@ function SimaGraficosPage() {
         const timeSeriesData = chartData as TimeSeriesDataPoint[];
         return timeSeriesData.map((point) => {
           const row: Record<string, unknown> = {
-            data: new Date(point.date).toLocaleString("pt-BR"),
+            data: new Date(point.date).toLocaleDateString("pt-BR"),
             estacao: point.estacao || "N/A",
           };
           chartFilters.parameters.forEach((param) => {
@@ -216,7 +232,7 @@ function SimaGraficosPage() {
         return scatterData.map((point) => ({
           [chartFilters.xAxisParam || "x"]: point.x,
           [chartFilters.yAxisParam || "y"]: point.y,
-          data: new Date(point.date).toLocaleString("pt-BR"),
+          data: new Date(point.date).toLocaleDateString("pt-BR"),
           estacao: point.estacao || "N/A",
         }));
       }

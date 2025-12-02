@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const API_BASE_URL =
@@ -491,13 +491,6 @@ function BalcarSPAPage() {
     showBalcar: true,
   });
 
-  const [mapFilters, setMapFilters] = useState({
-    showSima: false,
-    showFurnas: false,
-    showBalcar: true,
-  });
-
-  const [filtersPanelOpen, setFiltersPanelOpen] = React.useState(false);
 
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
@@ -525,6 +518,12 @@ function BalcarSPAPage() {
   });
 
   const fetchData = async (page: number = 1) => {
+    // Validar se há reservatório selecionado
+    if (!filters.reservatorio || filters.reservatorio.trim() === "") {
+      alert("Por favor, selecione um reservatório para visualizar os dados.");
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -1048,14 +1047,6 @@ function BalcarSPAPage() {
             points={mapPoints}
             loading={mapLoading}
             error={mapError}
-            filters={mapFilters}
-            onFiltersChange={setMapFilters}
-            filtersOpen={filtersPanelOpen}
-            onFiltersOpenChange={setFiltersPanelOpen}
-            onMarkerClick={(point) => {
-              console.log("Reservatório BALCAR clicado:", point);
-              // Aqui você pode adicionar lógica para mostrar detalhes do reservatório
-            }}
           />
         </Section>
 
@@ -1084,12 +1075,13 @@ function BalcarSPAPage() {
                 </DateRangeContainer>
               </DateRangeGroup>
               <ControlGroup>
-                <ControlLabel>Reservatório</ControlLabel>
+                <ControlLabel>Reservatório *</ControlLabel>
                 <ControlSelect
                   value={filters.reservatorio}
                   onChange={(e) => updateDatesForReservatorio(e.target.value)}
+                  required
                 >
-                  <option value="">Todos os reservatórios</option>
+                  <option value="">Selecione um reservatório</option>
                   {reservatorios.map((nome) => (
                     <option key={nome} value={nome}>
                       {nome}
