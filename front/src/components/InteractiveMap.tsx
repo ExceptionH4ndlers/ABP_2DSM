@@ -68,7 +68,7 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
     padding: 0 !important;
     width: auto !important;
     min-width: 200px !important;
-    max-width: 450px !important;
+    max-width: none !important;
     line-height: 1.5 !important;
   }
 
@@ -81,12 +81,33 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
     margin: 0 !important;
     padding: 0 !important;
     width: auto !important;
+    max-width: none !important;
   }
 
   .station-popup .leaflet-popup-content > div {
+    max-width: none !important;
+    width: max-content !important;
+    min-width: 200px !important;
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+    overflow: visible !important;
+  }
+
+  .station-popup .leaflet-popup-content > div > div:first-child {
+    overflow: visible !important;
+    max-width: none !important;
+  }
+
+  .station-popup .leaflet-popup-content > div > div:first-child > div:last-child {
+    max-width: none !important;
+    overflow: visible !important;
+  }
+
+  .station-popup .leaflet-popup-content > div > div:first-child > div:last-child > h3 {
+    max-width: none !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
   }
 
   .station-popup .leaflet-popup-content-wrapper {
@@ -94,11 +115,7 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
   }
 
   .station-popup .leaflet-popup-close-button {
-    position: absolute !important;
-    top: 12px !important;
-    right: 12px !important;
-    z-index: 1001 !important;
-    margin: 0 !important;
+    display: none !important;
   }
 
   .leaflet-popup-tip {
@@ -316,7 +333,7 @@ export default function InteractiveMap({
 
           return (
             <Marker key={point.id || `${point.lat}-${point.lng}`} position={[point.lat, point.lng]}>
-              <Popup className="station-popup" maxWidth={450} closeButton={true} autoPan={true}>
+              <Popup className="station-popup" maxWidth={600} closeButton={true} autoPan={true}>
                 <StationPopup point={point} />
               </Popup>
             </Marker>

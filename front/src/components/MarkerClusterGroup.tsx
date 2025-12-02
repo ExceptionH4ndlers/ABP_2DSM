@@ -170,7 +170,7 @@ export default function MarkerClusterGroup({ points }: MarkerClusterGroupProps) 
         const popupContent = createStationPopupHTML(point);
         marker.bindPopup(popupContent, {
           className: "station-popup",
-          maxWidth: 450,
+          maxWidth: 600,
           closeButton: true,
           autoPan: true,
           offset: [0, -10],
