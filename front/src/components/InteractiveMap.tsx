@@ -62,6 +62,16 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
     overflow: visible !important;
     background: transparent !important;
   }
+  
+  .station-popup.leaflet-popup .leaflet-popup-content-wrapper,
+  .station-popup .leaflet-popup-content-wrapper {
+    border-radius: 20px !important;
+    background: transparent !important;
+  }
+  
+  .station-popup .leaflet-popup {
+    border-radius: 20px !important;
+  }
 
   .leaflet-popup-content {
     margin: 0 !important;
@@ -75,6 +85,9 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
   .station-popup .leaflet-popup-content-wrapper {
     background: transparent !important;
     padding: 0 !important;
+    border-radius: 20px !important;
+    overflow: visible !important;
+    isolation: isolate !important;
   }
 
   .station-popup .leaflet-popup-content {
@@ -91,7 +104,14 @@ const MapWrapper = styled.div<{ $isFullscreen?: boolean }>`
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    overflow: visible !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+  
+  .station-popup .leaflet-popup-tip-container {
+    display: none !important;
   }
 
   .station-popup .leaflet-popup-content > div > div:first-child {
