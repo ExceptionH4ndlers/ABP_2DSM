@@ -890,7 +890,7 @@ Este dropdown contém todos os artefatos e documentos relacionados à metodologi
 | **🏃‍♂️ Sprint Planning Sprint 3** | [`SPRINT BACKLOG 3.pdf`](Scrum/Sprints/Sprint%203/Sprint%20Backlog/SPRINT%20BACKLOG%203.pdf) | Tarefas e atividades planejadas para o Sprint 3, incluindo estimativas e responsáveis |
 | **📊 Burndown Chart Sprint 1** | [`BurndownSP1.png`](Scrum/Burndown%20Chart/Sprint%201/BurndownSP1.png) | Gráfico de progresso do Sprint 1 para acompanhamento da evolução das atividades |
 | **📊 Burndown Chart Sprint 2** | [`BurndownSP2.png`](Scrum/Burndown%20Chart/Sprint%202/BurndownSP2.png) | Gráfico de progresso da Sprint 2 para acompanhamento da evolução das atividades |
-| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | Gráfico de progresso da Sprint 3 para acompanhamento da evolução das atividades (a ser adicionado) |
+| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | Gráfico de progresso da Sprint 3 para acompanhamento da evolução das atividades |
 
 ### 📅 **Dailys (Reuniões Diárias)**
 
@@ -955,7 +955,7 @@ ABP_2DSM/
 ### 📝 **Artefatos do Projeto**
 
 Todos os artefatos principais do projeto foram concluídos:
-- **Sprint 3**: Sprint Backlog, Burndown Chart (a ser adicionado) e retrospectiva completa
+- **Sprint 3**: Sprint Backlog, Burndown Chart e retrospectiva completa
 - **Sprint Review**: Relatórios de revisão dos Sprints
 - **Retrospectivas**: Análises de melhoria da equipe para todas as sprints
 - **Dailys**: Registros das reuniões diárias realizadas durante o projeto
@@ -1308,9 +1308,9 @@ O Burndown Chart da Sprint 3 está disponível para consulta:
 
 | **Artefato** | **Link Direto** | **Status** |
 |--------------|-----------------|------------|
-| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | A ser adicionado |
+| **📊 Burndown Chart Sprint 3** | [`BurndownSP3.png`](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png) | Concluído |
 
-O gráfico refletirá o progresso consistente da equipe ao longo da sprint, com cumprimento do cronograma e entrega de todas as funcionalidades planejadas.
+O gráfico reflete o progresso consistente da equipe ao longo da sprint, com cumprimento do cronograma e entrega de todas as funcionalidades planejadas.
 
 ### 🧩 Validação de Tasks
 
