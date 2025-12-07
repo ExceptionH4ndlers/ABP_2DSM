@@ -2,6 +2,13 @@
 
 Sistema web desenvolvido para visualização e disseminação de dados limnológicos coletados pelo INPE em cooperação com UFRJ, UFJF e IIE, com o objetivo de subsidiar estudos sobre o Balanço de Carbono nos Reservatórios de Furnas Centrais Elétricas S.A.
 
+## 🚀 Acesso Rápido
+
+- **🌐 Aplicação em Produção**: [https://abp-2-dsm.vercel.app/](https://abp-2-dsm.vercel.app/)
+- **📡 API Swagger**: `http://localhost:3000/api-docs` (local)
+- **📋 Product Backlog**: [`Product Backlog Completo.pdf`](Scrum/Product%20Backlog/Product%20Backlog%20Completo.pdf)
+- **📊 Burndown Charts**: [Sprint 1](Scrum/Burndown%20Chart/Sprint%201/BurndownSP1.png) | [Sprint 2](Scrum/Burndown%20Chart/Sprint%202/BurndownSP2.png) | [Sprint 3](Scrum/Burndown%20Chart/Sprint%203/BurndownSP3.png)
+
 <details>
 <summary><b>📋 Informações do Projeto</b></summary>
 
@@ -15,7 +22,7 @@ Sistema web desenvolvido para visualização e disseminação de dados limnológ
 | 👤 Focal Point | André Olimpio |
 | 🤝 Parceiro | INPE - Laboratório de Instrumentação de Sistemas Aquáticos (labISA) |
 | 📅 Kick off | 16/09/2025 |
-| 📊 Status | Em desenvolvimento |
+| 📊 Status | ✅ Concluído - Em produção |
 
 ### 🎯 Tema do Semestre
 
